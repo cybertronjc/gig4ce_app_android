@@ -73,7 +73,7 @@
     <string name="no_chat_chat">गपशप नहीं …</string>
     <string name="oops_it_looks_like_you_have_not_started_chat_with_anyone_chat">ओह...ऐसा लगता है कि आपने किसी के साथ चैट शुरू नहीं की है।</string>
     <string name="contacts_chat">संपर्क</string>
-    <string name="search_gigers_chat">खोज गिगर्स</string>
+    <string name="search_gigers_common_ui">खोज गिगर्स</string>
     <string name="no_contact_found_chat">कोई संपर्क नहीं मिला</string>
     <string name="it_seems_there_is_no_contact_registered_with_gigforce_chat">ऐसा लगता है कि Gigforce के साथ कोई संपर्क पंजीकृत नहीं है</string>
     <string name="invite_now_chat">अभी आमंत्रित करें</string>

@@ -61,6 +61,7 @@ class ViewTypes {
         const val GROUP_MESSAGE_READ_INFO = 17101
         const val GROUP_MESSAGE_DELIVERED_INFO = 17109
 
+
         const val CHAT_EVENT = 17134
     }
 }

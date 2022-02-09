@@ -103,6 +103,9 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
     private var unreadHeaderIds = arrayListOf<String>()
     private var readHeaderIds = arrayListOf<String>()
 
+    private var muteNotificationsHeaderIds = arrayListOf<String>()
+    private var unMuteNotificationsHeaderIds = arrayListOf<String>()
+
     var anyUnreadMessages = false
     var anyReadMessages = false
     var searchText = ""
@@ -148,6 +151,12 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     private fun makeSelectedChatListEnable(selectedChatList: java.util.ArrayList<ChatListItemDataObject>) {
         if (isMultiSelectEnable){
+            if (selectedChatList.size == 0){
+                moreChatOptionsLayout.gone()
+            } else {
+                moreChatOptionsLayout.visible()
+            }
+
             if (selectedChatList.size > 1){
                 toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.chat_selected_chat)}")
             } else{
@@ -156,13 +165,28 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
             unreadHeaderIds.clear()
             readHeaderIds.clear()
+            muteNotificationsHeaderIds.clear()
+            unMuteNotificationsHeaderIds.clear()
             selectedChatList.forEach {
                 if (it.unreadCount != 0){
                     unreadHeaderIds.add(it.id)
                 } else{
                     readHeaderIds.add(it.id)
                 }
+
+                if (it.headerSettings.muteNotifications){
+                    muteNotificationsHeaderIds.add(it.id)
+                } else {
+                    unMuteNotificationsHeaderIds.add(it.id)
+                }
             }
+
+            if (unMuteNotificationsHeaderIds.size > 0){
+                muteNotifications.text = "Mute notifications"
+            } else {
+                muteNotifications.text = "Unmute notifications"
+            }
+
             if (unreadHeaderIds.size > 0){
                 //atleast one unread chat is there
                 markAsRead.setTextColor(resources.getColor(R.color.chat_switch_checked))
@@ -247,7 +271,8 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                         chatType = it.chatType,
                         status = it.status,
                         lastMessageDeleted = it.lastMessageDeleted,
-                        senderName = it.senderName
+                        senderName = it.senderName,
+                        headerSettings = it.settings
                     ),
                     viewModel = viewModel,
                     searchText
@@ -454,6 +479,28 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             makeMultiSelectUiEnable(false)
             var map = mapOf("chats_marked_as_read" to unreadHeaderIds.size)
             eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MARKED_READ, map))
+        }
+
+        muteNotifications.setOnClickListener {
+            // mute or unmute notifications
+            Log.d("muteNotifications", "mutedNotifications: $muteNotificationsHeaderIds , unmutedNotifications: $unMuteNotificationsHeaderIds")
+            if (muteNotifications.text == "Unmute notifications"){
+                //unmute
+                viewModel.setHeadersMuteNotifications(muteNotificationsHeaderIds, false)
+                viewModel.setMultiSelectEnable(false)
+                viewModel.clearSelectedChats()
+                makeMultiSelectUiEnable(false)
+                var map = mapOf("chats_unmuted_notifications" to muteNotificationsHeaderIds.size)
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_UNMUTE_NOTIFICATIONS, map))
+            } else if (muteNotifications.text == "Mute notifications"){
+                //mute
+                viewModel.setHeadersMuteNotifications(unMuteNotificationsHeaderIds, true)
+                viewModel.setMultiSelectEnable(false)
+                viewModel.clearSelectedChats()
+                makeMultiSelectUiEnable(false)
+                var map = mapOf("chats_muted_notifications" to unMuteNotificationsHeaderIds.size)
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MUTE_NOTIFICATIONS, map))
+            }
         }
     }
 

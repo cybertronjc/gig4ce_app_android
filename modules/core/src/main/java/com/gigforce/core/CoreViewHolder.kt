@@ -26,4 +26,8 @@ open class CoreViewHolder(private val view: View) : RecyclerView.ViewHolder(view
 
     val IViewHolder:IViewHolder
         get() {return view as IViewHolder;}
+
+    val IItemClickListener : ICustomClickListener?
+        get() {return view as? ICustomClickListener
+        }
 }

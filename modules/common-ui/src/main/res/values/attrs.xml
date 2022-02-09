@@ -57,8 +57,8 @@
         <attr name="title" format="string"/>
         <attr name="caption" format="string"/>
     </declare-styleable>
-    
-    
+
+
     <declare-styleable name="ImageViewRounded">
         <attr name="radius" format="dimension" />
     </declare-styleable>

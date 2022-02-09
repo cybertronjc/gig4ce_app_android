@@ -148,6 +148,17 @@ class ChatHeadersViewModel @Inject constructor(
         }
     }
 
+    fun setHeadersMuteNotifications(
+        chatHeaders: List<String>,
+        enable: Boolean
+    ) = GlobalScope.launch {
+        try {
+            chatRepository.setHeaderMuteNotifications(chatHeaders, enable)
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     fun filterChatList(newText: String) {
         currentSearchTerm = newText
         filterChatHeadersAndEmit()

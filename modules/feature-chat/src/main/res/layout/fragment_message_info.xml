@@ -22,6 +22,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+        <include
+            android:id="@+id/info_shimmer"
+            android:visibility="visible"
+            layout="@layout/chat_headers_shimmer_list_view"
+            />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/size_12"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarComp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/read_by_layout"
         android:layout_width="match_parent"
@@ -31,7 +53,7 @@
         android:background="@drawable/read_by_layout_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarComp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/read_by_text"
@@ -78,6 +100,7 @@
             android:id="@+id/deliveredLayout"
             android:layout_margin="@dimen/size_12"
             android:elevation="@dimen/size_4"
+            android:layout_marginBottom="@dimen/size_12"
             android:background="@drawable/read_by_layout_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,5 +144,8 @@
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

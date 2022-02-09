@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -20,17 +21,25 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.common_ui.location.LocationSharingActivity
+import com.gigforce.common_ui.location.LocationUpdatesService
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -54,6 +63,10 @@ abstract class LocationMessageView(
     @Inject
     lateinit var eventTracker: IEventTracker
 
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
     private lateinit var imageView: ImageView
     private lateinit var locationAddressTV: TextView
     private lateinit var textViewTime: TextView
@@ -61,6 +74,12 @@ abstract class LocationMessageView(
     private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var receivedStatusIV: ImageView
     private lateinit var senderNameTV: TextView
+    private lateinit var stopSharingTV: TextView
+
+    private var selectedMessageList = emptyList<ChatMessage>()
+
+    // A reference to the service used to get location updates.
+    private var mService: LocationUpdatesService? = null
 
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -87,6 +106,7 @@ abstract class LocationMessageView(
         cardView = this.findViewById(R.id.cv_msgContainer)
         locationAddressTV = this.findViewById(R.id.location_address_tv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
+        stopSharingTV = this.findViewById(R.id.stop_location)
     }
 
     fun setDefault() {
@@ -106,6 +126,7 @@ abstract class LocationMessageView(
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     private fun loadThumbnail(msg: ChatMessage) {
@@ -149,6 +170,17 @@ abstract class LocationMessageView(
                             frameLayoutRoot?.foreground = null
                         }
                     })
+                    oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                        it ?: return@Observer
+                        selectedMessageList = it
+                        if (it.isNotEmpty() && it.contains(message)){
+                            Log.d("MultiSelection", "Contains this message $it")
+                            frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        } else {
+                            frameLayoutRoot.foreground = null
+                        }
+
+                    })
                     oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
                         it ?: return@Observer
                         if (it == message.id){
@@ -161,6 +193,17 @@ abstract class LocationMessageView(
                         if (it == false) {
                             frameLayoutRoot?.foreground = null
                         }
+                    })
+                    groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                        it ?: return@Observer
+                        selectedMessageList = it
+                        if (it.isNotEmpty() && it.contains(message)){
+                            Log.d("MultiSelection", "Contains this message $it")
+                            frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        } else {
+                            frameLayoutRoot.foreground = null
+                        }
+
                     })
                     groupChatViewModel.scrollToMessageId.observe(it1, Observer {
                         it ?: return@Observer
@@ -176,7 +219,29 @@ abstract class LocationMessageView(
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
 
-            locationAddressTV.setText("\uD83D\uDCCD ${message.locationPhysicalAddress}")
+            if (message.isLiveLocation) {
+                if (message.isCurrentlySharingLiveLocation){
+                    if (message.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid) {
+                        stopSharingTV.text = "Sharing live location"
+                        stopSharingTV.visible()
+                        locationAddressTV.gone()
+                    } else {
+                        stopSharingTV.text = "View live location"
+                        stopSharingTV.visible()
+                        locationAddressTV.gone()
+                    }
+                } else {
+                    stopSharingTV.text = "Live location ended"
+                    stopSharingTV.visible()
+                    locationAddressTV.gone()
+                }
+
+            } else {
+                stopSharingTV.gone()
+                locationAddressTV.visible()
+                locationAddressTV.text = "\uD83D\uDCCD ${message.locationPhysicalAddress}"
+            }
+
             textViewTime.setText(message.timestamp?.toDisplayText())
             loadThumbnail(message)
             setReceivedStatus(message)
@@ -196,6 +261,10 @@ abstract class LocationMessageView(
     private fun handleLocationUploading() {
 
     }
+
+//    private fun isCurrentlySharingLocation(): Boolean{
+//        return message.updatedAt?.toDate().after()
+//    }
 
     private fun blinkLayout(){
         frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
@@ -249,21 +318,77 @@ abstract class LocationMessageView(
 
 
     override fun onClick(v: View?) {
-        //Launch Map
-        if (message == null)
-            return
+        if (v?.id == R.id.cv_msgContainer) {
+            if (!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                //Launch Map
+                if (message == null)
+                    return
 
-        val lat = message.location?.latitude ?: 0.0
-        val long = message.location?.longitude ?: 0.0
+                if (message.isLiveLocation) {
+                    if (message.isCurrentlySharingLiveLocation) {
+                        val intent = Intent(context, LocationSharingActivity::class.java)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE, message.chatType)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, message.headerId)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID, message.id)
+                        context.startActivity(intent)
+                    }
+                } else {
+                    val lat = message.location?.latitude ?: 0.0
+                    val long = message.location?.longitude ?: 0.0
 
-        if (lat != 0.0) {
-            val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-            try {
-                context.startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(context, context.getString(R.string.no_app_found_locations_chat), Toast.LENGTH_SHORT).show()
+                    if (lat != 0.0) {
+                        val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        try {
+                            context.startActivity(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.no_app_found_locations_chat),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                }
+            } else {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
+
+                }
             }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = com.gigforce.common_ui.chat.ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
     }
 
@@ -285,12 +410,12 @@ abstract class LocationMessageView(
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message)
+                oneToOneChatViewModel.selectChatMessage(message, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message)
+                groupChatViewModel.selectChatMessage(message, true)
             }
         }
 
