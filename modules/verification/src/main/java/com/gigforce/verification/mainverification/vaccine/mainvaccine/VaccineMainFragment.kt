@@ -31,6 +31,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
+import com.gigforce.core.AppConstants
 import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone
@@ -41,6 +42,8 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.vaccine_main_fragment.*
 import okhttp3.MediaType
@@ -57,6 +60,14 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     private val viewModel: VaccineMainViewModel by viewModels()
     @Inject
     lateinit var navigation : INavigation
+
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +79,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
         super.onViewCreated(view, savedInstanceState)
         getIntentData(savedInstanceState)
         observers()
+        viewModel.getVaccineData(userIdToUse)
         spannableInit()
         checkIfDocUploadRequire()
         checkIfDocUploadRequireNew()
@@ -164,11 +176,19 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID)
         }?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
                     it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID)
             }
+        }
+
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
         }
 
     }
@@ -305,7 +325,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                         MultipartBody.Part.createFormData("vaccine", "${pdfname}.pdf", requestFile)
                     mutliplartFile?.let {
                         viewModel.uploadFile(
-                            VaccineIdLabelReqDM(vaccineId, vaccineLabel),
+                            VaccineIdLabelReqDM(vaccineId, vaccineLabel,userIdToUse),
                             it
                         )
                     }

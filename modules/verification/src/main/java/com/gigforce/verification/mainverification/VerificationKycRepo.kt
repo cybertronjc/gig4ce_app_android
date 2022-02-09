@@ -117,8 +117,11 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         }
     }
 
-    suspend fun getVaccinationObjectData() : DocumentSnapshot{
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME).document(getUID()).getOrThrow()
+    suspend fun getVaccinationObjectData(userIdToUse:String?=null) : DocumentSnapshot{
+        userIdToUse?.let {
+            return FirebaseFirestore.getInstance().collection(COLLECTION_NAME).document(it).getOrThrow()
+        }
+        throw Exception("User id not found!!")
     }
 
 
