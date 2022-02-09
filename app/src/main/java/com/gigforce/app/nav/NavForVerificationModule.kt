@@ -46,5 +46,6 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/SizeWarningBottomSheet",R.id.SizeWarningBottomSheet)
         baseImplementation.registerRoute("${moduleName}/VaccineUploadSuccessfulBS",R.id.VaccineUploadSuccessfulBS)
         baseImplementation.registerRoute("${moduleName}/CertificateDownloadBS",R.id.CertificateDownloadBS)
+        baseImplementation.registerRoute("${moduleName}/InvalidFormatBottomSheet",R.id.InvalidFormatBottomSheet)
     }
 }

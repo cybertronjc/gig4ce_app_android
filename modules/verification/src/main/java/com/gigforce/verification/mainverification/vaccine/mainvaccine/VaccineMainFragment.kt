@@ -361,17 +361,25 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                     val byteArr = getBytes(it)
                     val mimeType = MimeTypeMap.getSingleton()
                         .getExtensionFromMimeType(context?.contentResolver?.getType(fileUri))
-                    val requestFile: RequestBody =
-                        RequestBody.create(MediaType.parse(mimeType), byteArr)
-                    val pdfname: String =
-                        java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
-                    mutliplartFile =
-                        MultipartBody.Part.createFormData("vaccine", "${pdfname}.pdf", requestFile)
-                    mutliplartFile?.let {
-                        viewModel.uploadFile(
-                            VaccineIdLabelReqDM(vaccineId, vaccineLabel,userIdToUse),
-                            it
-                        )
+                    if(mimeType.toString().contains("pdf")) {
+                        val requestFile: RequestBody =
+                            RequestBody.create(MediaType.parse(mimeType), byteArr)
+                        val pdfname: String =
+                            java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
+                        mutliplartFile =
+                            MultipartBody.Part.createFormData(
+                                "vaccine",
+                                "${pdfname}.pdf",
+                                requestFile
+                            )
+                        mutliplartFile?.let {
+                            viewModel.uploadFile(
+                                VaccineIdLabelReqDM(vaccineId, vaccineLabel, userIdToUse),
+                                it
+                            )
+                        }
+                    }else{
+                        navigation.navigateTo("verification/InvalidFormatBottomSheet")
                     }
                 }
 
