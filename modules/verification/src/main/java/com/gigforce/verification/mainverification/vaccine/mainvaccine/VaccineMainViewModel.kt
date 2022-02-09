@@ -53,7 +53,7 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
         RetrofitFactory.createService(DownloadFileService::class.java)
 
 
-    fun getVaccineData(userIdToUse:String?=null) = viewModelScope.launch {
+    fun getVaccineData(userIdToUse:String?) = viewModelScope.launch {
         _vaccineConfigLiveData.value = Lce.loading()
         try {
             val data = intermediatorRepo.getAllVaccinationDataList(userIdToUse)
