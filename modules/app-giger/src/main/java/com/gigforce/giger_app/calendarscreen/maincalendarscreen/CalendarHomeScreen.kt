@@ -1223,8 +1223,10 @@ class CalendarHomeScreen : Fragment(),
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
         temporaryData = recyclerGenericAdapter.list.get(position)
         //event
-        val map = mapOf("Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
-        eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val map = mapOf("Giger ID" to it)
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+        }
 
         if (temporaryData.isGigAssign) {
             if (temporaryData.isUnavailable) {

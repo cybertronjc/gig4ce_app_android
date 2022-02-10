@@ -571,8 +571,10 @@ class GigDetailsFragment : Fragment(),
 
     private fun declineGigDialog() {
         //event
-        val map = mapOf("Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any, "Gig ID" to gigId)
-        eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val newMap = mapOf("Giger ID" to it, "Gig ID" to gigId)
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",newMap))
+        }
         DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
     }
 

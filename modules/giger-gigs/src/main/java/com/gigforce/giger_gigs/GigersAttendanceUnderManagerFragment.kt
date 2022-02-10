@@ -586,8 +586,10 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         )
         itemTouchHelper.startSwipe(viewHolder)
         //event
-        val map = mapOf("Giger ID" to attendanceData.gigerId as Any, "TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any, "Business Name" to attendanceData.businessName)
-        eventTracker.pushEvent(TrackingEventArgs("tl_attempted_decline",map))
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val map = mapOf("Giger ID" to attendanceData.gigerId, "TL ID" to it, "Business Name" to attendanceData.businessName)
+            eventTracker.pushEvent(TrackingEventArgs("tl_attempted_decline",map))
+        }
 
         DeclineGigDialogFragment.launch(
             attendanceData.gigId,

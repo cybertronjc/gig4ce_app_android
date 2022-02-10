@@ -276,20 +276,31 @@ class DeclineGigDialogFragment : DialogFragment() {
                 viewModel.declineGig(gigId!!, reason, isAnyUserOtherThanGigerIsDecliningTheGig)
                 if (isAnyUserOtherThanGigerIsDecliningTheGig) {
                     //event
-                    val map = mapOf(
-                        "Gig ID" to gigId as Any,
-                        "TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any,
-                        "Decline reason" to reason
-                    )
-                    eventTracker.pushEvent(TrackingEventArgs("tl_marked_decline", map))
+                    FirebaseAuth.getInstance().currentUser?.uid?.let {
+                        gigId?.let { it1 ->
+                            val map = mapOf(
+                                "Gig ID" to it1,
+                                "TL ID" to it,
+                                "Decline reason" to reason
+                            )
+                            eventTracker.pushEvent(TrackingEventArgs("tl_marked_decline", map))
+                        }
+
+                    }
+
                 } else {
                     //event
-                    val map = mapOf(
-                        "Gig ID" to gigId as Any,
-                        "Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any,
-                        "Decline reason" to reason
-                    )
-                    eventTracker.pushEvent(TrackingEventArgs("giger_marked_decline", map))
+                    FirebaseAuth.getInstance().currentUser?.uid?.let {
+                        gigId?.let { it1 ->
+                            val map = mapOf(
+                                "Gig ID" to it1,
+                                "TL ID" to it,
+                                "Decline reason" to reason
+                            )
+                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_decline", map))
+                        }
+
+                    }
                 }
             }
             else if (!gigIds.isNullOrEmpty())

@@ -520,9 +520,10 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 it.attendanceStatus = "Present"
                 it.gigStatus = GigStatus.ONGOING.getStatusString()
                 //event
-                val map = mapOf("Giger ID" to gigerId , "TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any, "Business Name" to businessName)
-                eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin",map))
-                eventTracker.setUserProperty(map)
+                FirebaseAuth.getInstance().currentUser?.uid?.let {
+                    val map = mapOf("Giger ID" to gigerId , "TL ID" to it, "Business Name" to businessName)
+                    eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin",map))
+                }
             }
 
             _markAttendanceState.postValue(
