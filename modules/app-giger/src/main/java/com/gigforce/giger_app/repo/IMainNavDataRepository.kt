@@ -44,22 +44,22 @@ class MainNavDataRepository @Inject constructor(
 
         FirebaseFirestore.getInstance().collection("AppConfigs")
             .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
-            .addSnapshotListener { value, error ->
+            .addSnapshotListener { value, _ ->
                 value?.documents?.let {
                     if (it.isNotEmpty() && reloadCount < 2) {
-                        var docData = it[0].data as? Map<String, Any>
+                        val docData = it[0].data as? Map<String, Any>
                         docData?.let { docMapData ->
-                            var versionCodeList = ArrayList<Int>()
+                            val versionCodeList = ArrayList<Int>()
                             docMapData.forEach { mapEntry ->
                                 mapEntry.key.toIntOrNull()?.let {
                                     versionCodeList.add(it)
                                 }
                             }
-                            var sortedVersionCodeList = versionCodeList.sortedDescending()
+                            val sortedVersionCodeList = versionCodeList.sortedDescending()
                             var foundVersionMapping = false
                             sortedVersionCodeList.forEach { dbVersionCode ->
                                 if (sharedPreAndCommonUtilInterface.getCurrentVersionCode() >= dbVersionCode) {
-                                    docMapData.get(dbVersionCode.toString())?.let { iconList ->
+                                    docMapData[dbVersionCode.toString()]?.let { iconList ->
                                         arrangeDataAndSetObserver(iconList)
                                     }
                                     foundVersionMapping = true
@@ -67,7 +67,7 @@ class MainNavDataRepository @Inject constructor(
                                 }
                             }
                             if (!foundVersionMapping) {
-                                docMapData.get("data")?.let { iconList ->
+                                docMapData["data"]?.let { iconList ->
                                     arrangeDataAndSetObserver(iconList)
                                 }
                             }
@@ -143,7 +143,7 @@ class MainNavDataRepository @Inject constructor(
 
     private suspend fun notifyToServer() {
         try {
-            var jsonData = JsonObject()
+            val jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             jsonData.addProperty(
                 "versionCode",
