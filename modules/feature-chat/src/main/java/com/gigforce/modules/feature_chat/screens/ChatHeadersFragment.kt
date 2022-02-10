@@ -118,6 +118,10 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                 hideSoftKeyboard()
             } else if (sharedFileSubmitted) {
                 navigation.navigateTo("common/landingScreen")
+            }  else if (isMultiSelectEnable) {
+                viewModel.setMultiSelectEnable(false)
+                viewModel.clearSelectedChats()
+                makeMultiSelectUiEnable(false)
             } else {
                 isEnabled = false
                 activity?.onBackPressed()
