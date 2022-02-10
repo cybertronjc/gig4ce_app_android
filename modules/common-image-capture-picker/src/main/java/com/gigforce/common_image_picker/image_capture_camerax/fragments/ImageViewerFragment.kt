@@ -183,7 +183,9 @@ class ImageViewerFragment : Fragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Unable to detect face")
                             .setMessage(getString(R.string.something_seems_off_common) )
-                            .setPositiveButton(getString(R.string.okay_common)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_common)) { _, _ ->
+                                sharedCameraViewModel.clickedImageDiscarded()
+                            }
                             .show()
                     }
                     is ImageViewerViewState.ImageUploadFailed -> {
