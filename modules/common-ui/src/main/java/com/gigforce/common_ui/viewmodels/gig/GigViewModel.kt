@@ -43,6 +43,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -58,8 +59,6 @@ class GigViewModel constructor(
 
     var gigOrder: GigOrder? = null
 
-    @Inject
-    lateinit var eventTracker: IEventTracker
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -605,16 +604,6 @@ class GigViewModel constructor(
                         "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
                     )
                 )
-            if (isDeclinedByTL){
-                //event
-                val map = mapOf("Giger ID" to currentGig?.gigerId as Any, "TL ID" to currentUser.uid as Any, "Business Name" to currentGig?.getFullCompanyName() as Any, "JobProfile ID" to currentGig?.profile?.id as Any, "Decline reason" to reason)
-                eventTracker.pushEvent(TrackingEventArgs("tl_marked_decline",map))
-            } else {
-                //event
-                val map = mapOf("Giger ID" to currentGig?.gigerId as Any, "Business Name" to currentGig?.getFullCompanyName() as Any, "JobProfile ID" to currentGig?.profile?.id as Any, "Decline reason" to reason)
-                eventTracker.pushEvent(TrackingEventArgs("giger_marked_decline",map))
-            }
-
 
             _declineGig.value = Lse.success()
         } catch (e: Exception) {

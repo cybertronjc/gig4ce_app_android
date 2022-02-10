@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
@@ -19,14 +21,18 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.viewModels.SharedGigerAttendanceUnderManagerViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*
+import javax.inject.Inject
 
 interface DeclineGigDialogFragmentResultListener {
 
     fun gigDeclined()
 }
 
+@AndroidEntryPoint
 class DeclineGigDialogFragment : DialogFragment() {
 
     companion object {
@@ -68,6 +74,9 @@ class DeclineGigDialogFragment : DialogFragment() {
     private var gigId: String? = null
     private var gigIds: ArrayList<String>? = null
     private var isAnyUserOtherThanGigerIsDecliningTheGig = false
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private var mDeclineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener? =
         null
@@ -263,8 +272,26 @@ class DeclineGigDialogFragment : DialogFragment() {
                     reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 
-            if (gigId != null)
+            if (gigId != null) {
                 viewModel.declineGig(gigId!!, reason, isAnyUserOtherThanGigerIsDecliningTheGig)
+                if (isAnyUserOtherThanGigerIsDecliningTheGig) {
+                    //event
+                    val map = mapOf(
+                        "Gig ID" to gigId as Any,
+                        "TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any,
+                        "Decline reason" to reason
+                    )
+                    eventTracker.pushEvent(TrackingEventArgs("tl_marked_decline", map))
+                } else {
+                    //event
+                    val map = mapOf(
+                        "Gig ID" to gigId as Any,
+                        "Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any,
+                        "Decline reason" to reason
+                    )
+                    eventTracker.pushEvent(TrackingEventArgs("giger_marked_decline", map))
+                }
+            }
             else if (!gigIds.isNullOrEmpty())
                 viewModel.declineGigs(gigIds!!, reason)
         }
