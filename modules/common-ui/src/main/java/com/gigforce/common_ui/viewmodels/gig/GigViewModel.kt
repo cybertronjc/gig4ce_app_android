@@ -43,7 +43,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@HiltViewModel
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()

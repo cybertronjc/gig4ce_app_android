@@ -283,7 +283,9 @@ class GigPage2Fragment : Fragment(),
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
                     if (imageClickedPath != null) {
-
+                        //event
+                        val map = mapOf("TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
+                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                         checkForLateOrEarlyCheckIn()
                     } else {
                         startCameraForCapturingSelfie()
@@ -494,9 +496,6 @@ class GigPage2Fragment : Fragment(),
                         } else {
                             showToast(getString(R.string.checkin_marked_giger_gigs))
                             plantLocationTrackers()
-                            //event
-                            val map = mapOf("TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
-                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
 
                             eventTracker.pushEvent(
                                 TrackingEventArgs(
@@ -940,6 +939,9 @@ class GigPage2Fragment : Fragment(),
             REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     imageClickedPath = data?.getStringExtra("image_name")
+                    //event
+                    val map = mapOf("TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
+                    eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                     checkForLateOrEarlyCheckIn()
                 }
             }
@@ -948,6 +950,9 @@ class GigPage2Fragment : Fragment(),
                     imageClickedPath =
                         data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
                     Log.d("clickedPath", "$imageClickedPath")
+                    //event
+                    val map = mapOf("TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
+                    eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                     checkForLateOrEarlyCheckIn()
                 }
             }
