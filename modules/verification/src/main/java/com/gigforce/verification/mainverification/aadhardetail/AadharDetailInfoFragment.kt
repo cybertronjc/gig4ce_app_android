@@ -887,7 +887,9 @@ class AadharDetailInfoFragment : Fragment(),
         addLine1Input.isEnabled = enable
         addLine2Input.isEnabled = enable
         stateSpinner.isEnabled = enable
+        stateLayout.isEnabled = enable
         citySpinner.isEnabled = enable
+        cityLayout.isEnabled = enable
         pincode.editText?.isEnabled = enable
         landmark.editText?.isEnabled = enable
         nomineeCheckbox.isEnabled = enable
