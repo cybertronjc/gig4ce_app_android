@@ -638,7 +638,7 @@ class ChatRepository @Inject constructor(
             val receiverChatMessageCollection = receiverHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
-            val batch1 = db.batch()
+            //val batch1 = db.batch()
             if (lastMessageIdInHeader != null) {
                 val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
                     .document(lastMessageIdInHeader)
@@ -668,19 +668,19 @@ class ChatRepository @Inject constructor(
                             .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
-                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
-                batch1.update(
-                    receiverMessageRef, mapOf(
-                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
-                        "updatedAt" to Timestamp.now(),
-                        "updatedBy" to FirebaseAuthStateListener.getInstance()
-                            .getCurrentSignInUserInfoOrThrow().uid
-                    )
-                )
+//                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
+//                batch1.update(
+//                    receiverMessageRef, mapOf(
+//                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+//                        "updatedAt" to Timestamp.now(),
+//                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                            .getCurrentSignInUserInfoOrThrow().uid
+//                    )
+//                )
             }
 
             batch.commitOrThrow()
-            batch1.commitOrThrow()
+            //batch1.commitOrThrow()
         }
     }
 
