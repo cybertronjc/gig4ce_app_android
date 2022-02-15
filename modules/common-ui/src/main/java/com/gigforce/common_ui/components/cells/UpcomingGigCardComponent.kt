@@ -22,7 +22,9 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.utils.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -44,6 +46,9 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
 
     init {
@@ -58,6 +63,11 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
     }
 
     fun callManager(number: String?) {
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                "giger_call_tl", null
+            )
+        )
         val intent = Intent(
             Intent.ACTION_DIAL,
             Uri.fromParts("tel", number, null)

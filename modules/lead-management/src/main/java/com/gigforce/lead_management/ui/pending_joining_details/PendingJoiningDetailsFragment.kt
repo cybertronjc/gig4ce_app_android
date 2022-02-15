@@ -11,6 +11,8 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -44,6 +46,9 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     @Inject
     lateinit var navigation : INavigation
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private var gigerPhone = ""
     private lateinit var joiningId : String
     private val viewModel : GigerInfoViewModel by viewModels()
@@ -64,11 +69,20 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
     private fun initUi() {
         viewBinding.overlayCardLayout.skipLabel.setOnClickListener {
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "giger_skip_selection_banner", null
+                )
+            )
             findNavController().navigateUp()
         }
 
         viewBinding.bottomButtonLayout.callLayout.setOnClickListener {
-
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "giger_call_tl", null
+                )
+            )
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,
