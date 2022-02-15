@@ -324,15 +324,18 @@ class ChatPageViewModel @Inject constructor(
                     }
 
                     this.chatMessages = messages.toMutableList()
-//                    chatMessages?.let {
-//
-//                        val unreadMessages = it.filter {
-//                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
-//                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
-//                                    it.senderMessageId.isNotBlank()
-//                        }
-//                        setMessagesAsRead(unreadMessages)
-//                    }
+                    chatMessages?.let {
+
+                        val unreadMessages = it.filter {
+                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
+                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
+                                    it.senderMessageId.isNotBlank()
+                        }
+                        if (unreadMessages.isNotEmpty()){
+                            setMessagesAsRead(unreadMessages)
+                        }
+
+                    }
                     if (messages.isNotEmpty()) {
                         var recentLiveLocationMessage : ChatMessage? = null
                         val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
