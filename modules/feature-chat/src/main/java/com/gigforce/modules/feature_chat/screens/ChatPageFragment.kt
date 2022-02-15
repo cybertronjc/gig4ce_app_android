@@ -64,6 +64,7 @@ import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_
 import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_MAP_IMAGE_FILE
 import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_PHYSICAL_ADDRESS
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.modules.feature_chat.adapters.diffutils.Chat2DiffUtilCallback
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
@@ -611,6 +612,7 @@ class ChatPageFragment : Fragment(),
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         chatRecyclerView.layoutManager = layoutManager
+        chatRecyclerView.setDiffUtilCallback(Chat2DiffUtilCallback())
 
         val itemTouchHelper = ItemTouchHelper(messageSwipeController)
         itemTouchHelper.attachToRecyclerView(chatRecyclerView)
