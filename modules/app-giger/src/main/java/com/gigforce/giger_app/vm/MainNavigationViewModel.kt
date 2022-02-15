@@ -28,7 +28,9 @@ class MainNavigationViewModel @Inject constructor(
 
     private fun requestData() = viewModelScope.launch {
         try {
-            repository.getData().catch {  }.collect {
+            repository.getData().catch {
+
+            }.collect {
                 _liveData.value = it
             }
         } catch (e: Exception) {

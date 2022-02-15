@@ -113,6 +113,9 @@ interface ViewModelBindings {
 
     @Binds
     fun provideSharedData(imp: SharedPreAndCommonUtilDataImp): SharedPreAndCommonUtilInterface
+
+    @Binds
+    fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 }
 
 

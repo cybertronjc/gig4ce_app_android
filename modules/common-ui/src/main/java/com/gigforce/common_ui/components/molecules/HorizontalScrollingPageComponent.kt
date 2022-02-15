@@ -37,7 +37,8 @@ open class HorizontalScrollingPageComponent<T>(
         LayoutInflater.from(context).inflate(R.layout.component_horizontal_scroll_page, this, true)
         initViews()
     }
-
+    fun getRecyclerView() = recyclerView
+    fun getContainerView() = containerLayout
     private fun initViews() {
         recyclerView = findViewById(R.id.recycler_view)
         containerLayout = findViewById(R.id.card_view)
