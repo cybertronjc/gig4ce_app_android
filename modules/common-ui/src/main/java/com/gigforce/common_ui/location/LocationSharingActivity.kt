@@ -27,6 +27,7 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.databinding.ActivityLocationSharingBinding
 import com.gigforce.common_ui.ext.onTabSelected
+import com.gigforce.common_ui.viewdatamodels.chat.LiveLocationInfo
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_HEADER_ID
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_TYPE
@@ -81,6 +82,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
     private val viewModel: LocationSharingViewModel by viewModels()
 
     private var chatMessage: ChatMessage? = null
+    private var liveLocationInfo: LiveLocationInfo? = null
 
 
     // The BroadcastReceiver used to listen from broadcasts from the service.
@@ -263,28 +265,33 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             viewModel.startWatchingGroupDetails(chatHeaderOrGroupId!!)
         }
 
-        viewModel.liveLocationMessage.observe(this, androidx.lifecycle.Observer {
-            Log.d("ViewLiveLocationFragment", "message: ${it?.isCurrentlySharingLiveLocation} ${it?.id} , ${it?.location} , ${it?.isLiveLocation}")
+        viewModel.liveChatMessage.observe(this, androidx.lifecycle.Observer {
+            Log.d("ViewLiveLocationFragment", "message:  , ${it?.isLiveLocation}")
             chatMessage = it
-            if (it?.location != null){
+        })
+
+        viewModel.liveLocationMessage.observe(this, androidx.lifecycle.Observer {
+            Log.d("ViewLiveLocationFragment", "message: ${it?.isCurrentlySharingLiveLocation} , ${it?.liveLocation} , ${it?.isLiveLocation}")
+            liveLocationInfo = it
+            if (it?.liveLocation != null){
                 Log.d("CheckInFragment", "Setting live location")
-                it.location?.let { it1 -> addMarkerOnMap(it1.latitude, it1.longitude) }
+                it.liveLocation?.let { it1 -> addMarkerOnMap(it1.latitude, it1.longitude) }
             }
             if (it?.isCurrentlySharingLiveLocation == true){
-                if (it?.senderInfo?.id == FirebaseAuth.getInstance().currentUser?.uid){
+                if (chatMessage?.senderInfo?.id == FirebaseAuth.getInstance().currentUser?.uid){
                     //current user is sender -> show stop sharing button and time left
                     viewBinding.stopSharing.visible()
                     viewBinding.personName.text = "You"
                     viewBinding.timeLeft.text = it?.liveEndTime?.let { it1 -> getDuration(it1) } + " left"
                 } else {
                     viewBinding.stopSharing.gone()
-                    viewBinding.personName.text = it?.senderInfo?.name ?: ""
+                    viewBinding.personName.text = chatMessage?.senderInfo?.name ?: ""
                     viewBinding.timeLeft.text = "Updated " + it?.updatedAt?.toDate()?.let { it1 ->
                         com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it1)
                     }?.let { it2 -> formatTimeAgo(it2) }
                 }
             } else {
-                viewBinding.appBarComp.setAppBarTitle(it?.receiverInfo?.name ?: "Live location")
+                viewBinding.appBarComp.setAppBarTitle(chatMessage?.receiverInfo?.name ?: "Live location")
                 viewBinding.stopSharing.gone()
                 viewBinding.timeLeft.gone()
                 viewBinding.personName.gone()

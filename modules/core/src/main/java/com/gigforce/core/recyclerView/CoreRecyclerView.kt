@@ -62,9 +62,12 @@ open class CoreRecyclerView(
             this.coreAdapter.collection = value
         }
 
-    fun filter(predicate: (Any) -> Boolean) {
-        this.coreAdapter.filter(predicate)
+    fun setDiffUtilCallback(
+        diffUtilCallback : CoreDiffUtilCallback<*>
+    ){
+        this.coreAdapter.diffUtilCallBack = diffUtilCallback
     }
+
 
     fun smoothScrollToLastPosition() {
         if (adapter == null)
@@ -84,9 +87,6 @@ open class CoreRecyclerView(
         }
     }
 
-    fun resetFilter() {
-        this.coreAdapter.resetFilter()
-    }
 
     var itemClickListener: ItemClickListener? = null
         set(value) {
