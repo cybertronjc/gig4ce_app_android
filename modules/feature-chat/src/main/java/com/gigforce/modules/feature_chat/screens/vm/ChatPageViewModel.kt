@@ -331,7 +331,10 @@ class ChatPageViewModel @Inject constructor(
 //                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
 //                                    it.senderMessageId.isNotBlank()
 //                        }
-//                        setMessagesAsRead(unreadMessages)
+//                        if (unreadMessages.isNotEmpty()){
+//                            setMessagesAsRead(unreadMessages)
+//                        }
+//
 //                    }
                     if (messages.isNotEmpty()) {
                         var recentLiveLocationMessage : ChatMessage? = null

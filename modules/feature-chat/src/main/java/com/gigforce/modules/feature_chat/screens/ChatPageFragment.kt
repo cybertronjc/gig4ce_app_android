@@ -790,6 +790,12 @@ class ChatPageFragment : Fragment(),
                     noChatLayout.visible()
                 }
                 else {
+                    //set messages as read
+//                    val unreadMessages = messages.filter { it.flowType == ChatConstants.FLOW_TYPE_IN && it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER }
+//                    Log.d("unreadMessages", "${unreadMessages.size}")
+//                    if (unreadMessages.isNotEmpty()) {
+//                            viewModel.setMessagesAsRead(unreadMessages)
+//                    }
                     messages.let {
                         chatRecyclerView.collection = messages.map {
                             ChatMessageWrapper(
@@ -803,11 +809,6 @@ class ChatPageFragment : Fragment(),
                         chatRecyclerView.visible()
                         noChatLayout.gone()
                         shimmerContainer.gone()
-
-                        //set messages as read
-                        val unreadMessages = messages.filter { it.flowType == ChatConstants.FLOW_TYPE_IN && it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER }
-                        Log.d("unreadMessages", "${unreadMessages.size}")
-                        viewModel.setMessagesAsRead(unreadMessages)
 
                     }
                 }

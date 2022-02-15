@@ -616,6 +616,7 @@ class ChatRepository @Inject constructor(
             val unreadMessage = unreadMessages.first()
 
             val senderId = unreadMessage.senderInfo.id
+            val receiverId = unreadMessage.receiverInfo?.id
             val headerId = unreadMessage.headerId
 
             val senderHeaderRef = FirebaseFirestore.getInstance()
@@ -626,7 +627,7 @@ class ChatRepository @Inject constructor(
 
             val receiverHeaderRef = FirebaseFirestore.getInstance()
                 .collection(ChatGroupRepository.COLLECTION_CHATS)
-                .document(getUID())
+                .document(receiverId.toString())
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(headerId)
 
@@ -637,6 +638,7 @@ class ChatRepository @Inject constructor(
             val receiverChatMessageCollection = receiverHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
+            val batch1 = db.batch()
             if (lastMessageIdInHeader != null) {
                 val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
                     .document(lastMessageIdInHeader)
@@ -667,7 +669,7 @@ class ChatRepository @Inject constructor(
                     )
                 )
                 val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
-                batch.update(
+                batch1.update(
                     receiverMessageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                         "updatedAt" to Timestamp.now(),
@@ -678,6 +680,7 @@ class ChatRepository @Inject constructor(
             }
 
             batch.commitOrThrow()
+            batch1.commitOrThrow()
         }
     }
 
