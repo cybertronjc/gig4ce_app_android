@@ -147,8 +147,9 @@ class MainNavDataRepository @Inject constructor(
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            Log.e("flowtest",dbVersionCode.toString())
+                                            Log.e("flowtest", "$foundVersionMapping $currentVersion $dbVersionCode")
                                             sendBlocking(arrangedData)
+                                            return@let
 //                                            producerScope?.sendBlocking(arrangedData)
                                         }
                                     }

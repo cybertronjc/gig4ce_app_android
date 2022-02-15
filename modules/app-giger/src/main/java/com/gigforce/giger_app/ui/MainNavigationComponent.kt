@@ -33,11 +33,18 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this.rootView)!!).get()
+        super.bind(
+            FeatureLayoutDVM(
+                data?.imageUrl ?: "",
+                data?.title ?: "",
+                viewModel?.getDefaultData() ?: listOf()
+            )
+        )
         viewModel?.liveData?.observeForever {
             try {
-                Log.e("flowtest","working")
+                Log.e("flowtest","${it.size} working")
                 val filteredData =
-                    it.filter { it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
+                    it.filter { true}//it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
                 if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                     super.bind(
                         FeatureLayoutDVM(
@@ -64,13 +71,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
 
             }
         }
-        super.bind(
-            FeatureLayoutDVM(
-                data?.imageUrl ?: "",
-                data?.title ?: "",
-                viewModel?.getDefaultData() ?: listOf()
-            )
-        )
+
     }
 
     override fun bind(data: Any?) {
