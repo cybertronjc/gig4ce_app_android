@@ -1,6 +1,8 @@
 package com.gigforce.giger_app.repo
 
 import android.content.Context
+import android.system.Os
+import android.util.Log
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -15,11 +17,9 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ClosedSendChannelException
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -74,6 +74,7 @@ class MainNavDataRepository @Inject constructor(
                         )
                     )
                 } catch (e: Exception) {
+                    Log.e("flowtest",e.toString())
 
                 }
 
@@ -84,6 +85,7 @@ class MainNavDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
+            Log.e("flowtest",mainNavData.size.toString())
             receivedNotifyToServer()
             reloadCount++
             return mainNavData
@@ -113,9 +115,9 @@ class MainNavDataRepository @Inject constructor(
         }
     }
     var producerScope : ProducerScope<ArrayList<FeatureItemCard2DVM>>?=null
-    override fun getData(): Flow<ArrayList<FeatureItemCard2DVM>> {
+    override fun getData(): Flow<List<FeatureItemCard2DVM>> {
 
-        return channelFlow {
+        return callbackFlow {
             producerScope = this
             FirebaseFirestore.getInstance().collection("AppConfigs")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
@@ -125,6 +127,7 @@ class MainNavDataRepository @Inject constructor(
                     } else {
                         data?.documents?.let {
                             if (it.isNotEmpty() && reloadCount < 2) {
+
                                 val docData = it[0].data as? Map<String, Any>
                                 docData?.let { docMapData ->
                                     val versionCodeList = ArrayList<Int>()
@@ -144,7 +147,9 @@ class MainNavDataRepository @Inject constructor(
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            producerScope?.sendBlocking(arrangedData)
+                                            Log.e("flowtest",dbVersionCode.toString())
+                                            sendBlocking(arrangedData)
+//                                            producerScope?.sendBlocking(arrangedData)
                                         }
                                     }
                                     if (!foundVersionMapping) {
@@ -152,7 +157,9 @@ class MainNavDataRepository @Inject constructor(
                                         docMapData.get("data")?.let { iconList ->
                                             arrangedData = arrangeDataAndSetObserver(iconList)
                                         }
-                                        producerScope?.sendBlocking(arrangedData)
+                                        Log.e("flowtest"," data ")
+                                        sendBlocking(arrangedData)
+//                                        producerScope?.sendBlocking(arrangedData)
                                     }
                                 }
 
@@ -163,6 +170,7 @@ class MainNavDataRepository @Inject constructor(
                         }
                     }
                 }
+            awaitClose{ }
         }
 
     }

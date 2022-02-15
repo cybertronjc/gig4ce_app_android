@@ -35,6 +35,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
         viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this.rootView)!!).get()
         viewModel?.liveData?.observeForever {
             try {
+                Log.e("flowtest","working")
                 val filteredData =
                     it.filter { it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
                 if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
