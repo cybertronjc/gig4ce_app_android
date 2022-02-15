@@ -26,9 +26,9 @@ class Chat2DiffUtilCallback() : CoreDiffUtilCallback<ChatMessageWrapper>() {
         return oldMessage.message.id == newMessage.message.id &&
                 oldMessage.message.attachmentPath == newMessage.message.attachmentPath &&
                 oldMessage.message.thumbnail == newMessage.message.thumbnail &&
-                (oldMessage.message.thumbnailBitmap == null && newMessage.message.thumbnailBitmap != null) &&
-                oldMessage.message.status == oldMessage.message.status &&
-                oldMessage.message.isDeleted == oldMessage.message.isDeleted &&
+                oldMessage.message.thumbnailBitmap == newMessage.message.thumbnailBitmap  &&
+                oldMessage.message.status == newMessage.message.status &&
+                oldMessage.message.isDeleted == newMessage.message.isDeleted &&
                 oldMessage.message.isMessageChatEvent == newMessage.message.isMessageChatEvent &&
                 oldMessage.message.location == newMessage.message.location &&
                 oldMessage.message.deletedOn == newMessage.message.deletedOn &&
