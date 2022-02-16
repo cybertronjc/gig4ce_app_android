@@ -22,13 +22,13 @@ class MainNavigationViewModel @Inject constructor(
         MutableLiveData<List<FeatureItemCard2DVM>>()
     var liveData: LiveData<List<FeatureItemCard2DVM>> = _liveData
 
-    init {
-        requestData()
-    }
+//    init {
+//        requestData()
+//    }
 
-    private fun requestData() = viewModelScope.launch {
+    fun requestData(currentVersionCode:Int) = viewModelScope.launch {
         try {
-            repository.getData().catch {
+            repository.getData(currentVersionCode).catch {
 
             }.collect {
                 _liveData.value = it

@@ -33,6 +33,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this.rootView)!!).get()
+        viewModel?.requestData(sharedPreAndCommonUtilInterface.getCurrentVersionCode())
         super.bind(
             FeatureLayoutDVM(
                 data?.imageUrl ?: "",

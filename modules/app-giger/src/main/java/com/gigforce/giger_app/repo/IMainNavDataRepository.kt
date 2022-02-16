@@ -26,17 +26,17 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 interface IMainNavDataRepository {
-    fun getData(): Flow<List<FeatureItemCard2DVM>>
+    fun getData(currentVersionCode:Int): Flow<List<FeatureItemCard2DVM>>
     fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
 }
 
 class MainNavDataRepository @Inject constructor(
     private val buildConfig: IBuildConfig
+
 ) : IMainNavDataRepository {
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var reloadCount = 0
-    private val currentVersion = 174
-
+    private var currentVersionCode : Int?=0
 
     private fun arrangeDataAndSetObserver(iconList: Any): ArrayList<FeatureItemCard2DVM> {
         val list = iconList as? List<Map<String, Any>>
@@ -74,7 +74,6 @@ class MainNavDataRepository @Inject constructor(
                         )
                     )
                 } catch (e: Exception) {
-                    Log.e("flowtest",e.toString())
 
                 }
 
@@ -85,7 +84,7 @@ class MainNavDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            Log.e("flowtest",mainNavData.size.toString())
+            Log.e("flowtest",tempMainNavData.size.toString()+" items found")
             receivedNotifyToServer()
             reloadCount++
             return mainNavData
@@ -103,11 +102,11 @@ class MainNavDataRepository @Inject constructor(
 
     private suspend fun notifyToServer() {
         try {
-            var jsonData = JsonObject()
+            val jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             jsonData.addProperty(
                 "versionCode",
-                currentVersion
+                currentVersionCode
             )
             appRenderingService.notifyToServer(buildConfig.getApiBaseURL(), jsonData)
         } catch (e: Exception) {
@@ -115,7 +114,8 @@ class MainNavDataRepository @Inject constructor(
         }
     }
     var producerScope : ProducerScope<ArrayList<FeatureItemCard2DVM>>?=null
-    override fun getData(): Flow<List<FeatureItemCard2DVM>> {
+    override fun getData(currentVersionCode: Int): Flow<List<FeatureItemCard2DVM>> {
+        this.currentVersionCode = currentVersionCode
 
         return callbackFlow {
             producerScope = this
@@ -140,17 +140,17 @@ class MainNavDataRepository @Inject constructor(
                                         versionCodeList.sortedDescending()
                                     var foundVersionMapping = false
                                     sortedVersionCodeList.forEach { dbVersionCode ->
-                                        if (currentVersion >= dbVersionCode) {
+                                        Log.e("flowtest", "$currentVersionCode and dbversion $dbVersionCode")
+
+                                        if (currentVersionCode >= dbVersionCode) {
                                             var arrangedData = ArrayList<FeatureItemCard2DVM>()
                                             docMapData.get(dbVersionCode.toString())
                                                 ?.let { iconList ->
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            Log.e("flowtest", "$foundVersionMapping $currentVersion $dbVersionCode")
                                             sendBlocking(arrangedData)
                                             return@let
-//                                            producerScope?.sendBlocking(arrangedData)
                                         }
                                     }
                                     if (!foundVersionMapping) {
@@ -158,9 +158,7 @@ class MainNavDataRepository @Inject constructor(
                                         docMapData.get("data")?.let { iconList ->
                                             arrangedData = arrangeDataAndSetObserver(iconList)
                                         }
-                                        Log.e("flowtest"," data ")
                                         sendBlocking(arrangedData)
-//                                        producerScope?.sendBlocking(arrangedData)
                                     }
                                 }
 
