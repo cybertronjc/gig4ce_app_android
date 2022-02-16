@@ -28,6 +28,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.*
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -62,6 +63,9 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     @Inject
     lateinit var eventTracker: IEventTracker
 
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     private var userId: String? = null
     private val user: FirebaseUser?
         get() {
@@ -78,6 +82,10 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+            false
+        )
         getIntentData(savedInstanceState)
         observers()
         viewModel.getVaccineData(userIdToUse)
