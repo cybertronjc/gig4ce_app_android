@@ -116,7 +116,7 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
     }
 
     private fun validateAllValues() {
-        if (!gender.equals("") && !username.text.toString().equals("") )  {
+        if (!gender.equals("") && !username.text.toString().trim().equals("") )  {
             formCompletionListener?.enableDisableNextButton(true)
         } else {
             formCompletionListener?.enableDisableNextButton(false)

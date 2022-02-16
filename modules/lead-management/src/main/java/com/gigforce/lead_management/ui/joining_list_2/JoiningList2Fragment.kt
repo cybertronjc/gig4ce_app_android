@@ -521,6 +521,15 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             navigation.popBackStack()
             navigation.navigateTo("common/calendarScreen")
             return true
+        } else if (viewModel.getSelectEnableGlobal()){
+            viewModel.resetViewModel()
+            viewModel.clearCachedRawJoinings()
+            viewModel.getJoinings()
+            if (title.isNotBlank())
+                viewBinding.appBarComp.setAppBarTitle(title)
+            else
+                viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+            return true
         }
         return false
     }

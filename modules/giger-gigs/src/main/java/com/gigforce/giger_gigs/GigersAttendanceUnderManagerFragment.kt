@@ -100,6 +100,8 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         viewBinding.toolbar.setBackButtonListener {
             if (viewBinding.toolbar.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
+            } else if (viewBinding){
+
             } else {
                 activity?.onBackPressed()
             }

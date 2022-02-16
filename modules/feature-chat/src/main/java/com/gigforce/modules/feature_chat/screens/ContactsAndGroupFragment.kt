@@ -373,6 +373,10 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 stateCreateNewGroup()
             }
 
+            viewBinding.askContactsPermission.setOnClickListener {
+                startAppSettingsPage()
+            }
+
         createGroupFab.setOnClickListener {
             if (contactsAdapter.getSelectedContact().isEmpty()) {
                 showToast(getString(R.string.select_at_least_one_contact_chat))
