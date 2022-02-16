@@ -129,21 +129,21 @@ class ChatRepository @Inject constructor(
         }
     }
 
-     override suspend fun setLocationToSenderChatMessage(
+    override suspend fun setLocationToSenderChatMessage(
         id: String,
         messageId: String,
         location: GeoPoint
     ){
         try {
             val chatMessagesRef = getChatMessagesCollectionRef(id)
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).setOrThrow(
-                    mapOf(
-                        "liveLocation" to location,
-                        "isCurrentlySharingLiveLocation" to true,
-                        "updatedAt" to Timestamp.now(),
-                        "updatedBy" to getUID()
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
                 )
-                )
+            )
         } catch (e: Exception){
             Log.d("ChatRepository", "exc: ${e.message}")
         }
@@ -156,9 +156,9 @@ class ChatRepository @Inject constructor(
     ){
         try {
             val chatMessagesRef = getChatMessagesCollectionRef(id)
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).setOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
-                    "liveLocation" to location,
+                    "location" to location,
                     "isCurrentlySharingLiveLocation" to false,
                     "updatedAt" to Timestamp.now(),
                     "updatedBy" to getUID()
@@ -182,9 +182,9 @@ class ChatRepository @Inject constructor(
                 .document(id)
                 .collection(COLLECTION_CHATS_MESSAGES)
 
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).setOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
-                    "liveLocation" to location,
+                    "location" to location,
                     "isCurrentlySharingLiveLocation" to false,
                     "updatedAt" to Timestamp.now(),
                     "updatedBy" to getUID()
@@ -203,7 +203,7 @@ class ChatRepository @Inject constructor(
                 .document(id)
                 .collection(COLLECTION_CHATS_MESSAGES)
 
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).updateOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
                     "isCurrentlySharingLiveLocation" to false,
                     "updatedAt" to Timestamp.now(),
@@ -228,10 +228,10 @@ class ChatRepository @Inject constructor(
                 .document(id)
                 .collection(COLLECTION_CHATS_MESSAGES)
 
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).setOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
-                    "liveLocation" to location,
-                    "isCurrentlySharingLiveLocation" to false,
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
                     "updatedAt" to Timestamp.now(),
                     "updatedBy" to getUID()
                 )
@@ -244,7 +244,7 @@ class ChatRepository @Inject constructor(
     override suspend fun stopSharingLocation(id: String, messageId: String) {
         try {
             val chatMessagesRef = getChatMessagesCollectionRef(id)
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).updateOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
                     "isCurrentlySharingLiveLocation" to false,
                     "updatedAt" to Timestamp.now(),
@@ -267,7 +267,7 @@ class ChatRepository @Inject constructor(
                 .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
                 .document(id)
                 .collection(COLLECTION_CHATS_MESSAGES)
-            chatMessagesRef.document(messageId).collection("live_location").document(messageId).updateOrThrow(
+            chatMessagesRef.document(messageId).updateOrThrow(
                 mapOf(
                     "isCurrentlySharingLiveLocation" to false,
                     "updatedAt" to Timestamp.now(),

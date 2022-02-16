@@ -48,11 +48,8 @@ class LocationSharingViewModel @Inject constructor(
     private val _groupInfo: MutableLiveData<ChatGroup> = MutableLiveData()
     val groupInfo: LiveData<ChatGroup> = _groupInfo
 
-    private var _liveLocationMessage = MutableLiveData<LiveLocationInfo?>()
-    val liveLocationMessage: LiveData<LiveLocationInfo?> = _liveLocationMessage
-
-    private var _liveChatMessage = MutableLiveData<ChatMessage?>()
-    val liveChatMessage: LiveData<ChatMessage?> = _liveChatMessage
+    private var _liveLocationMessage = MutableLiveData<ChatMessage?>()
+    val liveLocationMessage: LiveData<ChatMessage?> = _liveLocationMessage
 
     fun addSnapshotToLiveLocationMessage(header: String, messageId: String){
         this.headerId = header
@@ -61,7 +58,7 @@ class LocationSharingViewModel @Inject constructor(
             //header is not blank
             Log.d(TAG, "header: $headerId")
 
-            chatMessageListener = getReference(headerId).document(messageId).collection("live_location").document(messageId).addSnapshotListener { value, error ->
+            chatMessageListener = getReference(headerId).document(messageId).addSnapshotListener { value, error ->
 
                 Log.d(TAG, "live location changed/subscribed, messageId - $messageId")
 
@@ -70,29 +67,16 @@ class LocationSharingViewModel @Inject constructor(
                 }
 
                 if (value != null){
-                    val chatMessage = value.toObject(LiveLocationInfo::class.java)
-                    _liveLocationMessage.postValue(chatMessage)
-                }
-            }
-
-            val reference = getReference(headerId).document(messageId).addSnapshotListener { value, error ->
-                Log.d(TAG, "live location message changed/subscribed, messageId - $messageId")
-
-                error?.let {
-                    CrashlyticsLogger.e(TAG, "In startWatchingLiveLocation()", it)
-                }
-
-                if (value != null){
                     val chatMessage = value.toObject(ChatMessage::class.java)
-                    _liveChatMessage.postValue(chatMessage)
+                    _liveLocationMessage.postValue(chatMessage)
                 }
             }
 
         }
     }
 
-     fun startListeningForHeaderChanges(header: String) {
-         this.headerId = header
+    fun startListeningForHeaderChanges(header: String) {
+        this.headerId = header
         if (headerId.isBlank()) {
             return
         }
@@ -143,7 +127,7 @@ class LocationSharingViewModel @Inject constructor(
             //header is not blank
             Log.d(TAG, "groupId: $groupId")
 
-            chatMessageListener = getGroupChatReference(groupId).document(messageId).collection("live_location").document(messageId).addSnapshotListener { value, error ->
+            chatMessageListener = getGroupChatReference(groupId).document(messageId).addSnapshotListener { value, error ->
 
                 Log.d(TAG, "group live location changed/subscribed, messageId - $messageId")
 
@@ -152,7 +136,7 @@ class LocationSharingViewModel @Inject constructor(
                 }
 
                 if (value != null){
-                    val chatMessage = value.toObject(LiveLocationInfo::class.java)
+                    val chatMessage = value.toObject(ChatMessage::class.java)
                     _liveLocationMessage.postValue(chatMessage)
                 }
             }

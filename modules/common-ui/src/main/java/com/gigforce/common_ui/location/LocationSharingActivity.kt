@@ -82,7 +82,6 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
     private val viewModel: LocationSharingViewModel by viewModels()
 
     private var chatMessage: ChatMessage? = null
-    private var liveLocationInfo: LiveLocationInfo? = null
 
 
     // The BroadcastReceiver used to listen from broadcasts from the service.
@@ -265,33 +264,28 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             viewModel.startWatchingGroupDetails(chatHeaderOrGroupId!!)
         }
 
-        viewModel.liveChatMessage.observe(this, androidx.lifecycle.Observer {
-            Log.d("ViewLiveLocationFragment", "message:  , ${it?.isLiveLocation}")
-            chatMessage = it
-        })
-
         viewModel.liveLocationMessage.observe(this, androidx.lifecycle.Observer {
-            Log.d("ViewLiveLocationFragment", "message: ${it?.isCurrentlySharingLiveLocation} , ${it?.liveLocation} , ${it?.isLiveLocation}")
-            liveLocationInfo = it
-            if (it?.liveLocation != null){
+            Log.d("ViewLiveLocationFragment", "message: ${it?.isCurrentlySharingLiveLocation} ${it?.id} , ${it?.location} , ${it?.isLiveLocation}")
+            chatMessage = it
+            if (it?.location != null){
                 Log.d("CheckInFragment", "Setting live location")
-                it.liveLocation?.let { it1 -> addMarkerOnMap(it1.latitude, it1.longitude) }
+                it.location?.let { it1 -> addMarkerOnMap(it1.latitude, it1.longitude) }
             }
             if (it?.isCurrentlySharingLiveLocation == true){
-                if (chatMessage?.senderInfo?.id == FirebaseAuth.getInstance().currentUser?.uid){
+                if (it?.senderInfo?.id == FirebaseAuth.getInstance().currentUser?.uid){
                     //current user is sender -> show stop sharing button and time left
                     viewBinding.stopSharing.visible()
                     viewBinding.personName.text = "You"
                     viewBinding.timeLeft.text = it?.liveEndTime?.let { it1 -> getDuration(it1) } + " left"
                 } else {
                     viewBinding.stopSharing.gone()
-                    viewBinding.personName.text = chatMessage?.senderInfo?.name ?: ""
+                    viewBinding.personName.text = it?.senderInfo?.name ?: ""
                     viewBinding.timeLeft.text = "Updated " + it?.updatedAt?.toDate()?.let { it1 ->
                         com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it1)
                     }?.let { it2 -> formatTimeAgo(it2) }
                 }
             } else {
-                viewBinding.appBarComp.setAppBarTitle(chatMessage?.receiverInfo?.name ?: "Live location")
+                viewBinding.appBarComp.setAppBarTitle(it?.receiverInfo?.name ?: "Live location")
                 viewBinding.stopSharing.gone()
                 viewBinding.timeLeft.gone()
                 viewBinding.personName.gone()
@@ -482,14 +476,14 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
     override fun onStart() {
         super.onStart()
 //        if (chatMessageId.isNullOrBlank()){
-            PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
-            // Bind to the service. If the service is in foreground mode, this signals to the service
-            // that since this activity is in the foreground, the service can exit foreground mode.
-            bindService(
-                Intent(this, LocationUpdatesService::class.java), mServiceConnection,
-                BIND_AUTO_CREATE
-            )
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this);
+        // Bind to the service. If the service is in foreground mode, this signals to the service
+        // that since this activity is in the foreground, the service can exit foreground mode.
+        bindService(
+            Intent(this, LocationUpdatesService::class.java), mServiceConnection,
+            BIND_AUTO_CREATE
+        )
         //}
 
     }
@@ -518,93 +512,93 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             }
         }
     }
-        override fun onStop() {
+    override fun onStop() {
 //            if (chatMessageId.isNullOrBlank()) {
-                if (mBound) {
-                    // Unbind from the service. This signals to the service that this activity is no longer
-                    // in the foreground, and the service can respond by promoting itself to a foreground
-                    // service.
-                    unbindService(mServiceConnection)
-                    mBound = false
-                }
-                PreferenceManager.getDefaultSharedPreferences(this)
-                    .unregisterOnSharedPreferenceChangeListener(this)
-            //}
-            super.onStop()
+        if (mBound) {
+            // Unbind from the service. This signals to the service that this activity is no longer
+            // in the foreground, and the service can respond by promoting itself to a foreground
+            // service.
+            unbindService(mServiceConnection)
+            mBound = false
+        }
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .unregisterOnSharedPreferenceChangeListener(this)
+        //}
+        super.onStop()
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(p0: GoogleMap?) {
+        this.googleMap = p0
+    }
+
+    override fun locationReceiver(location: Location?) {
+        this.location = location
+        val address = processLocationAndUpdateUserDetails(location!!)
+        Log.d("received","$location")
+        Log.d("CheckInFragment", "Setting current location")
+        addMarkerOnMap(location?.latitude, location?.longitude)
+    }
+
+    private fun processLocationAndUpdateUserDetails(location: Location): String {
+
+        val latitude: Double = location.latitude
+        val longitude: Double = location.longitude
+
+        locationAddress = ""
+        try {
+            val geocoder = Geocoder(this)
+            val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+
+            locationAddress = if (addressArr.isNotEmpty())
+                addressArr?.get(0)?.getAddressLine(0) ?: ""
+            else
+                ""
+        } catch (e: Exception) {
+
         }
 
-        @SuppressLint("MissingPermission")
-        override fun onMapReady(p0: GoogleMap?) {
-            this.googleMap = p0
-        }
+        return locationAddress
+    }
 
-        override fun locationReceiver(location: Location?) {
-            this.location = location
-            val address = processLocationAndUpdateUserDetails(location!!)
-            Log.d("received","$location")
-            Log.d("CheckInFragment", "Setting current location")
-            addMarkerOnMap(location?.latitude, location?.longitude)
-        }
 
-        private fun processLocationAndUpdateUserDetails(location: Location): String {
+    override fun lastLocationReceiver(location: Location?) {
+        Log.d("lastLocation","$location")
+    }
 
-            val latitude: Double = location.latitude
-            val longitude: Double = location.longitude
+    private fun changeStatusBarColor() {
+        var win: Window? = this?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
-            locationAddress = ""
-            try {
-                val geocoder = Geocoder(this)
-                val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
-                locationAddress = if (addressArr.isNotEmpty())
-                    addressArr?.get(0)?.getAddressLine(0) ?: ""
-                else
-                    ""
-            } catch (e: Exception) {
+        // finally change the color
+        win?.statusBarColor = resources.getColor(R.color.pink)
+    }
 
+    fun setStatusBarIcons(shouldChangeStatusBarTintToDark: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val decor: View = this?.window?.decorView!!
+            if (shouldChangeStatusBarTintToDark) {
+                decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                // We want to change tint color to white again.
+                // You can also record the flags in advance so that you can turn UI back completely if
+                // you have set other flags before, such as translucent or full screen.
+                decor.systemUiVisibility = 0
             }
-
-            return locationAddress
         }
+    }
 
-
-        override fun lastLocationReceiver(location: Location?) {
-            Log.d("lastLocation","$location")
-        }
-
-        private fun changeStatusBarColor() {
-            var win: Window? = this?.window
-            // clear FLAG_TRANSLUCENT_STATUS flag:
-            win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
-            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-            win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-
-            // finally change the color
-            win?.statusBarColor = resources.getColor(R.color.pink)
-        }
-
-        fun setStatusBarIcons(shouldChangeStatusBarTintToDark: Boolean) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val decor: View = this?.window?.decorView!!
-                if (shouldChangeStatusBarTintToDark) {
-                    decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                } else {
-                    // We want to change tint color to white again.
-                    // You can also record the flags in advance so that you can turn UI back completely if
-                    // you have set other flags before, such as translucent or full screen.
-                    decor.systemUiVisibility = 0
-                }
-            }
-        }
-
-        override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
-            // Update the buttons state depending on whether location updates are being requested.
-            if (p1.equals("requesting_location_updates")) {
+    override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
+        // Update the buttons state depending on whether location updates are being requested.
+        if (p1.equals("requesting_location_updates")) {
 //            setButtonsState(sharedPreferences.getBoolean("requesting_location_updates",
 //                false));
-            }
         }
+    }
 
     fun formatTimeAgo(date1: String): String {  // Note : date1 must be in   "yyyy-MM-dd hh:mm:ss"   format
         var conversionTime =""

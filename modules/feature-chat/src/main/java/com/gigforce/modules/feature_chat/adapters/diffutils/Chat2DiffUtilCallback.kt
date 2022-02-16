@@ -30,7 +30,8 @@ class Chat2DiffUtilCallback() : CoreDiffUtilCallback<ChatMessageWrapper>() {
                 oldMessage.message.status == newMessage.message.status &&
                 oldMessage.message.isDeleted == newMessage.message.isDeleted &&
                 oldMessage.message.isMessageChatEvent == newMessage.message.isMessageChatEvent &&
-                oldMessage.message.location == newMessage.message.location &&
+                oldMessage.message.liveEndTime == newMessage.message.liveEndTime &&
+//                oldMessage.message.location == newMessage.message.location &&
                 oldMessage.message.deletedOn == newMessage.message.deletedOn &&
                 oldMessage.message.locationPhysicalAddress == newMessage.message.locationPhysicalAddress &&
                 oldMessage.message.isCurrentlySharingLiveLocation == newMessage.message.isCurrentlySharingLiveLocation
