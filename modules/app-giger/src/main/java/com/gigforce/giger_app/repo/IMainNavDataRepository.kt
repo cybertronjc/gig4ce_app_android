@@ -1,11 +1,8 @@
 package com.gigforce.giger_app.repo
 
 import android.content.Context
-import android.system.Os
-import android.util.Log
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.giger_app.R
@@ -20,7 +17,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
@@ -84,7 +80,6 @@ class MainNavDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            Log.e("flowtest",tempMainNavData.size.toString()+" items found")
             receivedNotifyToServer()
             reloadCount++
             return mainNavData
@@ -140,8 +135,6 @@ class MainNavDataRepository @Inject constructor(
                                         versionCodeList.sortedDescending()
                                     var foundVersionMapping = false
                                     sortedVersionCodeList.forEach { dbVersionCode ->
-                                        Log.e("flowtest", "$currentVersionCode and dbversion $dbVersionCode")
-
                                         if (currentVersionCode >= dbVersionCode) {
                                             var arrangedData = ArrayList<FeatureItemCard2DVM>()
                                             docMapData.get(dbVersionCode.toString())
