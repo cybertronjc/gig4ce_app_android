@@ -1,5 +1,7 @@
 package com.gigforce.landing_screen.landingscreen.help
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,8 +27,27 @@ class HelpVideosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listener()
         initView()
         initViewModel()
+    }
+
+    private fun listener() {
+        help_call.setOnClickListener{
+            viewModel.helpAndSupportMobileNumber.value?.number?.let {
+                if(it.isNotBlank()){
+                    callManager(it)
+
+                }
+            }
+        }
+    }
+    fun callManager(number: String?) {
+        val intent = Intent(
+            Intent.ACTION_DIAL,
+            Uri.fromParts("tel", number, null)
+        )
+        context?.startActivity(intent)
     }
 
     override fun onResume() {
