@@ -310,7 +310,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
          if (visible) viewBinding.searchImageButton.visible() else viewBinding.searchImageButton.invisible()
     }
     fun makeMenuItemVisible(visible: Boolean){
-        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.invisible()
+        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.gone()
     }
 
 
@@ -355,7 +355,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean){
+    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean, replyEnable: Boolean,  forwardEnable: Boolean,  selectedSize: String){
         if (visible){
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
@@ -368,6 +368,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.deleteButton.isVisible = deleteEnable
         viewBinding.infoButton.isVisible = infoEnable
         viewBinding.downloadButton.isVisible = downloadEnable
+        viewBinding.replyButton.isVisible = replyEnable
+        viewBinding.selectionCount.text = selectedSize
+        viewBinding.forwardButton.isVisible = forwardEnable
     }
 
     override fun bind(data: Any?) {
@@ -421,6 +424,17 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     ) {
         viewBinding.forwardButton.setOnClickListener(listener)
     }
+
+    fun showForwardProgress(){
+        viewBinding.forwardButton.invisible()
+        viewBinding.forwardProgressBar.visible()
+    }
+
+    fun hideForwardProgress(){
+        viewBinding.forwardProgressBar.gone()
+        viewBinding.forwardButton.visible()
+    }
+
     fun setInfoClickListener(
         listener: OnClickListener
     ) {

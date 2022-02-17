@@ -3,6 +3,8 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.text.util.Linkify
 import android.util.AttributeSet
 import android.util.Log
@@ -78,6 +80,8 @@ abstract class ImageMessageView(
     private lateinit var imageContainerFrameLayout: FrameLayout
 //    private lateinit var quotedMessagePreviewContainer: LinearLayout
 
+    private var selectedMessageList = emptyList<ChatMessage>()
+
     //Data
     private lateinit var chatMessage: ChatMessage
 
@@ -118,6 +122,7 @@ abstract class ImageMessageView(
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
         imageContainerFrameLayout.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
         //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
@@ -236,19 +241,53 @@ abstract class ImageMessageView(
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
-        lifeCycleOwner?.let {
+        lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
                 })
+                oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
+                oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
+                    }
+                })
             } else if(messageType == MessageType.GROUP_MESSAGE){
-                groupChatViewModel.enableSelect.observe(it, Observer {
+                groupChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
+                    }
+                })
+                groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
+                groupChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
                     }
                 })
             }
@@ -302,25 +341,78 @@ abstract class ImageMessageView(
         }
     }
 
+    private fun blinkLayout(){
+        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Handler(Looper.getMainLooper()).postDelayed({
+            frameLayoutRoot.foreground = null
+            if (messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.setScrollToMessageNull()
+            } else {
+                oneToOneChatViewModel.setScrollToMessageNull()
+            }
+        },2000)
+    }
+
     fun getCircularProgressDrawable(): Drawable {
         return ShimmerHelper.getShimmerDrawable()
     }
 
     override fun onClick(v: View?) {
         val view = v ?: return
+        if (view?.id == R.id.image_container_layout) {
+            if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
 
-        if(view.id == R.id.reply_messages_quote_container_layout){
-
-
-        } else {
-
-            val file = returnFileIfAlreadyDownloadedElseNull()
-            if (file != null) {
-                chatNavigation.openFullScreenImageViewDialogFragment(file)
+                }
             } else {
-                downloadAttachment()
+                if (view.id == R.id.reply_messages_quote_container_layout) {
+
+
+                } else {
+
+                    val file = returnFileIfAlreadyDownloadedElseNull()
+                    if (file != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(file)
+                    } else {
+                        downloadAttachment()
+                    }
+                }
             }
+        } else if (view?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
+
     }
 
     private fun setReceivedStatus(msg: ChatMessage) {
@@ -387,12 +479,12 @@ abstract class ImageMessageView(
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(chatMessage)
+                oneToOneChatViewModel.selectChatMessage(chatMessage, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(chatMessage)
+                groupChatViewModel.selectChatMessage(chatMessage, true)
             }
         }
 

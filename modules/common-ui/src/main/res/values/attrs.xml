@@ -57,8 +57,8 @@
         <attr name="title" format="string"/>
         <attr name="caption" format="string"/>
     </declare-styleable>
-    
-    
+
+
     <declare-styleable name="ImageViewRounded">
         <attr name="radius" format="dimension" />
     </declare-styleable>
@@ -154,5 +154,9 @@
             <enum name="trimModeLine" value="0"/>
             <enum name="trimModeLength" value="1"/>
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MaxHeightLinearLayout">
+        <attr name="maxHeightDp" format="integer" />
     </declare-styleable>
 </resources>

@@ -39,6 +39,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -53,6 +54,7 @@ class GigViewModel constructor(
     var currentGig: Gig? = null
 
     var gigOrder: GigOrder? = null
+
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -598,6 +600,7 @@ class GigViewModel constructor(
                         "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
                     )
                 )
+
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)

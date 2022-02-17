@@ -110,17 +110,19 @@ class GroupMediaRecyclerAdapter(
                 )
             val fileHasBeenDownloaded = downloadedFile != null
 
+            Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
+
             if (fileHasBeenDownloaded) {
                 itemsDownloading.remove(groupMedia)
                 attachmentDownloadingProgressBar.gone()
 
-                if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE) {
+                if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE)  || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE)) {
                     playDownloadOverlayIV.gone()
                     playDownloadIconIV.gone()
                     videoLengthLayout.gone()
 
                     requestManager.load(downloadedFile).into(thumbnailIV)
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) {
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO)) {
 
                     playDownloadOverlayIV.visible()
                     playDownloadIconIV.visible()
@@ -134,7 +136,7 @@ class GroupMediaRecyclerAdapter(
                         thumbnailIV.loadImageIfUrlElseTryFirebaseStorage(groupMedia.thumbnail!!)
 
                     requestManager.load(R.drawable.ic_play_2).into(playDownloadIconIV)
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT)  || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT)) {
                     requestManager.load(R.drawable.ic_document_background)
                         .into(thumbnailIV)
 
@@ -144,7 +146,7 @@ class GroupMediaRecyclerAdapter(
                     playDownloadOverlayIV.gone()
                     playDownloadIconIV.setImageDrawable(null)
                     attachmentDownloadingProgressBar.gone()
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO){
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO)){
                     requestManager.load(R.drawable.ic_audio_attachment)
                         .into(thumbnailIV)
 
@@ -160,7 +162,7 @@ class GroupMediaRecyclerAdapter(
             } else {
                 val isFileDownloading = itemsDownloading.contains(groupMedia)
 
-                if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE) {
+                if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE)  || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE)) {
                     videoLengthLayout.gone()
 
                     if (groupMedia.thumbnail != null)
@@ -178,7 +180,7 @@ class GroupMediaRecyclerAdapter(
                         playDownloadIconIV.visible()
                         requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) {
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO)  || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO)) {
 
                     videoLengthLayout.visible()
                     videoLength.text =
@@ -201,7 +203,7 @@ class GroupMediaRecyclerAdapter(
                         playDownloadIconIV.visible()
                         requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT)  || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT)) {
                     //Need work
                     thumbnailIV.loadImage(R.drawable.ic_document_background)
 
@@ -216,8 +218,8 @@ class GroupMediaRecyclerAdapter(
                         attachmentDownloadingProgressBar.gone()
                         requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
-                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
-                    Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
+                } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO)){
+                    //Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
                     //Need work
                     thumbnailIV.loadImage(R.drawable.ic_audio_attachment)
 
@@ -276,7 +278,7 @@ class GroupMediaRecyclerAdapter(
             type: String,
             fileName: String
         ): File? {
-            if (type == ChatConstants.ATTACHMENT_TYPE_IMAGE) {
+            if ((type == ChatConstants.ATTACHMENT_TYPE_IMAGE) || (type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE)) {
 
                 val file = File(imagesDirectoryRef, fileName)
                 if (file.exists())
@@ -284,20 +286,20 @@ class GroupMediaRecyclerAdapter(
                 else
                     return null
 
-            } else if (type == ChatConstants.ATTACHMENT_TYPE_VIDEO) {
+            } else if ((type == ChatConstants.ATTACHMENT_TYPE_VIDEO) || (type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO)) {
                 val file = File(videosDirectoryRef, fileName)
                 if (file.exists())
                     return file
                 else
                     return null
-            } else if (type == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
+            } else if ((type == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) || (type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT)) {
                 val file = File(documentsDirectoryRef, fileName)
                 if (file.exists())
                     return file
                 else
                     return null
 
-            } else if (type == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
+            } else if ((type == ChatConstants.ATTACHMENT_TYPE_AUDIO) || (type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO)) {
                 val file = File(audiosDirectoryRef, fileName)
                 if (file.exists())
                     return file
@@ -306,7 +308,7 @@ class GroupMediaRecyclerAdapter(
 
             }
 
-            throw IllegalArgumentException("other types not supperted yet")
+            return null
         }
 
         override fun onClick(v: View?) {
@@ -321,6 +323,7 @@ class GroupMediaRecyclerAdapter(
                     groupMedia.attachmentType,
                     fileName
                 )
+            Log.d("groupmediaadapter", "downloededFile: $downloadedFile , ")
 
             onGroupMediaClickListener.onChatMediaClicked(
                 position = pos,

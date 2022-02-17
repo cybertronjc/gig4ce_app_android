@@ -2,10 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gigforce.modules.feature_chat">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Required for foreground services on P+. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application>
 
-        <activity android:name=".screens.CaptureLocationActivity"/>
+
+
+        <activity
+            android:name="com.gigforce.common_ui.location.LocationSharingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mediapicker.VideoViewerActivity"
+            android:exported="false" />
+        <activity android:name=".screens.CaptureLocationActivity" />
     </application>
 
 </manifest>

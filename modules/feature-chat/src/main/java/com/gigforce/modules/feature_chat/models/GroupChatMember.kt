@@ -26,7 +26,7 @@ class GroupChatMember : Mentionable {
     // --------------------------------------------------
     override fun getTextForDisplayMode(mode: MentionDisplayMode): String {
         return when (mode) {
-            MentionDisplayMode.FULL -> name
+            MentionDisplayMode.FULL -> "@$name"
             MentionDisplayMode.PARTIAL, MentionDisplayMode.NONE -> ""
             else -> ""
         }

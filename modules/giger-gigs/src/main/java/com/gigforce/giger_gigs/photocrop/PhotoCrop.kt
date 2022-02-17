@@ -34,13 +34,13 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
 import com.gigforce.giger_gigs.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_photo_crop.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.*
@@ -54,9 +54,6 @@ import java.util.*
 class PhotoCrop : BaseActivity() {
 
     companion object {
-        var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
-            ProfilePictureOptionsBottomSheetFragment()
-
         const val UPLOAD_DOCUMENT = "upload_document"
         const val INTENT_EXTRA_PURPOSE = "purpose"
 
@@ -64,10 +61,8 @@ class PhotoCrop : BaseActivity() {
         const val INTENT_EXTRA_FIREBASE_FILE_NAME = "file"
         const val INTENT_EXTRA_OUTPUT_FILE = "outputfile"
         const val INTENT_EXTRA_DETECT_FACE = "detectFace"
-        const val INTENT_EXTRA_RESULTING_FILE_URI = "uri"
 
         const val PURPOSE_VERIFICATION = "verification"
-        const val PURPOSE_UPLOAD_SELFIE_IMAGE = "upload_selfie_image"
         private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
@@ -97,17 +92,26 @@ class PhotoCrop : BaseActivity() {
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
-        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-        setMinFaceSize(0.15f)
-        setTrackingEnabled(true)
-        build()
-    }
+    val options = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .build()
 
-    val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
+
+//        with(FirebaseVisionFaceDetectorOptions.Builder()) {
+//        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+//        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+//        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+//        setMinFaceSize(0.15f)
+//        setTrackingEnabled(true)
+//        build()
+//    }
+
+    val detector = FaceDetection.getClient(options)
+
+//        FirebaseVision.getInstance()
+//        .getVisionFaceDetector(options)
 
     /**
      * Every call to start crop needs to have an extra with the key "purpose"
@@ -125,8 +129,8 @@ class PhotoCrop : BaseActivity() {
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
-        var constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
-        var linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
+        val constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
+        val linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
 
         val fileSerialized = intent.getSerializableExtra(INTENT_EXTRA_OUTPUT_FILE)
@@ -299,11 +303,12 @@ class PhotoCrop : BaseActivity() {
                     var bitmap = data!!.data as Bitmap
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                 }
-                var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
+
+                val fvImage = imageUriResultCrop?.let { InputImage.fromFilePath(this,it) }
 
                 //  Face detect - Check if face is present in the cropped image or not.
                 if (detectFace == 1) {
-                    val result = detector.detectInImage(fvImage!!)
+                    val result = detector.process(fvImage!!)
                         .addOnSuccessListener { faces ->
                             // Task completed successfully
                             if (faces.size > 0) {
@@ -577,9 +582,12 @@ class PhotoCrop : BaseActivity() {
             Log.d("PHOTO_CROP", "loading - " + path)
             var profilePicRef: StorageReference =
                 storage.reference.child(folder).child(path)
-            GlideApp.with(this)
-                .load(profilePicRef)
-                .into(imageView)
+            if (!this.isDestroyed){
+                GlideApp.with(this)
+                    .load(profilePicRef)
+                    .into(imageView)
+            }
+
         }
 
     }

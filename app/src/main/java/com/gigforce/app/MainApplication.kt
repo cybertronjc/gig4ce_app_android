@@ -13,6 +13,7 @@ import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.logger.TimberReleaseTree
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
@@ -48,7 +49,9 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        WebView(this).destroy()
+        try {
+            WebView(this).destroy()
+        }catch (e:Exception){}
         setUpBranchTool()
         setUpMoengage()
         //setupMixpanel()
@@ -56,11 +59,22 @@ class MainApplication : Application() {
         //setUpUserOnAnalyticsAndCrashlytics()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+        setUserInFirebaseCrashlytics()
         initFirebaseAuthListener()
         subscribeToFirebaseMessageingTopics()
         initLogger()
     }
-    
+
+    private fun setUserInFirebaseCrashlytics() {
+        try {
+            FirebaseAuthStateListener.getInstance().getCurrentSignInInfo()?.let {
+                FirebaseCrashlytics.getInstance().setUserId(it.uid)
+            }
+        } catch (e: Exception) {
+            Log.d("MainApplication", "unable to set users")
+        }
+    }
+
 
     private fun initLogger() {
         if (BuildConfig.DEBUG)
@@ -75,7 +89,7 @@ class MainApplication : Application() {
             .addOnSuccessListener {
                 Log.d(LOG_TAG, "subscibed to topic sync data")
             }.addOnFailureListener {
-                Log.e(LOG_TAG, "Unable to subscribe to sync data topic",it)
+                Log.e(LOG_TAG, "Unable to subscribe to sync data topic", it)
             }
     }
 

@@ -25,4 +25,6 @@ object CommunityEvents {
     const val EVENT_CHAT_MESSAGE_READ = "Chat_message_read"
     const val EVENT_CHAT_GROUP_MUTED = "Chat_group_muted"
     const val EVENT_CHAT_FORWARDED_MESSAGE = "Chat_forwarded_message"
+    const val EVENT_CHAT_MUTE_NOTIFICATIONS = "Chat_mute_notifications"
+    const val EVENT_CHAT_UNMUTE_NOTIFICATIONS = "Chat_unmute_notifications"
 }

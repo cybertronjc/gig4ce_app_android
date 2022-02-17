@@ -7,15 +7,20 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.gigforce.core.StringConstants
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.verification.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.verification_fragment_click_or_select_image.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VerificationClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
     private var sheetTitle: String? = ""
     private var listener: OnPickOrCaptureImageClickListener? = null
-
+    @Inject
+    lateinit var gigforceLogger: GigforceLogger
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.PHOTO_PIC_TITLE.value, resources.getString(R.string.upload_photo_veri))
@@ -55,7 +60,11 @@ class VerificationClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
         gallery_layout.setOnClickListener {
-            listener?.onPickImageThroughCameraClicked()
+            try {
+                listener?.onPickImageThroughCameraClicked()
+            }catch (e:Exception){
+                gigforceLogger.d("Gallery imagepicker exception",e.toString())
+            }
             dismiss()
         }
 

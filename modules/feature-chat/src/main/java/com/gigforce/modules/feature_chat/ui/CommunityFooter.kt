@@ -50,6 +50,7 @@ import android.graphics.drawable.Drawable
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.linkedin.android.spyglass.mentions.Mentionable
 
 
 @AndroidEntryPoint
@@ -565,6 +566,9 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
         }
 
+        fun isAttachmentOptionViewVisible(): Boolean {
+            return viewBinding.layoutAttachment.isVisible
+        }
 
         private fun setupAttachmentOptions() = viewBinding.apply{
             imageViewAttachment.setOnClickListener(View.OnClickListener {
@@ -929,11 +933,11 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
     }
 
     override fun displaySuggestions(display: Boolean) {
-        viewBinding.mentionSuggestionRv.isVisible = display
+        viewBinding.mentionSuggLayout.isVisible = display
     }
 
     override fun isDisplayingSuggestions(): Boolean {
-        return viewBinding.mentionSuggestionRv.isVisible
+        return viewBinding.mentionSuggLayout.isVisible
     }
 
     override fun onReceiveSuggestionsResult(result: SuggestionsResult, bucket: String) {

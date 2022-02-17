@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/tv1HS1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="13dp"
@@ -31,6 +31,10 @@
             android:text="@string/good_morning_app_giger"
             android:textColor="#cd000000"
             android:textSize="22sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginEnd="@dimen/size_12"
+            app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

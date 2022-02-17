@@ -28,25 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <TextView
-            android:id="@+id/changeTLBtn"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginStart="@dimen/size_16"
-            android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_8"
-            android:text="@string/change_team_leader_giger_gigs"
-            android:textAllCaps="true"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:visibility="visible"
-            android:fontFamily="@font/lato_bold"
-            android:textColor="@color/pink_text"
-            android:background="@drawable/bottom_secondary_button_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/call_layout"
-            android:layout_marginBottom="@dimen/size_8"/>
-
 
         <TextView
             android:id="@+id/dropGigerBtn"
@@ -64,7 +45,7 @@
             android:textColor="@color/pink_text"
             android:background="@drawable/bottom_secondary_button_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/changeTLBtn"
+            app:layout_constraintTop_toBottomOf="@id/call_layout"
             android:layout_marginBottom="@dimen/size_8"/>
 
     </LinearLayout>

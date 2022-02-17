@@ -3,6 +3,8 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -60,6 +62,7 @@ abstract class VideoMessageView(
     private lateinit var attachmentUploadingDownloadingProgressBar: ProgressBar
     private lateinit var videoLength: TextView
     private lateinit var receivedStatusIV: ImageView
+    private lateinit var chatMessageText: TextView
 
     @Inject
     lateinit var navigation: INavigation
@@ -72,6 +75,8 @@ abstract class VideoMessageView(
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
+
+    private var selectedMessageList = emptyList<ChatMessage>()
 
     init {
         setDefault()
@@ -98,6 +103,7 @@ abstract class VideoMessageView(
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     fun loadViews() {
@@ -113,6 +119,7 @@ abstract class VideoMessageView(
             this.findViewById(R.id.attachment_downloading_pb)
         videoLength = this.findViewById(R.id.video_length_tv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
+        chatMessageText = this.findViewById(R.id.chat_text)
     }
 
     override fun onBind(msg: ChatMessage) {
@@ -126,21 +133,56 @@ abstract class VideoMessageView(
             messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
+        chatMessageText.text = msg.content.toString() ?: ""
         loadThumbnail(msg)
 
-        lifeCycleOwner?.let {
+        lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
                 })
+                oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
+                oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
+                    }
+                })
             } else if(messageType == MessageType.GROUP_MESSAGE){
-                groupChatViewModel.enableSelect.observe(it, Observer {
+                groupChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
+                    }
+                })
+                groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
+                groupChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
                     }
                 })
             }
@@ -183,6 +225,19 @@ abstract class VideoMessageView(
                     )
         }
     }
+
+    private fun blinkLayout(){
+        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Handler(Looper.getMainLooper()).postDelayed({
+            frameLayoutRoot.foreground = null
+            if (messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.setScrollToMessageNull()
+            } else {
+                oneToOneChatViewModel.setScrollToMessageNull()
+            }
+        },2000)
+    }
+
 
     private fun setReceivedStatus(msg: ChatMessage)  {
         when (msg.status) {
@@ -280,14 +335,56 @@ abstract class VideoMessageView(
     }
 
     override fun onClick(v: View?) {
-        val file = returnFileIfAlreadyDownloadedElseNull()
+        if (v?.id == R.id.cv_msgContainer) {
+            if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
 
-        if (file != null) {
+                }
+            } else {
+                val file = returnFileIfAlreadyDownloadedElseNull()
 
-            chatNavigation.openFullScreenVideoDialogFragment(file)
-        } else {
-            downloadAttachment()
+                if (file != null) {
+
+                    chatNavigation.openFullScreenVideoDialogFragment(file)
+                } else {
+                    downloadAttachment()
+                }
+            }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
+
     }
 
     private fun downloadAttachment() = GlobalScope.launch {
@@ -321,12 +418,12 @@ abstract class VideoMessageView(
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message)
+                oneToOneChatViewModel.selectChatMessage(message, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message)
+                groupChatViewModel.selectChatMessage(message, true)
             }
         }
 

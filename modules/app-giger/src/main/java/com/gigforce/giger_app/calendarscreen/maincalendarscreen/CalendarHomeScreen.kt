@@ -45,6 +45,7 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -63,6 +64,7 @@ import com.gigforce.giger_app.components.CalendarView
 import com.gigforce.giger_app.roster.RosterDayFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -1228,6 +1230,12 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
         temporaryData = recyclerGenericAdapter.list.get(position)
+        //event
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val map = mapOf("Giger ID" to it)
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+        }
+
         if (temporaryData.isGigAssign) {
             if (temporaryData.isUnavailable) {
                 temporaryData.isUnavailable = false

@@ -7,11 +7,18 @@ import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
+import com.google.firebase.firestore.GeoPoint
+import java.io.File
 
 //import com.gigforce.modules.feature_chat.models.ChatMessage
 //import com.gigforce.modules.feature_chat.models.VideoInfo
 
 interface IChatService {
+
+    suspend fun sendMessages(
+        chatHeaderId: String,
+        message: List<ChatMessage>
+    )
 
     suspend fun sendTextMessage(
         chatHeaderId: String,
@@ -44,6 +51,7 @@ interface IChatService {
         context: Context,
         chatHeaderId: String,
         message: ChatMessage,
+        audiosDirectoryRef: File,
         file: Uri,
         audioInfo: AudioInfo
     )
@@ -83,8 +91,61 @@ interface IChatService {
         senderId: String
     )
 
+    suspend fun setHeaderMuteNotifications(
+        headerIds: List<String>,
+        enable: Boolean
+    )
+
     suspend fun forwardChatMessage(
         contacts: List<ContactModel>,
         chatMessage: ChatMessage
+    )
+
+    suspend fun setLocationToSenderChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    )
+
+    suspend fun stopLocationToSenderChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    )
+
+    suspend fun setLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint,
+    )
+
+    suspend fun stopLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint,
+    )
+
+    suspend fun stopLocationForReceiver(
+        id: String,
+        messageId: String,
+        receiverId: String
+    )
+
+    suspend fun stopSharingLocation(
+        id: String,
+        messageId: String
+    )
+
+    suspend fun stopReceiverSharingLocation(
+        id: String,
+        messageId: String,
+        receiverId: String
+    )
+
+    suspend fun updateMuteNotifications(
+        enable: Boolean,
+        headerId: String
     )
 }

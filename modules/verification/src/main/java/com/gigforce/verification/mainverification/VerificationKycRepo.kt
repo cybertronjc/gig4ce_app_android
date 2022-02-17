@@ -9,18 +9,19 @@ import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
-import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.google.firebase.Timestamp
+import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
+import com.gigforce.common_ui.viewdatamodels.BaseResponse
+import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.logger.GigforceLogger
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService) :
+class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService, private val gigforceLogger: GigforceLogger) :
     BaseFirestoreDBRepository() {
-//    private val kycService: VerificationKycService = RetrofitFactory.createService(
-//        VerificationKycService::class.java
-//    )
 
     suspend fun getVerificationOcrResult(
         type: String,
@@ -28,16 +29,8 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         subType: String,
         image: MultipartBody.Part
     ): KycOcrResultModel {
-//        val jsonObject = JsonObject()
-//        jsonObject.addProperty("type", type)
-//        jsonObject.addProperty(
-//            "uId",
-//            "RAjCRVuaqaRhhM8qbwOaO97wo9x2"
-//        )//FirebaseAuth.getInstance().currentUser?.uid)
-//        jsonObject.addProperty("subType", subType)
-
-        var model = OCRQueryModel(type,uid, subType)
-        var kycOcrStatus =
+        val model = OCRQueryModel(type,uid, subType)
+        val kycOcrStatus =
             kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(), model, image)
         if (kycOcrStatus.isSuccessful) {
             Log.d("kycResult", kycOcrStatus.toString())
@@ -46,7 +39,6 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             FirebaseCrashlytics.getInstance()
                 .log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${kycOcrStatus.message()}")
-            Log.d("kycResult", kycOcrStatus.toString())
         }
     }
 
@@ -64,7 +56,127 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             FirebaseCrashlytics.getInstance()
                 .log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${kycOcrStatus.message()}")
-            Log.d("kycResult", kycOcrStatus.toString())
+        }
+    }
+
+    suspend fun setVerifiedStatus(status: Boolean, uid: String) : UserConsentResponse{
+        try {
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(status))
+                if(userConsentResponse.isSuccessful){
+                    return userConsentResponse.body()!!
+                }else{
+                    FirebaseCrashlytics.getInstance()
+                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
+                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
+                }
+        }catch (e: Exception){
+            throw Exception("Issue in network call $e")
+        }
+    }
+
+    suspend fun setUserAknowledge() : UserConsentResponse{
+        try {
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(counter = 1))
+                if(userConsentResponse.isSuccessful){
+                    return userConsentResponse.body()!!
+                }else{
+                    FirebaseCrashlytics.getInstance()
+                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
+                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
+                }
+
+        }catch (e: Exception){
+            throw Exception("Issue in network call}")
+        }
+    }
+
+    suspend fun setVerificationStatusStringToBlank(uid: String){
+        try {
+            db.collection(getCollectionName()).document(uid).updateOrThrow(
+                mapOf(
+                    "bank_details.status" to ""
+                )
+            )
+        }catch (e: Exception){
+        }
+    }
+
+    override fun getCollectionName(): String =
+        COLLECTION_NAME
+
+    suspend fun submitVaccinationCertificate(vaccineReqDM : VaccineIdLabelReqDM, file: MultipartBody.Part): VaccineFileUploadResDM {
+        val vaccinationCertificate =
+                    kycService.uploadVaccineCertificate(iBuildConfigVM.getBaseUrl()+"verificationVaccine/verfiyVaccineCertificate",
+                        vaccineReqDM, file)
+        if (vaccinationCertificate.isSuccessful) {
+            return vaccinationCertificate.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : submitVaccinationCertificate Method ${vaccinationCertificate?.message()}")
+            throw Exception("Issue in vaccination certification submission ${vaccinationCertificate?.errorBody()}")
+        }
+    }
+
+    suspend fun getVaccinationObjectData(userIdToUse:String?=null) : DocumentSnapshot{
+        userIdToUse?.let {
+            return FirebaseFirestore.getInstance().collection(COLLECTION_NAME).document(it).getOrThrow()
+        }
+        throw Exception("User id not found!!")
+    }
+
+
+
+    suspend fun confirmVaccinationData(vaccineId: String):BaseResponse<Any> {
+        val confirmationDetails =
+            kycService.confirmVaccinationData(iBuildConfigVM.getBaseUrl()+"verificationVaccine/confirmVaccine",
+                Data1(data = VaccineIdLabelReqDM(vaccineId = vaccineId))
+            )
+        if (confirmationDetails.isSuccessful) {
+            return confirmationDetails.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : submitVaccinationCertificate Method ${confirmationDetails.message()}")
+            throw Exception("Issue in vaccination certification submission")
+        }
+    }
+
+
+    companion object {
+        private const val COLLECTION_NAME = "Verification"
+    }
+
+
+    // below is unused code
+
+    suspend fun getVerificationStatus(): VerificationBaseModel? {
+        try {
+            var verifiedResult: VerificationBaseModel? = VerificationBaseModel()
+            val status = db.collection(getCollectionName()).document(getUID()).get().await()
+
+            if (status.exists()) {
+                verifiedResult = status.toObject(VerificationBaseModel::class.java)
+            }
+            return verifiedResult
+        }catch (e: Exception){
+            return VerificationBaseModel()
+        }
+
+    }
+
+    suspend fun getBeneficiaryName(): String? {
+        try{
+            var beneficiaryName: String? = ""
+            db.collection(getCollectionName()).document(getUID()).get().addOnSuccessListener {
+                it.let {
+                    if (it.contains("bank_details")){
+                        val doc = it.toObject(VerificationBaseModel::class.java)
+                        beneficiaryName = doc?.bank_details?.bankBeneficiaryName
+                    }
+                }
+            }
+            return beneficiaryName
+        } catch (e: Exception){
+            return ""
         }
     }
 
@@ -85,97 +197,4 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 
     }
 
-    suspend fun getBeneficiaryName(): String? {
-        try{
-            var beneficiaryName: String? = ""
-            db.collection(getCollectionName()).document(getUID()).get().addOnSuccessListener {
-                it.let {
-                    if (it.contains("bank_details")){
-                         val doc = it.toObject(VerificationBaseModel::class.java)
-                         beneficiaryName = doc?.bank_details?.bankBeneficiaryName
-                    }
-                }
-            }
-            return beneficiaryName
-        } catch (e: Exception){
-            return ""
-        }
-    }
-
-    suspend fun setVerifiedStatus(status: Boolean, uid: String) : UserConsentResponse{
-        try {
-                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(status))
-                if(userConsentResponse.isSuccessful){
-                    return userConsentResponse.body()!!
-                }else{
-                    FirebaseCrashlytics.getInstance()
-                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
-                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
-                }
-//            db.collection(getCollectionName()).document(uid).updateOrThrow(
-//                mapOf(
-//                    "bank_details.verified" to status,
-//                    "bank_details.verifiedOn" to Timestamp.now(),
-//                    "updatedAt" to Timestamp.now(),
-//                    "updatedBy" to FirebaseAuthStateListener.getInstance()
-//                        .getCurrentSignInUserInfoOrThrow().uid
-//                )
-//            )
-            return throw Exception("Issue in user input}")
-        }catch (e: Exception){
-            return throw Exception("Issue in network call ${e}")
-        }
-    }
-
-    suspend fun setUserAknowledge() : UserConsentResponse{
-        try {
-                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(counter = 1))
-                if(userConsentResponse.isSuccessful){
-                    return userConsentResponse.body()!!
-                }else{
-                    FirebaseCrashlytics.getInstance()
-                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
-                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
-                }
-
-        }catch (e: Exception){
-            return throw Exception("Issue in network call}")
-        }
-    }
-
-    suspend fun setVerificationStatusStringToBlank(uid: String){
-        try {
-            db.collection(getCollectionName()).document(uid).updateOrThrow(
-                mapOf(
-                    "bank_details.status" to ""
-                )
-            )
-        }catch (e: Exception){
-        }
-    }
-
-
-     suspend fun getVerificationStatus(): VerificationBaseModel? {
-         try {
-            var verifiedResult: VerificationBaseModel? = VerificationBaseModel()
-             val status = db.collection(getCollectionName()).document(getUID()).get().await()
-
-             if (status.exists()) {
-                 verifiedResult = status.toObject(VerificationBaseModel::class.java)
-             }
-             return verifiedResult
-         }catch (e: Exception){
-             return VerificationBaseModel()
-         }
-
-        }
-
-
-    override fun getCollectionName(): String =
-        COLLECTION_NAME
-
-
-    companion object {
-        private const val COLLECTION_NAME = "Verification"
-    }
 }

@@ -450,9 +450,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             )
         }
 
-        bottomButtonLayout.changeTLBtn.setOnClickListener {
+        this.overlayCardLayout.editReportingTlImageview.setOnClickListener {
             viewModel.openChangeTeamLeaderScreen()
         }
+
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
             eventTracker.pushEvent(
