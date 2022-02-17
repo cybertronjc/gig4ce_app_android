@@ -20,6 +20,7 @@ import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -43,6 +44,9 @@ class SignatureImageCaptureFragment :
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
 
     private val viewModel: SignatureUploadViewModel by viewModels()
     private val sharedViewModel: SharedSignatureUploadViewModel by activityViewModels()
@@ -106,7 +110,10 @@ class SignatureImageCaptureFragment :
         if(userId != null) {
             viewModel.userId = userId!!
         }
-
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+            false
+        )
         viewModel.checkForExistingSignature()
     }
 

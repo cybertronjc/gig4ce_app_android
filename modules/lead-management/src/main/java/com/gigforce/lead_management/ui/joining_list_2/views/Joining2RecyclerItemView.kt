@@ -224,7 +224,11 @@ class Joining2RecyclerItemView(
                     )
                 )
 
-
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        "tl_call_giger", null
+                    )
+                )
                 val intent =
                     Intent(
                         Intent.ACTION_DIAL,
