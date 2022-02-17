@@ -129,7 +129,6 @@ fun Date?.toFirebaseTimeStamp(): Timestamp? {
 }
 
 fun Timestamp.toLocalDateTime(): LocalDateTime {
-
     return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 }
 
