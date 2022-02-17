@@ -16,10 +16,7 @@ import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.core.StringConstants
 import com.gigforce.core.date.DateHelper
-import com.gigforce.core.extensions.addOrThrow
-import com.gigforce.core.extensions.commitOrThrow
-import com.gigforce.core.extensions.getOrThrow
-import com.gigforce.core.extensions.updateOrThrow
+import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -132,7 +129,7 @@ class ChatRepository @Inject constructor(
         }
     }
 
-     override suspend fun setLocationToSenderChatMessage(
+    override suspend fun setLocationToSenderChatMessage(
         id: String,
         messageId: String,
         location: GeoPoint
@@ -140,13 +137,13 @@ class ChatRepository @Inject constructor(
         try {
             val chatMessagesRef = getChatMessagesCollectionRef(id)
             chatMessagesRef.document(messageId).updateOrThrow(
-                    mapOf(
-                        "location" to location,
-                        "isCurrentlySharingLiveLocation" to true,
-                        "updatedAt" to Timestamp.now(),
-                        "updatedBy" to getUID()
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
                 )
-                )
+            )
         } catch (e: Exception){
             Log.d("ChatRepository", "exc: ${e.message}")
         }
@@ -616,6 +613,7 @@ class ChatRepository @Inject constructor(
             val unreadMessage = unreadMessages.first()
 
             val senderId = unreadMessage.senderInfo.id
+            val receiverId = unreadMessage.receiverInfo?.id
             val headerId = unreadMessage.headerId
 
             val senderHeaderRef = FirebaseFirestore.getInstance()
@@ -626,7 +624,7 @@ class ChatRepository @Inject constructor(
 
             val receiverHeaderRef = FirebaseFirestore.getInstance()
                 .collection(ChatGroupRepository.COLLECTION_CHATS)
-                .document(getUID())
+                .document(receiverId.toString())
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(headerId)
 
@@ -637,6 +635,7 @@ class ChatRepository @Inject constructor(
             val receiverChatMessageCollection = receiverHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
+            //val batch1 = db.batch()
             if (lastMessageIdInHeader != null) {
                 val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
                     .document(lastMessageIdInHeader)
@@ -666,18 +665,19 @@ class ChatRepository @Inject constructor(
                             .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
-                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
-                batch.update(
-                    receiverMessageRef, mapOf(
-                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
-                        "updatedAt" to Timestamp.now(),
-                        "updatedBy" to FirebaseAuthStateListener.getInstance()
-                            .getCurrentSignInUserInfoOrThrow().uid
-                    )
-                )
+//                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
+//                batch1.update(
+//                    receiverMessageRef, mapOf(
+//                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+//                        "updatedAt" to Timestamp.now(),
+//                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                            .getCurrentSignInUserInfoOrThrow().uid
+//                    )
+//                )
             }
 
             batch.commitOrThrow()
+            //batch1.commitOrThrow()
         }
     }
 
