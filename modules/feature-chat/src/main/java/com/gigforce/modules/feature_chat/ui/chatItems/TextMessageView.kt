@@ -159,6 +159,7 @@ abstract class TextMessageView(
         msgView.setOnClickListener(this)
         containerView.setOnClickListener(this)
         containerView.setOnLongClickListener(this)
+        msgView.setOnLongClickListener(this)
     }
 
     override fun bind(data: Any?) {
