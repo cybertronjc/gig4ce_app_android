@@ -257,6 +257,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewBinding: FragmentNewSelectionForm1Binding
     ) = viewBinding.toolbar.apply {
         this.setBackButtonListener {
+            hideSoftKeyboard()
             activity?.onBackPressed()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)

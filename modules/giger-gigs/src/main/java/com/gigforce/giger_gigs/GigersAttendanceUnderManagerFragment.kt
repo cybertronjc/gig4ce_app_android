@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
@@ -51,7 +52,7 @@ import java.util.*
 
 @AndroidEntryPoint
 class GigersAttendanceUnderManagerFragment : Fragment(),
-    AttendanceSwipeHandler.AttendanceSwipeHandlerListener {
+    AttendanceSwipeHandler.AttendanceSwipeHandlerListener, IOnBackPressedOverride {
 
 
     private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
@@ -100,8 +101,8 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         viewBinding.toolbar.setBackButtonListener {
             if (viewBinding.toolbar.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
-            } else if (viewBinding){
-
+            } else if (viewBinding.gigersUnderManagerMainLayout.slotCalendar.isVisible){
+                viewBinding.gigersUnderManagerMainLayout.slotCalendar.gone()
             } else {
                 activity?.onBackPressed()
             }
@@ -583,6 +584,15 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
             null,
             true
         )
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (viewBinding.gigersUnderManagerMainLayout.slotCalendar.isVisible){
+            viewBinding.gigersUnderManagerMainLayout.slotCalendar.gone()
+            return true
+        }
+        return  false
+
     }
 
 }

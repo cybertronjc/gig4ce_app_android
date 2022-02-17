@@ -74,7 +74,7 @@
     <string name="click_select_pan_image_amb">Click or select your PAN card image first</string>
     <string name="why_do_we_need_this_pan_amb">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="pan_details_uploaded_amb">Pan Card Details Uploaded</string>
-    <string name="add_experience_amb">Add experience</string>
+    <string name="add_experience_amb">Add Experience</string>
     <string name="wait_amb">Wait</string>
     <string name="interest_not_loaded_yet_amb">Please wait interest not loaded yet</string>
     <string name="select_experience_or_not_amb">Please Select if you have experience or not</string>

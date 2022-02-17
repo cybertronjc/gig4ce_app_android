@@ -14,6 +14,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
@@ -37,6 +38,10 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     var gender = ""
     private var win: Window? = null
     override fun onCreateView(
