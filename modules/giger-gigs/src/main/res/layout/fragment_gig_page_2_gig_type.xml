@@ -110,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 android:background="@color/warm_grey"
                 app:layout_constraintTop_toBottomOf="@id/gig_duration" />
 
@@ -118,6 +119,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator"
                 app:srcCompat="@drawable/ic_keyboard_arrow_down_c7c7cc" />
@@ -137,6 +139,7 @@
                 android:text="@string/details_giger_gigs"
                 android:textColor="@color/black_85"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@id/expand_iv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator" />
