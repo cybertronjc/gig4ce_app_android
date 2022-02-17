@@ -1258,15 +1258,24 @@ class ChatPageViewModel @Inject constructor(
 
     fun selectChatMessage(msg: ChatMessage, add: Boolean){
         val messageList = chatMessages ?: return
-        val index = messageList.indexOf(msg)
-        if (index != -1) {
-            if (add && !selectedMessagesList.contains(msg)) {
-                selectedMessagesList.add(msg)
-            } else if (!add && selectedMessagesList.contains(msg)){
-                selectedMessagesList.remove(msg)
+        messageList.forEachIndexed { index, chatMessage ->
+            if (chatMessage.id == msg.id){
+                if (add && !selectedMessagesList.contains(msg)) {
+                    selectedMessagesList.add(msg)
+                } else if (!add && selectedMessagesList.contains(msg)){
+                    selectedMessagesList.remove(msg)
+                }
+                _selectedChatMessage.value = selectedMessagesList
             }
-            _selectedChatMessage.value = selectedMessagesList
         }
+//        if (index != -1) {
+//            if (add && !selectedMessagesList.contains(msg)) {
+//                selectedMessagesList.add(msg)
+//            } else if (!add && selectedMessagesList.contains(msg)){
+//                selectedMessagesList.remove(msg)
+//            }
+//            _selectedChatMessage.value = selectedMessagesList
+//        }
     }
 
     fun makeSelectEnable(enable: Boolean){
