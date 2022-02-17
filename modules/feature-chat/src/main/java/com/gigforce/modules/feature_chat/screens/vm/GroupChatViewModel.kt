@@ -1181,7 +1181,7 @@ class GroupChatViewModel @Inject constructor(
 
     fun selectChatMessage(msg: ChatMessage, add: Boolean){
         val messageList = grpMessages ?: return
-        val index = messageList.indexOf(msg)
+        //val index = messageList.indexOf(msg)
         messageList.forEachIndexed { index, chatMessage ->
             if (chatMessage.id == msg.id){
                 if (add && !selectedMessagesList.contains(msg)) {
