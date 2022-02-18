@@ -121,7 +121,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 }
             }
 
-            var allStatus = arrayListOf("started", "completed", "failed")
+            val allStatus = arrayListOf("started", "completed", "failed")
             // need to change for KYC, profile pic and about_me
             val profileModel = getProfile()
             val verification = getVerification()
@@ -169,6 +169,10 @@ class ApplicationClientActivationViewModel : ViewModel() {
                     "pf_esic" -> {
                         it.isDone =
                             (profileModel?.pfesic?.dobNominee?.isNotBlank() == true && profileModel.pfesic?.rNomineeName?.isNotBlank() == true && profileModel.pfesic?.nomineeName?.isNotBlank() == true && profileModel.pfesic?.signature?.isNotBlank() == true) || (profileModel?.pfesic?.uanNumber?.isNotBlank() == true && profileModel.pfesic?.pfNumber?.isNotBlank() == true && profileModel.pfesic?.esicNumber?.isNotBlank() == true)
+                    }
+
+                    "vaccination" -> {
+                        it.isDone = verification?.vaccination != null && verification.vaccination?.status != null && verification.vaccination?.status?.isNotBlank() == true
                     }
                 }
             }

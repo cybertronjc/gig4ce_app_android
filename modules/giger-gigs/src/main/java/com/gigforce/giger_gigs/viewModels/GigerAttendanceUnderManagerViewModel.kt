@@ -6,12 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.giger_gigs.models.AttendanceFilterItemShift
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
 import com.gigforce.giger_gigs.repositories.GigersAttendanceRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -68,6 +72,9 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     //todo shift up
     private val gigersAttendanceRepository: GigersAttendanceRepository =
         GigersAttendanceRepository(buildConfig)
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     /* data*/
     private var currentlyShownAttendanceData: List<GigerAttendance>? = null
@@ -172,7 +179,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
                     gigerAttendance.forEach {
                         attendanceRecyclerItemData.add(
-                            mapRemoteGigerAttendanceToRecyclerViewAttendance(it)
+                            mapRemoteGigerAttendanceToRecyclerViewAttendance(it, companyName)
                         )
                     }
                 }
@@ -245,7 +252,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     private fun mapRemoteGigerAttendanceToRecyclerViewAttendance(
-        gigerAttendance: GigerAttendance
+        gigerAttendance: GigerAttendance,
+        companyName: String
     ): AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
 
         return AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData(
@@ -257,7 +265,9 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             gigerDesignation = gigerAttendance.role ?: "Role: NA",
             gigerImage = gigerAttendance.profilePicture ?: "",
             gigStatus = gigerAttendance.gigStatus ?: "",
-            gigerOffice = gigerAttendance.location ?: ""
+            gigerOffice = gigerAttendance.location ?: "",
+            businessName = companyName ?: ""
+
         )
     }
 
@@ -495,7 +505,9 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
     fun markUserCheckedIn(
         gigId: String,
-        userName: String
+        userName: String,
+        gigerId: String,
+        businessName: String
     ) = viewModelScope.launch {
 
         try {
@@ -507,7 +519,13 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             }?.let {
                 it.attendanceStatus = "Present"
                 it.gigStatus = GigStatus.ONGOING.getStatusString()
+                //event
+                FirebaseAuth.getInstance().currentUser?.uid?.let {
+                    val map = mapOf("Giger ID" to gigerId , "TL ID" to it, "Business Name" to businessName)
+                    eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin",map))
+                }
             }
+
             _markAttendanceState.postValue(
                 GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent(
                     "$userName marked present"

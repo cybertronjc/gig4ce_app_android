@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_bg"
+    tools:context=".mainverification.vaccine.bottomsheets.GetVaccinateFirstBS">
+
+    <ImageView
+        android:id="@+id/illustrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_xl4"
+        android:src="@drawable/ic_group_vaccine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_bs"
+        style="@style/CardCaptionTitleb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_xl2"
+        android:text="@string/please_get_yourseft_vaccinated"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        app:layout_constraintTop_toBottomOf="@+id/illustrate" />
+
+    <TextView
+        style="@style/CardCaptionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_mid"
+        android:layout_marginBottom="@dimen/dp_mid"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:text="@string/upload_whenever_vaccinated"
+        app:layout_constraintBottom_toTopOf="@+id/okay_bn_bs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_bs" />
+
+    <TextView
+        android:id="@+id/okay_bn_bs"
+        style="@style/primary_button_style"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="@dimen/dp_normal"
+        android:text="@string/okay_veri"
+        android:textAllCaps="true"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

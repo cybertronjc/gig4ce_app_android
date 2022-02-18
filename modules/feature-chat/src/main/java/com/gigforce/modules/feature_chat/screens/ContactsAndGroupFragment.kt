@@ -2,7 +2,6 @@ package com.gigforce.modules.feature_chat.screens
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -68,6 +67,7 @@ import com.gigforce.modules.feature_chat.databinding.ContactsAndGroupFragmentBin
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.ContactAndGroupViewEffects
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
 import com.gigforce.modules.feature_chat.service.SyncContactsService
@@ -221,6 +221,31 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
     }
 
     private fun initViewModel() {
+        lifecycleScope.launchWhenCreated {
+
+            viewModelNew.viewEffects.collect {
+
+                when(it){
+                    is ContactAndGroupViewEffects.ErrorWhileForwardingMessage -> {
+                        viewBinding.appBarComp.hideForwardProgress()
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage("Unable to forward messages")
+                            .setPositiveButton("Okay"){_,_ ->}
+                            .show()
+                    }
+                    ContactAndGroupViewEffects.ForwardingMessages -> {
+                        viewBinding.appBarComp.showForwardProgress()
+                    }
+                    ContactAndGroupViewEffects.MessagesForwarded -> {
+                        viewBinding.appBarComp.hideForwardProgress()
+                        showToast("Messages forwarded")
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        }
+
         viewModelNew.contacts
             .observe(viewLifecycleOwner, Observer {
                 sharedPreAndCommonUtilInterface.saveDataBoolean(AppConstants.CONTACTS_SYNCED, true)
@@ -382,7 +407,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 //forward the chat
                     Log.d(TAG, "$forwardingChat , message: ${forwardChatMessage?.headerId}")
                 processingContactsProgressbar.visible()
-                forwardChatMessage?.let { it1 -> chatViewModel.forwardMessage(it1, contactsAdapter.getSelectedContact() ) }
+                forwardChatMessage?.let { it1 -> viewModelNew.forwardMessage(it1, contactsAdapter.getSelectedContact() ) }
 
             } else{
                 nameGroupLayout.root.visible()

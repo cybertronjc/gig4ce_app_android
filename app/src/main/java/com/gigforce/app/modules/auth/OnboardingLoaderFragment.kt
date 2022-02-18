@@ -66,9 +66,7 @@ class OnboardingLoaderFragment : BaseFragment() {
             savedInstanceState
         )
         observer()
-        Handler().postDelayed({
-            viewModel.getProfileAndGigData()
-        }, SPLASH_TIME_OUT)
+        viewModel.getProfileAndGigData()
     }
 
     private fun getDataFrom(
@@ -137,34 +135,53 @@ class OnboardingLoaderFragment : BaseFragment() {
 
         checkPendingWritesAndNavigateNormally(profileAndGig)
     }
-
+    var pendingWritesDoneOnce = false
     private fun checkPendingWritesAndNavigateNormally(profileAndGig: ProfileAnGigInfo) {
+
         FirebaseFirestore
             .getInstance()
             .waitForPendingWrites()
             .addOnSuccessListener {
-                CrashlyticsLogger.d(
-                    "OnboardingLoggerFragment",
-                    "Success no pending writes found"
-                )
+                if(!pendingWritesDoneOnce) {
+                    pendingWritesDoneOnce = true
+                    CrashlyticsLogger.d(
+                        "OnboardingLoggerFragment",
+                        "Success no pending writes found"
+                    )
 
-                if (profileAndGig.hasGigs) {
-                    navigateToCalendarHomeScreen()
-                } else {
-                    navigateToLandingHomeScreen()
+                    if (profileAndGig.hasGigs) {
+                        navigateToCalendarHomeScreen()
+                    } else {
+                        navigateToLandingHomeScreen()
+                    }
                 }
-
             }.addOnFailureListener {
-                CrashlyticsLogger.e(
-                    "OnboardingLoggerFragment",
-                    "while syncning data to server",
-                    it
-                )
+                if(!pendingWritesDoneOnce) {
+                    pendingWritesDoneOnce = true
+                    CrashlyticsLogger.e(
+                        "OnboardingLoggerFragment",
+                        "while syncning data to server",
+                        it
+                    )
 
-                if (profileAndGig.hasGigs) {
-                    navigateToCalendarHomeScreen()
-                } else {
-                    navigateToLandingHomeScreen()
+                    if (profileAndGig.hasGigs) {
+                        navigateToCalendarHomeScreen()
+                    } else {
+                        navigateToLandingHomeScreen()
+                    }
+                }
+            }.runCatching {
+                if(!pendingWritesDoneOnce) {
+                    pendingWritesDoneOnce = true
+                    CrashlyticsLogger.e(
+                        "OnboardingLoggerFragment",
+                        "Internet connection not found"
+                    )
+                    if (profileAndGig.hasGigs) {
+                        navigateToCalendarHomeScreen()
+                    } else {
+                        navigateToLandingHomeScreen()
+                    }
                 }
             }
     }

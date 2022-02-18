@@ -49,7 +49,9 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        WebView(this).destroy()
+        try {
+            WebView(this).destroy()
+        }catch (e:Exception){}
         setUpBranchTool()
         setUpMoengage()
         //setupMixpanel()

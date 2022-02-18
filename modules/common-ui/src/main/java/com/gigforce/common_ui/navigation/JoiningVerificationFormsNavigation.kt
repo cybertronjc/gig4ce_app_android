@@ -60,4 +60,16 @@ class JoiningVerificationFormsNavigation @Inject constructor(
             NavigationOptions.getNavOptions()
         )
     }
+
+    fun openVaccineCertificateForJoiningFragment(
+        userId: String
+    ) {
+        navigation.navigateTo(
+            JoiningVerificationNavDestinations.VERIFICATION_VACCINE_CERTIFICATE_UPLOAD,
+            bundleOf(
+                AppConstants.INTENT_EXTRA_UID to userId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
 }

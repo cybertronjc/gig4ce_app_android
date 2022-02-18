@@ -24,9 +24,7 @@ import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import javax.inject.Inject
@@ -52,13 +50,21 @@ class ChatRepository @Inject constructor(
             .collection(ChatGroupRepository.COLLECTION_CHAT_REPORTED_USER)
     }
 
+    private fun getChatHeaderDocumentRef(userId: String, headerId: String): DocumentReference {
+        return FirebaseFirestore.getInstance()
+            .collection(ChatGroupRepository.COLLECTION_CHATS)
+            .document(userId)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(headerId)
+    }
+
     private fun getChatHeaderCollectionRef(userId: String): DocumentReference {
         return FirebaseFirestore.getInstance()
             .collection(ChatGroupRepository.COLLECTION_CHATS)
             .document(userId)
     }
 
-    private fun getChatMessagesCollectionRef(
+    fun getChatMessagesCollectionRef(
         headerId: String
     ) = userChatCollectionRef
         .collection(COLLECTION_CHAT_HEADERS)
@@ -88,6 +94,21 @@ class ChatRepository @Inject constructor(
         return COLLECTION_CHATS
     }
 
+    override suspend fun sendMessages(
+        chatHeaderId: String,
+        messages: List<ChatMessage>
+    ) {
+        db.batch().apply {
+
+            messages.forEach {
+                val newDocumentRef = getChatMessagesCollectionRef(chatHeaderId).document()
+                set(newDocumentRef,it)
+            }
+
+            commitOrThrow()
+        }
+    }
+
     override suspend fun sendTextMessage(
         chatHeaderId: String,
         message: ChatMessage
@@ -95,6 +116,170 @@ class ChatRepository @Inject constructor(
 
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
+    }
+
+    override suspend fun updateMuteNotifications(enable: Boolean, headerId: String) {
+        try {
+            val chatHeaderReference = getChatHeaderDocumentRef(getUID() , headerId)
+            chatHeaderReference.updateOrThrow(
+                mapOf(
+                    "settings.muteNotifications" to enable
+                )
+            )
+
+        } catch (e: Exception){
+            Log.d("ChatRepository", "MuteNot exc: ${e.message}")
+        }
+    }
+
+     override suspend fun setLocationToSenderChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    ){
+        try {
+            val chatMessagesRef = getChatMessagesCollectionRef(id)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                    mapOf(
+                        "location" to location,
+                        "isCurrentlySharingLiveLocation" to true,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to getUID()
+                )
+                )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun stopLocationToSenderChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    ){
+        try {
+            val chatMessagesRef = getChatMessagesCollectionRef(id)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun stopLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint
+    ) {
+        try {
+            val chatMessagesRef = FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
+                .document(id)
+                .collection(COLLECTION_CHATS_MESSAGES)
+
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun stopLocationForReceiver(id: String, messageId: String, receiverId: String) {
+        try {
+            val chatMessagesRef = FirebaseFirestore.getInstance()
+                .collection(COLLECTION_CHATS)
+                .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
+                .document(id)
+                .collection(COLLECTION_CHATS_MESSAGES)
+
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun setLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint
+    ) {
+        try {
+            val chatMessagesRef = FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
+                .document(id)
+                .collection(COLLECTION_CHATS_MESSAGES)
+
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun stopSharingLocation(id: String, messageId: String) {
+        try {
+            val chatMessagesRef = getChatMessagesCollectionRef(id)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    override suspend fun stopReceiverSharingLocation(
+        id: String,
+        messageId: String,
+        receiverId: String
+    ) {
+        try {
+            val chatMessagesRef = FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
+                .document(id)
+                .collection(COLLECTION_CHATS_MESSAGES)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
     }
 
     override suspend fun sendLocationMessage(
@@ -250,19 +435,19 @@ class ChatRepository @Inject constructor(
 //        val audioFile = File(audiosDirectoryRef, newFileName)
 //        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
 
-        if (!audiosDirectoryRef.exists())
-            audiosDirectoryRef.mkdirs()
-        val audioFile = File(audiosDirectoryRef, newFileName)
-        FileUtils.copyFile(context, newFileName, file, audioFile)
-
         val pathOnServer = uploadChatAttachment(
-            fileNameWithExtension = newFileName,
+            fileNameWithExtension = audioInfo.name,
             file = file,
             headerId = chatHeaderId,
             isGroupChatMessage = false,
             messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO
         )
         message.attachmentPath = pathOnServer
+
+        if (!audiosDirectoryRef.exists())
+            audiosDirectoryRef.mkdirs()
+        val audioFile = File(audiosDirectoryRef, newFileName)
+        FileUtils.copyFile(context, newFileName, file, audioFile)
 
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
@@ -433,16 +618,23 @@ class ChatRepository @Inject constructor(
             val senderId = unreadMessage.senderInfo.id
             val headerId = unreadMessage.headerId
 
-            val headerRef = FirebaseFirestore.getInstance()
+            val senderHeaderRef = FirebaseFirestore.getInstance()
                 .collection(ChatGroupRepository.COLLECTION_CHATS)
                 .document(senderId)
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(headerId)
 
-            val chatHeader = headerRef.getOrThrow()
+            val receiverHeaderRef = FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(getUID())
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(headerId)
+
+            val chatHeader = senderHeaderRef.getOrThrow()
             val lastMessageIdInHeader = chatHeader.getString("lastMsgId")
 
-            val chatMessageCollection = headerRef.collection(COLLECTION_CHATS_MESSAGES)
+            val chatMessageCollection = senderHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
+            val receiverChatMessageCollection = receiverHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
             if (lastMessageIdInHeader != null) {
@@ -453,7 +645,7 @@ class ChatRepository @Inject constructor(
 
                 if (shouldUpdateInHeader) {
                     batch.update(
-                        headerRef, mapOf(
+                        senderHeaderRef, mapOf(
                             "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                             "updatedAt" to Timestamp.now(),
                             "updatedBy" to FirebaseAuthStateListener.getInstance()
@@ -468,6 +660,15 @@ class ChatRepository @Inject constructor(
                 val messageRef = chatMessageCollection.document(it.senderMessageId)
                 batch.update(
                     messageRef, mapOf(
+                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
+                batch.update(
+                    receiverMessageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                         "updatedAt" to Timestamp.now(),
                         "updatedBy" to FirebaseAuthStateListener.getInstance()
@@ -499,6 +700,31 @@ class ChatRepository @Inject constructor(
                         "updatedAt" to Timestamp.now(),
                         "updatedBy" to FirebaseAuthStateListener.getInstance()
                             .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+            }
+
+            batch.commitOrThrow()
+
+        }
+    }
+
+    override suspend fun setHeaderMuteNotifications(headerIds: List<String>, enable: Boolean) {
+        if (headerIds.isNotEmpty()){
+            val batch = db.batch()
+
+            headerIds.forEach {
+
+                val headerReference = FirebaseFirestore.getInstance()
+                    .collection(COLLECTION_CHATS)
+                    .document(getUID())
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(it)
+
+
+                batch.update(
+                    headerReference, mapOf(
+                        "settings.muteNotifications" to enable
                     )
                 )
             }
@@ -565,6 +791,12 @@ class ChatRepository @Inject constructor(
             .collection(COLLECTION_CHATS_CONTACTS)
             .document(otherUserMobileNo)
 
+    }
+
+    fun getContactDetailsByUID(otherUserUid: String): Query {
+        return  db.collection(COLLECTION_CHATS)
+            .document(getUID())
+            .collection(COLLECTION_CHATS_CONTACTS).whereEqualTo("uid" , otherUserUid)
     }
 
     suspend fun sentMessagesSentMessageAsDelivered(
@@ -679,6 +911,53 @@ class ChatRepository @Inject constructor(
                 "updatedAt" to Timestamp.now(), "updatedBy" to getUID()
             )
         )
+
+    suspend fun deleteMessages(messageIds: List<String>, headerId: String) {
+        if (messageIds.isNotEmpty()){
+            val batch = db.batch()
+
+            messageIds.forEach {
+
+                val headerReference = FirebaseFirestore.getInstance()
+                    .collection(COLLECTION_CHATS)
+                    .document(getUID())
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(headerId)
+                    .collection(COLLECTION_CHATS_MESSAGES)
+                    .document(it)
+
+
+                batch.update(
+                    headerReference, mapOf(
+                        "isDeleted" to true,
+                        "deletedOn" to Timestamp.now(),
+                        "updatedAt" to Timestamp.now(), "updatedBy" to getUID()
+                    )
+                )
+            }
+
+            batch.commitOrThrow()
+
+        }
+    }
+
+    suspend fun checkAndReturnIfHeaderIsPresentInchat(
+        senderUserId: String,
+        receiverUserId: String
+    ): String? {
+        val query = db.collection(COLLECTION_CHATS)
+            .document(senderUserId)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .whereEqualTo("forUserId", senderUserId)
+            .whereEqualTo("otherUserId", receiverUserId)
+            .getOrThrow()
+
+        return if (query.isEmpty)
+            return null
+        else {
+            query.documents.get(0).id
+        }
+    }
 
 
     companion object {

@@ -18,12 +18,9 @@ import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
-import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
-import com.gigforce.core.file.FileUtils
-import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
@@ -34,7 +31,6 @@ import com.gigforce.modules.feature_chat.models.AudioPassingDataModel
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.*
@@ -43,29 +39,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-
-sealed class AudioPlayState {
-
-    object NothinIsPlaying : AudioPlayState()
-
-    object CancelPlaying : AudioPlayState()
-
-    data class PlayingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-
-    data class PausingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-
-    data class ResumingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-}
 
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(
@@ -88,6 +63,7 @@ class ChatPageViewModel @Inject constructor(
     private val currentUser : FirebaseUser get() {
         return firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
     }
+
 
     private var otherUserName: String? = null
     private var otherUserProfilePicture: String? = null
@@ -120,14 +96,20 @@ class ChatPageViewModel @Inject constructor(
     private var _allStoragePermissionsGranted = MutableLiveData<Boolean>()
     val allStoragePermissionsGranted: LiveData<Boolean> = _allStoragePermissionsGranted
 
-    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
-    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+    private var _selectedChatMessage = MutableLiveData<List<ChatMessage>>()
+    val selectedChatMessage: LiveData<List<ChatMessage>> = _selectedChatMessage
 
     private var _audioPlaying = MutableLiveData<Boolean>()
     val audioPlaying: LiveData<Boolean> = _audioPlaying
 
     private var _enableSelect = MutableLiveData<Boolean>()
     val enableSelect: LiveData<Boolean> = _enableSelect
+
+    private var _recentLocationMessageId = MutableLiveData<Pair<String, String>>()
+    val recentLocationMessageId: LiveData<Pair<String, String>> = _recentLocationMessageId
+
+//    private var _recentReceiverId = MutableLiveData<String>()
+//    val recentReceiverId: LiveData<String> = _recentReceiverId
 
     private var _audioData = MutableLiveData<AudioPassingDataModel>()
     val audioData: LiveData<AudioPassingDataModel> = _audioData
@@ -136,6 +118,7 @@ class ChatPageViewModel @Inject constructor(
     val currentlyPlayingAudioMessageId: LiveData<String> = _currentlyPlayingAudioMessageId
 
     private var selectEnable: Boolean? = null
+    private var selectedMessagesList = arrayListOf<ChatMessage>()
 //    private var audioPlaying: Boolean? = null
     private var currentlyPlayingAudioMessage: String? = null
 
@@ -209,9 +192,9 @@ class ChatPageViewModel @Inject constructor(
             }
     }
 
-    private fun setMessagesAsRead(
+    fun setMessagesAsRead(
         unreadMessages: List<ChatMessage>
-    ) = GlobalScope.launch {
+    ) = viewModelScope.launch {
 
         try {
             chatRepository.setMessagesAsRead(unreadMessages)
@@ -264,6 +247,21 @@ class ChatPageViewModel @Inject constructor(
                 }
             }
 
+    }
+
+    suspend fun getContactStoredByMobile(
+        otherUserUID: String
+    ) : String {
+
+//        try {
+            val contactModel = chatRepository.getDetailsOfUserFromContacts(otherUserUID)
+            Log.d("ChatPageViewModel", "catchingH: ${contactModel.uid} , ${contactModel.name}")
+            return contactModel.name.toString()
+//        } catch (e: Exception) {
+//            Log.d("ChatPageViewModel", "catching: ${e.message}")
+//            otherUserName = ""
+//        }
+        //return  otherUserName
     }
 
     private fun checkIfHeaderIsPresentInHeadersList() = viewModelScope.launch {
@@ -326,19 +324,51 @@ class ChatPageViewModel @Inject constructor(
                     }
 
                     this.chatMessages = messages.toMutableList()
-                    chatMessages?.let {
-
-                        val unreadMessages = it.filter {
-                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
-                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
-                                    it.senderMessageId.isNotBlank()
+//                    chatMessages?.let {
+//
+//                        val unreadMessages = it.filter {
+//                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
+//                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
+//                                    it.senderMessageId.isNotBlank()
+//                        }
+//                        setMessagesAsRead(unreadMessages)
+//                    }
+                    if (messages.isNotEmpty()) {
+                        var recentLiveLocationMessage : ChatMessage? = null
+                        val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+                        if (messagesWithCurrentlySharingLiveLocation.isNotEmpty()){
+                            recentLiveLocationMessage = messagesWithCurrentlySharingLiveLocation.last()
+                            Log.d("locationupdate", "Sharing message with fragment ${recentLiveLocationMessage.id}")
                         }
-                        setMessagesAsRead(unreadMessages)
+
+                        if (recentLiveLocationMessage != null) {
+                            _recentLocationMessageId.postValue(
+                                Pair(
+                                    recentLiveLocationMessage?.id,
+                                    recentLiveLocationMessage?.receiverInfo?.id
+                                ) as Pair<String, String>
+                            )
+                        }
                     }
                     _messages.postValue(messages)
 
                 }
             }
+    }
+
+    fun isUpdatedAtAndEndDateDiffIsGreaterThanOneMinute(updatedAt: Date?, endDate: Date?): Boolean {
+        val diff: Long = endDate?.time?.minus(updatedAt?.time!!) ?: 0
+        val minDiff = TimeUnit.MILLISECONDS.toMinutes(diff)
+        return minDiff > 1
+    }
+
+    fun stopAllPreviousLiveLocations(){
+        val messagesWithActiveLiveLocations = this.chatMessages?.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+        messagesWithActiveLiveLocations?.forEach {
+            Log.d("locationupdate", "Stoping location for: ${it.headerId} , ${it.id}")
+            stopSharingLocation(headerId, it.id)
+            stopSharingLocationForReceiver(headerId, it.id, it.receiverInfo?.id.toString())
+        }
     }
 
     private var _sendingMessage = MutableLiveData<ChatMessage>()
@@ -624,8 +654,6 @@ class ChatPageViewModel @Inject constructor(
                 attachmentName = fileName
             )
             showMessageAsSending(message)
-
-
             chatRepository.sendDocumentMessage(
                 context = context,
                 chatHeaderId = headerId,
@@ -649,6 +677,7 @@ class ChatPageViewModel @Inject constructor(
 
         _messages.postValue(chatMessages)
     }
+
 
     @SuppressLint("NewApi")
     fun sendNewImageMessage(
@@ -808,7 +837,10 @@ class ChatPageViewModel @Inject constructor(
         latitude: Double,
         longitude: Double,
         physicalAddress: String,
-        mapImageFile: File?
+        mapImageFile: File?,
+        isLiveLocation: Boolean,
+        isCurrentlySharingLiveLocation: Boolean,
+        liveEndTime: Date?
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -838,7 +870,10 @@ class ChatPageViewModel @Inject constructor(
                 timestamp = Timestamp.now(),
                 location = GeoPoint(latitude, longitude),
                 locationPhysicalAddress = physicalAddress,
-                thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
+                thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable),
+                isLiveLocation = isLiveLocation,
+                liveEndTime = liveEndTime,
+                isCurrentlySharingLiveLocation = isCurrentlySharingLiveLocation
             )
 
             showMessageAsSending(message)
@@ -853,6 +888,76 @@ class ChatPageViewModel @Inject constructor(
                 "while sending location message",
                 e
             )
+        }
+    }
+
+    fun updateMuteNotificationsInDB(enable: Boolean, header: String) = GlobalScope.launch{
+        if (header.isNotEmpty()){
+            try {
+                chatRepository.updateMuteNotifications(enable, header)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun updateLocationChatMessage(header: String, messageId: String, location: GeoPoint) = GlobalScope.launch{
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.setLocationToSenderChatMessage(header, messageId,location)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun stopLocationChatMessage(header: String, messageId: String, location: GeoPoint) = GlobalScope.launch {
+        if (header.isNotEmpty() && messageId.isNotEmpty()) {
+            try {
+                chatRepository.stopLocationToSenderChatMessage(header, messageId, location)
+            } catch (e: Exception) {
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun stopLocationReceiverChatMessage(header: String, messageId: String, location: GeoPoint, receiverId: String) = GlobalScope.launch{
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.stopLocationToReceiverChatMessage(header, receiverId,  messageId,location)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun updateLocationReceiverChatMessage(header: String, messageId: String, location: GeoPoint, receiverId: String) = GlobalScope.launch{
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.setLocationToReceiverChatMessage(header, receiverId,  messageId,location)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun stopSharingLocation(header: String, messageId: String) = GlobalScope.launch {
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.stopSharingLocation(header, messageId)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun stopSharingLocationForReceiver(header: String, messageId: String, receiverId: String) = GlobalScope.launch {
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.stopLocationForReceiver(header, messageId, receiverId)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
         }
     }
 
@@ -1130,17 +1235,46 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
-    fun selectChatMessage(msg: ChatMessage){
+    fun deleteMessages(
+        messageIds: List<String>
+    ) = viewModelScope.launch {
+        try {
+
+            chatRepository.deleteMessages(
+                messageIds,
+                headerId,
+            )
+        } catch (e: Exception) {
+
+            CrashlyticsLogger.e(
+                TAG,
+                "while deleting users message",
+                e
+            )
+        }
+    }
+
+    fun selectChatMessage(msg: ChatMessage, add: Boolean){
         val messageList = chatMessages ?: return
         val index = messageList.indexOf(msg)
         if (index != -1) {
-            _selectedChatMessage.value = msg
+            if (add && !selectedMessagesList.contains(msg)) {
+                selectedMessagesList.add(msg)
+            } else if (!add && selectedMessagesList.contains(msg)){
+                selectedMessagesList.remove(msg)
+            }
+            _selectedChatMessage.value = selectedMessagesList
         }
     }
 
     fun makeSelectEnable(enable: Boolean){
         selectEnable = enable
         _enableSelect.value = enable
+    }
+
+    fun clearSelection(){
+        selectedMessagesList.clear()
+        _selectedChatMessage.value = emptyList()
     }
 
     fun getSelectEnable(): Boolean?{

@@ -8,4 +8,8 @@
         <attr name="checkboxtext" format="string"/>
         <attr name="missingdoctext" format="string"/>
     </declare-styleable>
+    <declare-styleable name="SimpleCardComponent1">
+        <attr name="title_scc" format="string"/>
+    </declare-styleable>
+
 </resources>

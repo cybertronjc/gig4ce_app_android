@@ -60,6 +60,7 @@
             app:layout_constraintStart_toEndOf="@+id/iv_profile"
             app:layout_constraintTop_toTopOf="@id/backImageButton"
             app:layout_constraintEnd_toStartOf="@+id/searchImageButton">
+
             <TextView
                 android:id="@+id/textTitle"
                 android:layout_width="wrap_content"
@@ -244,6 +245,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/selectionCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size16"
+                android:fontFamily="@font/lato"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintStart_toEndOf="@id/chat_back_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
                 android:id="@+id/detail_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -335,7 +352,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="@dimen/size_4"
-                android:visibility="gone"
                 android:background="?attr/selectableItemBackground"
                 app:tint="@color/white"
                 android:layout_marginEnd="@dimen/size_30"
@@ -343,6 +359,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            
+            <ProgressBar
+                android:id="@+id/forward_progress_bar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
