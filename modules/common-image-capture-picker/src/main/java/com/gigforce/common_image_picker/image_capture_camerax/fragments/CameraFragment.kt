@@ -456,15 +456,17 @@ class CameraFragment : Fragment() {
             // When the format is JPEG or DEPTH JPEG we can simply save the bytes as-is
             ImageFormat.JPEG, ImageFormat.DEPTH_JPEG -> {
                 val buffer = result.image.planes[0].buffer
-                val bytes = ByteArray(buffer.remaining()).apply { buffer.get(this) }
+                var bytes : ByteArray?  = ByteArray(buffer.remaining()).apply { buffer.get(this) }
                 try {
                     val output = createFile(requireContext(), "jpg")
                     FileOutputStream(output).use { it.write(bytes) }
+                    result.close()
                     cont.resume(output)
                 } catch (exc: IOException) {
                     Log.e(TAG, "Unable to write JPEG image to file", exc)
                     cont.resumeWithException(exc)
                 }
+                bytes = null
             }
 
             // When the format is RAW we use the DngCreator utility library
@@ -473,6 +475,8 @@ class CameraFragment : Fragment() {
                 try {
                     val output = createFile(requireContext(), "dng")
                     FileOutputStream(output).use { dngCreator.writeImage(it, result.image) }
+
+                    result.close()
                     cont.resume(output)
                 } catch (exc: IOException) {
                     Log.e(TAG, "Unable to write DNG image to file", exc)

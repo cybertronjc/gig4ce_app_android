@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.remote.verification
 
 
+import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.common_ui.viewdatamodels.verification.SubmitSignatureRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -29,8 +30,22 @@ interface VerificationKycService {
         @Body jsonObject: UserConsentRequest
     ): Response<UserConsentResponse>
 
+    @Multipart
+    @POST
+    suspend fun uploadVaccineCertificate(
+        @Url getKycOcrUrl: String,
+        @Part("data") data: VaccineIdLabelReqDM,
+        @Part file: MultipartBody.Part
+    ): Response<VaccineFileUploadResDM>
+
     @POST("profiles/updateGigerSignature")
     suspend fun uploadSignature(
         @Body submitSignatureRequest: SubmitSignatureRequest
     ): Response<KycOcrResultModel>
+
+    @POST
+    suspend fun confirmVaccinationData(
+        @Url getKycOcrUrl: String,
+        @Body data: Data1
+    ): Response<BaseResponse<Any>>
 }

@@ -30,6 +30,7 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
@@ -65,6 +66,10 @@ abstract class AudioMessageView (
     @Inject
     lateinit var navigation: INavigation
 
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
     //Views
     private lateinit var linearLayout: ConstraintLayout
     private lateinit var senderNameTV: TextView
@@ -78,6 +83,7 @@ abstract class AudioMessageView (
     private lateinit var playProgress: View
     private lateinit var audioTimeText: TextView
 
+    private var selectedMessageList = emptyList<ChatMessage>()
     //Data
     private lateinit var chatMessage : ChatMessage
 
@@ -87,6 +93,7 @@ abstract class AudioMessageView (
         findViews()
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     private fun findViews() {
@@ -121,10 +128,6 @@ abstract class AudioMessageView (
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
-        if (msg.attachmentPath.isNullOrBlank()) {
-            handleAudioUploading()
-        } else {
-        }
 
         lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
@@ -133,6 +136,17 @@ abstract class AudioMessageView (
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
+                })
+                oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
                 })
                 oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
                     it ?: return@Observer
@@ -147,6 +161,17 @@ abstract class AudioMessageView (
                         frameLayoutRoot?.foreground = null
                     }
                 })
+                groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
                 groupChatViewModel.scrollToMessageId.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == message.id){
@@ -155,6 +180,22 @@ abstract class AudioMessageView (
                 })
             }
 
+        }
+
+        if (msg.attachmentPath.isNullOrBlank()) {
+            handleAudioUploading()
+        } else {
+            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
+            val fileHasBeenDownloaded = downloadedFile != null
+            if (fileHasBeenDownloaded) {
+                progressbar.gone()
+            } else {
+//                if (msg.attachmentCurrentlyBeingDownloaded) {
+//                    progressbar.visible()
+//                } else {
+//                    progressbar.gone()
+//                }
+            }
         }
 
         playAudio.setOnClickListener {
@@ -234,12 +275,12 @@ abstract class AudioMessageView (
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message)
+                oneToOneChatViewModel.selectChatMessage(message, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message)
+                groupChatViewModel.selectChatMessage(message, true)
             }
         }
 
@@ -308,11 +349,53 @@ abstract class AudioMessageView (
     }
 
     override fun onClick(v: View?) {
-        val file = returnFileIfAlreadyDownloadedElseNull()
+        if (v?.id == R.id.cv_msgContainer){
+        if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)){
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                if (selectedMessageList.contains(message)){
+                    //remove
+                    frameLayoutRoot.foreground = null
+                    oneToOneChatViewModel.selectChatMessage(message, false)
+                } else {
+                    //add
+                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    oneToOneChatViewModel.selectChatMessage(message, true)
+                }
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                if (selectedMessageList.contains(message)){
+                    //remove
+                    frameLayoutRoot.foreground = null
+                    groupChatViewModel.selectChatMessage(message, false)
+                } else {
+                    //add
+                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    groupChatViewModel.selectChatMessage(message, true)
+                }
 
-        if (file == null) {
-            downloadAttachment()
+            }
+        } else {
+            val file = returnFileIfAlreadyDownloadedElseNull()
+
+            if (file == null) {
+                downloadAttachment()
+            }
         }
+
+        }
+        else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
+        }
+
     }
 
 

@@ -12,4 +12,5 @@ object FieldTypes {
     const val BANK_VERIFICATION_VIEW = "bank_details"
     const val DL_VERIFICATION_VIEW = "dl_verification"
     const val PAN_VERIFICATION_VIEW = "pan_verification"
+    const val VACCINATION_CERTIFICATE_VIEW = "vaccination_certificate"
 }

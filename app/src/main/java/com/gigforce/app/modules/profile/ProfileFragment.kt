@@ -189,7 +189,7 @@ class ProfileFragment : BaseFragment() {
             setAppBarOffset(heightPx)
 
             if (!viewModel.profileAppBarExpanded) {
-                appbar.setExpanded(true)
+                appbar?.setExpanded(true)
                 viewModel.profileAppBarExpanded = true
             }
         })

@@ -14,8 +14,8 @@
         android:layout_weight="1"
         android:elevation="1dp"
         android:textAlignment="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         app:chipBackgroundColor="@color/white"
         android:text="@string/about_me" />
 
@@ -26,8 +26,8 @@
         android:layout_weight="1"
         android:elevation="1dp"
         android:textAlignment="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         app:chipBackgroundColor="@color/white"
         android:text="@string/education" />
 
@@ -38,8 +38,8 @@
         android:layout_weight="1"
         android:elevation="1dp"
         android:textAlignment="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         app:chipBackgroundColor="@color/white"
         android:text="@string/experience" />
 

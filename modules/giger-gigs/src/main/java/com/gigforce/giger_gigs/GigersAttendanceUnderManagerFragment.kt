@@ -25,6 +25,9 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
@@ -35,6 +38,7 @@ import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
 import com.gigforce.giger_gigs.viewModels.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,12 +52,15 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class GigersAttendanceUnderManagerFragment : Fragment(),
     AttendanceSwipeHandler.AttendanceSwipeHandlerListener, IOnBackPressedOverride {
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
     private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
@@ -253,9 +260,11 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
                 is GigerAttendanceUnderManagerViewModelMarkAttendanceState.ErrorWhileMarkingUserPresent -> showErrorInMarkingPresent(
                     it.error
                 )
-                is GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent -> showSnackBar(
-                    it.message
-                )
+                is GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent -> {
+                    showSnackBar(
+                        it.message
+                    )
+                }
             }
         })
 
@@ -565,7 +574,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
 
         viewModel.markUserCheckedIn(
             attendanceData.gigId,
-            attendanceData.gigerName
+            attendanceData.gigerName,
+            attendanceData.gigerId,
+            attendanceData.businessName
         )
     }
 
@@ -577,6 +588,11 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
             viewHolder.adapterPosition
         )
         itemTouchHelper.startSwipe(viewHolder)
+        //event
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val map = mapOf("Giger ID" to attendanceData.gigerId, "TL ID" to it, "Business Name" to attendanceData.businessName)
+            eventTracker.pushEvent(TrackingEventArgs("tl_attempted_decline",map))
+        }
 
         DeclineGigDialogFragment.launch(
             attendanceData.gigId,

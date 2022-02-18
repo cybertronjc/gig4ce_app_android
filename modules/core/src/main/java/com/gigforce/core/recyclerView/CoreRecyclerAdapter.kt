@@ -70,6 +70,7 @@ open class CoreRecyclerAdapter(
         position: Int
     ) {
         holder.IViewHolder.bind(collection[position])
+        holder.IItemClickListener?.onClickListener(itemClickListener)
         itemClickListener?.let {
             holder.itemView.setOnClickListener {
                 itemClickListener?.onItemClick(it,position,collection[position])
