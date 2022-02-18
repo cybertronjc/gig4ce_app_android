@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.components.cells
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -440,18 +441,28 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     fun hideKeyboard(view: View) {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS,
-                0
-        )
+//        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        inputMethodManager.toggleSoftInputFromWindow(
+//                view.applicationWindowToken,
+//                InputMethodManager.HIDE_NOT_ALWAYS,
+//                0
+//        )
+        context?.let {
+            val imm: InputMethodManager =
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            //var view: View? = it.currentFocus ?: null
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+    //            if (view == null) {
+    //                view = View(context)
+    //            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     fun openSoftKeyboard(view: View) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
+        inputMethodManager.toggleSoftInput(
                 InputMethod.SHOW_FORCED,
                 0
         )
