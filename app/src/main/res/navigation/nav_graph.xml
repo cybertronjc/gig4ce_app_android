@@ -1216,5 +1216,10 @@
         android:label="ChangeTeamLeaderBottomSheetFragment" />
 
 
+=========
+        android:id="@+id/viewLiveLocationFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
+        android:label="ViewLiveLocationFragment" />
+>>>>>>>>> Temporary merge branch 2
 </navigation>
 

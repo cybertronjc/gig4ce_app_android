@@ -3,6 +3,7 @@ package com.gigforce.core.recyclerView
 import android.content.Context
 import android.util.Log
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
 import com.gigforce.core.ICoreViewHolderFactory
@@ -25,14 +26,30 @@ open class CoreRecyclerAdapter(
 //    lateinit var iViewTypeFinder: ICoreViewHolderFactory
 
     // This Collection will not change on search
-    private var _originalCollection: List<Any> = ArrayList()
     private var _collection: List<Any> = ArrayList()
+    var diffUtilCallBack : CoreDiffUtilCallback<*>? = null
+
     var collection:List<Any>
         get() = _collection
         set(value) {
-            _collection = value
-            _originalCollection = value
-            this.notifyDataSetChanged()
+
+            if(diffUtilCallBack != null){
+                if(_collection.isEmpty()){
+                    _collection = value
+                    notifyDataSetChanged()
+                } else {
+                    diffUtilCallBack?.setOldAndNewList(
+                        _collection,
+                        value
+                    )
+                    val diffResult = DiffUtil.calculateDiff(diffUtilCallBack!!)
+                    this._collection = value
+                    diffResult.dispatchUpdatesTo(this)
+                }
+            } else{
+                _collection = value
+                this.notifyDataSetChanged()
+            }
         }
 
 
@@ -76,15 +93,5 @@ open class CoreRecyclerAdapter(
                 itemClickListener?.onItemClick(it,position,collection[position])
             }
         }
-    }
-
-    fun filter(predicate: (Any) -> Boolean){
-        _collection = _originalCollection.filter(predicate)
-        notifyDataSetChanged()
-    }
-
-    fun resetFilter(){
-        _collection = _originalCollection
-        notifyDataSetChanged()
     }
 }
