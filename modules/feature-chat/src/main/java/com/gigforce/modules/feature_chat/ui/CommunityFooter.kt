@@ -324,12 +324,17 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
 //        }
 
         fun hideKeyboard(view: View) {
-            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethodManager.HIDE_IMPLICIT_ONLY,
-                0
-            )
+//            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            inputMethodManager.toggleSoftInputFromWindow(
+//                view.applicationWindowToken,
+//                InputMethodManager.HIDE_IMPLICIT_ONLY,
+//                0
+//            )
+            context?.let {
+                val imm: InputMethodManager =
+                    it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
         }
 
 //        fun openSoftKeyboard(view: View) {
@@ -1083,7 +1088,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
         viewBinding.replyToMessageLayout.removeAllViews()
         viewBinding.replyToMessageLayout.gone()
         replyMessage = null
-        hideKeyboard(viewBinding.editTextMessage)
+        //hideKeyboard(viewBinding.editTextMessage)
     }
 
     fun getReplyToMessage(): ChatMessage? {
@@ -1092,9 +1097,8 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
 
     fun openSoftKeyboard(view: View) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-            view.applicationWindowToken,
-            InputMethod.SHOW_FORCED,
+        inputMethodManager.showSoftInput(
+            view,
             0
         )
     }

@@ -587,7 +587,7 @@ class ChatPageFragment : Fragment(),
     private fun setUpAudioView() {
         communityFooter.setAttachmentOptions(AttachmentOption.defaultList, this)
         communityFooter.setRecordingListener(this)
-//        AXEmojiManager.install(activity, AXIOSEmojiProvider(activity))
+//        AXEmojiManager.install(context, AXGoogleEmojiProvider(activity))
 //        val emojiView = AXEmojiView(activity)
 //        communityFooter.setupEmojiLayout(emojiView)
 
@@ -653,8 +653,9 @@ class ChatPageFragment : Fragment(),
         override fun handleOnBackPressed() {
             hideSoftKeyboard()
 
-            if (cameFromLinkInOtherChat)
+            if (cameFromLinkInOtherChat) {
                 chatNavigation.navigateUp()
+            }
             else
                 chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
         }
@@ -1398,7 +1399,7 @@ class ChatPageFragment : Fragment(),
                         map
                     )
                 )
-                chatFooter.closeReplyUi()
+                //chatFooter.closeReplyUi()
             }
         }
     }
