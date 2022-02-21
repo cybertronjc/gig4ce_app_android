@@ -110,7 +110,6 @@ class ChatRepository @Inject constructor(
         chatHeaderId: String,
         message: ChatMessage
     ) {
-
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
     }
@@ -299,6 +298,7 @@ class ChatRepository @Inject constructor(
         }
 
         message.attachmentPath = attachmentPathOnServer
+        message.status = ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
     }
@@ -333,7 +333,7 @@ class ChatRepository @Inject constructor(
 
         message.thumbnail = thumbnailPathOnServer
         message.attachmentPath = pathOnServer
-
+        message.status = ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
     }
@@ -404,7 +404,7 @@ class ChatRepository @Inject constructor(
 
         message.attachmentPath = pathOnServer
         message.thumbnail = thumbnailPathOnServer
-
+        message.status = ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
     }
@@ -445,7 +445,7 @@ class ChatRepository @Inject constructor(
             audiosDirectoryRef.mkdirs()
         val audioFile = File(audiosDirectoryRef, newFileName)
         FileUtils.copyFile(context, newFileName, file, audioFile)
-
+        message.status = ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
     }
@@ -477,7 +477,7 @@ class ChatRepository @Inject constructor(
             messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
         )
         message.attachmentPath = pathOnServer
-
+        message.status = ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
     }
