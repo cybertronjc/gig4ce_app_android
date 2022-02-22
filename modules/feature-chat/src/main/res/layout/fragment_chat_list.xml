@@ -63,7 +63,7 @@
                 app:backgroundTint="@color/white"
                 android:elevation="4dp"
                 app:tint="@color/colorPrimary"
-                android:src="@drawable/ic_chat_icon_fab"
+                android:src="@drawable/ic_chat_with_circle"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
