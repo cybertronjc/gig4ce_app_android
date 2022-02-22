@@ -74,6 +74,7 @@ abstract class LocationMessageView(
     private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var receivedStatusIV: ImageView
     private lateinit var senderNameTV: TextView
+    private lateinit var linearRoot: LinearLayout
     private lateinit var stopSharingTV: TextView
 
     private var selectedMessageList = emptyList<ChatMessage>()
@@ -102,6 +103,7 @@ abstract class LocationMessageView(
         senderNameTV = this.findViewById(R.id.user_name_tv)
         imageView = this.findViewById(R.id.iv_image)
         frameLayoutRoot = this.findViewById(R.id.frame)
+        linearRoot = this.findViewById(R.id.linearRoot)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         locationAddressTV = this.findViewById(R.id.location_address_tv)
@@ -127,6 +129,8 @@ abstract class LocationMessageView(
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
         senderNameTV.setOnClickListener(this)
+        linearRoot.setOnClickListener(this)
+        linearRoot.setOnLongClickListener(this)
     }
 
     private fun loadThumbnail(msg: ChatMessage) {
@@ -318,7 +322,7 @@ abstract class LocationMessageView(
 
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.cv_msgContainer) {
+        if (v?.id == R.id.cv_msgContainer || v?.id == R.id.linearRoot) {
             if (!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 //Launch Map
                 if (message == null)

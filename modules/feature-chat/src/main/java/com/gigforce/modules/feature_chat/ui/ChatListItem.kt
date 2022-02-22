@@ -111,6 +111,7 @@ class ChatListItem(
                             chatHeader.unreadCount.toString(),
                             ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
+                    unseenMessageCountIV.visible()
                     unseenMessageCountIV.setImageDrawable(drawable)
 //                    textViewName.setTextColor(
 //                            ResourcesCompat.getColor(context.resources,
@@ -126,6 +127,7 @@ class ChatListItem(
 //                                    null
 //                            )
 //                    )
+                    unseenMessageCountIV.gone()
                     unseenMessageCountIV.setImageDrawable(null)
                     //txtSubtitle.setTypeface(null, Typeface.NORMAL);
                 }

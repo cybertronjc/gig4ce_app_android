@@ -224,7 +224,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.searchItem.setText("")
         viewBinding.searchItem.gone()
         viewBinding.textTitle.visible()
-        viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
+        viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_search_icon))
     }
 
     private fun setColorsOnViews(backgroundType: BackgroundType) {
@@ -476,7 +476,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (viewBinding.searchItem.isVisible){
             viewBinding.searchItem.gone()
             viewBinding.textTitle.visible()
-            viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
+            viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_search_icon))
             viewBinding.searchItem.setText("")
             hideKeyboard(viewBinding.searchItem)
             viewBinding.searchItem.clearFocus()

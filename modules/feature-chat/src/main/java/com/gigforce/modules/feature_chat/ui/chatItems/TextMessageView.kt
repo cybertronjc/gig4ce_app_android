@@ -94,6 +94,7 @@ abstract class TextMessageView(
     private lateinit var timeView: TextView
     private lateinit var receivedStatusIV: ImageView
     private lateinit var quotedMessagePreviewContainer: LinearLayout
+    private lateinit var linearRoot: LinearLayout
 
     private lateinit var message: ChatMessage
     private lateinit var oneToOneChatViewModel: ChatPageViewModel
@@ -147,6 +148,7 @@ abstract class TextMessageView(
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
         frameLayoutRoot = this.findViewById(R.id.frame)
+        linearRoot = this.findViewById(R.id.linearRoot)
         quotedMessagePreviewContainer =
             this.findViewById(R.id.reply_messages_quote_container_layout)
         containerView = this.findViewById(R.id.ll_msgContainer)
@@ -158,6 +160,9 @@ abstract class TextMessageView(
         quotedMessagePreviewContainer.setOnClickListener(this)
         containerView.setOnClickListener(this)
         containerView.setOnLongClickListener(this)
+        linearRoot.setOnClickListener(this)
+        linearRoot.setOnLongClickListener(this)
+        msgView.setOnClickListener(this)
     }
 
     override fun bind(data: Any?) {
@@ -377,7 +382,7 @@ abstract class TextMessageView(
 
     override fun onClick(v: View?) {
 
-        if (v?.id == R.id.ll_msgContainer){
+        if (v?.id == R.id.ll_msgContainer || v?.id == R.id.linearRoot || v?.id == R.id.tv_msgValue){
             if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)){
