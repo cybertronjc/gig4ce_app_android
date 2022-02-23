@@ -692,6 +692,10 @@ class ChatPageFragment : Fragment(),
 
             if (cameFromLinkInOtherChat)
                 chatNavigation.navigateUp()
+            else if (selectedChatMessage != null && selectedChatMessage?.size != 0){
+                disableChatSelection()
+                clearSelection()
+            }
             else if (communityFooter.isAttachmentOptionViewVisible())
                 communityFooter.hideAttachmentOptionView()
             else
