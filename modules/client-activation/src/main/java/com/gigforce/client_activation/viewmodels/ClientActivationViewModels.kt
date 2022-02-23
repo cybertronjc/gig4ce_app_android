@@ -1,6 +1,7 @@
 package com.gigforce.client_activation.viewmodels
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,8 @@ class ClientActivationViewModels @Inject constructor(private val repository: ICl
 
     private val _liveData : MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData<List<FeatureItemCardDVM>>()
     var liveData : LiveData<List<FeatureItemCardDVM>> = _liveData
+
+
     fun requestLiveData(priorityVal : Long) = viewModelScope.launch{
         try {
             _liveData.value =  repository.getData(priorityVal)

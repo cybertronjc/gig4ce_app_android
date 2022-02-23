@@ -60,7 +60,7 @@ abstract class MediaMessage(
     private var downloadAttachmentService: DownloadChatAttachmentService =
         RetrofitFactory.createService(DownloadChatAttachmentService::class.java)
 
-    suspend fun downloadMediaFile(): Uri {
+        suspend fun downloadMediaFile(): Uri {
         iMediaMessage?.let {
 
             val downloadLink =
