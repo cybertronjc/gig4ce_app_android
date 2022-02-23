@@ -296,8 +296,15 @@ class MainActivity : BaseActivity(),
                     StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
                     false
                 ) -> {
-                    Log.d("datahere", "main")
                    handleLoginSummaryNav()
+                }
+
+                //deep linking for home screen is handled here
+                intent.getBooleanExtra(
+                    StringConstants.HOME_SCREEN_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleHomeScreenNav()
                 }
 
                 //deep linking for onboarding form is handled here
@@ -305,7 +312,6 @@ class MainActivity : BaseActivity(),
                     StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value,
                     false
                 ) -> {
-                    Log.d("datahere", "main")
                     handleOnboardingFormNav()
                 }
 
@@ -413,6 +419,18 @@ class MainActivity : BaseActivity(),
             R.id.teamLeaderLoginDetailsFragment, bundleOf(
                 StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
             )
+        )
+
+    }
+
+    private fun handleHomeScreenNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(
+            R.id.onboardingLoaderfragment
         )
 
     }

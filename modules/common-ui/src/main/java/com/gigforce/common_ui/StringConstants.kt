@@ -97,7 +97,8 @@ enum class StringConstants(val value: String) {
     PAN_CARD_SP("deeplink_pancard"),
     AADHAR_DETAIL_SP("deeplink_aadhardetails"),
     DRIVING_LICENCE_SP("deeplink_drivinglicence"),
-    VERIFICATION_SP("deeplink_verification")
+    VERIFICATION_SP("deeplink_verification"),
+    HOMESCREEN_SP("deeplink_homescreen")
 
 
 

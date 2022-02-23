@@ -120,7 +120,17 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            }else{
+                            } else if(param == "homescreen"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.HOMESCREEN_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.HOME_SCREEN_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            } else{
                                 resetDeeplinkSharedPreferences()
                             }
                         }
