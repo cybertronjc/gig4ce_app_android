@@ -657,7 +657,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imageThumbnailPathInStorage!!, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imageThumbnailPathInStorage!!, R.drawable.ic_profile_new)
 
                     } else {
 
@@ -667,12 +667,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                             else
                                 "profile_pics/${it.imageThumbnailPathInStorage}"
 
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_profile_new)
                     }
                 } else if (!it.imagePathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imagePathInStorage!!, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imagePathInStorage!!, R.drawable.ic_profile_new)
 
                     } else {
 
@@ -682,12 +682,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                             else
                                 "profile_pics/${it.imagePathInStorage}"
 
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_profile_new)
                     }
 
                 } else {
 
-                    overlayCardLayout.profileImg.loadImage(R.drawable.ic_user_white)
+                    overlayCardLayout.profileImg.loadImage(R.drawable.ic_profile_new)
                 }
                 Log.d(TAG, "block: ${it.isUserBlocked}")
                 if (it.isUserBlocked) {

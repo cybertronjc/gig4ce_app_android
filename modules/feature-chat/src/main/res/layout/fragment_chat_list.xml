@@ -54,6 +54,7 @@
                 layout="@layout/layout_no_chat_found"
                 />
 
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/contactsFab"
                 android:layout_width="wrap_content"

@@ -719,8 +719,8 @@ class ChatPageFragment : Fragment(),
 
                         appbar.showMainImageView(
                             it.imageThumbnailPathInStorage!!,
-                            R.drawable.ic_user_white,
-                            R.drawable.ic_user_white
+                            R.drawable.ic_profile_new,
+                            R.drawable.ic_profile_new
                         )
                     } else {
 
@@ -732,8 +732,8 @@ class ChatPageFragment : Fragment(),
 
                         appbar.showMainImageView(
                             profilePathRef,
-                            R.drawable.ic_user_white,
-                            R.drawable.ic_user_white
+                            R.drawable.ic_profile_new,
+                            R.drawable.ic_profile_new
                         )
                     }
                 } else if (!it.imagePathInStorage.isNullOrBlank()) {
@@ -741,8 +741,8 @@ class ChatPageFragment : Fragment(),
                     if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
                         appbar.showMainImageView(
                             it.imagePathInStorage!!,
-                            R.drawable.ic_user_white,
-                            R.drawable.ic_user_white
+                            R.drawable.ic_profile_new,
+                            R.drawable.ic_profile_new
                         )
 
                     } else {
@@ -755,15 +755,15 @@ class ChatPageFragment : Fragment(),
 
                         appbar.showMainImageView(
                             profilePathRef,
-                            R.drawable.ic_user_white,
-                            R.drawable.ic_user_white
+                            R.drawable.ic_profile_new,
+                            R.drawable.ic_profile_new
                         )
                     }
 
                 } else {
 
                     appbar.showMainImageView(
-                        R.drawable.ic_user_white
+                        R.drawable.ic_profile_new
                     )
                 }
 
