@@ -183,52 +183,69 @@ class MainNavDataRepository @Inject constructor(
                 title = context.resources.getString(R.string.settings_app_giger),
                 icon = "setting",
                 navPath = "setting",
-                index = 140
+                index = 120
             )
         )
-        mainNavData.add(
-            FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.learning_app_giger),
-                icon = "learning",
-                navPath = "learning/main",
-                index = 130
-            )
-        )
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.learning_app_giger),
+//                icon = "learning",
+//                navPath = "learning/main",
+//                index = 130
+//            )
+//        )
 
         mainNavData.add(
             FeatureItemCard2DVM(
                 title = context.resources.getString(R.string.profile_app_giger),
                 icon = "profile",
                 navPath = "profile",
-                index = 120
-            )
-        )
-
-        mainNavData.add(
-            FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.wallet_app_giger),
-                icon = "wallet",
-                navPath = "payslipMonthlyFragment",
                 index = 110
             )
         )
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.verification_app_giger),
+                title = context.resources.getString(R.string.payouts_app_giger),
                 icon = "shield",
                 navPath = "verification/main",
-                index = 160
+                index = 130
             )
         )
+
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.wallet_app_giger),
+//                icon = "wallet",
+//                navPath = "payslipMonthlyFragment",
+//                index = 110
+//            )
+//        )
+
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.verification_app_giger),
+//                icon = "shield",
+//                navPath = "verification/main",
+//                index = 160
+//            )
+//        )
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.invoices_app_giger),
-                icon = "wallet",
-                navPath = "wallet/invoicesList",
-                index = 170
+                title = context.resources.getString(R.string.my_documents_app_giger),
+                icon = "shield",
+                navPath = "verification/main",
+                index = 140
             )
         )
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.invoices_app_giger),
+//                icon = "wallet",
+//                navPath = "wallet/invoicesList",
+//                index = 170
+//            )
+//        )
         return mainNavData
     }
 

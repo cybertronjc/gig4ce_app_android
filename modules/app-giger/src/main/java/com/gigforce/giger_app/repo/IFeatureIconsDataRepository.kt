@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
-import com.gigforce.common_ui.viewdatamodels.FeatureItemCard3DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
@@ -26,7 +25,7 @@ import javax.inject.Inject
 interface IFeatureIconsDataRepository {
     fun reload()
     fun getData(): LiveData<List<FeatureItemCard2DVM>>
-    fun getDataBS(): LiveData<List<FeatureItemCard3DVM>>
+    fun getDataBS(): LiveData<List<FeatureItemCard2DVM>>
 }
 
 class FeatureIconsDataRepository @Inject constructor(
@@ -36,7 +35,7 @@ class FeatureIconsDataRepository @Inject constructor(
     IFeatureIconsDataRepository {
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
-    private var dataBS: MutableLiveData<List<FeatureItemCard3DVM>> = MutableLiveData()
+    private var dataBS: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
     private var reloadCount = 0
 
     init {
@@ -223,7 +222,7 @@ class FeatureIconsDataRepository @Inject constructor(
     private fun arrangeDataAndSetObserverBS(iconList: Any) {
         val list = iconList as? List<Map<String, Any>>
         list?.let {
-            val mainNavData = ArrayList<FeatureItemCard3DVM>()
+            val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
                 try {
                     val title = item.get("title") as? String ?: "-"
@@ -244,7 +243,7 @@ class FeatureIconsDataRepository @Inject constructor(
                         }
                     }
                     mainNavData.add(
-                        FeatureItemCard3DVM(
+                        FeatureItemCard2DVM(
                             active = active,
                             title = title,
                             icon = icon_type,
@@ -262,7 +261,7 @@ class FeatureIconsDataRepository @Inject constructor(
             }
             val tempMainNavData =
                 mainNavData.filter { it.active == true }
-                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard3DVM>
+                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
@@ -271,7 +270,7 @@ class FeatureIconsDataRepository @Inject constructor(
             reloadCount++
         }
     }
-    override fun getDataBS(): LiveData<List<FeatureItemCard3DVM>> {
+    override fun getDataBS(): LiveData<List<FeatureItemCard2DVM>> {
         loadBS()
         return dataBS
     }

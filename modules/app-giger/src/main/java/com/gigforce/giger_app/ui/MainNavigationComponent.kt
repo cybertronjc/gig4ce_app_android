@@ -20,7 +20,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     init {
-        this.setOrientationAndRows(1, 4)
+        this.setOrientationAndRows(1, 3)
     }
 
     override fun bind(data: Any?) {

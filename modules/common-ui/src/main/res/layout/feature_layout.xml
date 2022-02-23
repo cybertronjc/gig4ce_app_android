@@ -15,6 +15,8 @@
         android:layout_marginStart="@dimen/size16"
         android:layout_marginTop="@dimen/size16"
         android:layout_marginBottom="@dimen/size16"
+        android:layout_marginEnd="@dimen/size_16"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -36,7 +38,7 @@
                 android:id="@+id/image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginRight="@dimen/size8"
+                android:layout_marginEnd="@dimen/size8"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +72,7 @@
         android:layout_marginTop="@dimen/size16"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/title_cl"
         app:layout_constraintStart_toStartOf="@id/title_cl"
         app:layout_constraintTop_toBottomOf="@+id/title_cl">
 
