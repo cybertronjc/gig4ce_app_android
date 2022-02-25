@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment(), IOnBackPressedOver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-        isCancelable = false
+        isCancelable = true
     }
 
     override fun onCreateView(
@@ -273,15 +274,16 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment(), IOnBackPressedOver
         return super.onCreateDialog(savedInstanceState).apply {
             setOnKeyListener { _: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
                 if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
-//                    if (!backStackIcons())
+                    if (!backStackIcons())
                         dismiss()
-
-                    return@setOnKeyListener false
+                    return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
             }
         }
     }
+
+
 
     override fun onBackPressed(): Boolean {
         return backStackIcons()
