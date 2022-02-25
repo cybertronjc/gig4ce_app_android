@@ -11,7 +11,9 @@ class PayoutNavigation @Inject constructor(
 ) {
 
     companion object {
-        const val NAV_DESTINATION_PAYOUT_LIST = "Payout/PayoutListFragment" }
+        const val NAV_DESTINATION_PAYOUT_LIST = "Payout/PayoutListFragment"
+        const val NAV_DESTINATION_PAYOUT_DETAILS = "Payout/PayoutDetailsFragment"
+    }
 
     fun openPayoutList(
         payOutIdToOpenOnLoading: String? = null
@@ -19,6 +21,16 @@ class PayoutNavigation @Inject constructor(
         navigation.navigateTo(
             NAV_DESTINATION_PAYOUT_LIST,
             bundleOf(PayoutConstants.INTENT_EXTRA_PAYOUT_ID to payOutIdToOpenOnLoading),
+            navOptions = NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openPayoutDetailsScreen(
+        payoutId : String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_PAYOUT_DETAILS,
+            bundleOf(PayoutConstants.INTENT_EXTRA_PAYOUT_ID to payoutId),
             navOptions = NavigationOptions.getNavOptions()
         )
     }

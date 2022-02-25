@@ -5,7 +5,6 @@ import androidx.core.view.isVisible
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.PaySlipListFragmentBinding
-import com.gigforce.wallet.databinding.PayoutListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +25,7 @@ class PayoutSlipsListFragment : BaseFragment2<PaySlipListFragmentBinding>(
         viewBinding: PaySlipListFragmentBinding,
         savedInstanceState: Bundle?
     ) {
+
         viewBinding.informationLayout.infoMessageTv.text = "No Payslips to show"
         viewBinding.informationLayout.retryBtn.isVisible = false
     }

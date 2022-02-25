@@ -4,14 +4,31 @@
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rootFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".payouts.payout_list.PayoutListFragment">
 
-        <TextView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello" />
+            android:layout_height="match_parent">
+
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <include
+            android:id="@+id/shimmer_container"
+            layout="@layout/shimmer_container"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/info_layout"
+            layout="@layout/layout_information_with_button" />
 
     </FrameLayout>
 </layout>
