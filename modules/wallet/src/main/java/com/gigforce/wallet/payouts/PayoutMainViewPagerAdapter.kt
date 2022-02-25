@@ -3,6 +3,7 @@ package com.gigforce.wallet.payouts
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.wallet.payouts.payout_list.PayoutListFragment
+import com.gigforce.wallet.payouts.payout_slips.PayoutSlipsListFragment
 
 data class TabInfo(
     val fragment: Fragment,
@@ -21,10 +22,10 @@ class PayoutMainViewPagerAdapter(
                 fragment = PayoutListFragment(),
                 fragmentTabName = "Payouts"
             ),
-//            TabInfo(
-//                fragment = PayoutSlipsListFragment(),
-//                fragmentTabName = "Payout Slips"
-//            )
+            TabInfo(
+                fragment = PayoutSlipsListFragment(),
+                fragmentTabName = "Payout Slips"
+            )
         )
     }
 

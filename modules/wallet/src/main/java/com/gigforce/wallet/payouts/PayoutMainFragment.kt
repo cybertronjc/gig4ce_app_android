@@ -23,14 +23,13 @@ class PayoutMainFragment : BaseFragment2<FragmentPayoutMainBinding>(
         viewBinding: FragmentPayoutMainBinding,
         savedInstanceState: Bundle?
     ) {
+        viewBinding.viewPager.adapter = PayoutMainViewPagerAdapter(this)
 
-//        TabLayoutMediator(
-//            viewBinding.tablayout,
-//            viewBinding.viewPager
-//        ) { tab, position ->
-//            tab.text = PayoutMainViewPagerAdapter.TABS[position].fragmentTabName
-//        }.attach()
-//
-//        viewBinding.viewPager.adapter = PayoutMainViewPagerAdapter(this)
+        TabLayoutMediator(
+            viewBinding.tablayout,
+            viewBinding.viewPager
+        ) { tab, position ->
+            tab.text = PayoutMainViewPagerAdapter.TABS[position].fragmentTabName
+        }.attach()
     }
 }
