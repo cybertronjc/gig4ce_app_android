@@ -383,7 +383,7 @@ abstract class TextMessageView(
 
     override fun onClick(v: View?) {
 
-        if (v?.id == R.id.ll_msgContainer || v?.id == R.id.tv_msgValue){
+        if (v?.id == R.id.ll_msgContainer || v?.id == R.id.tv_msgValue || v?.id == R.id.linearRoot){
             if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)){
