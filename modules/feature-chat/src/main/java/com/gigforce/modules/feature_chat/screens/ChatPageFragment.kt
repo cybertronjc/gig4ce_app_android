@@ -64,6 +64,7 @@ import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_
 import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_MAP_IMAGE_FILE
 import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_PHYSICAL_ADDRESS
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.modules.feature_chat.adapters.diffutils.Chat2DiffUtilCallback
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
@@ -613,6 +614,7 @@ class ChatPageFragment : Fragment(),
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         chatRecyclerView.layoutManager = layoutManager
+        chatRecyclerView.setDiffUtilCallback(Chat2DiffUtilCallback())
 
         val itemTouchHelper = ItemTouchHelper(messageSwipeController)
         itemTouchHelper.attachToRecyclerView(chatRecyclerView)
@@ -790,6 +792,12 @@ class ChatPageFragment : Fragment(),
                     noChatLayout.visible()
                 }
                 else {
+                    //set messages as read
+//                    val unreadMessages = messages.filter { it.flowType == ChatConstants.FLOW_TYPE_IN && it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER }
+//                    Log.d("unreadMessages", "${unreadMessages.size}")
+//                    if (unreadMessages.isNotEmpty()) {
+//                            viewModel.setMessagesAsRead(unreadMessages)
+//                    }
                     messages.let {
                         chatRecyclerView.collection = messages.map {
                             ChatMessageWrapper(
@@ -803,11 +811,6 @@ class ChatPageFragment : Fragment(),
                         chatRecyclerView.visible()
                         noChatLayout.gone()
                         shimmerContainer.gone()
-
-                        //set messages as read
-                        val unreadMessages = messages.filter { it.flowType == ChatConstants.FLOW_TYPE_IN && it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER }
-                        Log.d("unreadMessages", "${unreadMessages.size}")
-                        viewModel.setMessagesAsRead(unreadMessages)
 
                     }
                 }

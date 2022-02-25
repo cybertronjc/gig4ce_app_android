@@ -125,7 +125,7 @@ abstract class TextMessageView(
         senderNameTV.setOnClickListener(this)
         msgView.setOnLongClickListener(OnLongClickListener {
             containerView.performLongClick()
-            false
+            true
         })
 
 //        msgView.setOnTouchListener(OnTouchListener { v, event ->
@@ -163,6 +163,7 @@ abstract class TextMessageView(
         linearRoot.setOnClickListener(this)
         linearRoot.setOnLongClickListener(this)
         msgView.setOnClickListener(this)
+        msgView.setOnLongClickListener(this)
     }
 
     override fun bind(data: Any?) {
@@ -382,7 +383,7 @@ abstract class TextMessageView(
 
     override fun onClick(v: View?) {
 
-        if (v?.id == R.id.ll_msgContainer || v?.id == R.id.linearRoot || v?.id == R.id.tv_msgValue){
+        if (v?.id == R.id.ll_msgContainer || v?.id == R.id.tv_msgValue){
             if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)){

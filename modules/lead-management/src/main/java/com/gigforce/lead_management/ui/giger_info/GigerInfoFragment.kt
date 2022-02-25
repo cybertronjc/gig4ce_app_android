@@ -464,7 +464,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     )
                 )
             )
-
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "tl_call_giger", null
+                )
+            )
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,

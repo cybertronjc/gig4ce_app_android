@@ -16,7 +16,6 @@ import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IAadhaarDetailsRepository
@@ -39,8 +38,8 @@ interface AppBindingsModule {
     @Binds
     fun provideNavigationBinding(impl: NavManagerImpl): INavigation
 
-    @Binds
-    fun provideManNavRepo(imp: MainNavDataRepository): IMainNavDataRepository
+//    @Binds
+//    fun provideManNavRepo(imp: MainNavDataRepository): IMainNavDataRepository
 
     @Binds
     fun provideLearningRepo(imp: LearningDataRepository): ILearningDataRepository
@@ -111,6 +110,12 @@ interface ViewModelBindings {
 
     @Binds
     fun provideHelpVideosRepo(imp: HelpVideosDataRepository): IHelpVideosDataRepository
+
+    @Binds
+    fun provideSharedData(imp: SharedPreAndCommonUtilDataImp): SharedPreAndCommonUtilInterface
+
+    @Binds
+    fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 }
 
 

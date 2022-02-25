@@ -8,24 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.giger_app.R
-import com.gigforce.giger_app.repo.IMainNavDataRepository
+import com.gigforce.giger_app.vm.MainNavigationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.subicon_list_fragment.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SubiconListFragment : Fragment() {
 
-    @Inject
-    lateinit var repository: IMainNavDataRepository
+//    private val viewModel: MainNavigationViewModel by viewModels()
 
-    @Inject
-    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
-    private val viewModel: SubiconListViewModel by viewModels()
-
-    //    private var viewBinding : SubiconList
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +39,6 @@ class SubiconListFragment : Fragment() {
     }
 
     private fun listener() {
-//        toolbar.textTitle.text = "TL"
         toolbar.apply {
             setBackButtonListener {
                 activity?.onBackPressed()
@@ -56,21 +47,22 @@ class SubiconListFragment : Fragment() {
     }
 
     private fun observer() {
-        repository.getData().observeForever {
-            try {
 
-                var featureList = ArrayList<FeatureItemCard2DVM>()
-                it.forEach {
-                    arrayLong?.forEach { subIcons ->
-                        if (it.index == subIcons) {
-                            featureList.add(it)
-                        }
-                    }
-                }
-                subiconsrv.collection = featureList
-            } catch (e: Exception) {
-            }
-        }
+//        viewModel.liveData.observeForever {
+//            try {
+//
+//                val featureList = ArrayList<FeatureItemCard2DVM>()
+//                it.forEach {
+//                    arrayLong?.forEach { subIcons ->
+//                        if (it.index == subIcons) {
+//                            featureList.add(it)
+//                        }
+//                    }
+//                }
+//                subiconsrv.collection = featureList
+//            } catch (e: Exception) {
+//            }
+//        }
     }
 
     var arrayLong: ArrayList<Long>? = null
@@ -89,10 +81,4 @@ class SubiconListFragment : Fragment() {
         }
 
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
-//    }
-
 }

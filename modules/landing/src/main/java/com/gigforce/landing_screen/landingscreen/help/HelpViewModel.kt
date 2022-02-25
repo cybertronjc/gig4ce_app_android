@@ -3,13 +3,33 @@ package com.gigforce.landing_screen.landingscreen.help
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.gigforce.core.extensions.getOrThrow
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
+
+data class HelpSupport(val number : String?="")
 
 class HelpViewModel : ViewModel() {
 
     private val _helpVideos = MutableLiveData<ArrayList<HelpVideo>>()
     val helpVideos : LiveData<ArrayList<HelpVideo>> = _helpVideos
+
+    private val _helpAndSupportMobileNumber = MutableLiveData<HelpSupport>()
+    val helpAndSupportMobileNumber:LiveData<HelpSupport> = _helpAndSupportMobileNumber
+    init {
+        getHelpAndSupportMobileNumber()
+    }
+    private fun getHelpAndSupportMobileNumber() = viewModelScope.launch{
+        val helpSupport = FirebaseFirestore.getInstance().collection("Configuration").document("help_support").getOrThrow()
+        val helpSupportObject = helpSupport.toObject(HelpSupport::class.java)
+        helpSupportObject?.let {
+            _helpAndSupportMobileNumber.value = it
+        }
+    }
 
     fun getTopHelpVideos(){
 
