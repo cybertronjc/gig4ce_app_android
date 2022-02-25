@@ -14,6 +14,7 @@ import androidx.core.text.bold
 import androidx.fragment.app.activityViewModels
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
+import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
@@ -44,7 +45,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     lateinit var navigation : INavigation
     private lateinit var whatsappTemplateModel: WhatsappTemplateModel
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-
+    private var cameFromAttendace: Boolean = false
     private val backPressHandler = object : OnBackPressedCallback(true) {
 
         override fun handleOnBackPressed() {
@@ -67,10 +68,12 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     ) {
         arguments?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
         }
 
         savedInstanceState?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
         }
 
         logDataReceivedFromBundles()
@@ -128,10 +131,19 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     private fun initListener() = viewBinding.apply {
 
         nextButton.setOnClickListener {
-            navigation.popBackStack(
-                LeadManagementNavDestinations.FRAGMENT_JOINING,
-                false
-            )
+
+            if (cameFromAttendace){
+                navigation.popBackStack(
+                    "gig/gigerAttendanceUnderManagerFragment",
+                    false
+                )
+            } else {
+                navigation.popBackStack(
+                    LeadManagementNavDestinations.FRAGMENT_JOINING,
+                    false
+                )
+            }
+
         }
         sharedViewModel.joiningAdded()
     }

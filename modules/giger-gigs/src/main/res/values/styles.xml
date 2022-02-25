@@ -47,4 +47,8 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="GigerGigsMaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/material_state_color</item>
+    </style>
+
 </resources>
