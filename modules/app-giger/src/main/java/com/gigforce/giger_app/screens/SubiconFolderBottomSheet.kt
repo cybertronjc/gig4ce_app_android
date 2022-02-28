@@ -56,6 +56,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment(), IOnBackPressedOver
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        viewModel.requestData(sharedPreAndCommonUtilInterface.getCurrentVersionCode())
         initViews()
         observer()
         listener()
@@ -218,6 +219,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment(), IOnBackPressedOver
                 try {
                     allIconsList.clear()
                     allIconsList.addAll(it)
+                    recyclerSubList.clear()
                     recyclerSubList.addAll(getFilteredList(data?.subicons, it))
                     subiconsrv.collection = recyclerSubList
                 } catch (e: Exception) {

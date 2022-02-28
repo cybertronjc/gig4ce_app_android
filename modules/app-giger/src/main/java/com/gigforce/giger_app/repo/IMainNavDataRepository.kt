@@ -76,7 +76,7 @@ class MainNavDataRepository @Inject constructor(
             }
             val tempMainNavData =
                 mainNavData.filter { it.active == true }
-                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
+                    .filter { (it.type != "sub_icon" && it.type != "sub_folder") } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
@@ -108,17 +108,15 @@ class MainNavDataRepository @Inject constructor(
 
         }
     }
-    var producerScope : ProducerScope<ArrayList<FeatureItemCard2DVM>>?=null
     override fun getData(currentVersionCode: Int): Flow<List<FeatureItemCard2DVM>> {
         this.currentVersionCode = currentVersionCode
 
         return callbackFlow {
-            producerScope = this
             FirebaseFirestore.getInstance().collection("AppConfigs")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
                 .addSnapshotListener { data, error ->
                     if (error != null) {
-                        producerScope?.close(error)
+                        close(error)
                     } else {
                         data?.documents?.let {
                             if (it.isNotEmpty() && reloadCount < 2) {

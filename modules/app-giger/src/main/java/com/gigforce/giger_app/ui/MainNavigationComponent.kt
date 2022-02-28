@@ -44,8 +44,8 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
         viewModel?.liveData?.observeForever {
             try {
                 Log.e("flowtest","${it.size} working")
-                val filteredData =
-                    it.filter { true}//it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
+                val filteredData = it
+//                    it.filter { true}//it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
                 if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                     super.bind(
                         FeatureLayoutDVM(
