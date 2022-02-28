@@ -24,6 +24,7 @@ import javax.inject.Inject
 interface IMainNavDataRepository {
     fun getData(currentVersionCode:Int): Flow<List<FeatureItemCard2DVM>>
     fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
+    suspend fun notifyToServer()
 }
 
 class MainNavDataRepository @Inject constructor(
@@ -80,22 +81,14 @@ class MainNavDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            receivedNotifyToServer()
             reloadCount++
             return mainNavData
         }
         return mainNavData
     }
 
-    private fun receivedNotifyToServer() {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
-            notifyToServer()
-        }
-    }
 
-
-    private suspend fun notifyToServer() {
+    override suspend fun notifyToServer() {
         try {
             val jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
@@ -120,7 +113,6 @@ class MainNavDataRepository @Inject constructor(
                     } else {
                         data?.documents?.let {
                             if (it.isNotEmpty() && reloadCount < 2) {
-
                                 val docData = it[0].data as? Map<String, Any>
                                 docData?.let { docMapData ->
                                     val versionCodeList = ArrayList<Int>()
@@ -153,9 +145,10 @@ class MainNavDataRepository @Inject constructor(
                                     }
                                 }
 
-                            } else {
+                            } else if(it.isEmpty()) {
                                 reloadCount = 1
-                                receivedNotifyToServer()
+                                sendBlocking(ArrayList<FeatureItemCard2DVM>())
+                            }else{
                             }
                         }
                     }

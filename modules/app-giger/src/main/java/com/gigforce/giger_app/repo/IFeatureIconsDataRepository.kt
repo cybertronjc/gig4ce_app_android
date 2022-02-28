@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 interface IFeatureIconsDataRepository {
     fun getDataBS(currentVersionCode: Int): Flow<List<FeatureItemCard2DVM>>
+    suspend fun notifyToServer()
 }
 
 class FeatureIconsDataRepository @Inject constructor(
@@ -32,17 +33,9 @@ class FeatureIconsDataRepository @Inject constructor(
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var reloadCount = 0
 
-
-    private fun receivedNotifyToServer() {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
-            notifyToServer()
-        }
-    }
-
-    private suspend fun notifyToServer() {
+    override suspend fun notifyToServer() {
         try {
-            var jsonData = JsonObject()
+            val jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             jsonData.addProperty(
                 "versionCode",
@@ -102,7 +95,6 @@ class FeatureIconsDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            receivedNotifyToServer()
             reloadCount++
         }
         return mainNavData
@@ -145,9 +137,9 @@ class FeatureIconsDataRepository @Inject constructor(
                                     sendBlocking(arrangedData)
                                 }
                             }
-                        } else {
+                        } else if(it.isEmpty()){
                             reloadCount = 1
-                            receivedNotifyToServer()
+                            sendBlocking(ArrayList<FeatureItemCard2DVM>())
                         }
                     }
                 }

@@ -22,7 +22,9 @@ class SubiconFolderBSViewModel  @Inject constructor(private val repository: IFea
     fun requestData(currentVersionCode: Int) = viewModelScope.launch{
         try {
             repository.getDataBS(currentVersionCode).catch {  }.collect {
+                if(it.isNotEmpty())
                 _allIconsLiveData.value = it
+                repository.notifyToServer()
             }
         }catch (e:Exception){}
     }
