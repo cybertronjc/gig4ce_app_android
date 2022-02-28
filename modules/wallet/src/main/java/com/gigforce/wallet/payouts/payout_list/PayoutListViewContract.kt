@@ -6,6 +6,8 @@ class PayoutListViewContract {
 
     sealed class State {
 
+        object ScreenLoaded: State()
+
         data class LoadingPayoutList(
             val message: String?
         ) : State()
@@ -28,6 +30,8 @@ class PayoutListViewContract {
         data class MonthYearHeaderClicked(
             val header : PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData
         ) : UiEvent()
+
+        object RefreshPayoutListClicked : UiEvent()
     }
 
     sealed class UiEffect {

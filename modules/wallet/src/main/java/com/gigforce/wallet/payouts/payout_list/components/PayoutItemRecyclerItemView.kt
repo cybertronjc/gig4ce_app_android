@@ -5,11 +5,18 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.content.res.ResourcesCompat
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.ext.formatToCurrency
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.extensions.capitalizeWords
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.RecyclerRowPayoutItemBinding
 import com.gigforce.wallet.models.PayoutListPresentationItemData
+import com.gigforce.wallet.payouts.payout_list.PayoutListViewContract
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,23 +61,53 @@ class PayoutItemRecyclerItemView(
     override fun bind(data: Any?) {
         viewData = null
 
-        data?.let {
-            val gigerAttendanceData =
-                it as PayoutListPresentationItemData.PayoutItemRecyclerItemData
-            viewData = gigerAttendanceData
+        (data as PayoutListPresentationItemData.PayoutItemRecyclerItemData?)?.let {
+            viewData = it
 
+            viewBinding.amountTextview.text = it.amount.formatToCurrency()
+            viewBinding.businessTextview.text = it.companyName?.capitalize(Locale.getDefault())
+            viewBinding.payoutStatusView.bind(
+                it.status,
+                it.statusColorCode
+            )
+            viewBinding.paidOnTextview.text = formatPaymentDate(it.paymentDate)
 
+            if (it.icon != null) {
+                viewBinding.businessLogoIv.loadImageIfUrlElseTryFirebaseStorage(
+                    it.icon
+                )
+            } else {
+                val businessInitials: String = if (it.companyName != null) {
+                    it.companyName[0].toUpperCase().toString()
+                } else {
+                    "C"
+                }
+                val drawable = TextDrawable.builder().buildRound(
+                    businessInitials,
+                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                )
+                viewBinding.businessLogoIv.setImageDrawable(drawable)
+            }
         }
     }
 
-    private fun setStatus(
-        status: String,
-    ) {
-
+    private fun formatPaymentDate(
+        paymentDate: String?
+    ): String {
+        return if (paymentDate != null) {
+            "Paid on : -"
+        } else {
+            "Paid on : -"
+        }
     }
 
     override fun onClick(v: View?) {
-        val currentViewData = viewData ?: return
 
+        val currentViewData = viewData ?: return
+        currentViewData.viewModel.handleEvent(
+            PayoutListViewContract.UiEvent.PayoutItemClicked(
+                currentViewData
+            )
+        )
     }
 }

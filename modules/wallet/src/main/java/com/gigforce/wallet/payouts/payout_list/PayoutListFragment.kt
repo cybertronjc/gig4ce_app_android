@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -51,8 +52,13 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
 
     private fun initView() = viewBinding.apply{
 
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setDiffUtilCallback(PayoutDiffUtilCallback())
+
+        swipeRefresh.setOnRefreshListener {
+            viewModel.handleEvent(PayoutListViewContract.UiEvent.RefreshPayoutListClicked)
+        }
     }
 
     private fun initViewModel() {

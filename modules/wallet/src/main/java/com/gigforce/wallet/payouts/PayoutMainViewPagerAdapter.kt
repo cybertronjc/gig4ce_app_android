@@ -6,7 +6,6 @@ import com.gigforce.wallet.payouts.payout_list.PayoutListFragment
 import com.gigforce.wallet.payouts.payout_slips.PayoutSlipsListFragment
 
 data class TabInfo(
-    val fragment: Fragment,
     val fragmentTabName: String
 )
 
@@ -19,19 +18,25 @@ class PayoutMainViewPagerAdapter(
     companion object {
         val TABS = listOf(
             TabInfo(
-                fragment = PayoutListFragment(),
                 fragmentTabName = "Payouts"
             ),
             TabInfo(
-                fragment = PayoutSlipsListFragment(),
                 fragmentTabName = "Payout Slips"
             )
         )
     }
 
+    private fun getFragmentAt(index : Int) : Fragment{
+       return when (index) {
+            0 -> PayoutListFragment()
+            1 -> PayoutSlipsListFragment()
+            else -> throw IllegalArgumentException("no fragment present for index $index")
+        }
+    }
+
     override fun getItemCount(): Int = TABS.size
 
     override fun createFragment(position: Int): Fragment {
-         return TABS[position].fragment
+         return getFragmentAt(position)
     }
 }

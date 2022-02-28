@@ -17,4 +17,9 @@ interface PayoutRetrofitService {
     suspend fun getPayouts(
         @Body filters : GetPayoutFilters
     ): Response<List<Payout>>
+
+    @GET("paymentcycle/fetchGigerPayoutList")
+    suspend fun getPayoutDetails(
+        @Query("id") payoutId : String
+    ): Response<Payout>
 }

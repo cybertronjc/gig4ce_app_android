@@ -1,5 +1,6 @@
 package com.gigforce.wallet.payouts.payout_list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.useCases.payouts.GetPayoutsUseCase
@@ -13,21 +14,22 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.Exception
 
 @HiltViewModel
 class PayoutListViewModel @Inject constructor(
     private val logger: GigforceLogger,
-    private val getPayoutsUseCase: GetPayoutsUseCase
+    private val getPayoutsUseCase: GetPayoutsUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
         const val TAG = "PayoutListViewModel"
+
+        const val INTENT_EXTRA_SELECTED_DATE_FILTER = "selected_date_filter"
     }
 
     private val _viewState = MutableStateFlow<PayoutListViewContract.State>(
-        PayoutListViewContract.State.LoadingPayoutList(null)
+        PayoutListViewContract.State.ScreenLoaded
     )
     val viewState = _viewState.asStateFlow()
 
@@ -35,21 +37,28 @@ class PayoutListViewModel @Inject constructor(
     val viewEffects = _viewEffects.asSharedFlow()
 
     // filters
-    private var expandedDates: List<String> = emptyList()
-    private var activeDateFilters: Pair<LocalDate, LocalDate> = PayoutListFilters.LAST_SIX_MONTHS
+    private var collapsedDates: MutableList<String> = mutableListOf()
+    private var activeDateFilter = PayoutDateFilters.LAST_SIX_MONTHS
 
     /**
      * Payout list from server as it is
      */
     private var payoutListRaw: List<Payout> = emptyList()
-    private var payoutListShownOnScreen: List<PayoutListPresentationItemData> = emptyList()
+    private var payoutListShownOnScreen: MutableList<PayoutListPresentationItemData> =
+        mutableListOf()
 
     init {
-        fetchPayouts(PayoutListFilters.LAST_SIX_MONTHS)
+        restoreFiltersAndOtherData()
+        fetchPayouts(PayoutDateFilters.LAST_SIX_MONTHS)
+    }
+
+    private fun restoreFiltersAndOtherData() {
+        val selectedDateFilter = savedStateHandle.get<String?>(INTENT_EXTRA_SELECTED_DATE_FILTER) ?: return
+        //todo complte thsi
     }
 
     private fun fetchPayouts(
-        dateFilter: Pair<LocalDate, LocalDate>
+        dateFilter: PayoutDateFilter
     ) = viewModelScope.launch {
         if (_viewState.value is PayoutListViewContract.State.LoadingPayoutList) {
             logger.d(TAG, "already a loading process in progress, no-op")
@@ -58,12 +67,15 @@ class PayoutListViewModel @Inject constructor(
 
         _viewState.emit(PayoutListViewContract.State.LoadingPayoutList(null))
         try {
-            activeDateFilters = dateFilter
-            payoutListRaw = getPayoutsUseCase.getPayouts(activeDateFilters)
+            activeDateFilter = dateFilter
+            payoutListRaw = getPayoutsUseCase.getPayouts(
+                activeDateFilter.startEndDatePair
+            )
             payoutListShownOnScreen = PayoutListDataProcessor.processPayoutListAndFilters(
                 payouts = payoutListRaw,
-                expandedDates = expandedDates
-            )
+                collapsedDates = collapsedDates,
+                payoutListViewModel = this@PayoutListViewModel
+            ).toMutableList()
 
             _viewState.emit(
                 PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
@@ -92,18 +104,47 @@ class PayoutListViewModel @Inject constructor(
     ) = when (event) {
         is PayoutListViewContract.UiEvent.MonthYearHeaderClicked -> monthYearHeaderClicked(event.header)
         is PayoutListViewContract.UiEvent.PayoutItemClicked -> payoutItemClicked(event.payoutItem)
+        PayoutListViewContract.UiEvent.RefreshPayoutListClicked -> fetchPayouts(activeDateFilter)
     }
 
     private fun payoutItemClicked(
         payoutItem: PayoutListPresentationItemData.PayoutItemRecyclerItemData
-    ) {
+    ) = viewModelScope.launch {
 
-
+        _viewEffects.emit(PayoutListViewContract.UiEffect.OpenPayoutDetailScreen(payoutItem.id))
     }
 
     private fun monthYearHeaderClicked(
         header: PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData
-    ) {
+    ) = viewModelScope.launch {
+
+        if (collapsedDates.contains(header.date)) {
+            collapsedDates.remove(header.date)
+
+            PayoutListDataProcessor.expandPayoutsOfMonthYear(
+                header.date,
+                payoutListRaw,
+                payoutListShownOnScreen,
+                this@PayoutListViewModel
+            )
+            _viewState.emit(
+                PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
+                    payoutListShownOnScreen
+                )
+            )
+        } else {
+            collapsedDates.add(header.date)
+
+            PayoutListDataProcessor.collapsePayoutsOfMonthYear(
+                header.date,
+                payoutListShownOnScreen
+            )
+            _viewState.emit(
+                PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
+                    payoutListShownOnScreen
+                )
+            )
+        }
 
     }
 
