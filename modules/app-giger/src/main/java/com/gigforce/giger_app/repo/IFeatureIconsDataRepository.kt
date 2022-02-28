@@ -126,7 +126,8 @@ class FeatureIconsDataRepository @Inject constructor(
             }
             val tempMainNavData =
                 mainNavData.filter { it.active == true }
-                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
+//                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() }
+                        as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
