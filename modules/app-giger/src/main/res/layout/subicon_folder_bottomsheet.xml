@@ -13,7 +13,6 @@
         android:text="Testing "
         style="@style/Caption2"
         android:textStyle="bold"
-        android:background="@drawable/title_bg"
         android:paddingStart="@dimen/size_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
