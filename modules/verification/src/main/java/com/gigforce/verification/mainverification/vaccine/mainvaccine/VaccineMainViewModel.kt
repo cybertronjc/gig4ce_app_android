@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
@@ -40,6 +42,9 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
 
     private val _fileUploadLiveData = MutableLiveData<Lce<VaccineFileUploadResDM>>()
     val vaccineFileUploadResLiveData: LiveData<Lce<VaccineFileUploadResDM>> = _fileUploadLiveData
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     val gigforceDirectory: File by lazy {
 
@@ -73,6 +78,17 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
                         file
                     )
                 )
+                when (vaccineReqDM.vaccineLabel) {
+                    "Dose 1" -> {
+                        eventTracker.pushEvent(TrackingEventArgs("vaccine_certi1_uploaded", null))
+                    }
+                    "Dose 2" -> {
+                        eventTracker.pushEvent(TrackingEventArgs("vaccine_certi2_uploaded", null))
+                    }
+                    "Booster Dose" -> {
+                        eventTracker.pushEvent(TrackingEventArgs("vaccine_booster_uploaded", null))
+                    }
+                }
             } catch (e: Exception) {
                 _fileUploadLiveData.value = Lce.error(e.toString())
             }
@@ -80,7 +96,7 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
         }
 
 
-    fun downloadFile(url: String) = viewModelScope.launch {
+    fun downloadFile(vaccineLabel: String, url: String) = viewModelScope.launch {
         try {
             _fileDownloaded.value = Lce.Loading
             val fullDownloadLink = FirebaseStorage.getInstance().reference.child(url).getDownloadUrlOrThrow().toString()
@@ -101,6 +117,17 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
                     try {
                         MediaStoreApiHelpers.saveDocumentToDownloads(context, fileRef.toUri())
                         _fileDownloaded.value = Lce.content(FileDownloaded(true))
+                        when (vaccineLabel) {
+                            "Dose 1" -> {
+                                eventTracker.pushEvent(TrackingEventArgs("vaccine_certi1_downloaded", null))
+                            }
+                            "Dose 2" -> {
+                                eventTracker.pushEvent(TrackingEventArgs("vaccine_certi2_downloaded", null))
+                            }
+                            "Booster Dose" -> {
+                                eventTracker.pushEvent(TrackingEventArgs("vaccine_booster_downloaded", null))
+                            }
+                        }
                     }catch (e:Exception){
                         _fileDownloaded.value = Lce.error("Error : File not able to download!!")
                     }

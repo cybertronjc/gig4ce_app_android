@@ -132,6 +132,26 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if(param == "esignature"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if(param == "vaccination"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             }else {
                                 resetDeeplinkSharedPreferences()
                             }
@@ -257,6 +277,14 @@ class SplashScreen : AppCompatActivity() {
         )
         sharedPreAndCommonUtilInterface.saveDataBoolean(
             StringConstants.VERIFICATION_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.VACCINATION_VIA_DEEP_LINK.value,
             false
         )
         sharedPreAndCommonUtilInterface.saveDataBoolean(
