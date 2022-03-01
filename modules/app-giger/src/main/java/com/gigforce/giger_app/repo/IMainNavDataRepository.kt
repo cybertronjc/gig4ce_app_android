@@ -105,11 +105,11 @@ class MainNavDataRepository @Inject constructor(
         this.currentVersionCode = currentVersionCode
 
         return callbackFlow {
-            FirebaseFirestore.getInstance().collection("AppConfigs")
+            val subscription =  FirebaseFirestore.getInstance().collection("AppConfigs")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
                 .addSnapshotListener { data, error ->
                     if (error != null) {
-                        close(error)
+//                        close(error)
                     } else {
                         data?.documents?.let {
                             if (it.isNotEmpty() && reloadCount < 2) {
@@ -132,7 +132,7 @@ class MainNavDataRepository @Inject constructor(
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            sendBlocking(arrangedData)
+                                            offer(arrangedData)
                                             return@let
                                         }
                                     }
@@ -141,19 +141,19 @@ class MainNavDataRepository @Inject constructor(
                                         docMapData.get("data")?.let { iconList ->
                                             arrangedData = arrangeDataAndSetObserver(iconList)
                                         }
-                                        sendBlocking(arrangedData)
+                                        offer(arrangedData)
                                     }
                                 }
 
                             } else if(it.isEmpty()) {
                                 reloadCount = 1
-                                sendBlocking(ArrayList<FeatureItemCard2DVM>())
+                                offer(ArrayList<FeatureItemCard2DVM>())
                             }else{
                             }
                         }
                     }
                 }
-            awaitClose{ }
+            awaitClose{ subscription.remove() }
         }
 
     }

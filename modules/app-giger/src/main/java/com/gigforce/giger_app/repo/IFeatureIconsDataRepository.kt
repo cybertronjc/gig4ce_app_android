@@ -103,7 +103,7 @@ class FeatureIconsDataRepository @Inject constructor(
     override fun getDataBS(currentVersionCode: Int): Flow<List<FeatureItemCard2DVM>> {
         this.currentVersionCode = currentVersionCode
         return callbackFlow {
-            FirebaseFirestore.getInstance().collection("AppConfigs")
+            val subscription = FirebaseFirestore.getInstance().collection("AppConfigs")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
                 .addSnapshotListener { value, error ->
                     value?.documents?.let {
@@ -125,7 +125,7 @@ class FeatureIconsDataRepository @Inject constructor(
                                             arrangedData = arrangeDataAndSetObserverBS(iconList)
                                         }
                                         foundVersionMapping = true
-                                        sendBlocking(arrangedData)
+                                        offer(arrangedData)
                                         return@let
                                     }
                                 }
@@ -134,16 +134,16 @@ class FeatureIconsDataRepository @Inject constructor(
                                     docMapData.get("data")?.let { iconList ->
                                         arrangedData = arrangeDataAndSetObserverBS(iconList)
                                     }
-                                    sendBlocking(arrangedData)
+                                    offer(arrangedData)
                                 }
                             }
                         } else if(it.isEmpty()){
                             reloadCount = 1
-                            sendBlocking(ArrayList<FeatureItemCard2DVM>())
+                            offer(ArrayList<FeatureItemCard2DVM>())
                         }
                     }
                 }
-            awaitClose{}
+            awaitClose{subscription.remove()}
             }
         }
 }
