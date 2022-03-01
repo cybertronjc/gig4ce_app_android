@@ -20,6 +20,7 @@ import com.gigforce.common_ui.viewmodels.payouts.Payout
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.wallet.PayoutConstants
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.PayoutDetailsFragmentBinding
@@ -121,12 +122,14 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
         url: String
     ) {
         try {
+            val filePathName = FirebaseUtils.extractFilePath(url)
+
             val downloadRequest = DownloadManager.Request(Uri.parse(url)).run {
-                setTitle("Payout Document")
+                setTitle(filePathName)
                 setDescription(businessName)
                 setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOCUMENTS,
-                    "Gigforce-Documents"
+                    Environment.DIRECTORY_DOWNLOADS,
+                    filePathName
                 )
             }
 
@@ -136,7 +139,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
 
             ToastHandler.showToast(
                 requireContext(),
-                "Document Download started,check notification...",
+                "Saving file in Downloads,check notification...",
                 Toast.LENGTH_LONG
             )
         } catch (e: Exception) {
