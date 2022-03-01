@@ -18,8 +18,8 @@ interface PayoutRetrofitService {
         @Body filters : GetPayoutFilters
     ): Response<List<Payout>>
 
-    @GET("paymentcycle/fetchGigerPayoutList")
+    @GET("paymentcycle/getDetailsApi")
     suspend fun getPayoutDetails(
         @Query("id") payoutId : String
-    ): Response<Payout>
+    ): Response<List<Payout>>
 }

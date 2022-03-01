@@ -53,7 +53,8 @@ class PayoutListViewModel @Inject constructor(
     }
 
     private fun restoreFiltersAndOtherData() {
-        val selectedDateFilter = savedStateHandle.get<String?>(INTENT_EXTRA_SELECTED_DATE_FILTER) ?: return
+        val selectedDateFilter =
+            savedStateHandle.get<String?>(INTENT_EXTRA_SELECTED_DATE_FILTER) ?: return
         //todo complte thsi
     }
 
@@ -105,6 +106,34 @@ class PayoutListViewModel @Inject constructor(
         is PayoutListViewContract.UiEvent.MonthYearHeaderClicked -> monthYearHeaderClicked(event.header)
         is PayoutListViewContract.UiEvent.PayoutItemClicked -> payoutItemClicked(event.payoutItem)
         PayoutListViewContract.UiEvent.RefreshPayoutListClicked -> fetchPayouts(activeDateFilter)
+        is PayoutListViewContract.UiEvent.FiltersApplied -> fetchPayouts(event.dateFilter)
+        PayoutListViewContract.UiEvent.OpenFiltersScreen -> prepareFiltersDatesAndOpenPayoutFilterScreen()
+    }
+
+    private fun prepareFiltersDatesAndOpenPayoutFilterScreen() = viewModelScope.launch {
+
+        val filters = arrayListOf<DateFilterForFilterScreen>().apply {
+            add(
+                DateFilterForFilterScreen(
+                    date = PayoutDateFilters.LAST_SIX_MONTHS,
+                    selected = PayoutDateFilters.LAST_SIX_MONTHS.id == activeDateFilter.id
+                )
+            )
+            add(
+                DateFilterForFilterScreen(
+                    date = PayoutDateFilters.LAST_ONE_YEAR,
+                    selected = PayoutDateFilters.LAST_ONE_YEAR.id == activeDateFilter.id
+                )
+            )
+            add(
+                DateFilterForFilterScreen(
+                    date = PayoutDateFilters.LAST_FIVE_YEARS,
+                    selected = PayoutDateFilters.LAST_FIVE_YEARS.id == activeDateFilter.id
+                )
+            )
+        }
+
+        _viewEffects.emit(PayoutListViewContract.UiEffect.OpenPayoutFiltersScreen(filters))
     }
 
     private fun payoutItemClicked(
@@ -120,32 +149,21 @@ class PayoutListViewModel @Inject constructor(
 
         if (collapsedDates.contains(header.date)) {
             collapsedDates.remove(header.date)
-
-            PayoutListDataProcessor.expandPayoutsOfMonthYear(
-                header.date,
-                payoutListRaw,
-                payoutListShownOnScreen,
-                this@PayoutListViewModel
-            )
-            _viewState.emit(
-                PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
-                    payoutListShownOnScreen
-                )
-            )
         } else {
             collapsedDates.add(header.date)
-
-            PayoutListDataProcessor.collapsePayoutsOfMonthYear(
-                header.date,
-                payoutListShownOnScreen
-            )
-            _viewState.emit(
-                PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
-                    payoutListShownOnScreen
-                )
-            )
         }
 
+        payoutListShownOnScreen = PayoutListDataProcessor.processPayoutListAndFilters(
+            payouts = payoutListRaw,
+            collapsedDates = collapsedDates,
+            payoutListViewModel = this@PayoutListViewModel
+        ).toMutableList()
+
+        _viewState.emit(
+            PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
+                payoutListShownOnScreen
+            )
+        )
     }
 
 }

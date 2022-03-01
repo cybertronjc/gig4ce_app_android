@@ -27,6 +27,7 @@ class MonthYearHeaderRecyclerItemView(
     init {
         setDefault()
         inflate()
+        setOnClickListener(this)
     }
 
     private fun setDefault() {
@@ -47,10 +48,10 @@ class MonthYearHeaderRecyclerItemView(
 
         (data as PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData?)?.let {
             viewData = it
+            viewBinding.statusTv.text = it.date
 
             if (it.expanded) {
 
-                viewBinding.statusTv.text = it.date
                 viewBinding.statusTv.setTextColor(
                     ResourcesCompat.getColor(resources, R.color.pink_text, null)
                 )

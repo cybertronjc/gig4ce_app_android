@@ -1,13 +1,16 @@
 package com.gigforce.wallet.payouts.payout_list
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 
+@Parcelize
 data class PayoutDateFilter(
     val id: String,
     val startDate: LocalDate,
     val endDate: LocalDate,
     val textForDate: String
-){
+) : Parcelable {
     val startEndDatePair = startDate to endDate
 }
 

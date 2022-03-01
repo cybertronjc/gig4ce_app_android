@@ -18,10 +18,10 @@ class PayoutMainViewPagerAdapter(
     companion object {
         val TABS = listOf(
             TabInfo(
-                fragmentTabName = "Payouts"
+                fragmentTabName = "    Payouts "
             ),
             TabInfo(
-                fragmentTabName = "Payout Slips"
+                fragmentTabName = "    Payout Slips "
             )
         )
     }

@@ -2,6 +2,7 @@ package com.gigforce.wallet.payouts.payout_list
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -16,6 +17,8 @@ import com.gigforce.wallet.PayoutNavigation
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.PayoutListFragmentBinding
 import com.gigforce.wallet.models.PayoutListPresentationItemData
+import com.gigforce.wallet.payouts.SharedPayoutViewModel
+import com.gigforce.wallet.payouts.SharedPayoutViewModelEvents
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -33,7 +36,9 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
 
     @Inject
     lateinit var payoutNavigation: PayoutNavigation
+
     private val viewModel: PayoutListViewModel by viewModels()
+    private val sharedViewModel: SharedPayoutViewModel by activityViewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
@@ -47,10 +52,11 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
         if (viewCreatedForTheFirstTime) {
             initView()
             initViewModel()
+            initSharedViewModel()
         }
     }
 
-    private fun initView() = viewBinding.apply{
+    private fun initView() = viewBinding.apply {
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -77,6 +83,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
                         is PayoutListViewContract.State.ShowOrUpdatePayoutListOnView -> showPayoutListOnView(
                             it.payouts
                         )
+                        PayoutListViewContract.State.ScreenLoaded -> {}
                     }
                 }
         }
@@ -91,10 +98,35 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
                         is PayoutListViewContract.UiEffect.OpenPayoutDetailScreen -> openPayoutDetailsScreen(
                             it.payoutId
                         )
+                        is PayoutListViewContract.UiEffect.OpenPayoutFiltersScreen -> openPayoutFilterBottomSheet(
+                            it.filters
+                        )
                     }
                 }
         }
     }
+
+    private fun initSharedViewModel() {
+
+        lifecycleScope.launchWhenCreated {
+
+            sharedViewModel.sharedEvents.collect {
+
+                when (it) {
+                    is SharedPayoutViewModelEvents.FilterSelected -> viewModel.handleEvent(
+                        PayoutListViewContract.UiEvent.FiltersApplied(it.filter)
+                    )
+                    SharedPayoutViewModelEvents.OpenFilterClicked -> viewModel.handleEvent(
+                        PayoutListViewContract.UiEvent.OpenFiltersScreen
+                    )
+                }
+            }
+        }
+    }
+
+    private fun openPayoutFilterBottomSheet(
+        payoutDateFilters: ArrayList<DateFilterForFilterScreen>
+    ) = payoutNavigation.openPayoutListFilterScreen(payoutDateFilters)
 
     private fun openPayoutDetailsScreen(
         payoutId: String
@@ -110,7 +142,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
         )
         shimmerContainer.gone()
 
-        if(recyclerView.childCount == 0){
+        if (recyclerView.childCount == 0) {
 
             infoLayout.root.visible()
             infoLayout.infoMessageTv.text = error
@@ -137,6 +169,11 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
         infoLayout.root.gone()
         recyclerView.collection = payouts
         swipeRefresh.isRefreshing = false
+
+        val itemsShown = recyclerView.adapter?.itemCount ?: 0
+        if (itemsShown != 0) {
+            Snackbar.make(viewBinding.rootFrameLayout,"Payouts Updated",Snackbar.LENGTH_SHORT).show()
+        }
 
         showOrHideNoPayoutsLayout(payouts.size)
     }

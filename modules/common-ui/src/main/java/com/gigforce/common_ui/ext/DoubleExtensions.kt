@@ -14,8 +14,6 @@ fun Double?.formatToCurrency(
         val format = NumberFormat.getCurrencyInstance()
         format.maximumFractionDigits = 0
         format.currency = Currency.getInstance("INR")
-        format.format(1000000)
-
-        defaultCurrencySymbol ?: "Rs." + " " + format.format(this)
+        format.format(this)
     }
 }

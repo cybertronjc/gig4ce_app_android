@@ -3,6 +3,8 @@ package com.gigforce.wallet
 import androidx.core.os.bundleOf
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
+import com.gigforce.wallet.payouts.payout_list.DateFilterForFilterScreen
+import com.gigforce.wallet.payouts.payout_list.PayoutListFilterFragment
 import javax.inject.Inject
 
 
@@ -12,7 +14,8 @@ class PayoutNavigation @Inject constructor(
 
     companion object {
         const val NAV_DESTINATION_PAYOUT_LIST = "Payout/PayoutListFragment"
-        const val NAV_DESTINATION_PAYOUT_DETAILS = "Payout/PayoutDetailsFragment"
+        const val NAV_DESTINATION_PAYOUT_DETAILS = "Payout/PayoutDetailsBottomSheet"
+        const val NAV_DESTINATION_PAYOUT_LIST_FILTERS = "Payout/PayoutListFilterFragment"
     }
 
     fun openPayoutList(
@@ -34,4 +37,15 @@ class PayoutNavigation @Inject constructor(
             navOptions = NavigationOptions.getNavOptions()
         )
     }
+
+    fun openPayoutListFilterScreen(
+        dateFilters  : ArrayList<DateFilterForFilterScreen>
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_PAYOUT_LIST_FILTERS,
+            bundleOf(PayoutListFilterFragment.INTENT_EXTRA_DATE_FILTERS to dateFilters),
+            navOptions = NavigationOptions.getNavOptions()
+        )
+    }
+
 }

@@ -1,11 +1,18 @@
 package com.gigforce.wallet.payouts.payout_details
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -16,9 +23,12 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.wallet.PayoutConstants
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.PayoutDetailsFragmentBinding
+import com.toastfix.toastcompatwrapper.ToastHandler
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmentBinding>(
     fragmentName = TAG,
     layoutId = R.layout.payout_details_fragment
@@ -30,31 +40,25 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
     private val viewModel: PayoutDetailsViewModel by viewModels()
 
     private lateinit var payoutId: String
-    private var payout: Payout? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             payoutId = it.getString(PayoutConstants.INTENT_EXTRA_PAYOUT_ID) ?: return@let
-            payout = it.getParcelable(PayoutConstants.INTENT_EXTRA_PAYOUT_DETAILS)
         }
 
         savedInstanceState?.let {
             payoutId = it.getString(PayoutConstants.INTENT_EXTRA_PAYOUT_ID) ?: return@let
-            payout = it.getParcelable(PayoutConstants.INTENT_EXTRA_PAYOUT_DETAILS)
         }
 
         viewModel.setPayoutReceivedFromPreviousScreen(
-            payoutId = payoutId,
-            payout = payout
+            payoutId = payoutId
         )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(PayoutConstants.INTENT_EXTRA_PAYOUT_ID, payoutId)
-        outState.putParcelable(PayoutConstants.INTENT_EXTRA_PAYOUT_DETAILS, payout)
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -74,7 +78,13 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
     }
 
     private fun initView() = viewBinding.apply {
+        this.mainLayout.callHelpLineButton.setOnClickListener {
+            viewModel.handleEvent(PayoutDetailsContract.UiEvent.CallHelpLineClicked)
+        }
 
+        this.mainLayout.downloadPayoutSlipButton.setOnClickListener {
+            viewModel.handleEvent(PayoutDetailsContract.UiEvent.DownloadPayoutPDFClicked)
+        }
     }
 
     private fun initViewModel() {
@@ -97,8 +107,40 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
             viewModel.viewEffects.collect {
                 when (it) {
                     is PayoutDetailsContract.UiEffect.CallHelpLineNo -> callPhoneNumber(it.phoneNumber)
+                    is PayoutDetailsContract.UiEffect.StartPayoutDocumentDownload -> startDocumentDownload(
+                        it.businessName,
+                        it.url
+                    )
                 }
             }
+        }
+    }
+
+    private fun startDocumentDownload(
+        businessName: String,
+        url: String
+    ) {
+        try {
+            val downloadRequest = DownloadManager.Request(Uri.parse(url)).run {
+                setTitle("Payout Document")
+                setDescription(businessName)
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOCUMENTS,
+                    "Gigforce-Documents"
+                )
+            }
+
+            val downloadManager = requireContext()
+                .getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            downloadManager.enqueue(downloadRequest)
+
+            ToastHandler.showToast(
+                requireContext(),
+                "Document Download started,check notification...",
+                Toast.LENGTH_LONG
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -135,8 +177,44 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
         showInfoOnView(payout)
     }
 
-    private fun showInfoOnView(payout: Payout) {
-        TODO("Not yet implemented")
+    private fun showInfoOnView(
+        payout: Payout
+    ) = viewBinding.mainLayout.apply {
+
+        businessNameTextview.text = payout.businessName
+
+        if (payout.businessIcon != null) {
+            this.businessLogoImageview.loadImageIfUrlElseTryFirebaseStorage(
+                payout.businessIcon!!
+            )
+        } else {
+            val businessInitials: String = if (payout.businessName != null) {
+                payout.businessName!![0].uppercaseChar().toString()
+            } else {
+                "C"
+            }
+            val drawable = TextDrawable.builder().buildRound(
+                businessInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            )
+            this.businessLogoImageview.setImageDrawable(drawable)
+        }
+
+        this.payoutStatusView.bind(
+            payout.status ?: "-",
+            payout.statusColorCode ?: "#ffffff"
+        )
+        this.infoLayout.bind(payout)
+
+        //Bank and ifsc info
+        this.accountNoLayout.titleTextView.text = "Account No."
+        this.accountNoLayout.valueTextView.text = ": ${payout.accountNo ?: "-"}"
+
+        this.ifscLayout.titleTextView.text = "IFSC Code."
+        this.ifscLayout.valueTextView.text = ": ${payout.isfc ?: "-"}"
+
+        this.remarksTextview.text = payout.remarks
+        this.downloadPayoutSlipButton.isVisible = !payout.payoutDocumentUrl.isNullOrBlank()
     }
 
     private fun errorInLoadingPayoutDetails(

@@ -20,6 +20,7 @@ open class PayoutListPresentationItemData(
         val id: String,
         val icon: String?,
         val companyName: String?,
+        val category: String?,
         val amount: Double?,
         val status: String,
         val statusColorCode: String,

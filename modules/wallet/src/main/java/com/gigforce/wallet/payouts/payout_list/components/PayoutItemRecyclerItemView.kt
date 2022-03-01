@@ -11,6 +11,7 @@ import com.gigforce.common_ui.ext.formatToCurrency
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.capitalizeWords
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.wallet.PayoutNavigation
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.RecyclerRowPayoutItemBinding
 import com.gigforce.wallet.models.PayoutListPresentationItemData
@@ -28,9 +29,6 @@ class PayoutItemRecyclerItemView(
     attrs
 ), IViewHolder,
     View.OnClickListener {
-
-    @Inject
-    lateinit var navigation: INavigation
 
     private lateinit var viewBinding: RecyclerRowPayoutItemBinding
     private var viewData: PayoutListPresentationItemData.PayoutItemRecyclerItemData? = null
@@ -66,6 +64,7 @@ class PayoutItemRecyclerItemView(
 
             viewBinding.amountTextview.text = it.amount.formatToCurrency()
             viewBinding.businessTextview.text = it.companyName?.capitalize(Locale.getDefault())
+            viewBinding.categoryTextview.text = it.category
             viewBinding.payoutStatusView.bind(
                 it.status,
                 it.statusColorCode
@@ -78,7 +77,7 @@ class PayoutItemRecyclerItemView(
                 )
             } else {
                 val businessInitials: String = if (it.companyName != null) {
-                    it.companyName[0].toUpperCase().toString()
+                    it.companyName[0].uppercaseChar().toString()
                 } else {
                     "C"
                 }

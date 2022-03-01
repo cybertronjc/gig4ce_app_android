@@ -13,12 +13,13 @@ class GetPayoutDetailsUseCase @Inject constructor(
     private val payoutRetrofitService: PayoutRetrofitService
 ) {
 
-    suspend fun getPayouts(
+    suspend fun getPayoutDetails(
         payoutId: String
     ): Payout {
 
         return payoutRetrofitService
             .getPayoutDetails(payoutId)
             .bodyOrThrow()
+            .first()
     }
 }

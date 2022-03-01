@@ -22,12 +22,19 @@ class PayoutDetailsContract {
     sealed class UiEvent {
 
         object CallHelpLineClicked : UiEvent()
+
+        object DownloadPayoutPDFClicked : UiEvent()
     }
 
     sealed class UiEffect {
 
         data class CallHelpLineNo(
             val phoneNumber: String
+        ) : UiEffect()
+
+        data class StartPayoutDocumentDownload(
+            val businessName : String,
+            val url : String
         ) : UiEffect()
     }
 }

@@ -34,7 +34,7 @@ object PayoutListDataProcessor {
                         add(
                             PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData(
                                 date = monthYearHeader,
-                                expanded = false,
+                                expanded = true,
                                 viewModel = payoutListViewModel
                             )
                         )
@@ -59,60 +59,10 @@ object PayoutListDataProcessor {
                 status = it.status ?: "#FFBF00",
                 statusColorCode = it.statusColorCode ?: "#",
                 paymentDate = it.paidOnDate,
-                viewModel = viewModel
+                viewModel = viewModel,
+                category = it.category
             )
         }
     }
 
-    fun expandPayoutsOfMonthYear(
-        monthYear: String,
-        payouts: List<Payout>,
-        payoutListShownOnScreen: MutableList<PayoutListPresentationItemData>,
-        payoutListViewModel: PayoutListViewModel
-    ) {
-        val indexOfTappedMonthYearHeader = payoutListShownOnScreen.indexOfFirst {
-            it is PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData && it.date == monthYear
-        }
-
-        if (indexOfTappedMonthYearHeader != -1) {
-            (payoutListShownOnScreen[indexOfTappedMonthYearHeader] as PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData).expanded =
-                true
-
-            val payoutToInsertFromIndex = indexOfTappedMonthYearHeader + 1
-            val payoutsToInsert = payouts.filter {
-                it.getPaymentCycleEndDateMonthYear() == monthYear
-            }
-
-            payoutListShownOnScreen.addAll(
-                payoutToInsertFromIndex,
-                mapPayoutsToPayoutItemView(payoutsToInsert, payoutListViewModel)
-            )
-        }
-    }
-
-    fun collapsePayoutsOfMonthYear(
-        monthYear: String,
-        payoutListShownOnScreen: MutableList<PayoutListPresentationItemData>
-    ) {
-
-        val indexOfTappedMonthYearHeader = payoutListShownOnScreen.indexOfFirst {
-            it is PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData && it.date == monthYear
-        }
-
-        val payoutToRemoveStartIndex = indexOfTappedMonthYearHeader + 1
-        var payoutToRemoveEndIndex = -1
-
-        for (i in payoutToRemoveStartIndex until payoutListShownOnScreen.size) {
-
-            if (payoutListShownOnScreen[i] is PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData) {
-                payoutToRemoveEndIndex = i
-                break
-            }
-        }
-        if (payoutToRemoveEndIndex == -1) {
-            payoutToRemoveEndIndex = payoutListShownOnScreen.lastIndex
-        }
-
-        payoutListShownOnScreen.subList(payoutToRemoveStartIndex, payoutToRemoveEndIndex).clear()
-    }
 }

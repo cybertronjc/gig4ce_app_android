@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.useCases.payouts.GetPayoutDetailsUseCase
 import com.gigforce.common_ui.viewmodels.payouts.Payout
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.wallet.payouts.payout_list.PayoutListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PayoutDetailsViewModel @Inject constructor(
     private val logger: GigforceLogger,
-    private val getPayoutDetailsUseCase: GetPayoutDetailsUseCase
+    private val getPayoutDetailsUseCase: GetPayoutDetailsUseCase,
+    private val buildConfigVM: IBuildConfigVM
 ) : ViewModel() {
 
     companion object {
@@ -41,6 +42,20 @@ class PayoutDetailsViewModel @Inject constructor(
         event: PayoutDetailsContract.UiEvent
     ) = when (event) {
         PayoutDetailsContract.UiEvent.CallHelpLineClicked -> callHelpLineNumber()
+        PayoutDetailsContract.UiEvent.DownloadPayoutPDFClicked -> checkAndDownloadPayoutDocument()
+    }
+
+    private fun checkAndDownloadPayoutDocument() = viewModelScope.launch {
+        val payoutUrl = payout?.payoutDocumentUrl ?: return@launch
+        val businessName = payout?.businessName ?: "-"
+        val finalDownloadUrl = buildConfigVM.getBaseUrl() + payoutUrl.substring(1)
+
+        _viewEffects.emit(
+            PayoutDetailsContract.UiEffect.StartPayoutDocumentDownload(
+                url = finalDownloadUrl,
+                businessName = businessName
+            )
+        )
     }
 
     private fun callHelpLineNumber() = viewModelScope.launch {
@@ -49,36 +64,21 @@ class PayoutDetailsViewModel @Inject constructor(
     }
 
     fun setPayoutReceivedFromPreviousScreen(
-        payoutId: String,
-        payout: Payout?
+        payoutId: String
     ) = viewModelScope.launch {
 
         this@PayoutDetailsViewModel.payoutId = payoutId
-        this@PayoutDetailsViewModel.payout = payout
-
-        if (payout != null) {
-            _viewState.emit(PayoutDetailsContract.State.ShowPayoutDetails(payout))
-        } else {
-            fetchPayoutDetails(payoutId)
-        }
+        fetchPayoutDetails(payoutId)
     }
 
     private fun fetchPayoutDetails(
         payoutId: String
     ) = viewModelScope.launch {
 
-        if (_viewState.value is PayoutDetailsContract.State.LoadingPayoutDetails) {
-            logger.d(
-                PayoutListViewModel.TAG,
-                "already a loading payout details process in progress, no-op"
-            )
-            return@launch
-        }
-
         _viewState.emit(PayoutDetailsContract.State.LoadingPayoutDetails(null))
         try {
 
-            payout = getPayoutDetailsUseCase.getPayouts(
+            payout = getPayoutDetailsUseCase.getPayoutDetails(
                 payoutId
             )
 

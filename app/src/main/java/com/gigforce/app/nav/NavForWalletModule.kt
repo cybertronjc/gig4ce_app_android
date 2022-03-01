@@ -21,5 +21,13 @@ class NavForWalletModule(
             PayoutNavigation.NAV_DESTINATION_PAYOUT_LIST,
             R.id.payoutMainFragment
         )
+        baseImplementation.registerRoute(
+            PayoutNavigation.NAV_DESTINATION_PAYOUT_DETAILS,
+            R.id.payoutDetailsBottomSheet
+        )
+        baseImplementation.registerRoute(
+            PayoutNavigation.NAV_DESTINATION_PAYOUT_LIST_FILTERS,
+            R.id.payoutListFilterFragment
+        )
     }
 }

@@ -31,6 +31,12 @@ class PayoutListViewContract {
             val header : PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData
         ) : UiEvent()
 
+        data class FiltersApplied(
+            val dateFilter : PayoutDateFilter
+        ) : UiEvent()
+
+        object OpenFiltersScreen : UiEvent()
+
         object RefreshPayoutListClicked : UiEvent()
     }
 
@@ -38,6 +44,10 @@ class PayoutListViewContract {
 
         data class OpenPayoutDetailScreen(
             val payoutId : String
+        ) : UiEffect()
+
+        data class OpenPayoutFiltersScreen(
+            val filters : ArrayList<DateFilterForFilterScreen>
         ) : UiEffect()
     }
 }

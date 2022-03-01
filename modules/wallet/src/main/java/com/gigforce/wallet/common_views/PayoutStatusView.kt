@@ -4,18 +4,10 @@ import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
-import com.gigforce.core.IViewHolder
-import com.gigforce.core.navigation.INavigation
 import com.gigforce.wallet.R
-import com.gigforce.wallet.databinding.RecyclerRowMonthYearHeaderItemViewBinding
-import com.gigforce.wallet.databinding.RecyclerRowPayoutItemBinding
-import com.gigforce.wallet.models.PayoutListPresentationItemData
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 class PayoutStatusView(
     context: Context,
@@ -38,13 +30,11 @@ class PayoutStatusView(
     }
 
     private fun inflate() {
-        viewBinding = RecyclerRowMonthYearHeaderItemViewBinding.inflate(
-            LayoutInflater.from(context),
-            this,
-            true
-        )
+        val view = LayoutInflater.from(
+            context
+        ).inflate(R.layout.layout_payout_status, this, true)
 
-        textView = findViewById(R.id.statusTextView)
+        textView = view.findViewById(R.id.statusTextView)
     }
 
     fun bind(
@@ -55,7 +45,7 @@ class PayoutStatusView(
 
         var background = textView.background
         background = DrawableCompat.wrap(background)
-        DrawableCompat.setTint(background,Color.parseColor(statusColorCode))
+        DrawableCompat.setTint(background, Color.parseColor(statusColorCode))
         textView.background = background
     }
 }
