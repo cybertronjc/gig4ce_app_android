@@ -10,10 +10,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.DisplayUtil.px
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.wallet.PayoutConstants
+import com.gigforce.wallet.PayoutNavigation
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.FragmentPayoutMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PayoutMainFragment : BaseFragment2<FragmentPayoutMainBinding>(
@@ -25,8 +28,11 @@ class PayoutMainFragment : BaseFragment2<FragmentPayoutMainBinding>(
         const val TAG = "PayoutMainFragment"
     }
 
+    @Inject
+    lateinit var payoutNavigation: PayoutNavigation
     private var title = ""
     private val sharedViewModel: SharedPayoutViewModel by activityViewModels()
+
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
@@ -43,6 +49,8 @@ class PayoutMainFragment : BaseFragment2<FragmentPayoutMainBinding>(
         } ?: run {
             arguments?.let {
                 title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
+                val id = it.getString(PayoutConstants.INTENT_EXTRA_PAYOUT_ID) ?: return@let
+                payoutNavigation.openPayoutDetailsScreen(id)
             }
         }
     }

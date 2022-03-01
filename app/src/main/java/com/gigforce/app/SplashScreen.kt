@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.wallet.PayoutConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ class SplashScreen : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
 
     override fun onResume() {
         super.onResume()
@@ -120,7 +122,17 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            }else{
+                            } else if(param == "payout"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.PAYOUT_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.PAYOUT_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else {
                                 resetDeeplinkSharedPreferences()
                             }
                         }
@@ -135,6 +147,9 @@ class SplashScreen : AppCompatActivity() {
                     val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
                     val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
                     val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
+                    val payoutId = deepLink?.getQueryParameter("payout_id")
+                    mainIntent.putExtra(PayoutConstants.INTENT_EXTRA_PAYOUT_ID, payoutId)
+
                     val sp =
                         SharedPreAndCommonUtilDataImp(
                             this
@@ -244,6 +259,10 @@ class SplashScreen : AppCompatActivity() {
             StringConstants.VERIFICATION_SP.value,
             false
         )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.PAYOUT_SP.value,
+            false
+        )
     }
 
     fun initApp(intent: Intent) {
@@ -270,6 +289,7 @@ class SplashScreen : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
+        handleDynamicLink()
         // if activity is in foreground (or in backstack but partially visible) launching the same
         // activity will skip onStart, handle this case with reInitSession
         Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit()

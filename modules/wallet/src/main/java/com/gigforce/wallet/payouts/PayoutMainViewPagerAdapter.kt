@@ -2,6 +2,7 @@ package com.gigforce.wallet.payouts
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.gigforce.wallet.InvoicesListFragment
 import com.gigforce.wallet.payouts.payout_list.PayoutListFragment
 import com.gigforce.wallet.payouts.payout_slips.PayoutSlipsListFragment
 
@@ -29,7 +30,7 @@ class PayoutMainViewPagerAdapter(
     private fun getFragmentAt(index : Int) : Fragment{
        return when (index) {
             0 -> PayoutListFragment()
-            1 -> PayoutSlipsListFragment()
+            1 -> InvoicesListFragment()
             else -> throw IllegalArgumentException("no fragment present for index $index")
         }
     }

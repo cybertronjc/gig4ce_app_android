@@ -58,6 +58,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
 
     private fun initView() = viewBinding.apply {
 
+        infoLayout.infoIv.loadImage(R.drawable.banner_no_data)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setDiffUtilCallback(PayoutDiffUtilCallback())
