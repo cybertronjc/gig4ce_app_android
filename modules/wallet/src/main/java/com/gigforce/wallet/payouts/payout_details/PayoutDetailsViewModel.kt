@@ -48,11 +48,10 @@ class PayoutDetailsViewModel @Inject constructor(
     private fun checkAndDownloadPayoutDocument() = viewModelScope.launch {
         val payoutUrl = payout?.payoutDocumentUrl ?: return@launch
         val businessName = payout?.businessName ?: "-"
-        val finalDownloadUrl = buildConfigVM.getBaseUrl() + payoutUrl.substring(1)
 
         _viewEffects.emit(
             PayoutDetailsContract.UiEffect.StartPayoutDocumentDownload(
-                url = finalDownloadUrl,
+                url = payoutUrl,
                 businessName = businessName
             )
         )

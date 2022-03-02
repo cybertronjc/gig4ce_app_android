@@ -44,7 +44,7 @@ data class Payout(
     @field:SerializedName("helpLineNo")
     val helpLineNumber: String? = null,
 
-    @field:SerializedName("payoutDocumentUrl")
+    @field:SerializedName("pdfUrl")
     val payoutDocumentUrl: String? = null,
 
     @field:SerializedName("utrNo")
