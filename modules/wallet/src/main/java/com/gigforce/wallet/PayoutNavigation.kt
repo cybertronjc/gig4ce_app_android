@@ -3,8 +3,8 @@ package com.gigforce.wallet
 import androidx.core.os.bundleOf
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
-import com.gigforce.wallet.payouts.payout_list.DateFilterForFilterScreen
-import com.gigforce.wallet.payouts.payout_list.PayoutListFilterFragment
+import com.gigforce.wallet.payouts.payout_list.filter.DateFilterForFilterScreen
+import com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment
 import javax.inject.Inject
 
 

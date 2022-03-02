@@ -68,7 +68,7 @@ class PayoutItemRecyclerItemView(
 
             viewBinding.amountTextview.text = it.amount.formatToCurrency()
             viewBinding.businessTextview.text = it.companyName?.capitalize(Locale.getDefault())
-            viewBinding.categoryTextview.text = it.category
+            viewBinding.categoryTextview.text = it.category?.capitalize()
             viewBinding.payoutStatusView.bind(
                 it.status,
                 it.statusColorCode

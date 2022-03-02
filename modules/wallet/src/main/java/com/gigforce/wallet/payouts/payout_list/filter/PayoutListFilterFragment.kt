@@ -1,5 +1,6 @@
-package com.gigforce.wallet.payouts.payout_list
+package com.gigforce.wallet.payouts.payout_list.filter
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -10,6 +11,7 @@ import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.FragmentPayoutListFilterBinding
 import com.gigforce.wallet.payouts.SharedPayoutViewModel
+import com.gigforce.wallet.payouts.payout_list.PayoutDateFilter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
 
@@ -45,6 +47,12 @@ class PayoutListFilterFragment : BaseBottomSheetDialogFragment<FragmentPayoutLis
         inflateFilterOptions()
         setViews()
         listeners()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog =  super.onCreateDialog(savedInstanceState)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 
     private fun inflateFilterOptions() = viewBinding.apply {

@@ -1,7 +1,7 @@
 package com.gigforce.wallet.payouts.payout_list
 
 import com.gigforce.wallet.models.PayoutListPresentationItemData
-import com.google.android.material.snackbar.Snackbar
+import com.gigforce.wallet.payouts.payout_list.filter.DateFilterForFilterScreen
 
 class PayoutListViewContract {
 

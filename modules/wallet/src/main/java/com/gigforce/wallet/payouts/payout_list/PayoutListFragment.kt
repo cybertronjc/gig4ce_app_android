@@ -19,6 +19,7 @@ import com.gigforce.wallet.databinding.PayoutListFragmentBinding
 import com.gigforce.wallet.models.PayoutListPresentationItemData
 import com.gigforce.wallet.payouts.SharedPayoutViewModel
 import com.gigforce.wallet.payouts.SharedPayoutViewModelEvents
+import com.gigforce.wallet.payouts.payout_list.filter.DateFilterForFilterScreen
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
