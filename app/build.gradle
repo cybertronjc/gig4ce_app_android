@@ -249,10 +249,13 @@ dependencies {
     def okhttp3_version = "3.12.0"
     def kotlinCoroutineVersion = "1.0.1"
     def moengageVersion = "11.2.00"
+    def work = "2.7.1"
 
     //Moshi
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    implementation "androidx.work:work-runtime-ktx:$work"
 
     //Retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
