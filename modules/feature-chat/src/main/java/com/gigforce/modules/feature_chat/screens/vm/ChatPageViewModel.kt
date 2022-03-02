@@ -324,15 +324,18 @@ class ChatPageViewModel @Inject constructor(
                     }
 
                     this.chatMessages = messages.toMutableList()
-//                    chatMessages?.let {
-//
-//                        val unreadMessages = it.filter {
-//                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
-//                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
-//                                    it.senderMessageId.isNotBlank()
-//                        }
-//                        setMessagesAsRead(unreadMessages)
-//                    }
+                    chatMessages?.let {
+
+                        val unreadMessages = it.filter {
+                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
+                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
+                                    it.senderMessageId.isNotBlank()
+                        }
+                        if (unreadMessages.isNotEmpty()){
+                            setMessagesAsRead(unreadMessages)
+                        }
+
+                    }
                     if (messages.isNotEmpty()) {
                         var recentLiveLocationMessage : ChatMessage? = null
                         val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
@@ -363,7 +366,7 @@ class ChatPageViewModel @Inject constructor(
     }
 
     fun stopAllPreviousLiveLocations(){
-        val messagesWithActiveLiveLocations = this.chatMessages?.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+        val messagesWithActiveLiveLocations = this.chatMessages?.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation }
         messagesWithActiveLiveLocations?.forEach {
             Log.d("locationupdate", "Stoping location for: ${it.headerId} , ${it.id}")
             stopSharingLocation(headerId, it.id)
@@ -872,7 +875,6 @@ class ChatPageViewModel @Inject constructor(
                 locationPhysicalAddress = physicalAddress,
                 thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable),
                 isLiveLocation = isLiveLocation,
-                liveEndTime = liveEndTime,
                 isCurrentlySharingLiveLocation = isCurrentlySharingLiveLocation
             )
 
@@ -1256,15 +1258,24 @@ class ChatPageViewModel @Inject constructor(
 
     fun selectChatMessage(msg: ChatMessage, add: Boolean){
         val messageList = chatMessages ?: return
-        val index = messageList.indexOf(msg)
-        if (index != -1) {
-            if (add && !selectedMessagesList.contains(msg)) {
-                selectedMessagesList.add(msg)
-            } else if (!add && selectedMessagesList.contains(msg)){
-                selectedMessagesList.remove(msg)
+        messageList.forEachIndexed { index, chatMessage ->
+            if (chatMessage.id == msg.id){
+                if (add && !selectedMessagesList.contains(msg)) {
+                    selectedMessagesList.add(msg)
+                } else if (!add && selectedMessagesList.contains(msg)){
+                    selectedMessagesList.remove(msg)
+                }
+                _selectedChatMessage.value = selectedMessagesList
             }
-            _selectedChatMessage.value = selectedMessagesList
         }
+//        if (index != -1) {
+//            if (add && !selectedMessagesList.contains(msg)) {
+//                selectedMessagesList.add(msg)
+//            } else if (!add && selectedMessagesList.contains(msg)){
+//                selectedMessagesList.remove(msg)
+//            }
+//            _selectedChatMessage.value = selectedMessagesList
+//        }
     }
 
     fun makeSelectEnable(enable: Boolean){
@@ -1308,38 +1319,4 @@ class ChatPageViewModel @Inject constructor(
         Log.d("viewModelChat", "id: $currentlyPlayingAudioMessage")
     }
 
-
-
-
-//    fun playPauseAudio(play: Boolean, messageId: String, uri: Uri){
-//        if (_audioData.value == AudioPlayState.NothinIsPlaying){
-//            _audioData.postValue(AudioPlayState.PlayingThisAudio(
-//                messageId = messageId,
-//                uri = uri
-//            ))
-//        } else if (_audioData.value == AudioPlayState.PlayingThisAudio){
-//
-//        }
-//    }
-
-    fun isAudioPlayingAlready(): String{
-        if (currentlyPlayingAudioMessage.isNullOrBlank()){
-            return ""
-        }
-        Log.d("viewModelChat", "idreturn: $currentlyPlayingAudioMessage")
-        _currentlyPlayingAudioMessageId.postValue(currentlyPlayingAudioMessage)
-        return currentlyPlayingAudioMessage.toString()
-    }
-
-    fun askForScopeAndStoragePermissionToDownload(ask: Boolean){
-        _askForPermission.value = ask
-    }
-
-    fun getScopeAndStoragePermission(): Boolean? {
-        return allStoragePermissionsGranted.value
-    }
-
-    fun setScopeAndStoragePermission(perm: Boolean){
-        _allStoragePermissionsGranted.value = perm
-    }
 }

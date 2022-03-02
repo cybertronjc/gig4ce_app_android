@@ -763,15 +763,18 @@ class DrivingLicenseFragment : Fragment(),
 
             }
         } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK){
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                dlFrontImagePath = imageUriResultCrop
-                showFrontDrivingLicense(dlFrontImagePath!!)
-            } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                dlBackImagePath = imageUriResultCrop
-                showBackDrivingLicense(dlBackImagePath!!)
+            data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA)?.let {
+                val imageUriResultCrop: Uri? =  Uri.parse(it)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                    dlFrontImagePath = imageUriResultCrop
+                    showFrontDrivingLicense(dlFrontImagePath!!)
+                } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                    dlBackImagePath = imageUriResultCrop
+                    showBackDrivingLicense(dlBackImagePath!!)
+                }
             }
+
         }
     }
 

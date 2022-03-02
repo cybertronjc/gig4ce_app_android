@@ -9,7 +9,9 @@ import com.gigforce.common_ui.chat.ChatRepository
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.common_ui.viewdatamodels.chat.LiveLocationInfo
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -73,8 +75,8 @@ class LocationSharingViewModel @Inject constructor(
         }
     }
 
-     fun startListeningForHeaderChanges(header: String) {
-         this.headerId = header
+    fun startListeningForHeaderChanges(header: String) {
+        this.headerId = header
         if (headerId.isBlank()) {
             return
         }

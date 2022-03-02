@@ -329,8 +329,16 @@ class CalendarHomeScreen : Fragment(),
             ResourcesCompat.getColor(resources, R.color.white, null)
         )
         trySyncingUnsyncedFirebaseData()
-    }
+        viewModel.state?.let { parcelable ->
+            rv_?.layoutManager?.onRestoreInstanceState(parcelable)
 
+        }
+    }
+    override fun onStop() {
+        super.onStop()
+        viewModel.state =
+            rv_?.layoutManager?.onSaveInstanceState()
+    }
     private fun trySyncingUnsyncedFirebaseData() {
         FirebaseFirestore
             .getInstance()

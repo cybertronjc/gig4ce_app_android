@@ -16,7 +16,6 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
@@ -26,8 +25,33 @@
                 android:background="@color/lipstick_2"
                 app:navigationIcon="@drawable/ic_arrow_back_white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="@string/help_videos_landing"
-                app:titleTextColor="@color/white" />
+                app:title="@string/help_and_support_landing"
+                app:titleTextColor="@color/white">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/help_and_support_landing"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:fontFamily="@font/lato"/>
+                <ImageView
+                    android:id="@+id/help_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_mid"
+                    android:src="@drawable/ic_call_white"/>
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout

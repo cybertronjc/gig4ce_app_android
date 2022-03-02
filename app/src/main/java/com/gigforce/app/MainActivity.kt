@@ -340,8 +340,19 @@ class MainActivity : BaseActivity(),
                 ) -> {
                     handleVerificationScreen()
                 }
+                intent.getBooleanExtra(
+                    StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleEsignatureScreen()
+                }
 
-
+                intent.getBooleanExtra(
+                    StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleVaccinationScreen()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -371,6 +382,26 @@ class MainActivity : BaseActivity(),
         navController.popBackStack()
         navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.drivingLicenseFragment)
+    }
+
+    private fun handleEsignatureScreen() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.signatureImageCaptureDialogFragment)
+    }
+
+    private fun handleVaccinationScreen() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.VaccineMainFragment)
     }
 
     private fun handleAadharDetailNav() {

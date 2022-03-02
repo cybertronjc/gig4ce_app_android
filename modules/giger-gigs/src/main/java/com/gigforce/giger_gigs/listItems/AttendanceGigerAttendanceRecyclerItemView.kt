@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.RecyclerRowGigerAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AttendanceGigerAttendanceRecyclerItemView(
     context: Context,
     attrs: AttributeSet?
@@ -29,6 +33,9 @@ class AttendanceGigerAttendanceRecyclerItemView(
 
     lateinit var foregroundView : View
     lateinit var backgroundView : View
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     init {
         setDefault()
@@ -114,7 +121,11 @@ class AttendanceGigerAttendanceRecyclerItemView(
 
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
-
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                "tl_call_giger", null
+            )
+        )
         val intent =
             Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", currentViewData.gigerPhoneNumber, null))
         context.startActivity(intent)

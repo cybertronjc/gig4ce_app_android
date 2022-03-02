@@ -27,9 +27,8 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
-import com.gigforce.core.AppConstants
-import com.gigforce.core.ScopedStorageConstants
-import com.gigforce.core.StringConstants
+import com.gigforce.core.*
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -61,6 +60,12 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     private var userId: String? = null
     private val user: FirebaseUser?
         get() {
@@ -77,6 +82,10 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+            false
+        )
         getIntentData(savedInstanceState)
         observers()
         viewModel.getVaccineData(userIdToUse)
@@ -244,8 +253,9 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                         requestStoragePermission()
                         throw Exception("stroage permission require")
                     } else {
-                        if (dataModel is VaccineCertDetailsDM)
-                            dataModel.pathOnFirebase?.let { viewModel.downloadFile(it) }
+                        if (dataModel is VaccineCertDetailsDM) {
+                            dataModel.pathOnFirebase?.let { viewModel.downloadFile(dataModel.vaccineLabel.toString(), it) }
+                        }
                     }
 
                 } else {
@@ -254,12 +264,18 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                             is Lce.Content -> {
                                 it.content.let { list ->
                                     if (dataModel is VaccineCertDetailsDM) {
-
                                         dataModel.vaccineId?.let { vaccineID ->
                                             vaccineId = vaccineID
                                         }
                                         dataModel.vaccineLabel?.let { vaccineText ->
                                             vaccineLabel = vaccineText
+                                        }
+                                        if (position == 0) {
+                                            eventTracker.pushEvent(TrackingEventArgs("vaccine_certi1_attempted", null))
+                                        } else if (position == 1) {
+                                            eventTracker.pushEvent(TrackingEventArgs("vaccine_certi2_attempted", null))
+                                        } else if (position == 2) {
+                                            eventTracker.pushEvent(TrackingEventArgs("vaccine_booster_attempted", null))
                                         }
                                         pickDocument()
                                     }
