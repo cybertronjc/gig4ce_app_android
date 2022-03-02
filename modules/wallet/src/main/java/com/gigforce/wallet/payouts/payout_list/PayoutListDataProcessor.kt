@@ -11,9 +11,11 @@ object PayoutListDataProcessor {
         payoutListViewModel: PayoutListViewModel
     ): List<PayoutListPresentationItemData> {
 
-        val payoutMonthYearToPayoutGroup = payouts.groupBy {
-            it.getPaymentCycleEndDateMonthYear()
-        }
+        val payoutMonthYearToPayoutGroup = payouts
+            .sortedByDescending { it.getPaymentCycleEndDateMonth() }
+            .groupBy {
+                it.getPaymentCycleEndDateMonthYear()
+            }
 
         return mutableListOf<PayoutListPresentationItemData>()
             .apply {
