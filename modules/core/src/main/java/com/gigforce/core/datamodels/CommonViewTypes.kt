@@ -45,5 +45,9 @@ class CommonViewTypes {
         //ALL module specific component will be start from 20401. Need to discuss with Himanshu for below layout
         const val VIEW_GIGER_ATTENDANCE = 12234
         const val VIEW_ATTENDANCE_BUSINESS_SHIFT_TIME = 12236
+
+        //verification
+        const val VACCINE_DOSE_STATUS = 30001
+        const val VACCINE_DOSE_CARD = 30002
     }
 }

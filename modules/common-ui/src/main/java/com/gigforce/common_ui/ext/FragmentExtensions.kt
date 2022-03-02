@@ -12,9 +12,10 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.toastfix.toastcompatwrapper.ToastHandler
 
 fun Fragment.showToast(string: String) {
-    Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
+    ToastHandler.getToastInstance(requireContext(), string, Toast.LENGTH_SHORT).show()
 }
 
 fun Fragment.startShimmer(

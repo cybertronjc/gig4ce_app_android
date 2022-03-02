@@ -111,25 +111,38 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
         val userUploadedAadhaarCard =
             verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null
 
+        val userUploadedVaccineCertificate =
+            verificationDocument.vaccination?.status != null
+
         logger.d(TAG,"Aadhaar Filled : ${verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null}")
         logger.d(TAG,"Bank status : ${verificationDocument.bank_details?.status}")
         logger.d(TAG,"Driving status : ${verificationDocument.driving_license?.status}")
         logger.d(TAG,"PAN status : ${verificationDocument.pan_card?.status}")
+        logger.d(TAG,"Vaccine Certificate uploaded status : $userUploadedVaccineCertificate")
 
         verificationDynamicFields.onEach {
             it.userId = userUid
 
-            if (it.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW) {
-                it.status = if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
-            } else if (it.fieldType == FieldTypes.BANK_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.bank_details?.status)
-            } else if (it.fieldType == FieldTypes.DL_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.driving_license?.status)
-            } else if (it.fieldType == FieldTypes.PAN_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.pan_card?.status)
-            } else if(it.fieldType == FieldTypes.SIGNATURE_DRAWER_2){
-                val userUploadedSignature = verificationDocument.signature?.signaturePathOnFirebase != null
-                it.status = if (userUploadedSignature) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+            when (it.fieldType) {
+                FieldTypes.AADHAAR_VERIFICATION_VIEW -> {
+                    it.status = if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+                }
+                FieldTypes.BANK_VERIFICATION_VIEW -> {
+                    it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.bank_details?.status)
+                }
+                FieldTypes.DL_VERIFICATION_VIEW -> {
+                    it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.driving_license?.status)
+                }
+                FieldTypes.PAN_VERIFICATION_VIEW -> {
+                    it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.pan_card?.status)
+                }
+                FieldTypes.SIGNATURE_DRAWER_2 -> {
+                    val userUploadedSignature = verificationDocument.signature?.signaturePathOnFirebase != null
+                    it.status = if (userUploadedSignature) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+                }
+                FieldTypes.VACCINATION_CERTIFICATE_VIEW -> {
+                    it.status = if (userUploadedVaccineCertificate) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+                }
             }
         }
 

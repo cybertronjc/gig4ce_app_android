@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -46,6 +46,10 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.common_ui.location.LocationUpdatesService
+import com.gigforce.core.AppConstants
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -57,6 +61,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.GsonBuilder
@@ -89,6 +94,14 @@ class MainActivity : BaseActivity(),
         ViewModelProvider(this).get(ChatHeadersViewModel::class.java)
     }
 
+    private val chatPageViewModel: ChatPageViewModel by lazy {
+        ViewModelProvider(this).get(ChatPageViewModel::class.java)
+    }
+
+    private val groupChatViewModel: GroupChatViewModel by lazy {
+        ViewModelProvider(this).get(GroupChatViewModel::class.java)
+    }
+
     fun getNavController(): NavController {
         return this.navController
     }
@@ -114,6 +127,55 @@ class MainActivity : BaseActivity(),
 
     private val chatNotificationHandler: ChatNotificationHandler by lazy {
         ChatNotificationHandler(applicationContext)
+    }
+
+
+    private val myReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val location =
+                p1?.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
+            val chatType = p1?.getStringExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE)
+            val headerId = p1?.getStringExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID)
+            val endLiveLocation = p1?.getBooleanExtra(AppConstants.INTENT_EXTRA_END_LIVE_LOCATION, false)
+            if (location != null) {
+                if (!isUserLoggedIn()) {
+                    Log.d("MainActivity", "User Not logged in, not showing chat notification")
+                    return
+                }
+
+                //update chat message
+                val recentMessageId = sharedPreAndCommonUtilInterface.getData("recent_loc_message")
+                val receiverId = sharedPreAndCommonUtilInterface.getData("recent_receiverId_message")
+                if (recentMessageId?.isNotEmpty() == true){
+                    Log.d("LocationUpdatesMain", "type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
+                    val newLocation = GeoPoint(location.latitude , location.longitude)
+
+                    if (receiverId == "group"){
+                        if (endLiveLocation == true){
+                            groupChatViewModel.stopSharingLocation(headerId.toString(), recentMessageId)
+                        } else {
+                            groupChatViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        }
+                    } else {
+                        if (endLiveLocation == true){
+                            chatPageViewModel.stopLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        } else {
+                            chatPageViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        }
+                        if (receiverId?.isNotEmpty() == true){
+                            Log.d("LocationUpdatesMain", " receiver entry = type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
+                            if (endLiveLocation == true){
+                                chatPageViewModel.stopLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            } else {
+                                chatPageViewModel.updateLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
     }
 
     private val intentFilters =
@@ -168,11 +230,15 @@ class MainActivity : BaseActivity(),
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
         // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
             notificationIntentRecevier,
             intentFilters
         )
+        if (myReceiver != null) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
+                IntentFilter(LocationUpdatesService.ACTION_BROADCAST)
+            )
+        }
         if (Intent.ACTION_SEND == intent.action && isUserLoggedIn()) {
             //User Clicked on share in gallery
             formatDataSharedAndOpenChat(intent!!)
@@ -274,8 +340,19 @@ class MainActivity : BaseActivity(),
                 ) -> {
                     handleVerificationScreen()
                 }
+                intent.getBooleanExtra(
+                    StringConstants.ESIGNATURE_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleEsignatureScreen()
+                }
 
-
+                intent.getBooleanExtra(
+                    StringConstants.VACCINATION_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleVaccinationScreen()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -305,6 +382,26 @@ class MainActivity : BaseActivity(),
         navController.popBackStack()
         navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.drivingLicenseFragment)
+    }
+
+    private fun handleEsignatureScreen() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.signatureImageCaptureDialogFragment)
+    }
+
+    private fun handleVaccinationScreen() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.VaccineMainFragment)
     }
 
     private fun handleAadharDetailNav() {
@@ -368,21 +465,26 @@ class MainActivity : BaseActivity(),
     private fun profileDataSnapshot() {
         FirebaseAuth.getInstance().addAuthStateListener { it1 ->
             it1.currentUser?.uid?.let {
-                FirebaseFirestore.getInstance().collection("Profiles").document(it)
-                    .addSnapshotListener { value, e ->
-                        value?.data?.let {
-                            value.toObject(ProfileData::class.java)?.let {
-                                shareDataAndCommUtil.saveLoggedInMobileNumber(
-                                    it1.currentUser?.phoneNumber ?: ""
-                                )
-                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
-                                shareDataAndCommUtil.saveUserProfilePic(
-                                    if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
-                                        ?: "")
-                                )
+                try {
+                    FirebaseFirestore.getInstance().collection("Profiles").document(it)
+                        .addSnapshotListener { value, e ->
+                            value?.data?.let {
+                                value.toObject(ProfileData::class.java)?.let {
+                                    shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                        it1.currentUser?.phoneNumber ?: ""
+                                    )
+                                    shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                    shareDataAndCommUtil.saveUserProfilePic(
+                                        if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
+                                            ?: "")
+                                    )
+                                }
                             }
                         }
-                    }
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
+
             } ?: run {
                 shareDataAndCommUtil.saveLoggedInMobileNumber("")
                 shareDataAndCommUtil.saveLoggedInUserName("")
@@ -691,6 +793,9 @@ class MainActivity : BaseActivity(),
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
+        if (myReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver)
+        }
 //        mixpanel?.flush();
         appUpdateManager.unregisterListener(this)
 

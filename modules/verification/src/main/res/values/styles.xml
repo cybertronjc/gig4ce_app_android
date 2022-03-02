@@ -35,6 +35,13 @@
         <item name="android:textColor">@color/colorLightAccent</item>
     </style>
 
+    <style name="caption_primary" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">@color/colorLightAccent</item>
+    </style>
+
     <style name="primary_color_heading" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/lato_bold</item>
@@ -65,6 +72,25 @@
         <item name="android:textColor">@color/black1</item>
     </style>
 
+    <style name="primary_color_subheading_bs" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">@color/blackDark</item>
+    </style>
 
+    <style name="section_value_bold" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/black1</item>
+    </style>
+
+    <style name="primary_color_heading2_bs" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/black1</item>
+    </style>
 
 </resources>

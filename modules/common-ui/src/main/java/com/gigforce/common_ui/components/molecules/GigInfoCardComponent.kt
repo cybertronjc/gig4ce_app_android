@@ -16,7 +16,9 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.utils.TextDrawable
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.visible
@@ -32,6 +34,8 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
 
 
     @Inject lateinit var navigation: INavigation
+    @Inject
+    lateinit var eventTracker: IEventTracker
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
@@ -88,6 +92,11 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun callManager(number: String) {
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                "giger_call_tl", null
+            )
+        )
         val intent = Intent(
             Intent.ACTION_DIAL,
             Uri.fromParts("tel", number, null)

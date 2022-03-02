@@ -92,7 +92,11 @@ data class ChatHeader(
 
     @get:PropertyName("senderName")
     @set:PropertyName("senderName")
-    var senderName: String = ""
+    var senderName: String = "",
+
+    @get:PropertyName("settings")
+    @set:PropertyName("settings")
+    var settings: HeaderSettings = HeaderSettings()
 
 ) : BaseFirestoreDataModel(tableName = "headers") {
 
@@ -102,3 +106,12 @@ data class ChatHeader(
         const val KEY_UNSEEN_MESSAGE_COUNT = "unseenCount"
     }
 }
+
+data class HeaderSettings(
+
+    @get:PropertyName("muteNotifications")
+    @set:PropertyName("muteNotifications")
+    var muteNotifications: Boolean = false
+)
+
+

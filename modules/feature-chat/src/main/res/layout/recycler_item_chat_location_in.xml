@@ -36,7 +36,10 @@
                 android:id="@+id/user_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
+                android:paddingBottom="@dimen/size_2"
+                android:paddingStart="@dimen/size_2"
+                android:paddingEnd="@dimen/size_2"
+                android:background="?android:selectableItemBackground"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/lipstick"
@@ -52,9 +55,27 @@
                 android:layout_height="196dp"
                 android:scaleType="fitXY"
                 android:paddingStart="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_4"
                 android:paddingEnd="@dimen/size_4"
                 app:shapeAppearanceOverlay="@style/chatImageView" />
 
+            <TextView
+                android:id="@+id/stop_location"
+                android:layout_width="196dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:visibility="gone"
+                android:paddingTop="@dimen/size_4"
+                android:paddingBottom="@dimen/size_4"
+                android:gravity="center"
+                android:text="Stop sharing"
+                android:letterSpacing="0"
+                android:textColor="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_image" />
 
             <TextView
                 android:id="@+id/location_address_tv"

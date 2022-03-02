@@ -18,10 +18,7 @@ import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.Properties
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.branch.referral.Branch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class EventTrackerImp @Inject constructor(
@@ -89,8 +86,7 @@ class EventTrackerImp @Inject constructor(
     }
 
     private fun logEventOnEventBridge(args: TrackingEventArgs) {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
+        GlobalScope.launch {
             eventBridgeRepo.setEventToEventBridge(args.eventName,args.props)
         }
     }

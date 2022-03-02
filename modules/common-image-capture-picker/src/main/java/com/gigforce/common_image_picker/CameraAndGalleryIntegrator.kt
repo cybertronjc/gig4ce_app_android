@@ -17,9 +17,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.text.SimpleDateFormat
@@ -43,16 +43,13 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         this.activity = fragment.requireActivity()
     }
 
-    private val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
-        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-        setMinFaceSize(0.15f)
-        setTrackingEnabled(true)
-        build()
-    }
+    private val options = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .build()
 
-    private val detector = FirebaseVision.getInstance().getVisionFaceDetector(options)
+    private val detector = FaceDetection.getClient(options)
 
     fun openFrontCamera() {
         this.openFrontCamera = true
@@ -143,7 +140,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 //                    startImageCropper(outputFileUri, imageCropOptions)
                     startCropImage(outputFileUri,imageCropOptions)
                 } else if (imageCropOptions.shouldDetectForFace) {
-                    val fVisionImage = FirebaseVisionImage.fromFilePath(context, outputFileUri)
+                    val fVisionImage = InputImage.fromFilePath(context, outputFileUri)
                     detectFacesAndReturnResult(callback, outputFileUri, fVisionImage)
                 } else {
                     returnFileImage(callback, outputFileUri)
@@ -167,7 +164,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             } else {
                 if (imageCropOptions.shouldDetectForFace) {
 
-                    val fvImage = FirebaseVisionImage.fromFilePath(context, imageUriResultCrop)
+                    val fvImage = InputImage.fromFilePath(context, imageUriResultCrop)
                     detectFacesAndReturnResult(callback, imageUriResultCrop, fvImage)
                 } else
                     returnFileImage(callback, imageUriResultCrop)
@@ -192,7 +189,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
                 Log.d("ImageUri", "working")
                 if (imageCropOptions.shouldDetectForFace) {
                     Log.d("ImageUri", "working1")
-                    val fvImage = FirebaseVisionImage.fromFilePath(context, imageUriResultCrop)
+                    val fvImage = InputImage.fromFilePath(context, imageUriResultCrop)
                     Log.d("ImageUri", "working2")
 
                     detectFacesAndReturnResult(callback, imageUriResultCrop, fvImage)
@@ -304,8 +301,8 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
     private fun detectFacesAndReturnResult(
         callback: ImageCropCallback,
         outputFileUri: Uri,
-        firebaseVisionImage: FirebaseVisionImage
-    ) = detector.detectInImage(firebaseVisionImage).addOnSuccessListener { faces ->
+        firebaseVisionImage: InputImage
+    ) = detector.process(firebaseVisionImage).addOnSuccessListener { faces ->
         // Task completed successfully
 
         if (faces.size > 0) {

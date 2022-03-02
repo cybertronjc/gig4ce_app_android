@@ -276,6 +276,7 @@ class WeekDayFragment : Fragment() {
 
     fun showSlotsAlert() {
         val slots = viewModel.getAllSlotsToShow()
+        if(slots.size<=0)return
         slots.removeAt(0)
         slots.add(0,resources.getString(R.string.all_pref))
         val items = slots.toTypedArray()

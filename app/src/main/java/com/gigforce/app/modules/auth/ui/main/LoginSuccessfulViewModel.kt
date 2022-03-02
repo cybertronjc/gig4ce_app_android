@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
+import com.gigforce.common_ui.ext.toDate
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.core.StringConstants
@@ -18,8 +19,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.functions.FirebaseFunctions
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.*
 
 data class ProfileAnGigInfo(
@@ -39,7 +40,6 @@ data class UserVersionInfo(
 
 class LoginSuccessfulViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
-    private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
 ) : ViewModel() {
     var profileFirebaseRepository =
         ProfileFirebaseRepository()
@@ -144,10 +144,15 @@ class LoginSuccessfulViewModel constructor(
     }
 
     private fun checkForGigData(profileData: ProfileData) {
+        val yesterday = LocalDate.now().apply {
+            minusDays(1)
+        }.toDate()
+
         gigsRepository.getCurrentUserGigs()
+            .whereGreaterThan("startDateTime", yesterday)
             .get()
             .addOnSuccessListener {
-                val gigAvailable = hasGigs(it)
+                val gigAvailable = it.isEmpty.not()
 
                 userProfileAndGigData.postValue(
                     ProfileAnGigInfo(
@@ -168,44 +173,5 @@ class LoginSuccessfulViewModel constructor(
                     )
                 )
             }
-    }
-
-    private fun hasGigs(querySnapshot: QuerySnapshot): Boolean {
-        val userGigs: MutableList<Gig> = mutableListOf()
-        querySnapshot.documents.forEach { t ->
-
-
-            try {
-                t.toObject(Gig::class.java)?.let {
-                    it.gigId = t.id
-                    userGigs.add(it)
-                }
-            } catch (e: Exception) {
-                CrashlyticsLogger.e("LoginSuccessfullViewModel","while desearializing gig data",e)
-            }
-        }
-
-        val currentDate = Date()
-        return userGigs.any {
-            it.startDateTime!!.toDate().time > currentDate.time
-        }
-    }
-
-    private fun dumm() {
-
-        firebaseFunctions.getHttpsCallable("getMainScreenRedirectionConfig")
-            .call()
-            .continueWith {
-                val result = it.result?.data as String
-                result
-            }
-            .addOnSuccessListener {
-                Log.d("D", "d")
-            }
-            .addOnFailureListener {
-
-                Log.d("D", "d")
-            }
-
     }
 }

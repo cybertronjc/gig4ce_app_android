@@ -313,6 +313,14 @@
             app:destination="@id/uploadDropDown" />
     </fragment>
 
+    <fragment
+        android:id="@+id/chooseYourVaccineFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.ChooseYourVaccineFragment"/>
+
+    <fragment
+        android:id="@+id/CovidCertificateStatusFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.CovidCertificateStatusFragment"/>
+
     <dialog
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
@@ -1134,6 +1142,11 @@
         android:id="@+id/contactsAndGroupFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment"
         android:label="ContactsAndGroupFragment" />
+
+    <fragment
+        android:id="@+id/CovidVaccinationCertificateFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.CovidVaccinationCertificateFragment"
+        />
     <dialog
         android:id="@+id/blockUserBottomSheetFragment"
         android:name="com.gigforce.modules.feature_chat.screens.BlockUserBottomSheetFragment"
@@ -1159,15 +1172,54 @@
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
+
+    <dialog android:id="@+id/AskUserForVaccineBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.AskUserForVaccineBS"
+        android:label="AskUserForVaccine"/>
+
+    <dialog android:id="@+id/SizeWarningBottomSheet"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.SizeWarningBottomSheet"
+        android:label="SizeWarningBottomSheet"/>
+
+    <dialog android:id="@+id/VaccineUploadSuccessfulBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.VaccineUploadSuccessfulBS"
+        android:label="VaccineUploadSuccessfulBS"/>
+
+    <dialog android:id="@+id/GetVaccinateFirstBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.GetVaccinateFirstBS"/>
+
+    <dialog android:id="@+id/CertificateDownloadBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.CertificateDownloadBS"
+        android:label="CertificateDownloadBS"/>
+
+    <dialog android:id="@+id/InvalidFormatBottomSheet"
+        android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
+        android:label="InvalidFormatBottomSheet"/>
+
+    <fragment
+        android:id="@+id/viewLiveLocationFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
+        android:label="ViewLiveLocationFragment" />
     <fragment
         android:id="@+id/gigerAttendanceDetailFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
         android:label="GigerAttendanceDetailFragment" />
+
+    <fragment
+        android:id="@+id/VaccineMainFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.VaccineMainFragment"
+        android:label="VaccineMainFragment" />
+
     <dialog
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
         android:label="ChangeTeamLeaderBottomSheetFragment" />
 
 
+=========
+        android:id="@+id/viewLiveLocationFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
+        android:label="ViewLiveLocationFragment" />
+>>>>>>>>> Temporary merge branch 2
 </navigation>
 
