@@ -43,7 +43,7 @@ open class IconButton : AppCompatImageButton {
             Log.i("iconbutton", "Setting Value as ${value}")
             this._iconType = value
             val iconRes = when(value){
-                IconType.Chat -> R.drawable.ic_chat_black_icon
+                IconType.Chat -> R.drawable.ic_chat_icon
                 IconType.Profile -> R.drawable.profile_avatar
                 else -> R.drawable.ic_tip
             }

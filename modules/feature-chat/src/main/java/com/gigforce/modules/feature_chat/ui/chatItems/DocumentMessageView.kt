@@ -72,6 +72,7 @@ abstract class DocumentMessageView(
     private lateinit var senderNameTV: TextView
     private lateinit var textView: TextView
     private lateinit var textViewTime: TextView
+    private lateinit var linearRoot: LinearLayout
     private lateinit var cardView: LinearLayout
     private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var progressbar: View
@@ -89,6 +90,8 @@ abstract class DocumentMessageView(
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
         senderNameTV.setOnClickListener(this)
+        linearRoot.setOnClickListener(this)
+        linearRoot.setOnLongClickListener(this)
     }
 
     private fun findViews() {
@@ -96,6 +99,7 @@ abstract class DocumentMessageView(
         linearLayout = this.findViewById(R.id.ll_msgContainer)
         textView = this.findViewById(R.id.tv_file_name)
         frameLayoutRoot = this.findViewById(R.id.frame)
+        linearRoot = this.findViewById(R.id.linearRoot)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         progressbar = this.findViewById(R.id.progress)
@@ -244,7 +248,7 @@ abstract class DocumentMessageView(
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.cv_msgContainer) {
+        if (v?.id == R.id.cv_msgContainer || v?.id == R.id.linearRoot) {
             if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)) {

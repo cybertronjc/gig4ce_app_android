@@ -100,6 +100,7 @@ enum class StringConstants(val value: String) {
     VERIFICATION_SP("deeplink_verification"),
     ESIGNATURE_VIA_DEEP_LINK("deeplink_esignature"),
     VACCINATION_VIA_DEEP_LINK("deeplink_vaccination"),
+    HOMESCREEN_SP("deeplink_homescreen"),
     PAYOUT_DEEP_LINK("PAYOUT_DEEP_LINK"),
     PAYOUT_SP("payout")
 

@@ -73,6 +73,7 @@ abstract class ImageMessageView(
     private lateinit var textViewTime: TextView
     private lateinit var cardView: LinearLayout
     private lateinit var frameLayoutRoot: FrameLayout
+    private lateinit var linearRoot: LinearLayout
     private lateinit var downloadIconIV: ImageView
     private lateinit var downloadOverlayIV: ImageView
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
@@ -99,6 +100,7 @@ abstract class ImageMessageView(
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         frameLayoutRoot = this.findViewById(R.id.frame)
+        linearRoot = this.findViewById(R.id.linearRoot)
         downloadIconIV = this.findViewById(R.id.download_icon_iv)
         downloadOverlayIV = this.findViewById(R.id.download_overlay_iv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
@@ -123,6 +125,8 @@ abstract class ImageMessageView(
         imageContainerFrameLayout.setOnClickListener(this)
         imageContainerFrameLayout.setOnLongClickListener(this)
         senderNameTV.setOnClickListener(this)
+        linearRoot.setOnClickListener(this)
+        linearRoot.setOnLongClickListener(this)
         //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
@@ -359,7 +363,7 @@ abstract class ImageMessageView(
 
     override fun onClick(v: View?) {
         val view = v ?: return
-        if (view?.id == R.id.image_container_layout) {
+        if (view?.id == R.id.image_container_layout || view?.id == R.id.linearRoot) {
             if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)) {
