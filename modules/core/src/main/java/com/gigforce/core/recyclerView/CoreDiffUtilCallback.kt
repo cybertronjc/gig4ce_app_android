@@ -32,4 +32,12 @@ abstract class CoreDiffUtilCallback<T> : DiffUtil.Callback(){
         this._oldList = oldList
         this._newList = newList
     }
+
+    override fun getNewListSize(): Int {
+        return this._newList.size
+    }
+
+    override fun getOldListSize(): Int {
+        return this._oldList.size
+    }
 }
