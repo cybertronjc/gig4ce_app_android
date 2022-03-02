@@ -120,6 +120,15 @@ abstract class SingeltonBindings {
             return retrofitServiceFactory.prepareService(DownloadChatAttachmentService::class.java)
         }
 
+        @Provides
+        fun provideGigerAttendanceService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): GigerAttendanceService {
+            return retrofitServiceFactory.prepareService(GigerAttendanceService::class.java)
+        }
+
+
+
 
         @Singleton
         @Provides
