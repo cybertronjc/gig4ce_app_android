@@ -3,7 +3,9 @@ package com.gigforce.common_ui.viewmodels.payouts
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Parcelize
 data class Payout(
@@ -60,15 +62,25 @@ data class Payout(
     val remarks: String? = null
 ) : Parcelable {
 
+
+    private val isoDateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private val monthYearDateFormat = SimpleDateFormat("MMMM yyyy")
+
     private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
     private val endCycleMonthYearFormatter = DateTimeFormatter.ofPattern("LLLL yyyy") //YYYY-MM-DD
     private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy") //YYYY-MM-DD
+
+    fun getPaymentCycleEndDateMonth(): Date {
+        return isoDateFormat.parse(this.paymentCycleEndDate)
+    }
 
     fun getPaymentCycleEndDateMonthYear(): String {
         return if (this.paymentCycleEndDate == null) {
             "Others"
         } else {
-            endCycleMonthYearFormatter.format(isoDateFormatter.parse(this.paymentCycleEndDate))
+            monthYearDateFormat.format(
+                isoDateFormat.parse(this.paymentCycleEndDate)
+            )
         }
     }
 

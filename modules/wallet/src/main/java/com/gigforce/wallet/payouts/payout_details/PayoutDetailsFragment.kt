@@ -222,7 +222,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
         this.infoLayout.bind(payout)
 
         //Bank and ifsc info
-        this.accountNoLayout.titleTextView.text = "Account No"
+        this.accountNoLayout.titleTextView.text = "Account No."
         this.accountNoLayout.valueTextView.text = ": ${payout.accountNo ?: "-"}"
 
         this.ifscLayout.titleTextView.text = "IFSC Code"
