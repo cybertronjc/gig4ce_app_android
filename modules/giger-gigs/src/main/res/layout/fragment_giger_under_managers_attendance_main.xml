@@ -230,6 +230,20 @@
             </LinearLayout>
         </FrameLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join_now_button"
+            style="@style/GigerGigsMaterialButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:fontFamily="@font/lato_bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/add_new_giger_gigs"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 
     </LinearLayout>
 
