@@ -87,10 +87,14 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnAppsFlyer(args)
         logEventOnMoEngage(args)
-        logEventOnEventBridge(args)
+        for(i in 1..50) {
+            if(args.eventName == "attendance")
+            logEventOnEventBridge(args)
+        }
     }
 
     private fun logEventOnEventBridge(args: TrackingEventArgs) {
+        Log.e("attendanceevent", args.eventName)
         val attendanceBuilder = OneTimeWorkRequestBuilder<AttendanceWorker>()
         val dataBuilder = Data.Builder()
         dataBuilder.putString("event_key",args.eventName)
