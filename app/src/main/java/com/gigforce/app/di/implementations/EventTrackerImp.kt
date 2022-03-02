@@ -98,6 +98,8 @@ class EventTrackerImp @Inject constructor(
             when(it.value){
                 is String -> {dataBuilder.putString(it.key, it.value as String)}
                 is Int -> {dataBuilder.putInt(it.key, it.value as Int)}
+                is Boolean -> {dataBuilder.putBoolean(it.key,it.value as Boolean)}
+                is Long -> {dataBuilder.putLong(it.key,it.value as Long)}
             }
         }
         attendanceBuilder.setInputData(dataBuilder.build())
