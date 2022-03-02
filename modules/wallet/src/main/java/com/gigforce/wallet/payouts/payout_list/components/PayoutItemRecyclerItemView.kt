@@ -17,6 +17,7 @@ import com.gigforce.wallet.databinding.RecyclerRowPayoutItemBinding
 import com.gigforce.wallet.models.PayoutListPresentationItemData
 import com.gigforce.wallet.payouts.payout_list.PayoutListViewContract
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -32,6 +33,9 @@ class PayoutItemRecyclerItemView(
 
     private lateinit var viewBinding: RecyclerRowPayoutItemBinding
     private var viewData: PayoutListPresentationItemData.PayoutItemRecyclerItemData? = null
+
+    private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
+    private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy") //YYYY-MM-DD
 
     init {
         setDefault()
@@ -64,7 +68,7 @@ class PayoutItemRecyclerItemView(
 
             viewBinding.amountTextview.text = it.amount.formatToCurrency()
             viewBinding.businessTextview.text = it.companyName?.capitalize(Locale.getDefault())
-            viewBinding.categoryTextview.text = it.category
+            viewBinding.categoryTextview.text = it.category?.capitalize()
             viewBinding.payoutStatusView.bind(
                 it.status,
                 it.statusColorCode
@@ -94,7 +98,7 @@ class PayoutItemRecyclerItemView(
         paymentDate: String?
     ): String {
         return if (paymentDate != null) {
-            "Paid on : -"
+            "Paid on : ${paidOnDateFormatter.format(isoDateFormatter.parse(paymentDate))}"
         } else {
             "Paid on : -"
         }

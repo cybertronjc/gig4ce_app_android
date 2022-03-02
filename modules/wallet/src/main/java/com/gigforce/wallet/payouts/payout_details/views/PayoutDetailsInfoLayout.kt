@@ -55,14 +55,14 @@ class PayoutDetailsInfoLayout(
 
         this.utrNoLayout.apply {
             imageView.loadImage(R.drawable.ic_money_person)
-            titleTextView.text = "UTR No"
+            titleTextView.text = "UTR No."
             valueTextView.text = ": ${data.utrNo ?: "-"}"
         }
 
         this.categoryLayout.apply {
             imageView.loadImage(R.drawable.ic_menu_grey)
             titleTextView.text = "Category"
-            valueTextView.text = ": ${data.category ?: "-"}"
+            valueTextView.text = ": ${data.category?.capitalize() ?: "-"}"
         }
 
         this.payoutCycleLayout.apply {

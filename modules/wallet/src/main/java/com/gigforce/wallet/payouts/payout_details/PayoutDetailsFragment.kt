@@ -1,5 +1,6 @@
 package com.gigforce.wallet.payouts.payout_details
 
+import android.app.Dialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.core.TextDrawable
@@ -52,6 +54,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
             payoutId = it.getString(PayoutConstants.INTENT_EXTRA_PAYOUT_ID) ?: return@let
         }
 
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         viewModel.setPayoutReceivedFromPreviousScreen(
             payoutId = payoutId
         )
@@ -76,6 +79,12 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
             initView()
             initViewModel()
         }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog =  super.onCreateDialog(savedInstanceState)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 
     private fun initView() = viewBinding.apply {
@@ -130,6 +139,9 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
                 setDestinationInExternalPublicDir(
                     Environment.DIRECTORY_DOWNLOADS,
                     filePathName
+                )
+                setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
                 )
             }
 
@@ -210,10 +222,10 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
         this.infoLayout.bind(payout)
 
         //Bank and ifsc info
-        this.accountNoLayout.titleTextView.text = "Account No."
+        this.accountNoLayout.titleTextView.text = "Account No"
         this.accountNoLayout.valueTextView.text = ": ${payout.accountNo ?: "-"}"
 
-        this.ifscLayout.titleTextView.text = "IFSC Code."
+        this.ifscLayout.titleTextView.text = "IFSC Code"
         this.ifscLayout.valueTextView.text = ": ${payout.isfc ?: "-"}"
 
         this.remarksTextview.text = payout.remarks

@@ -61,8 +61,8 @@ data class Payout(
 ) : Parcelable {
 
     private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
-    private val endCycleMonthYearFormatter = DateTimeFormatter.ofPattern("LLL yyyy") //YYYY-MM-DD
-    private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LL/yyyy") //YYYY-MM-DD
+    private val endCycleMonthYearFormatter = DateTimeFormatter.ofPattern("LLLL yyyy") //YYYY-MM-DD
+    private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy") //YYYY-MM-DD
 
     fun getPaymentCycleEndDateMonthYear(): String {
         return if (this.paymentCycleEndDate == null) {
