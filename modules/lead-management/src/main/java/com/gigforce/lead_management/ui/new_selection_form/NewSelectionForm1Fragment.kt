@@ -276,7 +276,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewBinding: FragmentNewSelectionForm1Binding
     ) = viewBinding.toolbar.apply {
         this.setBackButtonListener {
-            activity?.onBackPressed()
+            if (viewBinding.mainForm.mobileNoEt.hasFocus()){
+                hideSoftKeyboard()
+                viewBinding.mainForm.mobileNoEt.clearFocus()
+            } else {
+                activity?.onBackPressed()
+            }
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
         makeBackgroundMoreRound()

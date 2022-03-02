@@ -40,6 +40,7 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.KeyboardUtils
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.gigforce.lead_management.LeadManagementNavDestinations
@@ -376,6 +377,12 @@ class MainActivity : BaseActivity(),
             lookForNewChatMessages()
         }
         profileDataSnapshot()
+
+        //keyboard listener
+        KeyboardUtils.addKeyboardToggleListener(this, KeyboardUtils.SoftKeyboardToggleListener {
+            Log.d("keyboardMain", "keyboard visible: "+it)
+            sharedPreAndCommonUtilInterface.saveDataBoolean("KeyboardVisibility", it)
+        })
     }
 
     private fun handleVerificationScreen() {

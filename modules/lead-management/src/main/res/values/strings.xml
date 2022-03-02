@@ -110,7 +110,7 @@
     <string name="app_submitted_lead">Application Submitted</string>
     <string name="application_checklist_lead">Application Checklist</string>
     <string name="call_giger_lead">CALL GIGER</string>
-    <string name="giger_name_lead">Giger name</string>
+    <string name="giger_name_lead">Giger Name</string>
     <string name="del_executive_lead">Delivery Executive</string>
     <string name="company_text_lead">Company</string>
     <string name="joining_date_lead">Joining Date</string>
@@ -124,7 +124,7 @@
     <string name="new_selection_lead">New Selection</string>
     <string name="type_giger_name_here_lead">Type Giger Name here</string>
     <string name="select_business_lead">Select Business</string>
-    <string name="click_to_select_business_lead">Click to select business</string>
+    <string name="click_to_select_business_lead">Click to select Business</string>
     <string name="select_job_profile1_lead">Select Job Profile</string>
     <string name="click_to_select_job_profile_lead">Click to select Job Profile</string>
     <string name="giger_client_id_lead">Giger Client ID</string>

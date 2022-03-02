@@ -1,10 +1,12 @@
 package com.gigforce.profile.onboarding.fragments.preferredJobLocation
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -217,6 +219,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
 
     var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
+        hideKeyboard()
         if (currentStep == 0) {
             if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
@@ -290,6 +293,21 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     var formCompletionListener: OnFragmentFormCompletionListener? = null
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
+    }
+
+    fun hideKeyboard() {
+        activity?.let {
+            val imm: InputMethodManager =
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            var view: View? = it.currentFocus ?: null
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
     }
 
 

@@ -113,7 +113,7 @@ class ChatPageFragment : Fragment(),
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
-    
+
     @Inject
     lateinit var eventTracker: IEventTracker
 
@@ -624,7 +624,7 @@ class ChatPageFragment : Fragment(),
     private fun setUpAudioView() {
         communityFooter.setAttachmentOptions(AttachmentOption.defaultList, this)
         communityFooter.setRecordingListener(this)
-//        AXEmojiManager.install(activity, AXIOSEmojiProvider(activity))
+//        AXEmojiManager.install(context, AXGoogleEmojiProvider(activity))
 //        val emojiView = AXEmojiView(activity)
 //        communityFooter.setupEmojiLayout(emojiView)
 
@@ -692,6 +692,10 @@ class ChatPageFragment : Fragment(),
 
             if (cameFromLinkInOtherChat)
                 chatNavigation.navigateUp()
+            else if (selectedChatMessage != null && selectedChatMessage?.size != 0){
+                disableChatSelection()
+                clearSelection()
+            }
             else if (communityFooter.isAttachmentOptionViewVisible())
                 communityFooter.hideAttachmentOptionView()
             else
@@ -1459,7 +1463,7 @@ class ChatPageFragment : Fragment(),
                         map
                     )
                 )
-                chatFooter.closeReplyUi()
+                //chatFooter.closeReplyUi()
             }
         }
     }

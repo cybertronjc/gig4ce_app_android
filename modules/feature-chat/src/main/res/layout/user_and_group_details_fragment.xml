@@ -393,12 +393,12 @@
 
                     <ImageView
                         android:id="@+id/activate_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_group_exit_icon"
+                        android:src="@drawable/ic_deactivate_pink"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>

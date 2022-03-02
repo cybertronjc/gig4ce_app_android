@@ -162,7 +162,7 @@ class MainNavDataRepository @Inject constructor(
         val mainNavData = ArrayList<FeatureItemCard2DVM>()
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.chat_app_giger),
+                title = context.resources.getString(R.string.community_app_giger),
                 icon = "chat",
                 navPath = "chats/chatList",
                 index = 150
