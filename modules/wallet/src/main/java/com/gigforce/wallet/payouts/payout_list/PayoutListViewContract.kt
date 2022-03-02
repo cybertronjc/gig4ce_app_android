@@ -1,6 +1,7 @@
 package com.gigforce.wallet.payouts.payout_list
 
 import com.gigforce.wallet.models.PayoutListPresentationItemData
+import com.google.android.material.snackbar.Snackbar
 
 class PayoutListViewContract {
 
@@ -13,6 +14,7 @@ class PayoutListViewContract {
         ) : State()
 
         data class ShowOrUpdatePayoutListOnView(
+            val showUpdateSnackbar: Boolean,
             val payouts: List<PayoutListPresentationItemData>
         ) : State()
 

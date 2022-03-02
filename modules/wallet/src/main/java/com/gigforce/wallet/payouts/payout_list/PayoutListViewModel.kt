@@ -80,6 +80,7 @@ class PayoutListViewModel @Inject constructor(
 
             _viewState.emit(
                 PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
+                    true,
                     payoutListShownOnScreen
                 )
             )
@@ -161,6 +162,7 @@ class PayoutListViewModel @Inject constructor(
 
         _viewState.emit(
             PayoutListViewContract.State.ShowOrUpdatePayoutListOnView(
+                false,
                 payoutListShownOnScreen
             )
         )

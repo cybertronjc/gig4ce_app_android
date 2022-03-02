@@ -82,6 +82,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
                         )
                         is PayoutListViewContract.State.LoadingPayoutList -> showPayoutLoading()
                         is PayoutListViewContract.State.ShowOrUpdatePayoutListOnView -> showPayoutListOnView(
+                            it.showUpdateSnackbar,
                             it.payouts
                         )
                         PayoutListViewContract.State.ScreenLoaded -> {}
@@ -159,6 +160,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
     }
 
     private fun showPayoutListOnView(
+        showUpdateSnackbar : Boolean,
         payouts: List<PayoutListPresentationItemData>
     ) = viewBinding.apply {
 
@@ -172,7 +174,7 @@ class PayoutListFragment : BaseFragment2<PayoutListFragmentBinding>(
         swipeRefresh.isRefreshing = false
 
         val itemsShown = recyclerView.adapter?.itemCount ?: 0
-        if (itemsShown != 0) {
+        if (itemsShown != 0 && showUpdateSnackbar) {
             Snackbar.make(viewBinding.rootFrameLayout,"Payouts Updated",Snackbar.LENGTH_SHORT).show()
         }
 
