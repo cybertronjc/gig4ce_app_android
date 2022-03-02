@@ -25,8 +25,8 @@ class AttendanceWorker(var context: Context, params: WorkerParameters) :
             context.getSystemService(Context.NOTIFICATION_SERVICE) as
                     NotificationManager
         val notification = NotificationCompat.Builder(applicationContext, "1")
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Attendance updation")
+            //.setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("Gigforce - Attendance updation")
             .build()
         notificationManager?.notify(42, notification)
         var eventName = ""
