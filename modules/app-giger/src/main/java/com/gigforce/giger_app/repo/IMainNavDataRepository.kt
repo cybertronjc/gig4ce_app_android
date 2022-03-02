@@ -24,6 +24,7 @@ import javax.inject.Inject
 interface IMainNavDataRepository {
     fun getData(currentVersionCode:Int): Flow<List<FeatureItemCard2DVM>>
     fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
+    suspend fun notifyToServer()
 }
 
 class MainNavDataRepository @Inject constructor(
@@ -76,26 +77,18 @@ class MainNavDataRepository @Inject constructor(
             }
             val tempMainNavData =
                 mainNavData.filter { it.active == true }
-                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
+                    .filter { (it.type != "sub_icon" && it.type != "sub_folder") } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            receivedNotifyToServer()
             reloadCount++
             return mainNavData
         }
         return mainNavData
     }
 
-    private fun receivedNotifyToServer() {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
-            notifyToServer()
-        }
-    }
 
-
-    private suspend fun notifyToServer() {
+    override suspend fun notifyToServer() {
         try {
             val jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
@@ -108,21 +101,18 @@ class MainNavDataRepository @Inject constructor(
 
         }
     }
-    var producerScope : ProducerScope<ArrayList<FeatureItemCard2DVM>>?=null
     override fun getData(currentVersionCode: Int): Flow<List<FeatureItemCard2DVM>> {
         this.currentVersionCode = currentVersionCode
 
         return callbackFlow {
-            producerScope = this
-            FirebaseFirestore.getInstance().collection("AppConfigs")
+            val subscription =  FirebaseFirestore.getInstance().collection("AppConfigs")
                 .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
                 .addSnapshotListener { data, error ->
                     if (error != null) {
-                        producerScope?.close(error)
+//                        close(error)
                     } else {
                         data?.documents?.let {
                             if (it.isNotEmpty() && reloadCount < 2) {
-
                                 val docData = it[0].data as? Map<String, Any>
                                 docData?.let { docMapData ->
                                     val versionCodeList = ArrayList<Int>()
@@ -142,7 +132,7 @@ class MainNavDataRepository @Inject constructor(
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            sendBlocking(arrangedData)
+                                            offer(arrangedData)
                                             return@let
                                         }
                                     }
@@ -151,18 +141,19 @@ class MainNavDataRepository @Inject constructor(
                                         docMapData.get("data")?.let { iconList ->
                                             arrangedData = arrangeDataAndSetObserver(iconList)
                                         }
-                                        sendBlocking(arrangedData)
+                                        offer(arrangedData)
                                     }
                                 }
 
-                            } else {
+                            } else if(it.isEmpty()) {
                                 reloadCount = 1
-                                receivedNotifyToServer()
+                                offer(ArrayList<FeatureItemCard2DVM>())
+                            }else{
                             }
                         }
                     }
                 }
-            awaitClose{ }
+            awaitClose{ subscription.remove() }
         }
 
     }
@@ -191,52 +182,69 @@ class MainNavDataRepository @Inject constructor(
                 title = context.resources.getString(R.string.settings_app_giger),
                 icon = "setting",
                 navPath = "setting",
-                index = 140
+                index = 120
             )
         )
-        mainNavData.add(
-            FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.learning_app_giger),
-                icon = "learning",
-                navPath = "learning/main",
-                index = 130
-            )
-        )
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.learning_app_giger),
+//                icon = "learning",
+//                navPath = "learning/main",
+//                index = 130
+//            )
+//        )
 
         mainNavData.add(
             FeatureItemCard2DVM(
                 title = context.resources.getString(R.string.profile_app_giger),
                 icon = "profile",
                 navPath = "profile",
-                index = 120
-            )
-        )
-
-        mainNavData.add(
-            FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.wallet_app_giger),
-                icon = "wallet",
-                navPath = "payslipMonthlyFragment",
                 index = 110
             )
         )
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.verification_app_giger),
+                title = context.resources.getString(R.string.payouts_app_giger),
                 icon = "shield",
                 navPath = "verification/main",
-                index = 160
+                index = 130
             )
         )
+
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.wallet_app_giger),
+//                icon = "wallet",
+//                navPath = "payslipMonthlyFragment",
+//                index = 110
+//            )
+//        )
+
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.verification_app_giger),
+//                icon = "shield",
+//                navPath = "verification/main",
+//                index = 160
+//            )
+//        )
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = context.resources.getString(R.string.invoices_app_giger),
-                icon = "wallet",
-                navPath = "wallet/invoicesList",
-                index = 170
+                title = context.resources.getString(R.string.my_documents_app_giger),
+                icon = "shield",
+                navPath = "verification/main",
+                index = 140
             )
         )
+//        mainNavData.add(
+//            FeatureItemCard2DVM(
+//                title = context.resources.getString(R.string.invoices_app_giger),
+//                icon = "wallet",
+//                navPath = "wallet/invoicesList",
+//                index = 170
+//            )
+//        )
         return mainNavData
     }
 

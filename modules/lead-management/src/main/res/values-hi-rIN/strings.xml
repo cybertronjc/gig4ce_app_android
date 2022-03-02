@@ -71,7 +71,7 @@
     <string name="congratulations_lead">बधाई हो</string>
     <string name="giger_has_been_activated_successfully_lead">Giger को सफलतापूर्वक सक्रिय कर दिया गया है।</string>
     <string name="submit_lead">प्रस्तुत करना</string>
-    <string name="add_new_lead">नया जोड़ो</string>
+    <string name="add_new_lead">+ नया जोड़ो</string>
     <string name="start_referring_now_lead">अभी रेफर करना शुरू करें</string>
     <string name="send_via_whatsapp_lead">व्हाट्सएप के माध्यम से भेजें</string>
     <string name="send_via_other_apps_lead">अन्य ऐप्स के माध्यम से भेजें</string>

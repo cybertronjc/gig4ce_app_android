@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,11 +25,13 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.models.AttendanceFilterItemShift
@@ -60,6 +63,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var navigation: INavigation
 
     private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
     private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
@@ -110,6 +116,12 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
             } else {
                 activity?.onBackPressed()
             }
+        }
+
+        viewBinding.gigersUnderManagerMainLayout.joinNowButton.setOnClickListener {
+            navigation.navigateTo("LeadMgmt/selectionForm1", bundleOf(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to true
+            ))
         }
 
 

@@ -261,7 +261,6 @@
     <string name="add_attachment_giger_gigs">संलग्न करें</string>
     <string name="submit__giger_gigs">प्रस्तुत</string>
     <string name="change_date_giger_gigs">बदलाव दिनांक</string>
-    <string name="add_new_giger_gigs">नया जोड़ो</string>
     <string name="no_data_found_giger_gigs">डाटा प्राप्त नहीं हुआ</string>
     <string name="attendance_location_not_correct_giger_gigs">उपस्थिति स्थान सही नहीं है</string>
     <string name="you_are_currently_not_at_gig_location_this_will_be_reported_to_your_supervisor_giger_gigs">आप वर्तमान में गिग स्थान पर नहीं हैं। इसकी सूचना आपके पर्यवेक्षक को दी जाएगी</string>
@@ -314,4 +313,5 @@
     <string name="weekly_off_for_giger_gigs">गिगर साप्ताहिक अवकाश पर है।</string>
     <string name="weekly_off_for_me_gigs">मैं साप्ताहिक अवकाश पर हूं।</string>
     <string name="go_back">वापस जाओ</string>
+    <string name="add_new_giger_gigs">+ नया जोड़ो</string>
 </resources>

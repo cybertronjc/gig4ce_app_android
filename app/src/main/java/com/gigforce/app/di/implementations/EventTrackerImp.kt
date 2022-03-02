@@ -2,10 +2,15 @@ package com.gigforce.app.di.implementations
 
 import android.content.Context
 import android.util.Log
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.MainApplication
+import com.gigforce.app.background.workers.AttendanceWorker
 import com.gigforce.app.eventbridge.EventBridgeRepo
 import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.IEventTracker
@@ -82,13 +87,29 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnAppsFlyer(args)
         logEventOnMoEngage(args)
-        logEventOnEventBridge(args)
+        for(i in 1..50) {
+            if(args.eventName == "attendance")
+            logEventOnEventBridge(args)
+        }
     }
 
     private fun logEventOnEventBridge(args: TrackingEventArgs) {
-        GlobalScope.launch {
-            eventBridgeRepo.setEventToEventBridge(args.eventName,args.props)
+        Log.e("attendanceevent", args.eventName)
+        val attendanceBuilder = OneTimeWorkRequestBuilder<AttendanceWorker>()
+        val dataBuilder = Data.Builder()
+        dataBuilder.putString("event_key",args.eventName)
+        args.props?.forEach {
+            when(it.value){
+                is String -> {dataBuilder.putString(it.key, it.value as String)}
+                is Int -> {dataBuilder.putInt(it.key, it.value as Int)}
+                is Boolean -> {dataBuilder.putBoolean(it.key,it.value as Boolean)}
+                is Long -> {dataBuilder.putLong(it.key,it.value as Long)}
+            }
         }
+        attendanceBuilder.setInputData(dataBuilder.build())
+        val workManager = WorkManager.getInstance(context)
+        val continuation = workManager.beginWith(attendanceBuilder.build())
+        continuation.enqueue()
     }
 
 

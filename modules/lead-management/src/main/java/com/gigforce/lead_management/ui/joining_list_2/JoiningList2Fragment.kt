@@ -299,7 +299,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         val betweenSpace = 25
 
         val slidingTabStrip: ViewGroup = statusTabLayout.getChildAt(0) as ViewGroup
-
         for (i in 0 until slidingTabStrip.childCount - 1) {
             val v: View = slidingTabStrip.getChildAt(i)
             val params: ViewGroup.MarginLayoutParams =
