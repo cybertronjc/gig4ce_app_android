@@ -46,6 +46,8 @@ class PayoutDiffUtilCallback : CoreDiffUtilCallback<PayoutListPresentationItemDa
                         && oldItem.amount == newItem.amount
                         && oldItem.companyName == newItem.companyName
                         && oldItem.status == newItem.status
+                        && oldItem.category == newItem.category
+                        && oldItem.paymentDate == newItem.paymentDate
 
             } else if (oldItem is PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData &&
                 newItem is PayoutListPresentationItemData.MonthYearHeaderRecyclerItemData

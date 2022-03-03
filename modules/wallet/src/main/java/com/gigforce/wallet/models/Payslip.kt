@@ -2,7 +2,9 @@ package com.gigforce.wallet.models
 
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import java.time.LocalDate
 import java.time.Month
+import java.time.Year
 import java.util.*
 
 data class Payslip(
@@ -71,6 +73,14 @@ data class Payslip(
 
     fun getMonthNo(): Int {
         return Month.valueOf(monthOfPayment.toUpperCase(Locale.getDefault())).value
+    }
+
+    fun getDateOfPaymentLocalDate() : LocalDate{
+        return LocalDate.of(
+            yearOfPayment,
+            getMonthNo(),
+            1
+        )
     }
 
     @Exclude
