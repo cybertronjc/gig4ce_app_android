@@ -41,7 +41,7 @@
     <string name="something_wrong_wallet">something wrong</string>
     <string name="doing_really_great_wallet">You are doing really great</string>
     <string name="havent_set_monthly_goal_wallet">You haven\'t set your monthly goal</string>
-    <string name="serial_no_wallet">\"Serial No: \"</string>
+    <string name="serial_no_wallet">Serial No: </string>
     <string name="alert_wallet">Alert</string>
     <string name="okay_wallet">Okay</string>
     <string name="unable_to_open_wallet">Unable to open</string>

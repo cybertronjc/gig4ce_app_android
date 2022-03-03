@@ -10,6 +10,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:elevation="8dp" />
 
     <com.gigforce.wallet.components.WalletBalanceCard
@@ -19,6 +20,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
+        android:visibility="gone"
         app:cardCornerRadius="15dp" />
 
     <TextView
@@ -26,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:layout_marginStart="16dp"
         android:id="@+id/payslip_label"
         android:text="@string/payslips_wallet"/>
