@@ -89,7 +89,6 @@ class EventTrackerImp @Inject constructor(
         logEventOnMoEngage(args)
         if(args.eventName == "attendance")
             logEventOnEventBridge(args)
-        }
     }
 
     private fun logEventOnEventBridge(args: TrackingEventArgs) {
