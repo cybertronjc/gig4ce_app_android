@@ -25,9 +25,6 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.invisible
-import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -250,7 +247,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         contact_card.cardTitle = getString(R.string.contact)
         contact_card.cardContent = contactString
         contact_card.cardBottom = getString(R.string.add_contacts)
-        contact_card.edit_button.gone()
+//        contact_card.edit_button.gone()
 
 //        if (contact_card.edit_button != null) {
 //            contact_card.edit_button.setOnClickListener {
