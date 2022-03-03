@@ -87,8 +87,7 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnAppsFlyer(args)
         logEventOnMoEngage(args)
-        for(i in 1..50) {
-            if(args.eventName == "attendance")
+        if(args.eventName == "attendance")
             logEventOnEventBridge(args)
         }
     }
