@@ -18,8 +18,8 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding

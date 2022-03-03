@@ -1,18 +1,14 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.Joining
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningNew
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.common_ui.repository.LeadManagementRepository

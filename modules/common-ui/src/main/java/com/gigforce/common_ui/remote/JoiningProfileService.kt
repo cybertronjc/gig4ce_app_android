@@ -51,7 +51,8 @@ interface JoiningProfileService {
 
     @GET("joining/detail/{id}")
     suspend fun getJoiningInfo(
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("gigId") gigId : String?
     ): Response<GigerInfo>
 
     @GET("joining/pendingEjoining")

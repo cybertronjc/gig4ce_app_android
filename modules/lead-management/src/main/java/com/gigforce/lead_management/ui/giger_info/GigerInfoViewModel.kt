@@ -59,15 +59,22 @@ class GigerInfoViewModel @Inject constructor(
     private val _viewEffects = MutableSharedFlow<GigerInfoEffects>()
     val viewEffects = _viewEffects.asSharedFlow()
 
-    fun getGigerJoiningInfo(joiningId: String) = viewModelScope.launch {
+    fun getGigerJoiningInfo(
+        joiningId: String?,
+        gigId : String?
+    ) = viewModelScope.launch {
         _viewState.postValue(GigerInfoState.LoadingDataFromServer)
 
         try {
             logger.d(TAG, "fetching giger joining info...")
 
             currentJoiningId = joiningId
-            val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(joiningId)
+            val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(
+                joiningId,
+                gigId
+            )
             gigerInfo = gigerJoiningDetails
+            currentJoiningId = gigerJoiningDetails.gigerId
 
             _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)
 
@@ -82,6 +89,7 @@ class GigerInfoViewModel @Inject constructor(
             )
         }
     }
+
 
     fun openChangeTeamLeaderScreen() = viewModelScope.launch{
         val joiningInfo = gigerInfo ?: return@launch

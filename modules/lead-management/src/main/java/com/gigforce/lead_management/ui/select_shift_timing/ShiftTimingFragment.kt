@@ -1,12 +1,10 @@
 package com.gigforce.lead_management.ui.select_shift_timing
 
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,8 +25,8 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
