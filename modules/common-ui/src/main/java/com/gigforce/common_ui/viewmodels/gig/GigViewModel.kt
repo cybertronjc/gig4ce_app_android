@@ -66,7 +66,7 @@ class GigViewModel constructor(
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-            .getCurrentUserGigs()
+            .getCurrentUserGigs
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
                 if (querySnapshot != null) {
@@ -652,7 +652,7 @@ class GigViewModel constructor(
 
         _todaysGigs.value = Lce.loading()
         mWatchTodaysGigRegistration = gigsRepository
-            .getCurrentUserGigs()
+            .getCurrentUserGigs
             .whereGreaterThan("startDateTime", dateFull)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
@@ -682,7 +682,7 @@ class GigViewModel constructor(
         _todaysGigs.value = Lce.loading()
         try {
             val querySnapshot = gigsRepository
-                .getCurrentUserGigs()
+                .getCurrentUserGigs
                 .whereGreaterThan("startDateTime", dateFull)
                 .getOrThrow()
 
@@ -719,7 +719,7 @@ class GigViewModel constructor(
         try {
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
-                .getCurrentUserGigs()
+                .getCurrentUserGigs
                 .whereEqualTo("gigerId", currentUser.uid)
                 .whereEqualTo("gigOrderId", gigOrderId)
                 .whereGreaterThan("startDateTime", monthStart.toDate)
