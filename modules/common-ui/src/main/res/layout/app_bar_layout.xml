@@ -144,7 +144,7 @@
             android:background="?android:selectableItemBackground"
             android:visibility="gone"
             android:layout_marginEnd="@dimen/size_16"
-            android:src="@drawable/ic_three_dots"
+            android:src="@drawable/ic_three_dot"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -157,6 +157,7 @@
             android:visibility="visible"
             android:padding="@dimen/size_8"
             android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
             android:src="@drawable/ic_refresh"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/menuImageButton"
@@ -171,7 +172,7 @@
             android:background="?android:selectableItemBackground"
             app:tint="@color/white"
             android:layout_marginEnd="@dimen/size_16"
-            android:src="@drawable/ic_baseline_search_24"
+            android:src="@drawable/ic_search_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/filterImageFrame"
             app:layout_constraintTop_toTopOf="parent" />

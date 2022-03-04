@@ -61,6 +61,7 @@ abstract class VideoMessageView(
     private lateinit var playDownloadOverlayIV: ImageView
     private lateinit var attachmentUploadingDownloadingProgressBar: ProgressBar
     private lateinit var videoLength: TextView
+    private lateinit var linearRoot: LinearLayout
     private lateinit var receivedStatusIV: ImageView
     private lateinit var chatMessageText: TextView
 
@@ -104,6 +105,8 @@ abstract class VideoMessageView(
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
         senderNameTV.setOnClickListener(this)
+        linearRoot.setOnClickListener(this)
+        linearRoot.setOnLongClickListener(this)
     }
 
     fun loadViews() {
@@ -112,6 +115,7 @@ abstract class VideoMessageView(
         frameLayoutRoot = this.findViewById(R.id.frame)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
+        linearRoot = this.findViewById(R.id.linearRoot)
         attachmentNameTV = this.findViewById(R.id.tv_file_name)
         playDownloadIconIV = this.findViewById(R.id.play_download_icon_iv)
         playDownloadOverlayIV = this.findViewById(R.id.play_download_overlay_iv)
@@ -335,7 +339,7 @@ abstract class VideoMessageView(
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.cv_msgContainer) {
+        if (v?.id == R.id.cv_msgContainer || v?.id == R.id.linearRoot) {
             if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)) {

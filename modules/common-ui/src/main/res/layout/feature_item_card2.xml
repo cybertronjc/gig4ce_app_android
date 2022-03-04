@@ -4,17 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     style="@style/CardStyle.ItemStyle1"
-    android:layout_width="match_parent"
-    android:layout_height="82dp">
+    android:layout_width="90dp"
+    app:cardCornerRadius="@dimen/size_6"
+    android:layout_height="90dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?android:selectableItemBackground">
 
         <ImageView
             android:id="@+id/feature_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +28,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dp_sm4"
-            android:ellipsize="end"
-            android:maxLines="1"
+            android:singleLine="false"
             android:text="98765431230"
             android:gravity="center"
             android:paddingStart="@dimen/dp_xsm2"
-            android:paddingEnd="@dimen/dp_sm4"
+            android:paddingEnd="@dimen/dp_xsm2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

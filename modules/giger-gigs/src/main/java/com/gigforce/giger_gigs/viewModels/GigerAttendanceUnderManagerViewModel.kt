@@ -66,12 +66,9 @@ data class AttendanceFilters(
 
 @HiltViewModel
 class GigerAttendanceUnderManagerViewModel @Inject constructor(
-    private val buildConfig: IBuildConfigVM
+    private val gigersAttendanceRepository: GigersAttendanceRepository
 ) : ViewModel() {
 
-    //todo shift up
-    private val gigersAttendanceRepository: GigersAttendanceRepository =
-        GigersAttendanceRepository(buildConfig)
 
     @Inject
     lateinit var eventTracker: IEventTracker

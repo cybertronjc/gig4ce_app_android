@@ -1219,6 +1219,22 @@
         android:name="com.gigforce.verification.mainverification.MyDocumentsFragment"
         android:label="MyDocumentsFragment" />
 
+    <fragment
+        android:id="@+id/payoutMainFragment"
+        android:name="com.gigforce.wallet.payouts.PayoutMainFragment"
+        android:label="PayoutMainFragment"/>
+
+    <dialog
+        android:id="@+id/payoutDetailsBottomSheet"
+        android:name="com.gigforce.wallet.payouts.payout_details.PayoutDetailsFragment"
+        android:label="PayoutDetailsFragment"/>
+
+    <dialog
+        android:id="@+id/payoutListFilterFragment"
+        android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
+        android:label="PayoutListFilterFragment"/>
+
+
 
     =========
         android:id="@+id/viewLiveLocationFragment"

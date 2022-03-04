@@ -89,6 +89,7 @@
                 android:textColor="@color/lipstick_2"
                 android:textFontWeight="400"
                 android:text="@{teamLeader.stringForCity}"
+                app:layout_constraintBottom_toBottomOf="@id/team_leader_profile_picture_iv"
                 app:layout_constraintStart_toEndOf="@id/team_leader_profile_picture_iv"
                 app:layout_constraintTop_toBottomOf="@id/team_leader_name_textview"
                 tools:text="Bangalore" />

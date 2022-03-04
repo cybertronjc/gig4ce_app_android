@@ -112,4 +112,7 @@
 
     <color name="tab_background_unselected">#D0F6F5F5</color>
     <color name="tab_background_selected">#E42C64</color>
+
+    <color name="pink_text">#E42C64</color>
+    <color name="text_grey">#6F7070</color>
 </resources>
