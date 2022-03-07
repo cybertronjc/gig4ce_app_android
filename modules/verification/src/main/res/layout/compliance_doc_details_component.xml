@@ -2,98 +2,55 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<LinearLayout
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="46dp"
-    android:layout_margin="@dimen/size_4"
-    android:background="@drawable/card_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_20"
+        android:background="@drawable/card_background"
+        >
         <TextView
-            android:id="@+id/docType"
-            style="@style/primary_color_small_title"
-            android:layout_width="0dp"
+            android:id="@+id/doc_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_10"
-            android:gravity="start"
-            android:text="Form 2"
+            android:layout_marginTop="@dimen/size_10"
+            android:layout_marginStart="@dimen/size_20"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font14"
             android:fontFamily="@font/lato_bold"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/rightArrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/docTitle"
-            style="@style/primary_color_small_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_10"
-            android:gravity="start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/rightArrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/docType"/>
-
-        <ImageView
-            android:id="@+id/rightArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:selectableItemBackground"
-            android:layout_marginRight="@dimen/size_20"
-            android:src="@drawable/ic_grey_right_arrow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-
-        <ImageView
-            android:id="@+id/edit_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/vaccine_edit_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/download_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/copy_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/size_20"
-            android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_baseline_content_copy_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:text="UAN"/>
 
         <LinearLayout
-            android:id="@+id/download_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center"
-            android:visibility="gone">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/size_10">
 
-            <ImageView
+            <TextView
+                android:id="@+id/doc_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/size_20"
-                android:layout_marginLeft="@dimen/dp_mid"
-                android:src="@drawable/download_icon_ver"/>
+                android:text="xyz1234jucndfg123"
+                android:fontFamily="@font/lato"
+                android:textSize="@dimen/font12"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginStart="@dimen/size_20"/>
+
+            <ImageView
+                android:id="@+id/copy_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:padding="@dimen/size_4"
+                android:background="?android:selectableItemBackground"
+                android:layout_marginTop="@dimen/size_4"
+                android:src="@drawable/ic_copy_icon" />
+
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</LinearLayout>
+    </LinearLayout>
 </layout>

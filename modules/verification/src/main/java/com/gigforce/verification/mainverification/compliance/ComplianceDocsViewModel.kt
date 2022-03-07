@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import com.gigforce.verification.mainverification.compliance.models.ComplianceDocDetailsDM
+import com.gigforce.verification.mainverification.compliance.models.DataListItem
 import com.gigforce.verification.mainverification.vaccine.IntermediateVaccinationRepo
 import com.gigforce.verification.mainverification.vaccine.mainvaccine.FileDownloaded
 import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
@@ -30,18 +31,19 @@ class ComplianceDocsViewModel @Inject constructor(private val verificationKycRep
             val data = arrayListOf<ComplianceDocDetailsDM>()
             data.add(
                 ComplianceDocDetailsDM(
-                    type = "form_2",
-                    name = "Form 2",
+                    type = "offer_letter",
+                    name = "OFFER LETTER",
+                    value = "",
                     path = null,
-                    data = null
-                )
-            )
-            data.add(
-                ComplianceDocDetailsDM(
-                    type = "form_11",
-                    name = "Form 11",
-                    path = null,
-                    data = null
+                    data = arrayListOf(
+                        DataListItem(
+                            "Gigforce Offer Letter",
+                            "http://www.africau.edu/images/default/sample.pdf"
+                        ), DataListItem(
+                            "Delhivery Offer Letter",
+                            "http://www.africau.edu/images/default/sample.pdf"
+                        )
+                    )
                 )
             )
             data.add(
@@ -53,6 +55,27 @@ class ComplianceDocsViewModel @Inject constructor(private val verificationKycRep
                     data = null
                 )
             )
+            data.add(
+                ComplianceDocDetailsDM(
+                    type = "esic",
+                    name = "ESIC",
+                    value = "4754343543543",
+                    path = null,
+                    data = null
+                )
+            )
+            data.add(
+                ComplianceDocDetailsDM(
+                    type = "pf",
+                    name = "PF",
+                    value = "4754343543543",
+                    path = null,
+                    data = null
+                )
+            )
+
+
+
             _complianceLiveData.value = Lce.content(data)
 //            val data = intermediatorRepo.getAllVaccinationDataList(userIdToUse)
 //            _complianceLiveData.value = Lce.content(data)

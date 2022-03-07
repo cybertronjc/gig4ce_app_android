@@ -1,24 +1,26 @@
 package com.gigforce.verification.mainverification
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
+import android.widget.LinearLayout
+import androidx.navigation.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.gigforce.common_ui.CommonIntentExtras
+import com.gigforce.common_ui.DisplayUtil.px
+import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.FragmentMyDocumentsBinding
-import com.gigforce.verification.mainverification.compliance.ComplianceDocsFragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.verification_main_fragment.*
-import java.lang.NullPointerException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyDocumentsFragment : Fragment() {
+class MyDocumentsFragment : BaseFragment2<FragmentMyDocumentsBinding>(
+    fragmentName = TAG,
+    layoutId = R.layout.fragment_my_documents,
+    statusBarColor = R.color.lipstick_2
+) {
 
     companion object {
         fun newInstance() = MyDocumentsFragment()
@@ -30,77 +32,95 @@ class MyDocumentsFragment : Fragment() {
 
     lateinit var pagerAdapter: MyDocumentsPagerAdapter
 
+    private var title = ""
     var selectedTab = 0
-    private lateinit var viewBinding: FragmentMyDocumentsBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        StatusBarUtil.setColorNoTranslucent(
-            requireActivity(),
-            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
-        )
-        viewBinding = FragmentMyDocumentsBinding.inflate(inflater, container, false)
-        return viewBinding.root
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         getIntentData(savedInstanceState)
-        initViews()
-        initListeners()
     }
 
-    var title = ""
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            title = it.getString("title") ?: ""
+            title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
         } ?: run {
             arguments?.let {
-                title = it.getString("title") ?: ""
+                title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
             }
         }
     }
 
-    private fun initListeners() = viewBinding.apply{
-        val mediaArray = arrayOf(
-            "KYC Docs",
-            "Compliance"
-        )
-        pagerAdapter = MyDocumentsPagerAdapter(childFragmentManager, lifecycle)
-        viewPager.adapter = pagerAdapter
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE, title)
+    }
 
-        TabLayoutMediator(verificationTabLayout, viewPager) { tab, position ->
-            tab.text = mediaArray[position]
+    override fun viewCreated(
+        viewBinding: FragmentMyDocumentsBinding,
+        savedInstanceState: Bundle?
+    ) {
+        initAppBar()
+        viewBinding.viewPager.adapter = MyDocumentsPagerAdapter(this)
+        //viewBinding.viewPager.registerOnPageChangeCallback(viewPagePageChangeCallback)
+
+        TabLayoutMediator(
+            viewBinding.verificationTabLayout,
+            viewBinding.viewPager
+        ) { tab, position ->
+            tab.text = MyDocumentsPagerAdapter.TABS[position].fragmentTabName
         }.attach()
+        initTabLayout()
     }
 
-    private fun initViews() = viewBinding.apply{
+    private fun initTabLayout() {
+        val tabs = viewBinding.verificationTabLayout.getChildAt(0) as ViewGroup
 
-        appBarComp.apply {
-            if (title.isNotBlank())
-                this.setAppBarTitle(title)
+        for (i in 0 until tabs.childCount) {
+            val tab = tabs.getChildAt(i)
+            val layoutParams = tab.layoutParams as LinearLayout.LayoutParams
+            layoutParams.weight = 0f
+
+            layoutParams.marginEnd = 12.px
+            tab.layoutParams = layoutParams
+            viewBinding.verificationTabLayout.requestLayout()
         }
 
-        val betweenSpace = 25
-
-        val slidingTabStrip: ViewGroup = verificationTabLayout.getChildAt(0) as ViewGroup
-
-        for (i in 0 until slidingTabStrip.childCount - 1) {
-            val v: View = slidingTabStrip.getChildAt(i)
-            val params: ViewGroup.MarginLayoutParams =
-                v.layoutParams as ViewGroup.MarginLayoutParams
-            params.rightMargin = betweenSpace
-        }
-
-        try {
-            //showToast("position: ${selectedTab}")
-            verificationTabLayout.getTabAt(selectedTab)?.select()
-        } catch (e: NullPointerException) {
-            e.printStackTrace()
-        }
-
+        //viewBinding.viewPager.registerOnPageChangeCallback(viewPagePageChangeCallback)
     }
+
+    private fun initAppBar() = viewBinding.appBarComp.apply {
+        if (title.isNotBlank())
+            setAppBarTitle(title)
+        else
+            setAppBarTitle("My Documents")
+        changeBackButtonDrawable()
+        makeBackgroundMoreRound()
+        setBackButtonListener {
+            findNavController().navigateUp()
+        }
+    }
+
+//    private val viewPagePageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+//
+//        override fun onPageSelected(position: Int) {
+//            super.onPageSelected(position)
+//
+//            try {
+//                viewBinding.appBarComp.filterImageButton.isVisible = position == 0
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+//
+//    override fun onDestroy() {
+//        try {
+//            viewBinding.viewPager.unregisterOnPageChangeCallback(viewPagePageChangeCallback)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//        super.onDestroy()
+//    }
+
+
 }
