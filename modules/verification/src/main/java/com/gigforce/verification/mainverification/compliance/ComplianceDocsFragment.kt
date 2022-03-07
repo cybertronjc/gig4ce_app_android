@@ -6,17 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.ComplianceDocsFragmentBinding
 import com.gigforce.verification.databinding.FragmentMyDocumentsBinding
 import com.gigforce.verification.mainverification.MyDocumentsPagerAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.vaccine_main_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +45,13 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
     @Inject
     lateinit var eventTracker: IEventTracker
 
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +70,30 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
         //getIntentData(savedInstanceState)
         initViews()
         initListeners()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel.getComplianceData(user?.uid)
+        viewModel.complianceLiveData.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            when (it) {
+                Lce.Loading -> {
+                    progressBar.visible()
+                }
+                is Lce.Content -> {
+                    progressBar.gone()
+                    viewBinding.complianceRv.collection = it.content
+                }
+                is Lce.Error -> {
+                    progressBar.gone()
+                }
+                else -> {
+
+                }
+            }
+        })
     }
 
     private fun initListeners() {
