@@ -16,7 +16,7 @@ class EventBridgeRepo(private val event_bridge_url: String) {
             val eventBridgeModel = EventBridgeModel(activityType = eventName, gigerId = user.uid)
             try {
 //                eventBridgeService.setStatus(event_bridge_url,eventBridgeModel)
-                var propData = HashMap<String, Any>()
+                val propData = HashMap<String, Any>()
                 props?.let {
                     for(data in it.entries){
                         propData.put(data.key,data.value)
@@ -25,7 +25,7 @@ class EventBridgeRepo(private val event_bridge_url: String) {
                 propData.put("gigerId", user.uid)
                 propData.put("activityType", eventName)
 
-                var jsonObject = Gson().toJsonTree(propData).asJsonObject
+                val jsonObject = Gson().toJsonTree(propData).asJsonObject
                 eventBridgeService.setMapStatus(event_bridge_url, jsonObject)
             } catch (e: Exception) {
                 Log.e("errorfound",e.toString())

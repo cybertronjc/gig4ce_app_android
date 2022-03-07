@@ -40,6 +40,7 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.KeyboardUtils
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.gigforce.lead_management.LeadManagementNavDestinations
@@ -50,6 +51,8 @@ import com.gigforce.common_ui.location.LocationUpdatesService
 import com.gigforce.core.AppConstants
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import com.gigforce.wallet.PayoutConstants
+import com.gigforce.wallet.PayoutNavigation
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -120,6 +123,9 @@ class MainActivity : BaseActivity(),
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var payoutNavigation : PayoutNavigation
 
     override fun getINavigation(): INavigation {
         return navigation
@@ -296,8 +302,15 @@ class MainActivity : BaseActivity(),
                     StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
                     false
                 ) -> {
-                    Log.d("datahere", "main")
                    handleLoginSummaryNav()
+                }
+
+                //deep linking for home screen is handled here
+                intent.getBooleanExtra(
+                    StringConstants.HOME_SCREEN_VIA_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleHomeScreenNav()
                 }
 
                 //deep linking for onboarding form is handled here
@@ -305,7 +318,6 @@ class MainActivity : BaseActivity(),
                     StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value,
                     false
                 ) -> {
-                    Log.d("datahere", "main")
                     handleOnboardingFormNav()
                 }
 
@@ -353,6 +365,14 @@ class MainActivity : BaseActivity(),
                 ) -> {
                     handleVaccinationScreen()
                 }
+                intent.getBooleanExtra(
+                    StringConstants.PAYOUT_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handlePayoutDeeplink(
+                        intent
+                    )
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -363,6 +383,12 @@ class MainActivity : BaseActivity(),
             lookForNewChatMessages()
         }
         profileDataSnapshot()
+
+        //keyboard listener
+        KeyboardUtils.addKeyboardToggleListener(this, KeyboardUtils.SoftKeyboardToggleListener {
+            Log.d("keyboardMain", "keyboard visible: "+it)
+            sharedPreAndCommonUtilInterface.saveDataBoolean("KeyboardVisibility", it)
+        })
     }
 
     private fun handleVerificationScreen() {
@@ -372,6 +398,21 @@ class MainActivity : BaseActivity(),
         }
         navController.popBackStack()
         navController.navigate(R.id.gigerVerificationFragment)
+    }
+
+    private fun handlePayoutDeeplink(
+        intent: Intent
+    ) {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+
+        val payoutId = intent.getStringExtra(PayoutConstants.INTENT_EXTRA_PAYOUT_ID)
+        navController.popBackStack()
+        payoutNavigation.openPayoutList(
+            payoutId
+        )
     }
 
     private fun handleDrivingLicenceNav() {
@@ -444,6 +485,18 @@ class MainActivity : BaseActivity(),
             R.id.teamLeaderLoginDetailsFragment, bundleOf(
                 StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
             )
+        )
+
+    }
+
+    private fun handleHomeScreenNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(
+            R.id.onboardingLoaderfragment
         )
 
     }
@@ -740,7 +793,12 @@ class MainActivity : BaseActivity(),
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
         } else {
-            if (intent?.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) == true) {
+            if(intent?.getBooleanExtra(
+                StringConstants.PAYOUT_DEEP_LINK.value,
+                false
+            ) == true) {
+                handlePayoutDeeplink(intent)
+            } else if (intent?.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) == true) {
 
                 if (!isUserLoggedIn()) {
                     proceedWithNormalNavigation()

@@ -516,6 +516,31 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.lipstick_two, null)
         )
+        if (testingchipgrp.checkedChipId == 0){
+            //hide chip
+            user_details_layout.gone()
+            enrolled_users_rv.visible()
+            toolbar_layout.showSearchOption(getString(R.string.search_user_amb))
+            toolbar_layout.hideSubTitle()
+
+            if (enrolledUserAdapter.itemCount != 0) {
+                createProfileBtn.visible()
+                share_link.visible()
+                no_users_enrolled_layout.gone()
+            } else {
+                createProfileBtn.gone()
+                share_link.gone()
+                no_users_enrolled_layout.visible()
+            }
+        } else if (testingchipgrp.checkedChipId == 1){
+            no_users_enrolled_layout.gone()
+            enrolled_users_rv.gone()
+            toolbar_layout.hideSearchOption()
+            toolbar_layout.hideSubTitle()
+            createProfileBtn.gone()
+            share_link.gone()
+            user_details_layout.visible()
+        }
         locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates.setLocationUpdateCallbacks(this)
     }

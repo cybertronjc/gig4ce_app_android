@@ -115,7 +115,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
         override fun handleOnBackPressed() {
             if (toolbar.isSearchCurrentlyShown) {
-                hideSoftKeyboard()
+                //hideSoftKeyboard()
             } else if (sharedFileSubmitted) {
                 navigation.navigateTo("common/landingScreen")
             }  else if (isMultiSelectEnable) {
@@ -123,6 +123,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                 viewModel.clearSelectedChats()
                 makeMultiSelectUiEnable(false)
             } else {
+                hideSoftKeyboard()
                 isEnabled = false
                 activity?.onBackPressed()
             }
@@ -417,7 +418,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         toolbar.setBackButtonListener {
 
             if (toolbar.isSearchCurrentlyShown) {
-                hideSoftKeyboard()
+                //hideSoftKeyboard()
             } else if (sharedFileSubmitted) {
                 navigation.navigateTo("common/landingScreen")
             } else if(isMultiSelectEnable){
@@ -426,6 +427,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                 makeMultiSelectUiEnable(false)
 
             } else {
+                hideSoftKeyboard()
                 backPressHandler.isEnabled = false
                 activity?.onBackPressed()
             }

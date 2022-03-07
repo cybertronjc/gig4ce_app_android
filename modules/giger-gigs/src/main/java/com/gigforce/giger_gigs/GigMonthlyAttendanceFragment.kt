@@ -22,9 +22,11 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_gigs.viewModels.GigerAttendanceViewModel
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*
 import java.time.LocalDate
@@ -34,9 +36,10 @@ import java.time.ZonedDateTime
 import java.time.format.TextStyle
 import java.util.*
 
+@AndroidEntryPoint
 class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListener {
 
-    private val viewModel: GigViewModel by viewModels()
+    private val viewModel: GigerAttendanceViewModel by viewModels()
 
     private val adapter: GigAttendanceAdapter by lazy {
         GigAttendanceAdapter(

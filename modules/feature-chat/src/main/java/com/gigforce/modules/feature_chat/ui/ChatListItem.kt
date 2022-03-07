@@ -111,6 +111,7 @@ class ChatListItem(
                             chatHeader.unreadCount.toString(),
                             ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
+                    unseenMessageCountIV.visible()
                     unseenMessageCountIV.setImageDrawable(drawable)
 //                    textViewName.setTextColor(
 //                            ResourcesCompat.getColor(context.resources,
@@ -126,6 +127,7 @@ class ChatListItem(
 //                                    null
 //                            )
 //                    )
+                    unseenMessageCountIV.gone()
                     unseenMessageCountIV.setImageDrawable(null)
                     //txtSubtitle.setTypeface(null, Typeface.NORMAL);
                 }
@@ -163,7 +165,7 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(Uri.parse(chatHeader.profilePath))
-                                    .placeholder(R.drawable.ic_user_2)
+                                    .placeholder(R.drawable.ic_default_profile_light_pink)
                                     .into(contextImageView)
                         } else {
 
@@ -174,12 +176,12 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(profilePathRef)
-                                    .placeholder(R.drawable.ic_user_2)
+                                    .placeholder(R.drawable.ic_default_profile_light_pink)
                                     .into(contextImageView)
                         }
                     } else {
 
-                        Glide.with(context).load(R.drawable.ic_user_2).into(contextImageView)
+                        Glide.with(context).load(R.drawable.ic_default_profile_light_pink).into(contextImageView)
                     }
 
                 } else if (chatHeader.type == ChatConstants.CHAT_TYPE_GROUP) {
