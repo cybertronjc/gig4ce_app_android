@@ -101,7 +101,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         }
     }
 
-    suspend fun getComplianceData(): List<ComplianceDocDetailsDM> {
+    suspend fun getComplianceData(): ComplianceDataModel {
         val complianceStatus = kycService.getComplianceData(
             iBuildConfigVM.getComplianceDataUrl()
         )

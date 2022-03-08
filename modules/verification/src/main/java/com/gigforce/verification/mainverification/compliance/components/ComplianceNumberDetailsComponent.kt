@@ -8,29 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.verification.databinding.ComplianceDocDetailsComponentBinding
 import com.gigforce.common_ui.remote.verification.ComplianceDocDetailsDM
+import com.gigforce.verification.databinding.ComplianceNumberDetailsComponentBinding
 import com.toastfix.toastcompatwrapper.ToastHandler.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ComplianceDocDetailsComponent (context: Context, attrs: AttributeSet?) :
+class ComplianceNumberDetailsComponent (context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder, View.OnClickListener {
 
     @Inject
     lateinit var navigation: INavigation
 
-    private var viewBinding: ComplianceDocDetailsComponentBinding
+    private var viewBinding: ComplianceNumberDetailsComponentBinding
     //Data
     private lateinit var currentData: ComplianceDocDetailsDM
 
     init {
-        viewBinding = ComplianceDocDetailsComponentBinding.inflate(
+        viewBinding = ComplianceNumberDetailsComponentBinding.inflate(
             LayoutInflater.from(context),
             this,
             true

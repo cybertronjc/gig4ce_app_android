@@ -52,5 +52,5 @@ interface VerificationKycService {
     @GET
     suspend fun getComplianceData(
         @Url getComplianceDataUrl: String
-    ): Response<List<ComplianceDocDetailsDM>>
+    ): Response<ComplianceDataModel>
 }
