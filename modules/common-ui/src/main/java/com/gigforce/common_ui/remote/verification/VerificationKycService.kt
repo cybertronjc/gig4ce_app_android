@@ -48,4 +48,9 @@ interface VerificationKycService {
         @Url getKycOcrUrl: String,
         @Body data: Data1
     ): Response<BaseResponse<Any>>
+
+    @GET
+    suspend fun getComplianceData(
+        @Url getComplianceDataUrl: String
+    ): Response<List<ComplianceDocDetailsDM>>
 }

@@ -23,6 +23,7 @@
             android:layout_marginStart="@dimen/size_20"
             android:textColor="@color/black"
             android:textSize="@dimen/font14"
+            android:visibility="gone"
             android:fontFamily="@font/lato_bold"
             app:layout_constraintTop_toBottomOf="@id/compliance_rv"
             android:text="Compliance Documents"/>
@@ -31,10 +32,46 @@
             android:id="@+id/docs_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_mid"
             android:layout_marginBottom="@dimen/dp_mid"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/compliance_title"/>
+
+        <LinearLayout
+            android:id="@+id/no_compliance_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/no_compliance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_4"
+                android:background="?android:selectableItemBackground"
+                android:layout_marginTop="@dimen/size_4"
+                android:src="@drawable/ic_no_compliance" />
+
+            <TextView
+                android:id="@+id/no_compliance_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginStart="@dimen/size_20"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font14"
+                android:gravity="center"
+                android:fontFamily="@font/lato_bold"
+                app:layout_constraintTop_toBottomOf="@id/compliance_rv"
+                android:text="@string/no_compliance_generated_veri"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/progressBar"

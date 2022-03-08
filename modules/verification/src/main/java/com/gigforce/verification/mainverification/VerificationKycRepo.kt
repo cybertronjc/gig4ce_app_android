@@ -101,6 +101,19 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         }
     }
 
+    suspend fun getComplianceData(): List<ComplianceDocDetailsDM> {
+        val complianceStatus = kycService.getComplianceData(
+            iBuildConfigVM.getComplianceDataUrl()
+        )
+        if (complianceStatus.isSuccessful) {
+            return complianceStatus.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : kycOcrVerification Method ${complianceStatus.message()}")
+            throw Exception("Issue in KYC Ocr result ${complianceStatus.message()}")
+        }
+    }
+
     override fun getCollectionName(): String =
         COLLECTION_NAME
 

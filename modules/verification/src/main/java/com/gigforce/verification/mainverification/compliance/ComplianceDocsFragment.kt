@@ -45,13 +45,6 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
     @Inject
     lateinit var eventTracker: IEventTracker
 
-    private var userId: String? = null
-    private val user: FirebaseUser?
-        get() {
-            return FirebaseAuth.getInstance().currentUser
-        }
-    private var userIdToUse: String? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,23 +67,26 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initViewModel() {
-        viewModel.getComplianceData(user?.uid)
+        viewModel.getComplianceData()
         viewModel.complianceLiveData.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
-
             when (it) {
                 Lce.Loading -> {
                     progressBar.visible()
                 }
                 is Lce.Content -> {
                     progressBar.gone()
-                    viewBinding.complianceRv.collection = it.content
+                    if (it.content.isEmpty()){
+                        viewBinding.noComplianceData.visible()
+                        viewBinding.complianceRv.gone()
+                    } else {
+                        viewBinding.complianceRv.visible()
+                        viewBinding.complianceRv.collection = it.content
+                    }
+
                 }
                 is Lce.Error -> {
                     progressBar.gone()
-                }
-                else -> {
-
                 }
             }
         })
