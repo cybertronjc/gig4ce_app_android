@@ -87,6 +87,8 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
                 }
                 is Lce.Error -> {
                     progressBar.gone()
+                    viewBinding.noComplianceData.visible()
+                    viewBinding.complianceRv.gone()
                 }
             }
         })
