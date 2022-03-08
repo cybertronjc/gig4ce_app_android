@@ -274,12 +274,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/addLine2">
 
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/stateSpinner"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:clickable="true"
-                            android:inputType="none"
+                            android:inputType="textVisiblePassword"
                             android:padding="4dp"
                             tools:ignore="KeyboardInaccessibleWidget" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -298,12 +298,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/stateLayout">
 
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/citySpinner"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:clickable="true"
-                            android:inputType="none"
+                            android:inputType="textVisiblePassword"
                             android:padding="4dp"
                             tools:ignore="KeyboardInaccessibleWidget" />
                     </com.google.android.material.textfield.TextInputLayout>

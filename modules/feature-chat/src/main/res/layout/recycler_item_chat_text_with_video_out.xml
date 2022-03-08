@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearRoot"
+            android:orientation="vertical">
+        <LinearLayout
             android:id="@+id/cv_msgContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,6 +141,21 @@
                 android:textSize="16sp"
                 tools:text="How are you my dededbrother" />
 
+            <TextView
+                android:id="@+id/chat_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/thumbnail_layout"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:layout_gravity="bottom"
+                android:maxWidth="178dp"
+                android:visibility="visible"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tools:text="How are you my dededbrother" />
+
             <ImageView
                 android:id="@+id/tv_received_status"
                 android:layout_width="12dp"
@@ -164,6 +184,7 @@
 
         </RelativeLayout>
 
+        </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </merge>

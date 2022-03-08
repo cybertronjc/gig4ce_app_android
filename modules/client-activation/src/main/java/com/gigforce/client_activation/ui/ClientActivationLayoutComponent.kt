@@ -29,7 +29,7 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
     @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this)!!).get()
+        viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this.rootView)!!).get()
 
         data?.let { data->
             if(data is ClientActivationLayoutDVM ) {

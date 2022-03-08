@@ -1,5 +1,6 @@
 package com.gigforce.giger_app.calendarscreen.maincalendarscreen
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +25,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarHomeScreenViewModel : ViewModel() {
+    var state: Parcelable? = null
+
     // TODO: Implement the ViewModel
     var currentBottomSheetState = ExtendedBottomSheetBehavior.STATE_COLLAPSED
     private val _bankDetailedObject = MutableLiveData<BankDetailsDataModel>()

@@ -29,7 +29,9 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
@@ -90,6 +92,9 @@ class AadharDetailInfoFragment : Fragment(),
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var buildConfig: IBuildConfig
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var navigation: INavigation
@@ -780,6 +785,11 @@ class AadharDetailInfoFragment : Fragment(),
             viewBinding.progressBar.gone()
             if (updated) {
                 showToast(getString(R.string.data_uploaded_veri))
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        "Aadhaar_form_submitted", null
+                    )
+                )
                 viewModel.getVerificationData(userIdToUse.toString())
             }
 
@@ -819,6 +829,11 @@ class AadharDetailInfoFragment : Fragment(),
             processKycData(kycData)
             it.aadhaar_card_questionnaire?.apply {
                 if (verified == true) {
+
+                    var props = HashMap<String, Any>()
+                    props.put("Aadhaar verified", true)
+                    eventTracker.setUserProperty(props)
+
                     allFieldsEnable(false)
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
                     viewBinding.submitButton.text = getString(R.string.next_veri)
@@ -887,7 +902,9 @@ class AadharDetailInfoFragment : Fragment(),
         addLine1Input.isEnabled = enable
         addLine2Input.isEnabled = enable
         stateSpinner.isEnabled = enable
+        stateLayout.isEnabled = enable
         citySpinner.isEnabled = enable
+        cityLayout.isEnabled = enable
         pincode.editText?.isEnabled = enable
         landmark.editText?.isEnabled = enable
         nomineeCheckbox.isEnabled = enable
@@ -1236,18 +1253,19 @@ class AadharDetailInfoFragment : Fragment(),
                 Log.d("image", outputFileUri.toString())
             }
         } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =
-                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            clickedImagePath = imageUriResultCrop
-            if (imageUriResultCrop != null) {
-                showAadharImage(
-                    imageUriResultCrop,
-                    viewBinding.toplayoutblock.viewPager2.currentItem
-                )
-                uploadImage(imageUriResultCrop)
+            data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA)?.let { uriStringValue->
+                val imageUriResultCrop: Uri? =
+                    Uri.parse(uriStringValue)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                clickedImagePath = imageUriResultCrop
+                if (imageUriResultCrop != null) {
+                    showAadharImage(
+                        imageUriResultCrop,
+                        viewBinding.toplayoutblock.viewPager2.currentItem
+                    )
+                    uploadImage(imageUriResultCrop)
+                }
             }
-
         }
     }
 

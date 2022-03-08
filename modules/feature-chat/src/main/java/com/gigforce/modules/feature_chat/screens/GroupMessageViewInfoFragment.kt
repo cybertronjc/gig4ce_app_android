@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.databinding.FragmentMessageInfoBinding
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class GroupMessageViewInfoFragment : Fragment() {
 
     private val viewModel: GroupChatViewModel by viewModels()
-    private lateinit var viewBinding: FragmentMessageViewedInfoBinding
+    private lateinit var viewBinding: FragmentMessageInfoBinding
 
     private lateinit var groupId: String
     private lateinit var messageId: String
@@ -29,7 +32,7 @@ class GroupMessageViewInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = FragmentMessageViewedInfoBinding.inflate(
+        viewBinding = FragmentMessageInfoBinding.inflate(
             inflater,
             container,
             false
@@ -49,15 +52,19 @@ class GroupMessageViewInfoFragment : Fragment() {
     }
 
     private fun initView() {
-        viewBinding.toolbar.apply {
-            showTitle(context.getString(R.string.message_info_chat))
-            hideActionMenu()
-            setBackButtonListener {
+        viewBinding.appBarComp.apply {
+            setAppBarTitle("Message info")
+            makeBackgroundMoreRound()
+            setBackButtonDrawable(R.drawable.ic_icon_back_button)
+            makeSearchVisible(false)
+            makeRefreshVisible(false)
+            setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
-            }
+            })
         }
 
         viewBinding.messageViewedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        viewBinding.messageDeliveredRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun getDataFrom(
@@ -85,8 +92,15 @@ class GroupMessageViewInfoFragment : Fragment() {
         viewModel.messageReadingInfo
             .observe(viewLifecycleOwner, {
 
-                viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + it.readingInfo.size + "/ " + it.totalMembers)
+                //viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + " "+ it.readingInfo.size + "/ " + it.totalMembers)
+                viewBinding.readByRemaining.text = (it.totalMembers - it.readingInfo.size).toString() + " remaining"
                 viewBinding.messageViewedRecyclerView.collection = it.readingInfo
+
+                viewBinding.deliveredByRemaining.text = (it.totalMembers - it.receivingInfo.size).toString() + " remaining"
+                viewBinding.messageDeliveredRecyclerView.collection = it.receivingInfo
+
+                viewBinding.nestedScrollView.visible()
+                viewBinding.infoShimmer.gone()
             })
     }
 

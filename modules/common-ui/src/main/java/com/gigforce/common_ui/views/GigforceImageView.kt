@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.AttributeSet
 import android.util.Patterns
+import android.webkit.URLUtil
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -72,8 +73,7 @@ class GigforceImageView(
         centerCrop: Boolean = false
     ) {
 
-        val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
-        if (isUrl) {
+        if (isUrl(urlOrFirebasePath)) {
             loadImage(
                 Uri.parse(urlOrFirebasePath),
                 placeHolder,
@@ -158,14 +158,15 @@ class GigforceImageView(
         profilePictureThumbnail: String?,
         profilePicture: String?
     ) {
-        if (profilePicture.isNullOrEmpty() && profilePictureThumbnail.isNullOrEmpty()) {
+        if ((profilePicture.isNullOrEmpty() && profilePictureThumbnail.isNullOrEmpty()) ||
+            profilePicture == "avatar.jpg"
+        ) {
             loadDefaultUserAvatar()
         } else {
 
             if (!profilePictureThumbnail.isNullOrBlank()) {
 
-                val isUrl = Patterns.WEB_URL.matcher(profilePictureThumbnail).matches()
-                if (isUrl) {
+                if (isUrl(profilePictureThumbnail)) {
 
                     loadImage(
                         Uri.parse(profilePictureThumbnail),
@@ -183,8 +184,8 @@ class GigforceImageView(
                 }
             } else {
 
-                val isUrl = Patterns.WEB_URL.matcher(profilePicture).matches()
-                if (isUrl) {
+
+                if (isUrl(profilePicture)) {
 
                     loadImage(
                         Uri.parse(profilePicture),
@@ -226,5 +227,11 @@ class GigforceImageView(
 
     fun clearImage() {
         Glide.with(context).clear(this)
+    }
+
+    fun isUrl(
+        string : String?
+    ) : Boolean{
+        return URLUtil.isHttpUrl(string) || URLUtil.isHttpsUrl(string)
     }
 }

@@ -10,7 +10,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.models.JpSettings
@@ -388,7 +387,7 @@ class ApplicationClientActivationFragment : Fragment(),
             //code to get data for title type
 
         }
-        var bundleForFragment = bundleOf(
+        val bundleForFragment = bundleOf(
             StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,
             StringConstants.FROM_CLIENT_ACTIVATON.value to true,
             StringConstants.ACTION.value to UPLOAD_PROFILE_PIC,
@@ -458,6 +457,10 @@ class ApplicationClientActivationFragment : Fragment(),
                 "client_activation/pfesicFragment",
                 bundleForFragment
             )
+            "vaccination" -> navigation.navigateTo(
+                "verification/VaccineMainFragment",
+                bundleForFragment
+            )
         }
     }
 
@@ -498,6 +501,9 @@ class ApplicationClientActivationFragment : Fragment(),
             }
             "pf_esic" -> {
                 return "client_activation/pfesicFragment"
+            }
+            "vaccination" -> {
+                return "verification/VaccineMainFragment"
             }
             else -> return ""
         }

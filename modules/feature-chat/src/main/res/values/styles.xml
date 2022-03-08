@@ -16,6 +16,14 @@
 
     <style name="SwitchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
         <item name="thumbTint">@color/switch_button_background</item>
+<!--         active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#FCEAF0</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#979C9E</item>
+
+<!--         inactive track color (30% transparency)-->
+        <item name="android:colorForeground">#F3F3F3</item>
     </style>
 
     <style name="PopupMenuChat" parent="@android:style/Widget.PopupMenu">
@@ -38,6 +46,11 @@
         <item name="android:fontFamily">@font/lato</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

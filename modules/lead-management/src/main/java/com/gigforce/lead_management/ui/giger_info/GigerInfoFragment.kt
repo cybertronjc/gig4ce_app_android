@@ -450,9 +450,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             )
         }
 
-        bottomButtonLayout.changeTLBtn.setOnClickListener {
+        this.overlayCardLayout.editReportingTlImageview.setOnClickListener {
             viewModel.openChangeTeamLeaderScreen()
         }
+
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
             eventTracker.pushEvent(
@@ -463,7 +464,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     )
                 )
             )
-
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "tl_call_giger", null
+                )
+            )
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,

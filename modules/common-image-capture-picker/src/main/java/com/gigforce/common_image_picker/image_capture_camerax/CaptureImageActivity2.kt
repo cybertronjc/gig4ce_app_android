@@ -4,12 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.ImageFormat
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -20,6 +21,7 @@ import com.gigforce.common_image_picker.image_capture_camerax.fragments.ImageVie
 import com.gigforce.common_image_picker.image_capture_camerax.fragments.PermissionsFragment
 import com.gigforce.core.base.BaseActivity
 import java.io.File
+
 
 class CameraActivity : BaseActivity() {
 
@@ -172,12 +174,31 @@ class CameraActivity : BaseActivity() {
         transaction.commit()
     }
 
+    private fun getFrontFacingCameraId(
+        cManager: CameraManager
+    ): String? {
+        try {
+            for (i in cManager.cameraIdList.indices) {
+                val cameraId = cManager.cameraIdList[i]
+                val characteristics = cManager.getCameraCharacteristics(cameraId)
+                val cameraOrientation = characteristics.get(CameraCharacteristics.LENS_FACING)
+                if (CameraCharacteristics.LENS_FACING_FRONT == cameraOrientation) {
+                    return cameraId
+                }
+            }
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
     private fun replaceImagePreviewFragmentWithCameraViewFragment() {
 
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val frontFacingCameraId = getFrontFacingCameraId(cameraManager) ?: return
 
         val cameraFragment = CameraFragment.getInstance(
-            cameraId = cameraManager.cameraIdList[1],
+            cameraId = frontFacingCameraId,
             pixelFormat = ImageFormat.JPEG
         )
 
@@ -194,24 +215,21 @@ class CameraActivity : BaseActivity() {
     private fun openCameraFragment() {
 
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val cameraIdList = cameraManager.cameraIdList
-        if (cameraIdList.isEmpty()) return
+        val frontFacingCameraId = getFrontFacingCameraId(cameraManager) ?: return
 
-        if (cameraIdList.size > 1) {
-            val cameraFragment = CameraFragment.getInstance(
-                cameraId = cameraIdList[1],
-                pixelFormat = ImageFormat.JPEG
-            )
+        val cameraFragment = CameraFragment.getInstance(
+            cameraId = frontFacingCameraId,
+            pixelFormat = ImageFormat.JPEG
+        )
 
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(
-                R.id.fragment_container,
-                cameraFragment,
-                CameraFragment.TAG
-            )
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            transaction.commit()
-        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(
+            R.id.fragment_container,
+            cameraFragment,
+            CameraFragment.TAG
+        )
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        transaction.commit()
     }
 
     companion object {

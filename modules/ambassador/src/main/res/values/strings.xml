@@ -74,7 +74,7 @@
     <string name="click_select_pan_image_amb">Click or select your PAN card image first</string>
     <string name="why_do_we_need_this_pan_amb">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="pan_details_uploaded_amb">Pan Card Details Uploaded</string>
-    <string name="add_experience_amb">Add experience</string>
+    <string name="add_experience_amb">Add Experience</string>
     <string name="wait_amb">Wait</string>
     <string name="interest_not_loaded_yet_amb">Please wait interest not loaded yet</string>
     <string name="select_experience_or_not_amb">Please Select if you have experience or not</string>
@@ -291,9 +291,9 @@
     <string name="pan_captured_amb">Information of PAN card captured successfully.</string>
     <string name="pan_manually_amb">Enter the PAN details manually below</string>
     <string name="upload_pan_amb">Upload PAN Card</string>
-    <string name="pan_verified_success_amb">The PAN card details have been verified successfully.</string>
-    <string name="pan_verified_amb">PAN card verified</string>
-    <string name="pending_to_verify_amb">PAN card pending for verify</string>
+    <string name="pan_verified_success_amb">The PAN Card details have been verified successfully.</string>
+    <string name="pan_verified_amb">PAN Card verified</string>
+    <string name="pending_to_verify_amb">PAN Card pending for verify</string>
     <string name="why_we_need_this_amb">Why we need this</string>
     <string name="congratulations_amb">Congratulation</string>
     <string name="enter_driving_license_number_amb">Enter driving license number</string>
@@ -393,11 +393,11 @@
     <string name="aadhaar_card_amb">Aadhaar Card</string>
     <string name="you_need_to_upload_amb">You need to upload</string>
     <string name="upload_front_side_first_amb">Please upload the front side first!</string>
-    <string name="enter_valid_pin_amb">Enter valid pincode</string>
+    <string name="enter_valid_pin_amb">Enter valid Pincode</string>
     <string name="select_city_amb">Select City</string>
     <string name="enter_landmark_amb">Enter Landmark</string>
     <string name="enter_add2_amb">Enter Address Line 2</string>
-    <string name="enter_add1_amb">Please enter address1</string>
+    <string name="enter_add1_amb">Please enter address line 1</string>
     <string name="select_dob_amb">Select date of birth</string>
     <string name="date_of_birth_spaced_amb">"   Date of birth   "</string>
     <string name="no_doc_title_aadhaar_amb">Aadhaar not available!</string>

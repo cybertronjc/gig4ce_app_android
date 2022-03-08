@@ -62,6 +62,7 @@ class ChatListItem(
     private lateinit var statusIV: ImageView
     private lateinit var viewModel: ChatHeadersViewModel
     private lateinit var selectUnselectIcon: ImageView
+    private lateinit var muteNotificationIcon: ImageView
 
     private val storage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -87,6 +88,7 @@ class ChatListItem(
         unseenMessageCountIV = this.findViewById(R.id.unseen_msg_count_iv)
         statusIV = this.findViewById(R.id.tv_received_status)
         selectUnselectIcon = this.findViewById(R.id.select_unselect_icon)
+        muteNotificationIcon = this.findViewById(R.id.mute_notification_iv)
     }
 
     private var dObj: ChatListItemDataObject? = null
@@ -109,6 +111,7 @@ class ChatListItem(
                             chatHeader.unreadCount.toString(),
                             ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
+                    unseenMessageCountIV.visible()
                     unseenMessageCountIV.setImageDrawable(drawable)
 //                    textViewName.setTextColor(
 //                            ResourcesCompat.getColor(context.resources,
@@ -124,6 +127,7 @@ class ChatListItem(
 //                                    null
 //                            )
 //                    )
+                    unseenMessageCountIV.gone()
                     unseenMessageCountIV.setImageDrawable(null)
                     //txtSubtitle.setTypeface(null, Typeface.NORMAL);
                 }
@@ -161,7 +165,7 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(Uri.parse(chatHeader.profilePath))
-                                    .placeholder(R.drawable.ic_user_2)
+                                    .placeholder(R.drawable.ic_default_profile_light_pink)
                                     .into(contextImageView)
                         } else {
 
@@ -172,12 +176,12 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(profilePathRef)
-                                    .placeholder(R.drawable.ic_user_2)
+                                    .placeholder(R.drawable.ic_default_profile_light_pink)
                                     .into(contextImageView)
                         }
                     } else {
 
-                        Glide.with(context).load(R.drawable.ic_user_2).into(contextImageView)
+                        Glide.with(context).load(R.drawable.ic_default_profile_light_pink).into(contextImageView)
                     }
 
                 } else if (chatHeader.type == ChatConstants.CHAT_TYPE_GROUP) {
@@ -273,6 +277,12 @@ class ChatListItem(
                 } else{
                     txtSubtitle.setTypeface(null, Typeface.NORMAL)
                     txtSubtitle.setTextColor(resources.getColor(R.color.gray_text_color))
+                }
+
+                if (chatHeader.headerSettings.muteNotifications){
+                    muteNotificationIcon.visible()
+                } else {
+                    muteNotificationIcon.gone()
                 }
 
                 textViewTime.text = chatHeader.timeDisplay

@@ -12,5 +12,6 @@ data class VerificationBaseModel(
         var sync_status: Boolean = false,
         var contract: Contract? = null,
         var aadhaar_card_questionnaire: AadhaarDetailsDataModel? = null,
+        var vaccination : CovidVaccineDetailsDataModel?=null,
         var signature: SignatureDataModel? = null
 )

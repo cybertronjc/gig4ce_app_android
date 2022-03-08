@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,9 +30,8 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -40,12 +40,16 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm1Binding
+import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
+import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
 import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
+import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel
+import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -74,9 +78,11 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     @Inject
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
 
+    private var cameFromAttendace: Boolean = false
+
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-    private val sharedSignatureViewModel: com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel by activityViewModels()
+    private val sharedSignatureViewModel: SharedSignatureUploadViewModel by activityViewModels()
 
     private val contactsDelegate: ContactsDelegate by lazy {
         ContactsDelegate(requireContext().contentResolver)
@@ -170,12 +176,25 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         if (viewCreatedForTheFirstTime) {
             attachTextWatcher()
         }
-
+        getDataFrom(arguments, savedInstanceState)
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
         initSharedSingatureViewModel()
+    }
+
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+        arguments?.let {
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
+        }
     }
 
     private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
@@ -257,7 +276,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewBinding: FragmentNewSelectionForm1Binding
     ) = viewBinding.toolbar.apply {
         this.setBackButtonListener {
-            activity?.onBackPressed()
+            if (viewBinding.mainForm.mobileNoEt.hasFocus()){
+                hideSoftKeyboard()
+                viewBinding.mainForm.mobileNoEt.clearFocus()
+            } else {
+                activity?.onBackPressed()
+            }
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
         makeBackgroundMoreRound()
@@ -384,7 +408,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
                 NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest,
                 NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues,
-                NewSelectionForm2Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationRelatedDynamicInputsFieldValues
+                NewSelectionForm2Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationRelatedDynamicInputsFieldValues,
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to cameFromAttendace
             )
         )
         hideSoftKeyboard()
@@ -559,7 +584,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             .collect {
 
                 when (it) {
-                    is com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
+                    is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
                         dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
                             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
                             it.pathOnFirebase,

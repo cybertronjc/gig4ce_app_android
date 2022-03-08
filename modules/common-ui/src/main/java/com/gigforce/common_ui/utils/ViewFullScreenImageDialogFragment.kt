@@ -1,16 +1,21 @@
 package com.gigforce.common_ui.utils
 
+import android.Manifest
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -20,6 +25,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.TrackingEventArgs
 import com.jsibbold.zoomage.ZoomageView
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +47,7 @@ class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
 
         const val INTENT_EXTRA_IMAGE_URI = "image_uri"
         const val INTENT_EXTRA_IMAGE_PATH = "image_path"
+        private const val REQUEST_STORAGE_PERMISSION = 205
 
         @JvmStatic
         fun showImage(fragmentManager: FragmentManager, file: File) {
@@ -132,6 +139,18 @@ class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
 
+        //check for storage permission
+        if (isStoragePermissionGranted()){
+            startDownloading()
+        } else {
+            //ask for storage permission
+            askForStoragePermission()
+        }
+
+        return true
+    }
+
+    private fun startDownloading(){
         GlobalScope.launch {
 
             try {
@@ -151,7 +170,70 @@ class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
                 }
             }
         }
-
-        return true
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            var allPermsGranted = true
+            for (i in grantResults.indices) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    allPermsGranted = false
+                    break
+                }
+            }
+
+            if (allPermsGranted) {
+                startDownloading()
+            } else
+                Toast.makeText(
+                    requireContext(),
+                    "Please grant storage permission",
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
+    }
+
+    private fun askForStoragePermission() {
+        Log.v(TAG, "Permission Required. Requesting Permission")
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+//            requestPermissions(
+//                arrayOf(
+//                    Manifest.permission.CAMERA
+//                ),
+//                REQUEST_STORAGE_PERMISSION
+//            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+    }
+
+    private fun isStoragePermissionGranted(): Boolean {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return true
+        } else {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
 }

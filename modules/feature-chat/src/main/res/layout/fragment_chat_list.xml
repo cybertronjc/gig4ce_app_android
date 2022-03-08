@@ -54,6 +54,7 @@
                 layout="@layout/layout_no_chat_found"
                 />
 
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/contactsFab"
                 android:layout_width="wrap_content"
@@ -63,7 +64,7 @@
                 app:backgroundTint="@color/white"
                 android:elevation="4dp"
                 app:tint="@color/colorPrimary"
-                android:src="@drawable/ic_chat_icon_fab"
+                android:src="@drawable/ic_new_conversation"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -87,11 +88,11 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
                     android:text="@string/mute_notifications_chat"
-                    android:enabled="false"
                     android:layout_marginTop="@dimen/size_20"
                     android:layout_marginBottom="@dimen/size_40"
+                    android:padding="@dimen/size_4"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/gray_text_color"
+                    android:textColor="@color/chat_switch_checked"
                     android:textFontWeight="500"
                     app:layout_constraintEnd_toStartOf="@+id/markAsRead"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +107,7 @@
                     android:fontFamily="@font/lato"
                     android:text="@string/mark_as_read_chat"
                     android:enabled="true"
+                    android:padding="@dimen/size_4"
                     android:layout_marginTop="@dimen/size_20"
                     android:layout_marginBottom="@dimen/size_40"
                     android:gravity="center_horizontal"
@@ -122,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
                     android:text="@string/delete_chat"
+                    android:padding="@dimen/size_4"
                     android:layout_marginTop="@dimen/size_20"
                     android:layout_marginBottom="@dimen/size_40"
                     android:enabled="false"

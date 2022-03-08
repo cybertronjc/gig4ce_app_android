@@ -106,5 +106,15 @@
     <color name="edit_action">#e42c64</color>
     <color name="semi_black_transparent">#99000000</color>
 
+    <color name="chat_switch_checked">#E42C64</color>
+    <color name="chat_switch_unchecked">#FCEAF0</color>
+    <color name="tab_background_color">#FFFFFF</color>
+
+    <color name="tab_background_unselected">#D0F6F5F5</color>
+    <color name="tab_background_selected">#E42C64</color>
+
+    <color name="pink_text">#E42C64</color>
+    <color name="text_grey">#6F7070</color>
     <color name="inkDefault">#202325</color>
+
 </resources>

@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,7 +33,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
     override fun getCollectionName(): String =
         COLLECTION_NAME
 
-    open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
+    val getCurrentUserGigs : Query by lazy { getCollectionReference().whereEqualTo("gigerId", getUID())}
 
     private val userLocationCollectionRef: CollectionReference by lazy {
         db.collection("UserLocations")
@@ -261,7 +262,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
         val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         val querySnap =
-            getCurrentUserGigs()
+            getCurrentUserGigs
                 .whereGreaterThan("startDateTime", dateFull)
                 .getOrThrow()
 
@@ -342,7 +343,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         val dateEnd = Date.from(nextDay.atStartOfDay(ZoneId.systemDefault()).toInstant())
 
         val querySnap =
-            getCurrentUserGigs()
+            getCurrentUserGigs
                 .whereGreaterThan("startDateTime", dateStart)
                 .whereLessThan("startDateTime", dateEnd)
                 .getOrThrow()

@@ -11,25 +11,31 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.StringConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -41,14 +47,18 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.databinding.UserAndGroupDetailsFragmentBinding
 import com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment.Companion.INTENT_EXTRA_RETURN_SELECTED_RESULTS
+import com.gigforce.modules.feature_chat.screens.adapters.ExpendedMediaAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_audio_player_bottom_sheet.*
 import java.io.File
+import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -58,7 +68,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     fragmentName = "UserAndGroupDetailsFragment",
     layoutId = R.layout.user_and_group_details_fragment,
     statusBarColor = R.color.lipstick_2
-), GroupMediaRecyclerAdapter.OnGroupMediaClickListener, OnContactsSelectedListener, PopupMenu.OnMenuItemClickListener{
+), GroupMediaRecyclerAdapter.OnGroupMediaClickListener, OnContactsSelectedListener, PopupMenu.OnMenuItemClickListener, ExpendedMediaAdapter.OnMediaClickListener{
 
     companion object  {
         fun newInstance() = UserAndGroupDetailsFragment()
@@ -69,6 +79,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
         const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
         const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
+        const val INTENT_EXTRA_SHOW_MEDIA_ONLY = "media_only"
     }
 
     private val viewModel: GroupChatViewModel by viewModels()
@@ -82,6 +93,11 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     private var receiverMobileNumber: String? = null
     private var receiverPhotoUrl: String? = null
     private var fromClientActivation: Boolean = false
+    private var mediaList: List<GroupMedia>? = null
+    private var showOnlyMedia: Boolean = false
+
+    var selectedTab = 0
+    var isExpendedMediaShowing = false
 
     var onContactSelectedListener: OnContactsSelectedListener? = null
 
@@ -93,6 +109,9 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private var chatType: String = ChatConstants.CHAT_TYPE_USER
     private var chatHeaderOrGroupId: String? = null
@@ -115,27 +134,55 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         )
     }
 
+
+    private val expendedMediaAdapter: ExpendedMediaAdapter by lazy {
+        ExpendedMediaAdapter(
+            requireContext(),
+            chatFileManager.gigforceDirectory,
+            Glide.with(requireContext()),
+            this
+
+        )
+    }
+
     private val currentUserUid: String by lazy {
         FirebaseAuth.getInstance().currentUser!!.uid
     }
 
-//    private val groupMembersRecyclerAdapter: GroupMembersRecyclerAdapter by lazy {
-//        GroupMembersRecyclerAdapter(
-//            Glide.with(requireContext()),
-//            this
-//        )
-//    }
+    private val onBackPressCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            if (isExpendedMediaShowing){
+                viewBinding.mainScrollView.visible()
+                viewBinding.mediaExpendedLayout.gone()
+                isExpendedMediaShowing = false
+            } else {
+                navigation.popBackStack()
+            }
+        }
 
+
+    }
 
     override fun viewCreated(
         viewBinding: UserAndGroupDetailsFragmentBinding,
         savedInstanceState: Bundle?
-    ) {
-        getDataFromIntents(arguments, savedInstanceState)
-        setListeners()
-        initRecyclerView()
-        checkForChatTypeAndSubscribeToRespectiveViewModel()
-        setStatusBarIcons(false)
+        ) {
+            getDataFromIntents(arguments, savedInstanceState)
+            setListeners()
+            initRecyclerView()
+            checkForChatTypeAndSubscribeToRespectiveViewModel()
+            showOnlyMediaLayoutOrNot()
+            setStatusBarIcons(false)
+    }
+
+    private fun showOnlyMediaLayoutOrNot() {
+        if (showOnlyMedia){
+            viewBinding.mainScrollView.gone()
+            viewBinding.mediaExpendedLayout.visible()
+        } else {
+            viewBinding.mainScrollView.visible()
+            viewBinding.mediaExpendedLayout.gone()
+        }
     }
 
     private fun initRecyclerView() = viewBinding.apply{
@@ -144,11 +191,126 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         mediaRecyclerview.layoutManager = layoutManager
         mediaRecyclerview.adapter = groupMediaRecyclerAdapter
 
-        val membersLayoutManager =
+        //for images and videos
+        val gridLayoutManager =
+            GridLayoutManager(requireContext(), 3)
+        mediaImagesVideosRecyclerview.layoutManager = gridLayoutManager
+        mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
+
+        //for documents
+        val docLinearLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//        membersRecyclerview.layoutManager = membersLayoutManager
-//        membersRecyclerview.isNestedScrollingEnabled = false
-//        membersRecyclerview.adapter = groupMembersRecyclerAdapter
+        docsRecyclerview.layoutManager = docLinearLayoutManager
+        docsRecyclerview.adapter = null
+
+        //for audio
+        val audioLinearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        audioRecyclerview.layoutManager = audioLinearLayoutManager
+        audioRecyclerview.adapter = null
+
+        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Media"))
+        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Document"))
+        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Audio"))
+
+        val betweenSpace = 25
+
+        val slidingTabStrip: ViewGroup = mediaTabLayout.getChildAt(0) as ViewGroup
+
+        for (i in 0 until slidingTabStrip.childCount - 1) {
+            val v: View = slidingTabStrip.getChildAt(i)
+            val params: ViewGroup.MarginLayoutParams =
+                v.layoutParams as ViewGroup.MarginLayoutParams
+            params.rightMargin = betweenSpace
+        }
+
+        try {
+            //showToast("position: ${selectedTab}")
+            mediaTabLayout.getTabAt(selectedTab)?.select()
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        }
+
+        mediaTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                selectedTab = tab?.position!!
+                when(selectedTab) {
+                    0 -> {
+                        //hide docs & audios recyclerview and show images view
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Media Found"
+                        if (mediaList.isNullOrEmpty()){
+                            viewBinding.noMediaText.visible()
+                            mediaImagesVideosRecyclerview.gone()
+                        } else{
+                             mediaList?.let {
+                                 mediaImagesVideosRecyclerview.visible()
+                                 docsRecyclerview.gone()
+                                 viewBinding.noMediaText.gone()
+                                 audioRecyclerview.gone()
+                                setDataToExpendedMediaView("Media", it)
+
+                            }
+                        }
+                    }
+                    1 -> {
+
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        docsRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Documents Found"
+                        if (mediaList.isNullOrEmpty()) {
+                            viewBinding.noMediaText.visible()
+                            docsRecyclerview.gone()
+                         } else {
+                             mediaList?.let {
+                                 viewBinding.noMediaText.gone()
+                                 mediaImagesVideosRecyclerview.gone()
+                                 docsRecyclerview.visible()
+                                 audioRecyclerview.gone()
+                                 setDataToExpendedMediaView("Document", it)
+                            }
+                        }
+
+                    }
+                    2 -> {
+
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        audioRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Audio Found"
+                        if (mediaList.isNullOrEmpty()){
+                            viewBinding.noMediaText.visible()
+                            audioRecyclerview.gone()
+                        } else {
+                            mediaList?.let {
+                                viewBinding.noMediaText.gone()
+                                mediaImagesVideosRecyclerview.gone()
+                                docsRecyclerview.gone()
+                                audioRecyclerview.visible()
+                                setDataToExpendedMediaView("Audio", it)
+
+                            }
+                        }
+                        }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -161,7 +323,11 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             chatHeaderOrGroupId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
             receiverUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID) ?: ""
             receiverMobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
+            showOnlyMedia = it.getBoolean(INTENT_EXTRA_SHOW_MEDIA_ONLY, false)
+
         }
+
+        Log.d(TAG, "type: $chatType , receiverPhoto: $receiverPhotoUrl , receivername: $receiverName , header: $chatHeaderOrGroupId , number: $receiverMobileNumber ")
 
         savedInstanceState?.let {
             //groupId = it.getString(INTENT_EXTRA_GROUP_ID) ?: return@let
@@ -172,6 +338,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             chatHeaderOrGroupId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
             receiverUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID) ?: ""
             receiverMobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
+            showOnlyMedia = it.getBoolean(INTENT_EXTRA_SHOW_MEDIA_ONLY, false)
         }
     }
 
@@ -184,6 +351,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             putString(INTENT_EXTRA_CHAT_TYPE, chatType)
             putString(INTENT_EXTRA_OTHER_USER_ID, receiverUserId)
             putString(StringConstants.MOBILE_NUMBER.value, receiverMobileNumber)
+            putBoolean(INTENT_EXTRA_SHOW_MEDIA_ONLY, showOnlyMedia)
         }
     }
 
@@ -192,11 +360,20 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         //block user
         blockUserLayout.setOnClickListener {
-            BlockUserBottomSheetFragment.launch(
-                chatViewModel.headerId,
-                chatViewModel.otherUserId,
-                childFragmentManager
-            )
+            if (blockText.text == "Block"){
+                BlockUserBottomSheetFragment.launch(
+                    chatViewModel.headerId,
+                    chatViewModel.otherUserId,
+                    childFragmentManager
+                )
+            } else {
+                chatViewModel.blockOrUnBlockUser(
+                    chatViewModel.headerId,
+                    chatViewModel.otherUserId,
+                    false
+                )
+            }
+
         }
 
         //report user
@@ -209,35 +386,104 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         }
 
         backButtonDetails.setOnClickListener {
-            navigation.popBackStack()
+            if (isExpendedMediaShowing){
+                mainScrollView.visible()
+                mediaExpendedLayout.gone()
+                isExpendedMediaShowing = false
+            } else {
+                navigation.popBackStack()
+            }
+
+        }
+
+        muteNotificationSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if (isChecked){
+                chatHeaderOrGroupId?.let {
+                    chatViewModel.updateMuteNotificationsInDB(enable = true,
+                        it
+                    )
+                }
+                eventTracker.setProfileProperty(ProfilePropArgs("Mute Notifications", true))
+            } else{
+                chatHeaderOrGroupId?.let {
+                    chatViewModel.updateMuteNotificationsInDB(enable = false,
+                        it
+                    )
+                }
+                eventTracker.setProfileProperty(ProfilePropArgs("Mute Notifications", false))
+            }
+        }
+
+        mediaAndDocsCount.setOnClickListener {
+            forwardArrow.performClick()
         }
 
         forwardArrow.setOnClickListener {
 //            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
 //                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
 //            ))
-            chatNavigation.openGroupMediaList(
-                chatHeaderOrGroupId.toString()
-            )
+            mainScrollView.gone()
+            mediaExpendedLayout.visible()
+            isExpendedMediaShowing = true
+//            chatNavigation.openGroupMediaList(
+//                chatHeaderOrGroupId.toString()
+//            )
         }
 
-        addGigerLayout.setOnClickListener {
+        addParticipantLayout.setOnClickListener {
 //            navigation.navigateTo("chats/contactsFragment", bundleOf(
 //                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
 //            ))
             ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
         }
 
-        addContactFab.setOnClickListener {
+        addParticipantLayout.setOnClickListener {
 //            navigation.navigateTo("chats/contactsFragment", bundleOf(
 //                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
 //            ))
             ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
         }
+
+        activateGroupLayout.setOnClickListener {
+            viewModel.deactivateOrActivateGroup()
+        }
+
+        exitGroupLayout.setOnClickListener {
+            //exit from group
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.exit_group_chat))
+                .setMessage(R.string.exit_group_message_chat)
+                .setPositiveButton(getString(R.string.okay_chat)) { dialog, _ ->
+                    uid?.let {
+                        viewModel.removeUserFromGroup(uid)
+                        dialog.dismiss()
+                        navigation.popBackStack()
+                    }
+
+                }
+                .setNegativeButton(getString(R.string.cancel_chat)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressCallback
+        )
+        onBackPressCallback.isEnabled = true
     }
 
     private fun showMembers(members: List<ContactModel>) = viewBinding.apply{
         membersLinearLayout.removeAllViewsInLayout()
+        if (members.isEmpty()){
+            membersLayout.gone()
+            exitGroupLayout.gone()
+        } else{
+            exitGroupLayout.visible()
+            membersLayout.visible()
+        }
         members.forEachIndexed { index, contact ->
             Log.d("selected", "$contact")
             val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_item_group_member_2, null)
@@ -253,9 +499,11 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
             val isUserTheCurrentUser = contact.uid == currentUserUid
             if (isUserTheCurrentUser) {
+                exitGroupLayout.visible()
                 chatOverlay.gone()
                 chatIcon.gone()
             } else {
+                exitGroupLayout.gone()
                 chatOverlay.visible()
                 chatIcon.visible()
             }
@@ -352,6 +600,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     private fun checkForChatTypeAndSubscribeToRespectiveViewModel() {
 
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
+            //receiverMobileNumber?.let { chatViewModel.startListeningForContactChanges(it) }
             chatViewModel.setRequiredDataAndStartListeningToMessages(
                 otherUserId = receiverUserId!!,
                 headerId = chatHeaderOrGroupId,
@@ -379,24 +628,25 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         membersLayout.gone()
         exitGroupLayout.gone()
         blockUserLayout.visible()
-        exitGroupLayout.visible()
-        muteNotificationsLayout.gone()
-        reportUserLayout.gone()
+        muteNotificationsLayout.visible()
+        reportUserLayout.visible()
+        addParticipantLayout.gone()
     }
 
     private fun adjustUiAccToGroupChat() = viewBinding.apply{
         membersLayout.visible()
-        exitGroupLayout.visible()
         blockUserLayout.gone()
-        exitGroupLayout.gone()
-        muteNotificationsLayout.gone()
+        exitGroupLayout.visible()
+        muteNotificationsLayout.visible()
+        addParticipantLayout.visible()
         reportUserLayout.gone()
     }
 
     private fun subscribeOneToOneViewModel() = viewBinding.apply{
+
         chatViewModel.otherUserInfo
             .observe(viewLifecycleOwner, Observer {
-
+                Log.d(TAG, "CONTACT: ${it.toString()}")
                 if (it.name.isNullOrBlank()) {
                     overlayCardLayout.profileName.text = "Add new contact"
                 } else {
@@ -407,7 +657,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imageThumbnailPathInStorage!!, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imageThumbnailPathInStorage!!, R.drawable.ic_profile_new)
 
                     } else {
 
@@ -417,12 +667,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                             else
                                 "profile_pics/${it.imageThumbnailPathInStorage}"
 
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_profile_new)
                     }
                 } else if (!it.imagePathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imagePathInStorage!!, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(it.imagePathInStorage!!, R.drawable.ic_profile_new)
 
                     } else {
 
@@ -432,21 +682,144 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                             else
                                 "profile_pics/${it.imagePathInStorage}"
 
-                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_user_white)
+                        overlayCardLayout.profileImg.loadImageIfUrlElseTryFirebaseStorage(profilePathRef, R.drawable.ic_profile_new)
                     }
 
                 } else {
 
-                    overlayCardLayout.profileImg.loadImage(R.drawable.ic_user_white)
+                    overlayCardLayout.profileImg.loadImage(R.drawable.ic_profile_new)
                 }
-
+                Log.d(TAG, "block: ${it.isUserBlocked}")
                 if (it.isUserBlocked) {
                     blockText.text = "Unblock"
+
                 } else {
                     blockText.text = "Block"
                 }
             })
 
+        chatViewModel.headerInfo.observe(viewLifecycleOwner, Observer {
+            if (it.isBlocked) {
+                blockText.text = "Unblock"
+            } else {
+                blockText.text = "Block"
+            }
+
+            muteNotificationSwitch.isChecked = it.settings?.muteNotifications == true
+        })
+        chatViewModel.messages.observe(viewLifecycleOwner, Observer {
+
+            Log.d(TAG, "message: $it")
+            it?.let {
+                val mediaMessages =  it.filter { it.attachmentPath != null }
+                Log.d(TAG, "mediamessage: $mediaMessages")
+                showOneToOneMedia(mediaMessages)
+            }
+        })
+
+        chatViewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            when (it) {
+                is DownloadStarted -> {
+
+                    groupMediaRecyclerAdapter.setItemAsDownloading(it.index)
+                    expendedMediaAdapter.setItemAsDownloading(it.index)
+                }
+                is DownloadCompleted -> {
+
+                    groupMediaRecyclerAdapter.notifyItemChanged(it.index)
+                    expendedMediaAdapter.notifyItemChanged(it.index)
+                }
+                is ErrorWhileDownloadingAttachment -> {
+
+                    groupMediaRecyclerAdapter.setItemAsNotDownloading(it.index)
+                    expendedMediaAdapter.setItemAsNotDownloading(it.index)
+                }
+            }
+        })
+
+    }
+
+    private fun showOneToOneMedia(mediaMessages: List<ChatMessage>) = viewBinding.apply{
+        val chatMediaList = arrayListOf<GroupMedia>()
+        val filteredMedia = mediaMessages.filter { it.type != ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION }.filter { it.type != ChatConstants.MESSAGE_TYPE_TEXT }
+        filteredMedia.forEach {
+            var media = GroupMedia(
+                id = it.id,
+                groupHeaderId = "",
+                messageId = it.id,
+                attachmentType = it.type,
+                videoAttachmentLength = it.videoLength,
+                timestamp = it.timestamp,
+                thumbnail = it.thumbnail,
+                attachmentName = it.attachmentName,
+                attachmentPath = it.attachmentPath,
+                senderInfo = it.senderInfo
+            )
+            chatMediaList.add(media)
+        }
+
+        groupMediaRecyclerAdapter.setData(chatMediaList)
+        mediaAndDocsCount.text = chatMediaList.size.toString()
+
+        if (chatMediaList.isEmpty()){
+            mediaLayout.gone()
+            noMediaText.visible()
+        } else {
+            mediaLayout.visible()
+            mediaList = chatMediaList
+            setDataToExpendedMediaView("Media", chatMediaList)
+            mediaImagesVideosRecyclerview.visible()
+            docsRecyclerview.gone()
+            audioRecyclerview.gone()
+            mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
+            docsRecyclerview.adapter = null
+            audioRecyclerview.adapter = null
+        }
+    }
+
+    private fun setDataToExpendedMediaView(s: String, chatMediaList: List<GroupMedia>) {
+        when(s) {
+            "Media" -> {
+                val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) } + chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.mediaImagesVideosRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.mediaImagesVideosRecyclerview.visible()
+                }
+                expendedMediaAdapter.setData(list, 1)
+
+            }
+
+            "Document" -> {
+                val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.docsRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.docsRecyclerview.visible()
+                }
+                expendedMediaAdapter.setData(list, 2)
+
+            }
+
+            "Audio" -> {
+                val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.audioRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.audioRecyclerview.visible()
+                }
+                expendedMediaAdapter.setData(list, 3)
+
+            }
+        }
     }
 
     private fun subscribeChatGroupViewModel() {
@@ -461,12 +834,15 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             when (it) {
                 is DownloadStarted -> {
                     groupMediaRecyclerAdapter.setItemAsDownloading(it.index)
+                    expendedMediaAdapter.setItemAsDownloading(it.index)
                 }
                 is DownloadCompleted -> {
                     groupMediaRecyclerAdapter.notifyItemChanged(it.index)
+                    expendedMediaAdapter.notifyItemChanged(it.index)
                 }
                 is ErrorWhileDownloadingAttachment -> {
                     groupMediaRecyclerAdapter.setItemAsNotDownloading(it.index)
+                    expendedMediaAdapter.setItemAsNotDownloading(it.index)
                 }
             }
         })
@@ -493,6 +869,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 }
             })
 
+        viewModel.chatHeaderInfo.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewBinding.muteNotificationSwitch.isChecked = it.settings?.muteNotifications == true
+            }
+        })
+
         if (chatHeaderOrGroupId?.isEmpty() == true) {
             CrashlyticsLogger.e(GroupDetailsFragment.TAG, "getting args from arguments", Exception("$chatHeaderOrGroupId <-- String passed as groupId"))
             throw IllegalArgumentException("$chatHeaderOrGroupId <-- String passed as groupId")
@@ -500,6 +882,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         chatHeaderOrGroupId?.let { viewModel.setGroupId(it) }
         viewModel.startWatchingGroupDetails()
+        chatHeaderOrGroupId?.let { viewModel.getChatHeaderInfo(headerInfoId = it) }
     }
 
     private fun showGroupDetails(content: ChatGroup) = viewBinding.apply{
@@ -539,7 +922,14 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             mediaLayout.visible()
         }
         groupMediaRecyclerAdapter.setData(content.groupMedia)
-
+        mediaList = content.groupMedia
+        setDataToExpendedMediaView("Media", content.groupMedia)
+        mediaImagesVideosRecyclerview.visible()
+        docsRecyclerview.gone()
+        audioRecyclerview.gone()
+        mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
+        docsRecyclerview.adapter = null
+        audioRecyclerview.adapter = null
         val membersList = content.groupMembers.filter {
             it.isUserGroupManager
         }.sortedBy {
@@ -578,26 +968,26 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         if (isUserGroupManager) {
             if (content.groupDeactivated) {
-                addGigerLayout.isVisible = false
+                addParticipantLayout.isVisible = false
                 activateGroupLayout.isVisible = true
                 activateText.text = getString(R.string.activate_group_chat)
                 //group_deactivated_container.visible()
             } else {
                 activateText.text = getString(R.string.deactivate_group_chat)
-                addGigerLayout.isVisible = true
+                addParticipantLayout.isVisible = true
                 activateGroupLayout.isVisible = true
                 //group_deactivated_container.gone()
             }
         } else {
-            addGigerLayout.isVisible = false
-            activateText.isVisible = false
+            addParticipantLayout.isVisible = false
+            activateGroupLayout.isVisible = false
         }
 
-        if (content.groupDeactivated) {
-            activateGroupLayout.visible()
-        } else {
-            activateGroupLayout.gone()
-        }
+//        if (content.groupDeactivated) {
+//            activateGroupLayout.visible()
+//        } else {
+//            activateGroupLayout.gone()
+//        }
     }
 
 
@@ -610,7 +1000,6 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     ) {
         if (fileDownloaded) {
             //Open the file
-                Log.d("type", "type : ${media.attachmentType}")
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
 
@@ -634,11 +1023,40 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 ChatConstants.ATTACHMENT_TYPE_AUDIO -> {
                     openAudioPlayerBottomSheet(fileIfDownloaded!!)
                 }
+
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                    openDocument(fileIfDownloaded!!)
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> {
+                    openAudioPlayerBottomSheet(fileIfDownloaded!!)
+                }
             }
 
         } else {
             //Start downloading the file
-            viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
+            if (chatType == ChatConstants.CHAT_TYPE_USER){
+                chatViewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
+            } else if (chatType == ChatConstants.CHAT_TYPE_GROUP){
+                viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
+            }
+            showToast("Downloading")
+
         }
     }
 
@@ -748,6 +1166,75 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 // you have set other flags before, such as translucent or full screen.
                 decor.systemUiVisibility = 0
             }
+        }
+    }
+
+    override fun onMediaClicked(
+        position: Int,
+        fileDownloaded: Boolean,
+        fileIfDownloaded: File?,
+        media: GroupMedia
+    ) {
+        if (fileDownloaded) {
+            //Open the file
+            Log.d("type", "type : ${media.attachmentType}")
+            when (media.attachmentType) {
+                ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.ATTACHMENT_TYPE_VIDEO -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
+                    openDocument(fileIfDownloaded!!)
+                }
+                ChatConstants.ATTACHMENT_TYPE_AUDIO -> {
+                    openAudioPlayerBottomSheet(fileIfDownloaded!!)
+                }
+
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                    openDocument(fileIfDownloaded!!)
+                }
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> {
+                    openAudioPlayerBottomSheet(fileIfDownloaded!!)
+                }
+            }
+
+        } else {
+            //Start downloading the file
+            if (chatType == ChatConstants.CHAT_TYPE_USER){
+                chatViewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
+            } else if (chatType == ChatConstants.CHAT_TYPE_GROUP){
+                viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
+            }
+
+
         }
     }
 

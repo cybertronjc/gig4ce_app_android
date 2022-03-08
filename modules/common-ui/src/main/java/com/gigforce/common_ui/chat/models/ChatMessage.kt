@@ -6,6 +6,7 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.StringConstants
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 import java.util.*
+import kotlin.jvm.internal.Intrinsics
 
 class ChatMessage(
     @DocumentId
@@ -67,6 +69,18 @@ class ChatMessage(
     @get:PropertyName("audioLength")
     @set:PropertyName("audioLength")
     var audioLength: Long = 0,
+
+    @get:PropertyName("isLiveLocation")
+    @set:PropertyName("isLiveLocation")
+    var isLiveLocation: Boolean = false,
+
+    @get:PropertyName("isCurrentlySharingLiveLocation")
+    @set:PropertyName("isCurrentlySharingLiveLocation")
+    var isCurrentlySharingLiveLocation: Boolean = false,
+
+    @get:PropertyName("liveEndTime")
+    @set:PropertyName("liveEndTime")
+    var liveEndTime: Date? = null,
 
     /**
      * Attachment Path- full path of image, video etc
@@ -123,6 +137,10 @@ class ChatMessage(
     @set:PropertyName("isDeleted")
     var isDeleted: Boolean = false,
 
+    @get:PropertyName("forwardedMessage")
+    @set:PropertyName("forwardedMessage")
+    var forwardedMessage: Boolean = false,
+
     @get:PropertyName("deletedOn")
     @set:PropertyName("deletedOn")
     var deletedOn: Timestamp? = null,
@@ -130,6 +148,10 @@ class ChatMessage(
     @get:PropertyName("groupMessageReadBy")
     @set:PropertyName("groupMessageReadBy")
     var groupMessageReadBy: List<MessageReceivingInfo> = emptyList(),
+
+    @get:PropertyName("groupMessageDeliveredTo")
+    @set:PropertyName("groupMessageDeliveredTo")
+    var groupMessageDeliveredTo: List<MessageReceivingInfo> = emptyList(),
 
     @get:PropertyName("groupId")
     @set:PropertyName("groupId")
@@ -179,43 +201,93 @@ class ChatMessage(
     @set:PropertyName("createdAt")
     var createdAt : Timestamp ?= Timestamp.now()
 
-) : IMediaMessage, Serializable
+) : IMediaMessage, Serializable{
+
+    @Exclude
+    fun cloneForForwarding(
+        newChatType : String = ChatConstants.CHAT_TYPE_USER
+    ): ChatMessage{
+
+        val currentUser = FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow()
+        return  ChatMessage(
+            id = "",
+            flowType = ChatConstants.FLOW_TYPE_OUT,
+            timestamp = Timestamp.now(),
+            status = ChatConstants.MESSAGE_STATUS_NOT_SENT,
+            type = this.type,
+            chatType = newChatType,
+            content = this.content,
+            mentionedUsersInfo = this.mentionedUsersInfo.map { it.copy() },
+            videoLength = this.videoLength,
+            audioLength = this.audioLength,
+            thumbnail = this.thumbnail,
+            attachmentName = this.attachmentName,
+            attachmentPath = this.attachmentPath,
+            contactName = this.contactName,
+            contactNumber = this.contactNumber,
+            locationPhysicalAddress = this.locationPhysicalAddress,
+            location = this.location,
+            senderInfo  = UserInfo(
+                id = currentUser.uid,
+                mobileNo = currentUser.phoneNumber!!
+            ),
+            receiverInfo = null,
+            isDeleted = false,
+            forwardedMessage = true,
+            deletedOn = null,
+            groupMessageReadBy = listOf() ,
+            groupMessageDeliveredTo = listOf(),
+            groupId = "",
+            imageMetaData = this.imageMetaData,
+            isMessageChatEvent = false,
+            eventInfo = null,
+            isAReplyToOtherMessage = false,
+            replyForMessageId = null,
+            otherUsersMessageId = null,
+            replyForMessage = null,
+            thumbnailBitmap = this.thumbnailBitmap,
+            updatedAt = Timestamp.now(),
+            updatedBy = null,
+            createdAt = Timestamp.now()
+        )
+    }
+}
 
 
 data class EventInfo(
 
-        @get:PropertyName("groupId")
-        @set:PropertyName("groupId")
-        var groupId: String = "",
+    @get:PropertyName("groupId")
+    @set:PropertyName("groupId")
+    var groupId: String = "",
 
-        @get:PropertyName("showEventToUsersWithUid")
-        @set:PropertyName("showEventToUsersWithUid")
-        var showEventToUsersWithUid: List<String> = emptyList(),
+    @get:PropertyName("showEventToUsersWithUid")
+    @set:PropertyName("showEventToUsersWithUid")
+    var showEventToUsersWithUid: List<String> = emptyList(),
 
-        @get:PropertyName("eventDoneByUserUid")
-        @set:PropertyName("eventDoneByUserUid")
-        var eventDoneByUserUid: String = "",
+    @get:PropertyName("eventDoneByUserUid")
+    @set:PropertyName("eventDoneByUserUid")
+    var eventDoneByUserUid: String = "",
 
-        @get:PropertyName("eventText")
-        @set:PropertyName("eventText")
-        var eventText: String = "",
+    @get:PropertyName("eventText")
+    @set:PropertyName("eventText")
+    var eventText: String = "",
 
-        @get:PropertyName("eventTime")
-        @set:PropertyName("eventTime")
-        var eventTime: Timestamp =  Timestamp.now(),
+    @get:PropertyName("eventTime")
+    @set:PropertyName("eventTime")
+    var eventTime: Timestamp =  Timestamp.now(),
 
-        @get:PropertyName("updatedAt")
-        @set:PropertyName("updatedAt")
-        var updatedAt : Timestamp ?= Timestamp.now(),
+    @get:PropertyName("updatedAt")
+    @set:PropertyName("updatedAt")
+    var updatedAt : Timestamp ?= Timestamp.now(),
 
-        @get:PropertyName("updatedBy")
-        @set:PropertyName("updatedBy")
-        var updatedBy : String ?= null,
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= null,
 
-        @get:PropertyName("createdAt")
-        @set:PropertyName("createdAt")
-        var createdAt : Timestamp ?= Timestamp.now()
-){
+    @get:PropertyName("createdAt")
+    @set:PropertyName("createdAt")
+    var createdAt : Timestamp ?= Timestamp.now()
+)  {
 
     fun setUpdatedAtAndBy(uid : String){
         updatedAt = Timestamp.now()
@@ -228,17 +300,19 @@ data class EventInfo(
 
     fun toChatMessage(): ChatMessage{
         return ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = groupId,
-                isMessageChatEvent = true,
-                type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
-                chatType = ChatConstants.CHAT_TYPE_GROUP,
-                flowType = ChatConstants.FLOW_TYPE_OUT,
-                content = "",
-                timestamp = eventTime,
-                eventInfo = this
+            id = UUID.randomUUID().toString(),
+            headerId = groupId,
+            isMessageChatEvent = true,
+            type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
+            chatType = ChatConstants.CHAT_TYPE_GROUP,
+            flowType = ChatConstants.FLOW_TYPE_OUT,
+            content = "",
+            timestamp = eventTime,
+            eventInfo = this
         )
     }
+
+
 }
 
 interface IMediaMessage {

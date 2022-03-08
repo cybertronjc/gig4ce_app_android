@@ -5,6 +5,7 @@ package com.gigforce.giger_gigs.gighistory
 //import com.gigforce.app.core.base.BaseFragment
 //import com.gigforce.user_preferences.PreferencesFragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_gigs.GigPage2Fragment
@@ -68,6 +71,11 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
 
     override fun onResume() {
         super.onResume()
+        if (adapter?.getOngoingGigsCount() == 0 && viewModel.eventState == AdapterGigHistory.EVENT_UPCOMING){
+            no_gigs_layout.visible()
+        } else {
+            no_gigs_layout.gone()
+        }
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(), ResourcesCompat.getColor(
                 resources,

@@ -146,7 +146,6 @@ class PayslipMonthlyFragment : Fragment() {
     }
 
     private fun showPayslipsOnView(content: List<Payslip>) {
-        payslip_label.isVisible = content.isNotEmpty()
 
         payslip_monthly_details_error.gone()
         payslip_monthly_progress_bar.gone()
@@ -154,7 +153,7 @@ class PayslipMonthlyFragment : Fragment() {
 
 
 
-        mAdapter.updateCourseContent(content)
+        mAdapter.updateCourseContent(content.sortedByDescending { it.getDateOfPaymentLocalDate() })
     }
 
     private fun showErrorInLoadingPayslips(error: String) {

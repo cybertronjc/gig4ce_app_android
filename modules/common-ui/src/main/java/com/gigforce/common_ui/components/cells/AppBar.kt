@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.components.cells
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -224,7 +225,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.searchItem.setText("")
         viewBinding.searchItem.gone()
         viewBinding.textTitle.visible()
-        viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
+        viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_search_icon))
     }
 
     private fun setColorsOnViews(backgroundType: BackgroundType) {
@@ -310,7 +311,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
          if (visible) viewBinding.searchImageButton.visible() else viewBinding.searchImageButton.invisible()
     }
     fun makeMenuItemVisible(visible: Boolean){
-        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.invisible()
+        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.gone()
     }
 
 
@@ -355,7 +356,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean){
+    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean, replyEnable: Boolean,  forwardEnable: Boolean,  selectedSize: String){
         if (visible){
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
@@ -368,6 +369,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.deleteButton.isVisible = deleteEnable
         viewBinding.infoButton.isVisible = infoEnable
         viewBinding.downloadButton.isVisible = downloadEnable
+        viewBinding.replyButton.isVisible = replyEnable
+        viewBinding.selectionCount.text = selectedSize
+        viewBinding.forwardButton.isVisible = forwardEnable
     }
 
     override fun bind(data: Any?) {
@@ -421,6 +425,17 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     ) {
         viewBinding.forwardButton.setOnClickListener(listener)
     }
+
+    fun showForwardProgress(){
+        viewBinding.forwardButton.invisible()
+        viewBinding.forwardProgressBar.visible()
+    }
+
+    fun hideForwardProgress(){
+        viewBinding.forwardProgressBar.gone()
+        viewBinding.forwardButton.visible()
+    }
+
     fun setInfoClickListener(
         listener: OnClickListener
     ) {
@@ -440,18 +455,16 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     fun hideKeyboard(view: View) {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS,
-                0
-        )
+        context?.let {
+            val imm: InputMethodManager =
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     fun openSoftKeyboard(view: View) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
+        inputMethodManager.toggleSoftInput(
                 InputMethod.SHOW_FORCED,
                 0
         )
@@ -462,7 +475,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (viewBinding.searchItem.isVisible){
             viewBinding.searchItem.gone()
             viewBinding.textTitle.visible()
-            viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
+            viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_search_icon))
             viewBinding.searchItem.setText("")
             hideKeyboard(viewBinding.searchItem)
             viewBinding.searchItem.clearFocus()

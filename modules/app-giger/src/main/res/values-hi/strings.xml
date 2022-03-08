@@ -89,5 +89,8 @@
     <string name="decline_gigs">गिग्स को अस्वीकार करें</string>
     <string name="no_gig_assigned_giger">कोई गिग्स असाइन नहीं है</string>
     <string name="marked_not_working_giger">काम नहीं कर रहा चिह्नित करें</string>
+    <string name="my_documents_app_giger">मेरे दस्तावेज़</string>
+    <string name="payouts_app_giger">भुगतान</string>
+    <string name="tl_workspace_app_giger">Tl कार्यस्थान</string>
 
 </resources>

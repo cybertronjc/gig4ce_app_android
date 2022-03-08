@@ -50,6 +50,7 @@ import android.graphics.drawable.Drawable
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.linkedin.android.spyglass.mentions.Mentionable
 
 
 @AndroidEntryPoint
@@ -324,12 +325,17 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
 //        }
 
         fun hideKeyboard(view: View) {
-            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethodManager.HIDE_IMPLICIT_ONLY,
-                0
-            )
+//            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            inputMethodManager.toggleSoftInputFromWindow(
+//                view.applicationWindowToken,
+//                InputMethodManager.HIDE_IMPLICIT_ONLY,
+//                0
+//            )
+            context?.let {
+                val imm: InputMethodManager =
+                    it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
         }
 
 //        fun openSoftKeyboard(view: View) {
@@ -565,6 +571,9 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
         }
 
+        fun isAttachmentOptionViewVisible(): Boolean {
+            return viewBinding.layoutAttachment.isVisible
+        }
 
         private fun setupAttachmentOptions() = viewBinding.apply{
             imageViewAttachment.setOnClickListener(View.OnClickListener {
@@ -929,11 +938,11 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
     }
 
     override fun displaySuggestions(display: Boolean) {
-        viewBinding.mentionSuggestionRv.isVisible = display
+        viewBinding.mentionSuggLayout.isVisible = display
     }
 
     override fun isDisplayingSuggestions(): Boolean {
-        return viewBinding.mentionSuggestionRv.isVisible
+        return viewBinding.mentionSuggLayout.isVisible
     }
 
     override fun onReceiveSuggestionsResult(result: SuggestionsResult, bucket: String) {
@@ -1083,7 +1092,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
         viewBinding.replyToMessageLayout.removeAllViews()
         viewBinding.replyToMessageLayout.gone()
         replyMessage = null
-        hideKeyboard(viewBinding.editTextMessage)
+        //hideKeyboard(viewBinding.editTextMessage)
     }
 
     fun getReplyToMessage(): ChatMessage? {
@@ -1092,9 +1101,8 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
 
     fun openSoftKeyboard(view: View) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInputFromWindow(
-            view.applicationWindowToken,
-            InputMethod.SHOW_FORCED,
+        inputMethodManager.showSoftInput(
+            view,
             0
         )
     }

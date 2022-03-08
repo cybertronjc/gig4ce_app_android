@@ -34,6 +34,7 @@ open class AttendanceRecyclerItemData(
         val gigerPhoneNumber: String,
         val gigerDesignation: String,
         val gigerOffice: String,
+        val businessName: String
     ) : AttendanceRecyclerItemData(
         type = CommonViewTypes.VIEW_GIGER_ATTENDANCE
     ){

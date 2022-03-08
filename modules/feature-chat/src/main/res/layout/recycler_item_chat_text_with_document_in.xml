@@ -7,6 +7,11 @@
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearRoot"
+            android:orientation="vertical">
     <LinearLayout
         android:id="@+id/cv_msgContainer"
         android:layout_width="wrap_content"
@@ -39,18 +44,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:paddingBottom="8dp"
+                android:paddingBottom="@dimen/size_2"
+                android:paddingStart="@dimen/size_2"
+                android:paddingEnd="@dimen/size_2"
+                android:background="?android:selectableItemBackground"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/document_type_iv"
                 android:textColor="@color/colorPrimary"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:text="Himanshu" />
 
             <ImageView
                 android:id="@+id/document_type_iv"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginTop="@dimen/size_4"
                 app:layout_constraintTop_toBottomOf="@id/user_name_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_chat_document_3" />
@@ -60,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="120dp"
+                android:layout_marginTop="@dimen/size_4"
                 android:layout_marginStart="14dp"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
@@ -110,6 +120,7 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </merge>

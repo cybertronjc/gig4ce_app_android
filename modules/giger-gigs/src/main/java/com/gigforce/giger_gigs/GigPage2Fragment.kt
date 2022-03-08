@@ -275,10 +275,23 @@ class GigPage2Fragment : Fragment(),
 
             val gig = viewModel.currentGig ?: return@setOnClickListener
 
+            //event
+
+            FirebaseAuth.getInstance().currentUser?.uid?.let {
+                gig.getFullCompanyName()?.let { it1 ->
+                    val map = mapOf("Giger ID" to gig.gigerId, "TL ID" to it, "Business Name" to it1, "gigId" to gigId)
+                    eventTracker.pushEvent(TrackingEventArgs("giger_attempted_checkin",map))
+                }
+            }
             if (isNecessaryPermissionGranted()) {
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
                     if (imageClickedPath != null) {
+                        //event
+                        FirebaseAuth.getInstance().currentUser?.uid?.let {
+                            val map = mapOf("TL ID" to it, "gigId" to gigId)
+                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                        }
 
                         checkForLateOrEarlyCheckIn()
                     } else {
@@ -490,6 +503,7 @@ class GigPage2Fragment : Fragment(),
                         } else {
                             showToast(getString(R.string.checkin_marked_giger_gigs))
                             plantLocationTrackers()
+
                             eventTracker.pushEvent(
                                 TrackingEventArgs(
                                     "attendance",
@@ -880,6 +894,12 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun showDeclineGigDialog() {
+        //event
+
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            val map = mapOf("Giger ID" to it)
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+        }
         DeclineGigDialogFragment.launch(gigId, childFragmentManager, this@GigPage2Fragment)
     }
 
@@ -929,6 +949,11 @@ class GigPage2Fragment : Fragment(),
             REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     imageClickedPath = data?.getStringExtra("image_name")
+                    //event
+                    FirebaseAuth.getInstance().currentUser?.uid?.let {
+                        val map = mapOf("TL ID" to it, "gigId" to gigId)
+                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                    }
                     checkForLateOrEarlyCheckIn()
                 }
             }
@@ -937,6 +962,11 @@ class GigPage2Fragment : Fragment(),
                     imageClickedPath =
                         data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
                     Log.d("clickedPath", "$imageClickedPath")
+                    //event
+                    FirebaseAuth.getInstance().currentUser?.uid?.let {
+                        val map = mapOf("TL ID" to it, "gigId" to gigId)
+                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                    }
                     checkForLateOrEarlyCheckIn()
                 }
             }

@@ -39,6 +39,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -54,6 +55,7 @@ class GigViewModel constructor(
 
     var gigOrder: GigOrder? = null
 
+
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
     }
@@ -64,7 +66,7 @@ class GigViewModel constructor(
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-            .getCurrentUserGigs()
+            .getCurrentUserGigs
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
                 if (querySnapshot != null) {
@@ -139,7 +141,7 @@ class GigViewModel constructor(
         checkInTimeAccToUser: Timestamp?,
         remarks: String?
     ) {
-        _markingAttendanceState.postValue(Lce.loading())
+        _markingAttendanceState.value = Lce.loading()
 
         try {
             gigsRepository.markCheckIn(
@@ -152,11 +154,11 @@ class GigViewModel constructor(
                 remarks = remarks,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
-            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
-            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_IN)
+            _markingAttendanceState.value = null
         } catch (e: Exception) {
-            _markingAttendanceState.postValue(Lce.error(e.toString()))
-            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = null
         }
     }
 
@@ -169,7 +171,7 @@ class GigViewModel constructor(
         checkOutTimeAccToUser: Timestamp?,
         remarks: String?
     ) {
-        _markingAttendanceState.postValue(Lce.loading())
+        _markingAttendanceState.value = Lce.loading()
 
         try {
             gigsRepository.markCheckOut(
@@ -185,8 +187,8 @@ class GigViewModel constructor(
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
             _markingAttendanceState.value = null
         } catch (e: Exception) {
-            _markingAttendanceState.postValue(Lce.error(e.toString()))
-            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = null
         }
     }
 
@@ -598,6 +600,7 @@ class GigViewModel constructor(
                         "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
                     )
                 )
+
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
@@ -649,7 +652,7 @@ class GigViewModel constructor(
 
         _todaysGigs.value = Lce.loading()
         mWatchTodaysGigRegistration = gigsRepository
-            .getCurrentUserGigs()
+            .getCurrentUserGigs
             .whereGreaterThan("startDateTime", dateFull)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
@@ -679,7 +682,7 @@ class GigViewModel constructor(
         _todaysGigs.value = Lce.loading()
         try {
             val querySnapshot = gigsRepository
-                .getCurrentUserGigs()
+                .getCurrentUserGigs
                 .whereGreaterThan("startDateTime", dateFull)
                 .getOrThrow()
 
@@ -716,7 +719,7 @@ class GigViewModel constructor(
         try {
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
-                .getCurrentUserGigs()
+                .getCurrentUserGigs
                 .whereEqualTo("gigerId", currentUser.uid)
                 .whereEqualTo("gigOrderId", gigOrderId)
                 .whereGreaterThan("startDateTime", monthStart.toDate)

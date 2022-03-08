@@ -31,8 +31,10 @@ object AppConstants {
     const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
     const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
     const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
+    const val INTENT_EXTRA_CHAT_MESSAGE_ID = "chat_message_id"
     const val CHAT_TYPE_USER = "user"
     const val CHAT_TYPE_GROUP = "group"
+    const val INTENT_EXTRA_END_LIVE_LOCATION = "end_live_location"
 
 
     const val LEARNING_IMAGES_FIREBASE_FOLDER = "learning_images"
@@ -40,6 +42,7 @@ object AppConstants {
 
     const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
     const val INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM = "came_from_onboarding_form"
+    const val INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE = "came_from_attendance"
     const val INTENT_EXTRA_UID = "uid"
 
     const val INTENT_EXTRA_COURSE_ID = "course_id"
