@@ -1,8 +1,6 @@
 package com.gigforce.verification.mainverification.compliance.components
 
 import android.app.DownloadManager
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
@@ -13,29 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.core.net.toUri
-import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.ext.showToast
-import com.gigforce.common_ui.remote.verification.ComplianceDocDetailsDM
 import com.gigforce.common_ui.remote.verification.ComplianceDocumentDetailDM
-import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.core.IViewHolder
-import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
-import com.gigforce.core.file.FileUtils
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.core.utils.Lce
 import com.gigforce.verification.databinding.ComplianceDocumentDetailComponentBinding
-import com.gigforce.verification.databinding.ComplianceNumberDetailsComponentBinding
-import com.gigforce.verification.mainverification.vaccine.DownloadFileService
-import com.gigforce.verification.mainverification.vaccine.mainvaccine.FileDownloaded
-import com.google.firebase.storage.FirebaseStorage
 import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -83,28 +65,38 @@ class ComplianceDocumentDetailsComponent (context: Context, attrs: AttributeSet?
 
     override fun onClick(p0: View?) {
             //download file
-        Toast.makeText(context, "Download started, please check notification", Toast.LENGTH_SHORT).show()
-        downloadFile(context, currentData.path.substring(currentData.path.lastIndexOf('/') + 1),
-            ".pdf",
-            Environment.DIRECTORY_DOWNLOADS,
-            currentData.path)
+        startDocumentDownload(currentData.path)
     }
 
-    private fun downloadFile(
-        context: Context,
-        fileName: String,
-        fileExtension: String,
-        destination: String,
+    private fun startDocumentDownload(
         url: String
     ) {
-        val downloadManager: DownloadManager =
-            context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val uri = Uri.parse(url)
-        val request: DownloadManager.Request = DownloadManager.Request(uri)
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalFilesDir(context, destination, fileName + fileExtension)
-        request.setTitle(fileName)
-        request.setMimeType("application/pdf")
-        downloadManager.enqueue(request)
+        try {
+            val filePathName = FirebaseUtils.extractFilePath(url)
+
+            val downloadRequest = DownloadManager.Request(Uri.parse(url)).run {
+                setTitle(filePathName)
+                setDescription("Offer Letter")
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    filePathName
+                )
+                setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+                )
+            }
+
+            val downloadManager = context
+                .getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            downloadManager.enqueue(downloadRequest)
+
+            ToastHandler.showToast(
+                context,
+                "Saving file in Downloads,check notification...",
+                Toast.LENGTH_LONG
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
