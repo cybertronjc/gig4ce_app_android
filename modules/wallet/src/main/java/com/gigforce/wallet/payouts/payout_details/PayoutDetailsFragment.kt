@@ -83,7 +83,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog =  super.onCreateDialog(savedInstanceState)
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
         return dialog
     }
 

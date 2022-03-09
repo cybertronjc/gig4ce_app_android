@@ -13,24 +13,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="20dp"
-            android:paddingTop="40dp"
             android:paddingBottom="10dp"
             tools:context=".payouts.payout_details.PayoutDetailsFragment">
 
+            <View
+                android:id="@+id/top_bar"
+                android:layout_width="48dp"
+                android:layout_height="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/rect_primary"
+                />
 
             <com.gigforce.wallet.common_views.PayoutStatusView
                 android:id="@+id/payoutStatusView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/business_logo_imageview"
+                app:layout_constraintBottom_toBottomOf="@+id/business_logo_imageview"/>
 
             <com.gigforce.common_ui.views.GigforceImageView
                 android:id="@+id/business_logo_imageview"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/top_bar" />
 
             <TextView
                 android:id="@+id/business_name_textview"
@@ -45,15 +56,16 @@
                 android:textFontWeight="700"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@id/payoutStatusView"
+                app:layout_constraintBottom_toBottomOf="@id/business_logo_imageview"
                 app:layout_constraintStart_toEndOf="@id/business_logo_imageview"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/business_logo_imageview"
                 tools:text="Whoo ho Company Name" />
 
             <com.gigforce.wallet.payouts.payout_details.views.PayoutDetailsInfoLayout
                 android:id="@+id/infoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="20dp"
                 app:cardCornerRadius="6dp"
                 android:layout_marginEnd="20dp"
                 app:cardBackgroundColor="#E9F0FE"
@@ -136,12 +148,29 @@
 
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/download_payout_slip_button"
+                style="@style/LeadMgmtMaterialButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textFontWeight="700"
+                android:textSize="12sp"
+                android:layout_marginTop="30dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="Download Payout Slip"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/remarks_textview"
+                app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/call_help_line_button"
                 style="@style/LeadMgmtMaterialButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="@dimen/size_16"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/lato"
                 android:textFontWeight="700"
@@ -153,24 +182,10 @@
                 app:iconPadding="10dp"
                 app:icon="@drawable/ic_call_icon"
                 android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/remarks_textview"
-                app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/download_payout_slip_button"
-                style="@style/LeadMgmtMaterialButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/size_16"
-                android:fontFamily="@font/lato"
-                android:textFontWeight="700"
-                android:textSize="12sp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:layout_marginEnd="20dp"
-                android:text="Download Payout Slip"
-                android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/call_help_line_button"
+                app:layout_constraintTop_toBottomOf="@id/download_payout_slip_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
