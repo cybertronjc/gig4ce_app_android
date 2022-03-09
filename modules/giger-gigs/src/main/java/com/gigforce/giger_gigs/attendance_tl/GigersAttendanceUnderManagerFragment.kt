@@ -28,7 +28,6 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
-import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -62,6 +61,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class GigersAttendanceUnderManagerFragment : Fragment(),
     AttendanceSwipeHandler.AttendanceSwipeHandlerListener, IOnBackPressedOverride {
+
+    companion object {
+        const val TAG = "GigerAttendanceUnderManagerFrg"
+    }
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -112,112 +115,39 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
     @OptIn(FlowPreview::class)
     private fun initView() {
 
-        viewBinding.toolbar.setBackButtonListener {
-            if (viewBinding.toolbar.isSearchCurrentlyShown) {
-                hideSoftKeyboard()
-            } else if (viewBinding.gigersUnderManagerMainLayout.slotCalendar.isVisible){
-                viewBinding.gigersUnderManagerMainLayout.slotCalendar.gone()
-            } else {
-                activity?.onBackPressed()
-            }
-        }
-
-        viewBinding.gigersUnderManagerMainLayout.joinNowButton.setOnClickListener {
-            navigation.navigateTo("LeadMgmt/selectionForm1", bundleOf(
-                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to true
-            ))
-        }
+//        viewBinding.appBarComp.setBackButtonListener {
+//            if (viewBinding.appBarComp.isSearchCurrentlyShown) {
+//                hideSoftKeyboard()
+//            } else if (viewBinding.appBarComp.slotCalendar.isVisible){
+//                viewBinding.appBarComp.slotCalendar.gone()
+//            } else {
+//                activity?.onBackPressed()
+//            }
+//        }
 
 
         lifecycleScope.launch {
 
-            viewBinding.toolbar.apply {
-
-                if (title.isNotBlank())
-                    showTitle(title)
-                else
-                    showTitle(context.getString(R.string.gigers_attendance_giger_gigs))
-                hideActionMenu()
-                showSearchOption(context.getString(R.string.search_name_giger_gigs))
-                viewBinding.toolbar.hideSubTitle()
-                getSearchTextChangeAsFlow()
-                    .debounce(300)
-                    .distinctUntilChanged()
-                    .flowOn(Dispatchers.Default)
-                    .collect { searchString ->
-                        Log.d("Search ", "Searhcingg...$searchString")
-                        viewModel.searchAttendance(searchString)
-                    }
-            }
+//            viewBinding.toolbar.apply {
+//
+//                if (title.isNotBlank())
+//                    showTitle(title)
+//                else
+//                    showTitle(context.getString(R.string.gigers_attendance_giger_gigs))
+//                hideActionMenu()
+//                showSearchOption(context.getString(R.string.search_name_giger_gigs))
+//                viewBinding.toolbar.hideSubTitle()
+//                getSearchTextChangeAsFlow()
+//                    .debounce(300)
+//                    .distinctUntilChanged()
+//                    .flowOn(Dispatchers.Default)
+//                    .collect { searchString ->
+//                        Log.d("Search ", "Searhcingg...$searchString")
+//                        viewModel.searchAttendance(searchString)
+//                    }
+//            }
         }
 
-        viewBinding.gigersUnderManagerMainLayout.apply {
-
-
-            attendanceRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            itemTouchHelper.attachToRecyclerView(attendanceRecyclerView)
-            slotContainer.setOnClickListener {
-
-                slotCalendar.isVisible = !slotCalendar.isVisible
-            }
-            selectedSlotTv.text = getString(R.string.today_giger_gigs)
-            slotCalendar.selectedDate = CalendarDay.today()
-            slotCalendar.setOnDateChangedListener { _, date, _ ->
-
-                val selectedDate = LocalDate.of(date.year, date.month, date.day)
-                selectedSlotTv.text = selectedDate.format(simpleDateFormat)
-                slotCalendar.gone()
-
-                viewModel.fetchUsersAttendanceDate(selectedDate)
-            }
-
-            statusTabLayout.onTabSelected { tab ->
-                val selectedTab = tab ?: return@onTabSelected
-                viewModel.filterAttendanceByStatus(
-                    if (selectedTab.tag.toString() == "All") null else selectedTab.tag.toString()
-                )
-            }
-
-            businessSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-
-                    if (businessSpinner.childCount != 0 && businessSpinner.selectedItemPosition != 0) {
-                        viewModel.filterAttendanceByBusiness(businessSpinner.selectedItem.toString())
-                    } else {
-                        viewModel.filterAttendanceByBusiness(null)
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-
-            shiftSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-
-                    if (shiftSpinner.childCount != 0 && shiftSpinner.selectedItemPosition != 0) {
-
-                        val selectedShift = shiftSpinner.selectedItem as AttendanceFilterItemShift
-                        viewModel.filterDataByShift(selectedShift.shift)
-                    } else {
-                        viewModel.filterDataByShift(null)
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-        }
 
     }
 
@@ -257,15 +187,13 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
                 }
             })
 
-        viewModel.filters.observe(viewLifecycleOwner, {
+        viewModel.filters.observe(viewLifecycleOwner) {
 
             updateFilters(
                 it.shouldRemoveOlderStatusTabs,
-                it.attendanceStatuses,
-                it.business,
-                it.shiftTimings
+                it.attendanceStatuses
             )
-        })
+        }
 
         viewModel.markAttendanceState.observe(viewLifecycleOwner, {
 
@@ -308,65 +236,20 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
 
     private fun updateFilters(
         shouldRemoveOlderStatusTabs: Boolean,
-        attendanceStatuses: List<AttendanceStatusAndCountItemData>?,
-        business: List<String>?,
-        shiftTimings: List<AttendanceFilterItemShift>?
+        attendanceStatuses: List<AttendanceStatusAndCountItemData>?
     ) {
 
         if (attendanceStatuses != null)
             setStatusTabs(shouldRemoveOlderStatusTabs, attendanceStatuses)
 
-        if (business != null) {
-            setBusinessOnSpinners(business)
-        }
-
-        if (shiftTimings != null) {
-            setShiftTimmingsOnSpinners(shiftTimings)
-        }
     }
 
-    private fun setShiftTimmingsOnSpinners(
-        shiftTimings: List<AttendanceFilterItemShift>
-    ) {
-
-        val shiftAdapter: ArrayAdapter<AttendanceFilterItemShift> =
-            ArrayAdapter<AttendanceFilterItemShift>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                shiftTimings.toMutableList().apply {
-                    add(
-                        0, AttendanceFilterItemShift(
-                            shift = "",
-                            shiftTimeForView = getString(R.string.select_shift_giger_gigs)
-                        )
-                    )
-                }
-            )
-        shiftAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        viewBinding.gigersUnderManagerMainLayout.shiftSpinner.adapter = shiftAdapter
-    }
-
-    private fun setBusinessOnSpinners(
-        business: List<String>
-    ) {
-
-        val businessAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                business.toMutableList().apply {
-                    add(0, getString(R.string.select_company_giger_gigs))
-                }
-            )
-        businessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        viewBinding.gigersUnderManagerMainLayout.businessSpinner.adapter = businessAdapter
-    }
 
     private fun showSnackBar(
         text: String
     ) {
         Snackbar.make(
-            viewBinding.gigersUnderManagerMainLayout.root,
+            viewBinding.rootFrameLayout,
             text,
             Snackbar.LENGTH_SHORT
         ).show()
@@ -383,53 +266,30 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         swipeTouchHandler.markPresentSwipeActionEnabled = enablePresentSwipeAction
         swipeTouchHandler.declineSwipeActionEnabled = enableDeclineSwipeAction
 
-        this.gigersUnderManagerMainLayout.errorInfoLayout.gone()
-        this.gigersUnderManagerMainLayout.apply {
-            this.root.visible()
-            this.swipeLabel.isVisible = attendanceSwipeControlsEnabled
-
-            stopShimmer(
-                this.statusShimmerContainer,
-                R.id.chip_like_shimmer_controller
-            )
-            stopShimmer(
-                this.attendanceShimmerContainer,
-                R.id.shimmer_controller
-            )
-            this.attendanceRecyclerView.collection = attendanceItemData
-            if (attendanceItemData.isEmpty()) {
-                noAttendanceFound()
-            } else {
-                this.businessSpinner.visible()
-                this.businessLabel.visible()
-                this.shiftSpinner.visible()
-                this.shiftLabel.visible()
-            }
-        }
     }
 
     private fun setStatusTabs(
         shouldRemoveOlderStatusTabs: Boolean,
         attendanceStatuses: List<AttendanceStatusAndCountItemData>
-    ) = viewBinding.gigersUnderManagerMainLayout.apply {
+    ) = viewBinding.apply {
 
         if (shouldRemoveOlderStatusTabs) {
-            this.statusTabLayout.removeAllTabs()
+            this.tablayout.removeAllTabs()
 
             attendanceStatuses.forEach {
 
-                val newTab = this.statusTabLayout.newTab().apply {
+                val newTab = this.tablayout.newTab().apply {
                     this.text = "${it.status} (${it.attendanceCount})"
                     this.tag = it.status
                 }
-                this.statusTabLayout.addTab(newTab)
+                this.tablayout.addTab(newTab)
             }
         } else {
             //Just updating Tabs Text
             val currentShownTabsInView = mutableListOf<String>()
-            for (i in 0 until this.statusTabLayout.tabCount) {
+            for (i in 0 until this.tablayout.tabCount) {
 
-                val tab = this.statusTabLayout.getTabAt(i)
+                val tab = this.tablayout.getTabAt(i)
                 val tabStatus = tab!!.tag.toString()
                 currentShownTabsInView.add(tabStatus)
             }
@@ -455,16 +315,16 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
 
             tabsAdded.forEach {
 
-                val newTab = this.statusTabLayout.newTab().apply {
+                val newTab = this.tablayout.newTab().apply {
                     this.text = "${it.status} (${it.attendanceCount})"
                     this.tag = it.status
                 }
-                this.statusTabLayout.addTab(newTab)
+                this.tablayout.addTab(newTab)
             }
 
-            for (i in 0 until statusTabLayout.tabCount) {
+            for (i in 0 until tablayout.tabCount) {
 
-                val tab = statusTabLayout.getTabAt(i)
+                val tab = tablayout.getTabAt(i)
                 val tabStatus = tab!!.tag.toString()
 
                 if (tabsDeleted.contains(tabStatus)) {
@@ -487,80 +347,33 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         shouldShowRetryButton: Boolean
     ) = viewBinding.apply {
 
-        stopShimmer(
-            this.gigersUnderManagerMainLayout.attendanceShimmerContainer,
-            R.id.shimmer_controller
-        )
-        stopShimmer(
-            this.gigersUnderManagerMainLayout.statusShimmerContainer,
-            R.id.chip_like_shimmer_controller
-        )
-
-        this.gigersUnderManagerMainLayout.swipeLabel.gone()
-        this.gigersUnderManagerMainLayout.errorInfoLayout.visible()
-        this.gigersUnderManagerMainLayout.gigersUnderManagerMainError.text = error
     }
 
 
-    private fun noAttendanceFound() = viewBinding.gigersUnderManagerMainLayout.apply {
+    private fun noAttendanceFound() = viewBinding.apply {
 
-        stopShimmer(
-            this.statusShimmerContainer,
-            R.id.chip_like_shimmer_controller
-        )
-        stopShimmer(
-            this.attendanceShimmerContainer,
-            R.id.shimmer_controller
-        )
-
-        this.attendanceRecyclerView.collection = emptyList()
-        this.errorInfoLayout.visible()
-        this.gigersUnderManagerMainError.text = getString(R.string.no_attendance_found_giger_gigs)
-
-        this.businessSpinner.gone()
-        this.businessLabel.gone()
-        this.shiftSpinner.gone()
-        this.shiftLabel.gone()
+//        stopShimmer(
+//            this.statusShimmerContainer,
+//            R.id.chip_like_shimmer_controller
+//        )
+//        stopShimmer(
+//            this.attendanceShimmerContainer,
+//            R.id.shimmer_controller
+//        )
+//
+//        this.attendanceRecyclerView.collection = emptyList()
+//        this.errorInfoLayout.visible()
+//        this.gigersUnderManagerMainError.text = getString(R.string.no_attendance_found_giger_gigs)
+//
+//        this.businessSpinner.gone()
+//        this.businessLabel.gone()
+//        this.shiftSpinner.gone()
+//        this.shiftLabel.gone()
     }
 
 
     private fun showDataLoadingFromServer() = viewBinding.apply {
 
-        this.gigersUnderManagerMainLayout.apply {
-            this.root.visible()
-            this.errorInfoLayout.gone()
-
-            this.swipeLabel.gone()
-//            toolbar.hideSearchOption()
-            this.statusTabLayout.removeAllTabs()
-            startShimmer(
-                this.statusShimmerContainer,
-                ShimmerDataModel(
-                    cardRes = com.gigforce.common_ui.R.layout.shimmer_chip_like_layout,
-                    minHeight = R.dimen.size_30,
-                    minWidth = R.dimen.size_90,
-                    marginRight = R.dimen.size_8,
-                    marginTop = R.dimen.size16,
-                    marginLeft = R.dimen.size_1,
-                    itemsToBeDrawn = 3,
-                    orientation = LinearLayout.HORIZONTAL
-                ),
-                R.id.chip_like_shimmer_controller
-            )
-
-            this.attendanceRecyclerView.collection = emptyList()
-            startShimmer(
-                this.attendanceShimmerContainer,
-                ShimmerDataModel(
-                    minHeight = R.dimen.size_120,
-                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                    marginRight = R.dimen.size_16,
-                    marginTop = R.dimen.size_1,
-                    orientation = LinearLayout.VERTICAL
-                ),
-                R.id.shimmer_controller
-            )
-        }
     }
 
     private fun hideSoftKeyboard() {
@@ -572,15 +385,13 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
-    companion object {
-        const val TAG = "GigerAttendanceUnderManagerFrg"
-    }
+
 
     override fun onRightSwipedForMarkingPresent(
         viewHolder: RecyclerView.ViewHolder,
         attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) {
-        viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(
+        viewBinding.recyclerView.coreAdapter.notifyItemChanged(
             viewHolder.adapterPosition
         )
         itemTouchHelper.startSwipe(viewHolder)
@@ -588,8 +399,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         viewModel.markUserCheckedIn(
             attendanceData.gigId,
             attendanceData.gigerName,
-            attendanceData.gigerId,
-            attendanceData.businessName
+            attendanceData.gigerId
         )
     }
 
@@ -597,15 +407,15 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         viewHolder: RecyclerView.ViewHolder,
         attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) {
-        viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(
+        viewBinding.recyclerView.coreAdapter.notifyItemChanged(
             viewHolder.adapterPosition
         )
         itemTouchHelper.startSwipe(viewHolder)
         //event
-        FirebaseAuth.getInstance().currentUser?.uid?.let {
-            val map = mapOf("Giger ID" to attendanceData.gigerId, "TL ID" to it, "Business Name" to attendanceData.businessName)
-            eventTracker.pushEvent(TrackingEventArgs("tl_attempted_decline",map))
-        }
+//        FirebaseAuth.getInstance().currentUser?.uid?.let {
+//            val map = mapOf("Giger ID" to attendanceData.gigerId, "TL ID" to it, "Business Name" to attendanceData.businessName)
+//            eventTracker.pushEvent(TrackingEventArgs("tl_attempted_decline",map))
+//        }
 
         DeclineGigDialogFragment.launch(
             attendanceData.gigId,
@@ -616,10 +426,10 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        if (viewBinding.gigersUnderManagerMainLayout.slotCalendar.isVisible){
-            viewBinding.gigersUnderManagerMainLayout.slotCalendar.gone()
-            return true
-        }
+//        if (viewBinding.gigersUnderManagerMainLayout.slotCalendar.isVisible){
+//            viewBinding.gigersUnderManagerMainLayout.slotCalendar.gone()
+//            return true
+//        }
         return  false
 
     }

@@ -2,58 +2,44 @@ package com.gigforce.giger_gigs.models
 
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
+import com.gigforce.giger_gigs.GigCoreRecyclerViewBindings
+import com.gigforce.giger_gigs.attendance_tl.GigerAttendanceUnderManagerViewModel
 
 
 open class AttendanceRecyclerItemData(
     val type: Int
 ) : SimpleDVM(type) {
 
-//    data class AttendanceRecyclerItemBusinessData(
-//            val businessName: String
-//    ) : AttendanceRecyclerItemData(
-//            type = GigViewTypes.ATTENDANCE_BUSSINESS_NAME
-//    )
-
-    data class AttendanceRecyclerItemBusinessAndShiftNameData(
+    data class AttendanceBusinessHeaderItemData(
         val businessName: String,
         val enabledCount: Int,
         val activeCount: Int,
         val inActiveCount: Int,
-        val expanded: Boolean
+        var expanded: Boolean,
+        val viewModel : GigerAttendanceUnderManagerViewModel
     ) : AttendanceRecyclerItemData(
-        type = CommonViewTypes.VIEW_ATTENDANCE_BUSINESS_SHIFT_TIME
+        type = GigCoreRecyclerViewBindings.VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER
     )
 
     data class AttendanceRecyclerItemAttendanceData(
-        val attendanceStatus: String,
+        val status: String,
+        val statusTextColorCode : String,
+        val statusBackgroundColorCode : String,
+
+        val gigerImage: String,
         val gigId: String,
-        val gigStatus: String,
         val gigerId: String,
         val gigerName: String,
-        val gigerImage: String,
-        val gigerPhoneNumber: String,
         val gigerDesignation: String,
-        val gigerOffice: String,
-        val businessName: String
+
+        val markedByText : String,
+        val lastActiveText : String,
+        val hasAttendanceConflict : Boolean,
+        val gigerAttendanceStatus : String,
+
+        val viewModel : GigerAttendanceUnderManagerViewModel
     ) : AttendanceRecyclerItemData(
-        type = CommonViewTypes.VIEW_GIGER_ATTENDANCE
-    ){
-
-        fun getLastActiveText() : String{
-            return ""
-        }
-
-        fun getMarkedByText(): String{
-            return ""
-        }
-
-        fun getOverallStatusText(): String{
-            return ""
-        }
-
-        fun hasAttendanceConflict() : Boolean{
-            return false
-        }
-    }
+        type = GigCoreRecyclerViewBindings.VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM
+    )
 }
 

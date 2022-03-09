@@ -7,7 +7,7 @@
 
         <variable
             name="businessAndAttendanceModel"
-            type="com.gigforce.giger_gigs.models.AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData" />
+            type="com.gigforce.giger_gigs.models.AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData" />
 
     </data>
 

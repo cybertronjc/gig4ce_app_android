@@ -3,7 +3,6 @@ package com.gigforce.giger_gigs.listItems
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View.inflate
 import android.widget.RelativeLayout
 import com.gigforce.core.IViewHolder
 import com.gigforce.giger_gigs.databinding.RecyclerRowBusinessNameShiftTimeBinding
@@ -40,7 +39,7 @@ class AttendanceBusinessAndShiftTimeRecyclerItemView(
 
     override fun bind(data: Any?) {
         data?.let {
-            val shiftNameData = it as AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData
+            val shiftNameData = it as AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData
             viewBinding.shiftTimeTv.text = shiftNameData.shiftName
             viewBinding.companyNameTv.text = shiftNameData.businessName
         }

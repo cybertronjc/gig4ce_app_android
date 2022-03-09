@@ -26,8 +26,8 @@ class TLAttendanceAdapterDiffUtil(
         if (oldItem.type != newItem.type) {
             return false
         } else {
-            if (oldItem is AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData &&
-                newItem is AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData
+            if (oldItem is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData &&
+                newItem is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData
             ) {
                 return oldItem.businessName == newItem.businessName
             } else if (oldItem is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
@@ -47,8 +47,8 @@ class TLAttendanceAdapterDiffUtil(
         if (oldItem.type != newItem.type) {
             return false
         } else {
-            if (oldItem is AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData &&
-                newItem is AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData
+            if (oldItem is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData &&
+                newItem is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData
             ) {
 
                 return oldItem.businessName == newItem.businessName &&
@@ -61,8 +61,7 @@ class TLAttendanceAdapterDiffUtil(
                 newItem is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
             ) {
                 return oldItem.gigId == newItem.gigId &&
-                        oldItem.attendanceStatus == newItem.attendanceStatus &&
-                        oldItem.gigStatus == newItem.gigStatus
+                        oldItem.status == newItem.status 
             }
 
             return false

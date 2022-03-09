@@ -1,72 +1,106 @@
 package com.gigforce.giger_gigs.attendance_tl
 
-import com.gigforce.common_ui.viewmodels.payouts.Payout
+import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
-import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModel
-import com.gigforce.wallet.models.PayoutListPresentationItemData
 
 object AttendanceUnderTLListDataProcessor {
 
-    fun processPayoutListAndFilters(
-        attendance: List<Payout>,
-        collapsedDates: List<String>,
-        gigerAttendanceUnderManager: GigerAttendanceUnderManagerViewModel
+    fun processAttendanceListAndFilters(
+        attendance: List<GigAttendanceApiModel>,
+        collapsedBusiness: List<String>,
+        currentlySelectedStatus: String,
+        currentlySearchTerm: String?,
+        gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel
     ): List<AttendanceRecyclerItemData> {
 
-        val payoutMonthYearToPayoutGroup = attendance
-            .sortedByDescending { it.getPaymentCycleEndDateMonth() }
+        val filteredAttendance = filterAttendanceList(
+            attendance,
+            currentlySelectedStatus,
+            currentlySearchTerm
+        )
+
+        val businessToAttendanceGroup = filteredAttendance
+            .sortedByDescending { it.getBusinessNameNN() }
             .groupBy {
-                it.getPaymentCycleEndDateMonthYear()
+                it.getBusinessNameNN()
             }
 
         return mutableListOf<AttendanceRecyclerItemData>()
             .apply {
 
-                payoutMonthYearToPayoutGroup.forEach { (monthYearHeader, payouts) ->
-
-                    if (collapsedDates.contains(monthYearHeader)) {
-
-                        add(
-                            AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData(
-                                date = monthYearHeader,
-                                expanded = false,
-                                viewModel = payoutListViewModel
-                            )
+                businessToAttendanceGroup.forEach { (businessName, attendance) ->
+                    val attendanceHeader =
+                        AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData(
+                            businessName = "",
+                            enabledCount = attendance.count(),
+                            activeCount = 0,
+                            inActiveCount = 0,
+                            expanded = false,
+                            viewModel = gigerAttendanceUnderManagerViewModel
                         )
+
+                    if (collapsedBusiness.contains(businessName)) {
+                        attendanceHeader.expanded = false
+                        add(attendanceHeader)
                     } else {
+                        attendanceHeader.expanded = true
+                        add(attendanceHeader)
 
-                        add(
-                            AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData(
-                                date = monthYearHeader,
-                                expanded = true,
-                                viewModel = payoutListViewModel
+                        addAll(
+                            mapPayoutsToPayoutItemView(
+                                attendance,
+                                gigerAttendanceUnderManagerViewModel
                             )
                         )
-
-                        addAll(mapPayoutsToPayoutItemView(payouts, payoutListViewModel))
                     }
                 }
             }
     }
 
-    private fun mapPayoutsToPayoutItemView(
-        payouts: List<Payout>,
-        viewModel: GigerAttendanceUnderManagerViewModel
-    ): Collection<AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData> {
+    fun filterAttendanceList(
+        attendance: List<GigAttendanceApiModel>,
+        currentlySelectedStatus: String?,
+        currentlySearchTerm: String?
+    ): List<GigAttendanceApiModel> {
+       return attendance.run {
 
-        return payouts.map {
-            AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData(
-                id = it.id ?: "-1",
-                icon = it.businessIcon,
-                companyName = it.businessName,
-                amount = it.amount,
-                status = it.status ?: "#FFBF00",
-                statusColorCode = it.statusColorCode ?: "#",
-                paymentDate = it.paidOnDate,
-                viewModel = viewModel,
-                category = it.category
-            )
+           if(!currentlySearchTerm.isNullOrBlank()){
+               this.filter {
+
+                   it.gigerName?.contains(currentlySearchTerm,true) ?: false ||
+                   it.jobProfile?.contains(currentlySearchTerm,true) ?: false
+               }
+           }
+
+           this.filter {
+               true
+           }
         }
     }
+
+    private fun mapPayoutsToPayoutItemView(
+        attendances: List<GigAttendanceApiModel>,
+        viewModel: GigerAttendanceUnderManagerViewModel
+    ): Collection<AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData> =
+        attendances.sortedBy {
+            it.gigerName
+        }.map {
+            AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData(
+                status = "",
+                statusTextColorCode = "",
+                statusBackgroundColorCode = "",
+                gigerImage = it.gigerName ?: "",
+                gigId = "",
+                gigerId = "",
+                gigerName = "",
+                gigerDesignation = "",
+                markedByText = "",
+                lastActiveText = "",
+                hasAttendanceConflict = false,
+                gigerAttendanceStatus = "",
+                viewModel = viewModel
+            )
+        }
+
 
 }

@@ -1,29 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".payouts.PayoutMainFragment">
 
-        <com.gigforce.common_ui.views.GigforceToolbar
-            android:id="@+id/toolbar"
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?android:actionBarSize" />
+            android:visibility="visible"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
+            app:isSearchVisible="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="Payouts" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:clipToPadding="false"
+            app:tabBackground="@drawable/payout_tab_selector_background"
+            app:tabGravity="fill"
+            app:tabIndicator="@null"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="0dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="16dp"
+            app:tabPaddingStart="0dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/black" />
 
         <FrameLayout
+            android:id="@+id/rootFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.gigforce.core.recyclerView.CoreRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <include
-                android:id="@+id/gigers_under_manager_main_layout"
-                layout="@layout/fragment_giger_under_managers_attendance_main"
-             />
+                android:id="@+id/shimmer_container"
+                layout="@layout/shimmer_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:visibility="visible" />
 
-
+            <include
+                android:id="@+id/info_layout"
+                layout="@layout/layout_information_with_button" />
 
         </FrameLayout>
 
