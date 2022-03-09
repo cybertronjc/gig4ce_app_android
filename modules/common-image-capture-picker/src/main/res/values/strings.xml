@@ -15,4 +15,7 @@
     <string name="gallery_common">Gallery</string>
     <string name="face_detected_common">Face Detected. Uploading...</string>
     <string name="something_seems_off_common">Please upload clear and straight selfie image.</string>
+    <string name="no_face_detected_details_common">Try again to capture clear and straight selfie image or proceed with this selfie</string>
+    <string name="try_again_common">Try again</string>
+    <string name="submit_common">Submit</string>
 </resources>

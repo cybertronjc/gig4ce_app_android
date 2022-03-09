@@ -15,4 +15,7 @@
     <string name="gallery_common">गेलरी</string>
     <string name="face_detected_common">चेहरे का पता चला। अपलोडिंग...</string>
     <string name="something_seems_off_common">कृपया स्पष्ट और सीधी तस्वीर अपलोड करें।</string>
+    <string name="no_face_detected_details_common">स्पष्ट और सीधी सेल्फी छवि कैप्चर करने के लिए पुनः प्रयास करें या इस सेल्फ़ी के साथ आगे बढ़ें</string>
+    <string name="try_again_common">पुनः प्रयास करें</string>
+    <string name="submit_common">आगे बढ़ना</string>
 </resources>
