@@ -1214,6 +1214,10 @@
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
         android:label="ChangeTeamLeaderBottomSheetFragment" />
+    <fragment
+        android:id="@+id/myDocumentsFragment"
+        android:name="com.gigforce.verification.mainverification.MyDocumentsFragment"
+        android:label="MyDocumentsFragment" />
 
     <fragment
         android:id="@+id/payoutMainFragment"
@@ -1232,7 +1236,7 @@
 
 
 
-=========
+    =========
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
         android:label="ViewLiveLocationFragment" />

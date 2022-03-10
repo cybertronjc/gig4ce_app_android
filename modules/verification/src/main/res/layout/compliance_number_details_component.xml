@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_20"
+        android:background="@drawable/card_background"
+        >
+        <TextView
+            android:id="@+id/doc_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:layout_marginStart="@dimen/size_20"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font14"
+            android:fontFamily="@font/lato_bold"
+            android:text="UAN"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/size_10">
+
+            <TextView
+                android:id="@+id/doc_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xyz1234jucndfg123"
+                android:fontFamily="@font/lato"
+                android:textSize="@dimen/font12"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginStart="@dimen/size_20"/>
+
+            <ImageView
+                android:id="@+id/copy_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:padding="@dimen/size_4"
+                android:background="?android:selectableItemBackground"
+                android:layout_marginTop="@dimen/size_4"
+                android:src="@drawable/ic_copy_icon" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
