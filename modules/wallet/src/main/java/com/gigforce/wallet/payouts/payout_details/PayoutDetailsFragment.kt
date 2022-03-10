@@ -99,12 +99,6 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
             viewModel.handleEvent(PayoutDetailsContract.UiEvent.DownloadPayoutPDFClicked)
         }
         this.mainLayout.updateBankDetail.pushOnclickListener{
-            try {
-                dismiss()
-            }catch (e:java.lang.Exception){
-
-            }
-            navigation.popBackStack()
             navigation.navigateTo("verification/bank_account_fragment")
         }
     }
