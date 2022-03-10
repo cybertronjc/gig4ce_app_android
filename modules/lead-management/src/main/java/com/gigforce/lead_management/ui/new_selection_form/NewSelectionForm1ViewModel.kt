@@ -412,7 +412,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             checkForCurrentUserInTLListAndPreSelectTeamLeader()
 
             _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
-                selectedTeamLeader = selectedReportingTL
+                selectedTeamLeader = null
             )
         } catch (e: Exception) {
             gigforceLogger.e(
