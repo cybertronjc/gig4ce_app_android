@@ -1196,6 +1196,9 @@
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
         android:label="InvalidFormatBottomSheet"/>
 
+    <dialog android:id="@+id/UserAlreadyExistsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.UserAlreadyExistsBottomSheet"
+        android:label="UserAlreadyExistsBottomSheet"/>
     <fragment
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
