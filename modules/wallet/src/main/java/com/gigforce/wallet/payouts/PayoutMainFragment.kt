@@ -74,6 +74,7 @@ class PayoutMainFragment : BaseFragment2<FragmentPayoutMainBinding>(
         ) { tab, position ->
             tab.text = PayoutMainViewPagerAdapter.TABS[position].fragmentTabName
         }.attach()
+        viewBinding.viewPager.isSaveEnabled = false
         initTabLayout()
     }
 
