@@ -95,6 +95,22 @@ class ImageViewerFragment : Fragment() {
         findViews(view)
         Glide.with(requireContext()).load(image).into(imageView)
         initViewModel()
+        checkForImageConfirmation()
+    }
+
+    private fun checkForImageConfirmation() {
+        childFragmentManager.setFragmentResultListener("imageConfirm", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getInt("confirm")
+            if (result == 0){
+                sharedCameraViewModel.clickedImageDiscarded()
+            }else{
+                viewModel.faceNotDetectedStillUploadImage(
+                    requireContext().applicationContext,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
+            }
+        }
     }
 
 
@@ -180,27 +196,9 @@ class ImageViewerFragment : Fragment() {
                     is ImageViewerViewState.ErrorWhileFaceDetection -> {
 
                         progressBar.visibility = View.GONE
-//                        MaterialAlertDialogBuilder(requireContext())
-//                            .setTitle("Unable to detect face")
-//                            .setMessage(getString(R.string.something_seems_off_common) )
-//                            .setPositiveButton(getString(R.string.okay_common)) { _, _ ->
-//                                sharedCameraViewModel.clickedImageDiscarded()
-//                            }
-//                            .show()
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to detect face")
-                            .setMessage(getString(R.string.no_face_detected_details_common) )
-                            .setPositiveButton(getString(R.string.try_again_common)) { _, _ ->
-                                sharedCameraViewModel.clickedImageDiscarded()
-                            }
-                            .setNegativeButton(getString(R.string.submit_common)) {dialog, _ ->
-                                viewModel.faceNotDetectedStillUploadImage(
-                                    requireContext().applicationContext,
-                                    image,
-                                    parentDirectoryNameInFirebaseStorage
-                                )
-                            }
-                            .show()
+                        AttendanceImageConfirmBottomSheet.launch(
+                            childFragmentManager
+                        )
                     }
                     is ImageViewerViewState.ImageUploadFailed -> {
 
