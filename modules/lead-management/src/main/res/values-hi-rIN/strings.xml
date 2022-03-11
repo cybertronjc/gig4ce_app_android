@@ -206,5 +206,6 @@
     <string name="giger_not_joined_lead">गिगर गिग में शामिल नहीं हुए हैं।</string>
     <string name="giger_joined_lead">काम करने के बाद गिगर ने इस्तीफा दे दिया है।</string>
     <string name="giger_already_disabled_lead">This giger is already disabled</string>
+    <string name="cluster_lead_lead">क्लस्टर लीड</string>
 
 </resources>
