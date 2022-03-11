@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lineSpacingExtra="1sp"
+                android:textAppearance="@style/style_h5"
+                android:translationY="-0.6sp"
+                tools:text="ss" />
+
+            <TextView
+                android:id="@+id/optional_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginStart="4dp"
+                android:gravity="top"
+                android:lineSpacingExtra="1sp"
+                android:text="@string/common_optional"
+                android:textAppearance="@style/body_primary"
+                android:translationY="-0.6sp" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"
+            android:gravity="center"
+            android:saveEnabled="false"
+            android:paddingStart="3dp" />
+
+        <LinearLayout
+            android:id="@+id/selected_items_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_4"
+            android:layout_marginBottom="@dimen/size_4"
+            android:orientation="horizontal"/>
+
+        <include
+            android:id="@+id/error_layout"
+            layout="@layout/layout_validation_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+</layout>
