@@ -221,5 +221,7 @@
     <string name="company_name_giger_gigs">Flipkart</string>
     <string name="call_text_giger_gigs">CALL GIGER</string>
     <string name="okay_giger_gigs">OKAY</string>
+    <string name="selection_failed_lm">Selection Failed !</string>
+    <string name="giger_already_enable_lm">Giger is already enabled in another job profile.</string>
 
 </resources>
