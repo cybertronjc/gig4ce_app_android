@@ -1,6 +1,5 @@
 package com.gigforce.common_ui.dynamic_fields.types
 
-import android.R
 import android.content.Context
 import android.os.Parcelable
 import android.text.SpannedString
@@ -11,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicMultiSelectDropDownBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
@@ -20,7 +21,6 @@ import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicFieldData
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
-import com.gigforce.common_ui.ext.addOnItemSelectedListener
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.parcel.Parcelize
@@ -76,7 +76,7 @@ class DynamicMultiSelectDropDown(
 
         val spinnerAdapter: ArrayAdapter<DynamicFieldData> = ArrayAdapter<DynamicFieldData>(
             context,
-            R.layout.simple_spinner_dropdown_item,
+            android.R.layout.simple_spinner_dropdown_item,
             dataToShow.toMutableList().apply {
                 add(
                     0, DynamicFieldData(
@@ -89,12 +89,25 @@ class DynamicMultiSelectDropDown(
 
         adapter = spinnerAdapter
 
-        this.onItemClickListener = object : AdapterView.OnItemClickListener {
-            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                if (position > 0){
+                    val view = LayoutInflater.from(context).inflate(R.layout.layout_dynamic_selected_item_chip_layout, null)
+
+                    val chipText: TextView = view.findViewById(R.id.chip_text)
+                    chipText.setText(dataToShow.get(position - 1).value)
+
+                    viewBinding.selectedItemsLayout.addView(view)
+                }
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
 
         }
+
     }
 
     private fun setTitle(title: String?) {

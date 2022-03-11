@@ -67,7 +67,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 containerLayout,
                 it
             )
-            FieldTypes.DROP_DOWN -> inflateDropDown(
+            FieldTypes.DROP_DOWN -> inflateMultiSelectDropDown(
                 context,
                 containerLayout,
                 it
@@ -157,6 +157,16 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         it: DynamicField
     ) {
         val view = DynamicDropDownView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
+    private fun inflateMultiSelectDropDown(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicMultiSelectDropDown(context, null)
         containerLayout.addView(view)
         view.bind(it)
     }

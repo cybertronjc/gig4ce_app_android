@@ -6,10 +6,10 @@
             android:shape="rectangle"
             android:useLevel="false">
             <corners
-                android:radius="@dimen/size_6"
+                android:radius="@dimen/size_16"
                 />
             <solid
-                android:color="#FFFFFF"
+                android:color="#e42c64"
                 ></solid>
             <stroke android:color="#E1E1E1"
                 android:width="@dimen/size_1"
