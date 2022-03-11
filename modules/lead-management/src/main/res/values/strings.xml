@@ -223,5 +223,6 @@
     <string name="okay_giger_gigs">OKAY</string>
     <string name="selection_failed_lm">Selection Failed !</string>
     <string name="giger_already_enable_lm">Giger is already enabled in another job profile.</string>
+    <string name="cluster_lead_lead">Cluster Lead</string>
 
 </resources>
