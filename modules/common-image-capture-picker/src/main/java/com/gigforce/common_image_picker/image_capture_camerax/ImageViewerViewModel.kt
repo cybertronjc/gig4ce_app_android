@@ -179,6 +179,18 @@ class ImageViewerViewModel : ViewModel() {
         )
     }
 
+     fun faceNotDetectedStillUploadImage(
+        context: Context,
+        file: File,
+        parentDirectoryNameInFirebaseStorage: String?
+    ) = viewModelScope.launch{
+        uploadImage(
+            context,
+            file,
+            parentDirectoryNameInFirebaseStorage
+        )
+    }
+
     private suspend fun uploadImage(
         context: Context,
         file: File,

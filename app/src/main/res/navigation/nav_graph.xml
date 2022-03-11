@@ -1236,13 +1236,10 @@
         android:id="@+id/payoutListFilterFragment"
         android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
         android:label="PayoutListFilterFragment"/>
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
 
-
-
-    =========
-        android:id="@+id/viewLiveLocationFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
-        android:label="ViewLiveLocationFragment" />
->>>>>>>>> Temporary merge branch 2
 </navigation>
 
