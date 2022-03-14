@@ -84,7 +84,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private lateinit var gigerUid: String
 
     var hasStartEndDate = false
-    var dropScreenIntentModel: DropScreenIntentModel? = null
+    var dropScreenIntentModel: DropScreenIntentModel? = DropScreenIntentModel("", "",false, false, "", "", "")
 
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
@@ -99,8 +99,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViews() {
         joiningId?.let {
-            dropScreenIntentModel =
-                DropScreenIntentModel(joiningId = it, gigId,false, false, "", "", "")
+            dropScreenIntentModel?.joiningId = it
+        }
+        gigId?.let {
+            dropScreenIntentModel?.gigId = it
         }
     }
 
