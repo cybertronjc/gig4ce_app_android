@@ -2,7 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 
 class NavForLeadManagmentModule(
     baseImplementation: BaseNavigationImpl

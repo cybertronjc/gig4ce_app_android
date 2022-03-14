@@ -14,7 +14,7 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragment
