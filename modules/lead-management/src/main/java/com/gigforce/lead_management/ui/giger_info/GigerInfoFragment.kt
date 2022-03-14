@@ -424,20 +424,18 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun showErrorLoadingInfo(error: String) = viewBinding.apply {
         checklistLayout.removeAllViews()
+        toolbar.showTitle("")
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
-        mainScrollView.visible()
+        mainScrollView.gone()
+        bottomButtonLayout.root.gone()
+        joiningInfoErrorInfoLayout.root.visible()
+        joiningInfoErrorInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        joiningInfoErrorInfoLayout.infoMessageTv.text = error
 
-
-        MaterialAlertDialogBuilder(
-            requireContext()
-        ).setTitle("Unable to load info")
-            .setMessage(error)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
     }
 
     private fun initListeners() = viewBinding.apply {

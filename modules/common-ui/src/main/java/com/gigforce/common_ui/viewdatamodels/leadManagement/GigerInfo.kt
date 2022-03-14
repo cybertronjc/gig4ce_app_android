@@ -70,6 +70,9 @@ data class GigerInfo(
     @SerializedName("recruitingTL")
     val recruitingTL: TeamLeader? = null,
 
+    @SerializedName("message")
+    val message: String? = null,
+
 ) {
 }
 

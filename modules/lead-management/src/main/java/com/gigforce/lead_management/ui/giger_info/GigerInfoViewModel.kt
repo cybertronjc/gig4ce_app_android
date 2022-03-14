@@ -76,7 +76,10 @@ class GigerInfoViewModel @Inject constructor(
             gigerInfo = gigerJoiningDetails
             currentJoiningId = gigerJoiningDetails.gigerId
 
-            _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)
+            if (gigerJoiningDetails.message.isNullOrBlank())
+                _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)
+             else
+                _viewState.value = GigerInfoState.ErrorLoadingData(gigerJoiningDetails.message.toString())
 
             logger.d(TAG, "received ${gigerJoiningDetails} giger joining info from server")
 
