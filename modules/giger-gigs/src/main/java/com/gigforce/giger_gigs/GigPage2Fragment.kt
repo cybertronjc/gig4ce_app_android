@@ -279,7 +279,7 @@ class GigPage2Fragment : Fragment(),
 
             FirebaseAuth.getInstance().currentUser?.uid?.let {
                 gig.getFullCompanyName()?.let { it1 ->
-                    val map = mapOf("Giger ID" to gig.gigerId, "TL ID" to it, "Business Name" to it1)
+                    val map = mapOf("Giger ID" to gig.gigerId, "TL ID" to it, "Business Name" to it1, "gigId" to gigId)
                     eventTracker.pushEvent(TrackingEventArgs("giger_attempted_checkin",map))
                 }
             }
@@ -289,7 +289,7 @@ class GigPage2Fragment : Fragment(),
                     if (imageClickedPath != null) {
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
-                            val map = mapOf("TL ID" to it)
+                            val map = mapOf("TL ID" to it, "gigId" to gigId)
                             eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                         }
 
@@ -951,7 +951,7 @@ class GigPage2Fragment : Fragment(),
                     imageClickedPath = data?.getStringExtra("image_name")
                     //event
                     FirebaseAuth.getInstance().currentUser?.uid?.let {
-                        val map = mapOf("TL ID" to it)
+                        val map = mapOf("TL ID" to it, "gigId" to gigId)
                         eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                     }
                     checkForLateOrEarlyCheckIn()
@@ -964,7 +964,7 @@ class GigPage2Fragment : Fragment(),
                     Log.d("clickedPath", "$imageClickedPath")
                     //event
                     FirebaseAuth.getInstance().currentUser?.uid?.let {
-                        val map = mapOf("TL ID" to it)
+                        val map = mapOf("TL ID" to it, "gigId" to gigId)
                         eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
                     }
                     checkForLateOrEarlyCheckIn()

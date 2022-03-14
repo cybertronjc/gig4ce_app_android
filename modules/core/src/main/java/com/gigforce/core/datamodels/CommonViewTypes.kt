@@ -49,5 +49,7 @@ class CommonViewTypes {
         //verification
         const val VACCINE_DOSE_STATUS = 30001
         const val VACCINE_DOSE_CARD = 30002
+        const val COMPLIANCE_NUMBER_CARD = 30005
+        const val COMPLIANCE_DOC_CARD = 30006
     }
 }

@@ -27,7 +27,7 @@ class GigAttendanceAdapter(
     private var gigs: List<Gig> = emptyList()
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigAttendanceAdapterClickListener? = null
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.ENGLISH)
 
     fun setListener(otherOptionClickListener: GigAttendanceAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener

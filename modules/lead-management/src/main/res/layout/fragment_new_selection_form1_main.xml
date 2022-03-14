@@ -24,8 +24,8 @@
                 <TextView
                     android:id="@+id/giger_mobil"
                     android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="40dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
@@ -37,6 +37,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
@@ -109,8 +110,8 @@
                 <TextView
                     android:id="@+id/giger_name_label"
                     android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
@@ -122,6 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -168,8 +170,8 @@
                 <TextView
                     android:id="@+id/select_business_label"
                     android:layout_width="134dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
@@ -202,7 +204,7 @@
                             android:id="@+id/business_selected_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:gravity="top"
@@ -234,8 +236,8 @@
                 <TextView
                     android:id="@+id/select_job_profile_label"
                     android:layout_width="134dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
@@ -268,7 +270,7 @@
                             android:id="@+id/selected_job_profile_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:gravity="top"
@@ -299,12 +301,12 @@
                 <TextView
                     android:id="@+id/reporting_tl_label"
                     android:layout_width="134dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Reporting TL"
+                    android:text="Cluster Lead"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -333,7 +335,7 @@
                             android:id="@+id/selected_reporting_tl_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:gravity="top"

@@ -221,12 +221,12 @@
 
                     <ImageView
                         android:id="@+id/notification_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_notification_chat"
+                        android:src="@drawable/ic_mute_4x"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -250,13 +250,14 @@
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/muteNotificationSwitch"
-                        android:layout_width="wrap_content"
                         style="@style/SwitchStyle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/size_20"
-                        app:layout_constraintTop_toTopOf="@id/notification_icon"
                         app:layout_constraintBottom_toBottomOf="@id/notification_icon"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/notification_icon"
+                        app:trackTint="#FCEAF0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -276,7 +277,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_group_add_participant"
+                        android:src="@drawable/ic_add_new"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -393,12 +394,12 @@
 
                     <ImageView
                         android:id="@+id/activate_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_group_exit_icon"
+                        android:src="@drawable/ic_deactivate_pink"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -474,12 +475,12 @@
 
                     <ImageView
                         android:id="@+id/report_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_block"
+                        android:src="@drawable/ic_report_icon"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>

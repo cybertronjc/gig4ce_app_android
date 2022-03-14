@@ -86,7 +86,7 @@ class VerificationMainViewModel @Inject constructor(
             SimpleCardDVM(
                 appContext.getString(R.string.aadhar_card_detail_veri),
                 appContext.getString(R.string.pending_status_veri),
-                R.drawable.ic_account_box_black_24dp,
+                R.drawable.ic_aadhar_simple_card_icon,
                 "verification/AadharDetailInfoFragment",
                 false
             )
@@ -96,7 +96,7 @@ class VerificationMainViewModel @Inject constructor(
             SimpleCardDVM(
                 title = appContext.getString(R.string.covid_vaccination_certificate_veri),
                 appContext.getString(R.string.pending_status_veri),
-                R.drawable.ic_account_box_black_24dp,
+                R.drawable.ic_vaccine_icon,
                 "verification/VaccineMainFragment",
                 false
             )
@@ -106,7 +106,7 @@ class VerificationMainViewModel @Inject constructor(
             SimpleCardDVM(
                 "Signature",
                 appContext.getString(R.string.pending_status_veri),
-                R.drawable.ic_account_box_black_24dp,
+                R.drawable.ic_signature_icon,
                 SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
                 false
             )
@@ -169,7 +169,7 @@ class VerificationMainViewModel @Inject constructor(
                             subtitle = if (doc?.aadhaar_card_questionnaire?.verified == true) appContext.getString(
                                 R.string.submitted_status_veri
                             ) else appContext.getString(R.string.pending_status_veri),
-                            image = R.drawable.ic_account_box_black_24dp,
+                            image = R.drawable.ic_aadhar_simple_card_icon,
                             navpath = "verification/AadharDetailInfoFragment",
                             color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else "RED"
                         )
@@ -180,7 +180,7 @@ class VerificationMainViewModel @Inject constructor(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.covid_vaccination_certificate_veri),
                             subtitle = doc?.vaccination?.statusString?:appContext.getString(R.string.not_vaccinated_veri),
-                            image = R.drawable.ic_account_box_black_24dp,
+                            image = R.drawable.ic_vaccine_icon,
                             navpath = "verification/VaccineMainFragment",
                             color = getVaccineColor(doc?.vaccination?.statusString)
                         )
@@ -192,7 +192,7 @@ class VerificationMainViewModel @Inject constructor(
                             subtitle = if (doc?.signature?.signaturePathOnFirebase != null) appContext.getString(
                                 R.string.submitted_status_veri
                             ) else appContext.getString(R.string.tap_to_select),
-                            image = R.drawable.ic_account_box_black_24dp,
+                            image = R.drawable.ic_signature_icon,
                             navpath= SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
                             color = if (doc?.signature?.signaturePathOnFirebase != null) "GREEN" else ""
                         )

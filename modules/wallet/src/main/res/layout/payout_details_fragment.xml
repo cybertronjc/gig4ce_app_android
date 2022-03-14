@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/filter_bottom_background"
+        tools:context=".payouts.payout_details.PayoutDetailsFragment">
+
+        <include
+            android:id="@+id/main_layout"
+            layout="@layout/fragment_payout_details_main"
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/shimmer_container"
+            layout="@layout/shimmer_container"
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:paddingTop="20dp"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/info_layout"
+            layout="@layout/layout_information_with_button"
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:visibility="gone" />
+
+
+    </FrameLayout>
+</layout>

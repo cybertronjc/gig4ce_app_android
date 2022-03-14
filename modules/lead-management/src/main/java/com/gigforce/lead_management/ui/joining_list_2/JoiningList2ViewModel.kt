@@ -433,6 +433,10 @@ class JoiningList2ViewModel @Inject constructor(
         //processJoiningsAndEmit(joiningsRaw!!)
     }
 
+    fun getSelectEnableGlobal(): Boolean {
+        return isSelectEnableGlobal
+    }
+
     fun clearCachedRawJoinings(){
         joiningsRaw = null
     }

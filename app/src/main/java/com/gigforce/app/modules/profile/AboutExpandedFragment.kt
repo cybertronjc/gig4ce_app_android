@@ -237,15 +237,17 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                 }
             }
         }
-        contact_card.hasContentTitles = false
-        contact_card.cardTitle = getString(R.string.contact)
-        contact_card.cardContent = contactString
-        contact_card.cardBottom = getString(R.string.add_contact)
+//        contact_card.hasContentTitles = false
+//        contact_card.cardTitle = getString(R.string.contact)
+//        contact_card.cardContent = contactString
+//        contact_card.cardBottom = getString(R.string.add_contact)
+//        contact_card.edit_button.gone()
 
         contact_card.hasContentTitles = false
         contact_card.cardTitle = getString(R.string.contact)
         contact_card.cardContent = contactString
         contact_card.cardBottom = getString(R.string.add_contacts)
+//        contact_card.edit_button.gone()
 
 //        if (contact_card.edit_button != null) {
 //            contact_card.edit_button.setOnClickListener {

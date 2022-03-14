@@ -29,9 +29,10 @@ class MainNavigationViewModel @Inject constructor(
     fun requestData(currentVersionCode:Int) = viewModelScope.launch {
         try {
             repository.getData(currentVersionCode).catch {
-
             }.collect {
+                if(it.isNotEmpty())
                 _liveData.value = it
+                repository.notifyToServer()
             }
         } catch (e: Exception) {
         }

@@ -7,7 +7,15 @@
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <RelativeLayout
+
+        <LinearLayout
+        android:id="@+id/linearRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
         android:id="@+id/cv_msgContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,7 +102,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
-
+        </LinearLayout>
     </FrameLayout>
 
 </merge>

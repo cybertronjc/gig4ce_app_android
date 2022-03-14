@@ -288,7 +288,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         val betweenSpace = 25
 
         val slidingTabStrip: ViewGroup = statusTabLayout.getChildAt(0) as ViewGroup
-
         for (i in 0 until slidingTabStrip.childCount - 1) {
             val v: View = slidingTabStrip.getChildAt(i)
             val params: ViewGroup.MarginLayoutParams =
@@ -510,9 +509,18 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             navigation.popBackStack()
             navigation.navigateTo("common/calendarScreen")
             return true
+        } else if (viewModel.getSelectEnableGlobal()){
+            viewModel.resetViewModel()
+            viewModel.clearCachedRawJoinings()
+            viewModel.getJoinings()
+            viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+            if (title.isNotBlank())
+                viewBinding.appBarComp.setAppBarTitle(title)
+            else
+                viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+            return true
         }
         return false
     }
-
 }
 

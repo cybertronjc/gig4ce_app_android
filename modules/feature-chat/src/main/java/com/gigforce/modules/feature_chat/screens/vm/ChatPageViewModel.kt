@@ -408,6 +408,7 @@ class ChatPageViewModel @Inject constructor(
                 replyForMessageId = replyToMessage?.id,
                 replyForMessage = replyToMessage
             )
+            showMessageAsSending(message)
             getReference(headerId).document(message.id).setOrThrow(message)
 
             //Update Header for current User

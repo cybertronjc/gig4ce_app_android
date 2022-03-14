@@ -41,7 +41,7 @@
     <string name="something_wrong_wallet">कुछ गड़बड़</string>
     <string name="doing_really_great_wallet">आप वाकई बहुत अच्छा कर रहे हैं</string>
     <string name="havent_set_monthly_goal_wallet">आपने अपना मासिक लक्ष्य निर्धारित नहीं किया है</string>
-    <string name="serial_no_wallet">\"सीरीयल नम्बर: \"</string>
+    <string name="serial_no_wallet">सीरीयल नम्बर: </string>
     <string name="alert_wallet">चेतावनी</string>
     <string name="okay_wallet">ठीक</string>
     <string name="unable_to_open_wallet">खोलने में असमर्थ</string>

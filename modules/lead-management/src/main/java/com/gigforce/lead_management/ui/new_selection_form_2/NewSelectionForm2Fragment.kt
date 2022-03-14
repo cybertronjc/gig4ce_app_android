@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -87,6 +89,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     @Inject
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
+
+    private var cameFromAttendace: Boolean = false
 
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
@@ -209,6 +213,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
             verificationRelatedDynamicInputsFields =
                 it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false)
         }
 
         savedInstanceState?.let {
@@ -217,6 +222,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
             verificationRelatedDynamicInputsFields =
                 it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false)
         }
 
         viewModel.handleEvent(
@@ -368,12 +374,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 is NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData -> {
                     viewBinding.mainForm.nextButton.hideProgress(getString(R.string.submit_lead))
                     viewBinding.mainForm.nextButton.isEnabled = true
-
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.unable_to_submit_joining_request_lead))
-                        .setMessage(state.error)
-                        .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
-                        .show()
+                    navigation.navigateTo(LeadManagementNavDestinations.BOTTOM_SHEET_JOINING_ERROR, bundleOf("message" to state.error))
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle(getString(R.string.unable_to_submit_joining_request_lead))
+//                        .setMessage(state.error)
+//                        .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
+//                        .show()
                 }
                 is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
                     try {
@@ -388,7 +394,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                             LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
                             bundleOf(
                                 SelectionFormSubmitSuccessFragment.INTENT_EXTRA_WHATSAPP_DATA to whatsAppIntentData,
-
+                                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to cameFromAttendace
                                 )
                         )
                     } catch (e: Exception) {
@@ -428,6 +434,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_JOINING_DATA to joiningRequest,
                 NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_USER_UID to userId,
                 NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationDynamicFields,
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to cameFromAttendace
             ),
             getNavOptions()
         )

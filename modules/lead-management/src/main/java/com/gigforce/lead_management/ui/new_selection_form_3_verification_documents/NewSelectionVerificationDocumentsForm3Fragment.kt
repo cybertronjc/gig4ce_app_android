@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.new_selection_form_3_verification_docume
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -57,6 +59,8 @@ class NewSelectionVerificationDocumentsForm3Fragment :
     @Inject
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
 
+    private var cameFromAttendace: Boolean = false
+
     private val viewModel: NewSelectionForm3VerificationDocumentViewModel by viewModels()
 
 
@@ -77,6 +81,7 @@ class NewSelectionVerificationDocumentsForm3Fragment :
             verificationRelatedDynamicInputsFields =
                 it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
             userUid = it.getString(INTENT_EXTRA_USER_UID) ?: return@let
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
         }
 
         savedInstanceState?.let {
@@ -84,6 +89,7 @@ class NewSelectionVerificationDocumentsForm3Fragment :
             verificationRelatedDynamicInputsFields =
                 it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
             userUid = it.getString(INTENT_EXTRA_USER_UID) ?: return@let
+            cameFromAttendace = it.getBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE, false) ?: return@let
         }
 
 
@@ -179,7 +185,7 @@ class NewSelectionVerificationDocumentsForm3Fragment :
 
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
-            bundleOf(SelectionFormSubmitSuccessFragment.INTENT_EXTRA_WHATSAPP_DATA to whatsAppIntentData),
+            bundleOf(SelectionFormSubmitSuccessFragment.INTENT_EXTRA_WHATSAPP_DATA to whatsAppIntentData, AppConstants.INTENT_EXTRA_USER_CAME_FROM_ATTENDANCE to cameFromAttendace),
             getNavOptions()
         )
     }

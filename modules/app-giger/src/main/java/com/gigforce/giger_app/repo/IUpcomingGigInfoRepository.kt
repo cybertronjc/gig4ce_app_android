@@ -24,13 +24,15 @@ class UpcomingGigInfoRepository @Inject constructor() : IUpcomingGigInfoReposito
 
     override fun getData(): Flow<List<Gig>>{
         return callbackFlow {
-            getCurrentUserGigs()
+            val subscription = getCurrentUserGigs()
                 .addSnapshotListener { querySnapshot, _ ->
                     if (querySnapshot != null) {
-                        sendBlocking(extractUpcomingGigs(querySnapshot))
+                        offer(extractUpcomingGigs(querySnapshot))
+
                     }
                 }
-            awaitClose{ }
+
+            awaitClose{ subscription.remove()}
         }
     }
 
