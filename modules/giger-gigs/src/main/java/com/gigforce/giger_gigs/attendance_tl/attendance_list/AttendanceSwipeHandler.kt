@@ -1,10 +1,11 @@
-package com.gigforce.giger_gigs.attendance_tl
+package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
-import com.gigforce.giger_gigs.attendance_tl.views.GigerAttendanceItemRecyclerItemView
+import com.gigforce.giger_gigs.attendance_tl.GigAttendanceStatus
+import com.gigforce.giger_gigs.attendance_tl.attendance_list.views.GigerAttendanceItemRecyclerItemView
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
 class AttendanceSwipeHandler(
@@ -29,11 +30,13 @@ class AttendanceSwipeHandler(
                 val gigData = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).getGigDataOrThrow()
 
                 return when {
-//                    "Present".equals(gigData.attendanceStatus, true) && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
-//                    "Declined".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-//                    "Absent".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-//                    "Absent".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-//                    "Absent".equals(gigData.attendanceStatus, true) && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
+                    gigData.currentlyMarkingAttendanceForThisGig -> ItemTouchHelper.ACTION_STATE_IDLE // Disable swipe
+                    GigAttendanceStatus.ACTIVE.equals(gigData.status, true) && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
+                    GigAttendanceStatus.INACTIVE.equals(gigData.status, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
+
                     else -> 0 //Disabling swipe
                 }
 

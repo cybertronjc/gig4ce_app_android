@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.attendance_tl.views
+package com.gigforce.giger_gigs.attendance_tl.attendance_list.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import com.gigforce.core.IViewHolder
+import com.gigforce.giger_gigs.attendance_tl.attendance_list.GigerAttendanceUnderManagerViewContract
 import com.gigforce.giger_gigs.databinding.RecyclerRowGigerAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,9 @@ class GigerAttendanceItemRecyclerItemView(
 
     private lateinit var viewBinding: RecyclerRowGigerAttendanceBinding
     private var viewData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
+
+    lateinit var viewForeground : View
+    lateinit var viewBackground : View
 
     private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
     private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy") //YYYY-MM-DD
@@ -48,6 +52,8 @@ class GigerAttendanceItemRecyclerItemView(
             this,
             true
         )
+        viewForeground = viewBinding.viewForeground
+        viewBackground = viewBinding.viewBackground
     }
 
     override fun bind(data: Any?) {
@@ -56,6 +62,19 @@ class GigerAttendanceItemRecyclerItemView(
         (data as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData?)?.let {
             viewData = it
 
+            viewBinding.userImageIv.loadProfilePicture(
+                it.gigerImage,
+                it.gigerImage
+            )
+            viewBinding.gigerNameTextview.text = it.gigerName.capitalize()
+            viewBinding.gigerDesignationTextview.text = it.gigerDesignation
+            viewBinding.gigerLastActiveDateTextview.text = it.lastActiveText
+            viewBinding.markedByTextview.text = it.markedByText
+            viewBinding.overallStatusTextview.bind(
+                it.status,
+                it.statusBackgroundColorCode,
+                it.statusTextColorCode
+            )
         }
     }
 
@@ -72,11 +91,11 @@ class GigerAttendanceItemRecyclerItemView(
     override fun onClick(v: View?) {
 
         val currentViewData = viewData ?: return
-//        currentViewData.viewModel.handleEvent(
-//            PayoutListViewContract.UiEvent.PayoutItemClicked(
-//                currentViewData
-//            )
-//        )
+        currentViewData.viewModel.handleEvent(
+            GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemClicked(
+                currentViewData
+            )
+        )
     }
 
     fun getGigDataOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData{

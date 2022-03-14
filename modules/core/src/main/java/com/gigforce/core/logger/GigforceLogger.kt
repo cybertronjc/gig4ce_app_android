@@ -85,4 +85,14 @@ class GigforceLogger @Inject constructor() {
          }
      }
 
+    fun eAndReThrow(
+        tag: String,
+        occurredWhen: String,
+        e: Throwable,
+        vararg args: Any
+    ){
+        e(tag, occurredWhen, e, args)
+        throw e
+    }
+
 }

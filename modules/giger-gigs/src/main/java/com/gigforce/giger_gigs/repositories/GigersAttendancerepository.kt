@@ -36,24 +36,9 @@ class GigersAttendanceRepository @Inject constructor(
         date: LocalDate
     ): List<GigAttendanceApiModel> {
 
-        return emptyList()
-//        val loggedInUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
-//        val getGigersAttendanceResponse = gigerAttendanceService.getGigersAttendance(
-//            dateInYYYMMDD = date.format(dateFormatter),
-//            managerLoginMobile = loggedInUser.phoneNumber!!
-//        )
-//
-//        if (getGigersAttendanceResponse.isSuccessful) {
-//            return getGigersAttendanceResponse.body()!!
-//        } else {
-//            CrashlyticsLogger.e(
-//                TAG,
-//                "fetching gigers attendance with params, date=${date.format(dateFormatter)}, managerLoginMobile=${loggedInUser.phoneNumber}",
-//                Exception(getGigersAttendanceResponse.message())
-//            )
-//
-//            throw Exception("Unable to fetch users attendance")
-//        }
+        return  gigerAttendanceService.getGigersAttendance(
+            dateInYYYMMDD = date.format(dateFormatter)
+        ).bodyOrThrow()
     }
 
 

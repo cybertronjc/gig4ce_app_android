@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.*
 import com.gigforce.common_ui.remote.verification.VerificationKycService
+import com.gigforce.core.CoreConstants
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
@@ -33,6 +34,16 @@ abstract class SingeltonBindings {
     abstract fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
 
     companion object {
+
+        @Provides
+        fun provideGlobalSharedPreferences(
+            @ApplicationContext appContext: Context
+        ): SharedPreferences {
+            return appContext.getSharedPreferences(
+                CoreConstants.SHARED_PREFERENCE_DB,
+                Context.MODE_PRIVATE
+            )!!
+        }
 
         //Base
         @Provides

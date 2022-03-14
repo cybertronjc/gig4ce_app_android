@@ -1,9 +1,10 @@
 package com.gigforce.giger_gigs.models
 
+import android.os.Parcelable
 import com.gigforce.core.SimpleDVM
-import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.giger_gigs.GigCoreRecyclerViewBindings
-import com.gigforce.giger_gigs.attendance_tl.GigerAttendanceUnderManagerViewModel
+import com.gigforce.giger_gigs.attendance_tl.attendance_list.GigerAttendanceUnderManagerViewModel
+import kotlinx.android.parcel.Parcelize
 
 
 open class AttendanceRecyclerItemData(
@@ -22,20 +23,23 @@ open class AttendanceRecyclerItemData(
     )
 
     data class AttendanceRecyclerItemAttendanceData(
-        val status: String,
+        var status: String,
         val statusTextColorCode : String,
         val statusBackgroundColorCode : String,
 
-        val gigerImage: String,
+        val gigerImage: String?,
         val gigId: String,
         val gigerId: String,
         val gigerName: String,
         val gigerDesignation: String,
+        val businessName: String,
 
         val markedByText : String,
         val lastActiveText : String,
         val hasAttendanceConflict : Boolean,
         val gigerAttendanceStatus : String,
+
+        var currentlyMarkingAttendanceForThisGig : Boolean,
 
         val viewModel : GigerAttendanceUnderManagerViewModel
     ) : AttendanceRecyclerItemData(

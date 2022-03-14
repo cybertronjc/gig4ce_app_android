@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.attendance_tl
+package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
@@ -8,6 +8,7 @@ object AttendanceUnderTLListDataProcessor {
     fun processAttendanceListAndFilters(
         attendance: List<GigAttendanceApiModel>,
         collapsedBusiness: List<String>,
+        currentMarkingAttendanceForGigs: MutableSet<String>,
         currentlySelectedStatus: String,
         currentlySearchTerm: String?,
         gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel
@@ -31,7 +32,7 @@ object AttendanceUnderTLListDataProcessor {
                 businessToAttendanceGroup.forEach { (businessName, attendance) ->
                     val attendanceHeader =
                         AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData(
-                            businessName = "",
+                            businessName = businessName,
                             enabledCount = attendance.count(),
                             activeCount = 0,
                             inActiveCount = 0,
@@ -49,6 +50,7 @@ object AttendanceUnderTLListDataProcessor {
                         addAll(
                             mapPayoutsToPayoutItemView(
                                 attendance,
+                                currentMarkingAttendanceForGigs,
                                 gigerAttendanceUnderManagerViewModel
                             )
                         )
@@ -59,46 +61,49 @@ object AttendanceUnderTLListDataProcessor {
 
     fun filterAttendanceList(
         attendance: List<GigAttendanceApiModel>,
-        currentlySelectedStatus: String?,
+        currentlySelectedStatus: String,
         currentlySearchTerm: String?
     ): List<GigAttendanceApiModel> {
-       return attendance.run {
+        return attendance.run {
 
-           if(!currentlySearchTerm.isNullOrBlank()){
-               this.filter {
+            if (!currentlySearchTerm.isNullOrBlank()) {
+                this.filter {
 
-                   it.gigerName?.contains(currentlySearchTerm,true) ?: false ||
-                   it.jobProfile?.contains(currentlySearchTerm,true) ?: false
-               }
-           }
+                    it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
+                            it.jobProfile?.contains(currentlySearchTerm, true) ?: false
+                }
+            }
 
-           this.filter {
-               true
-           }
+            this.filter {
+                true
+            }
         }
     }
 
     private fun mapPayoutsToPayoutItemView(
         attendances: List<GigAttendanceApiModel>,
+        currentMarkingAttendanceForGigs: Set<String>,
         viewModel: GigerAttendanceUnderManagerViewModel
     ): Collection<AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData> =
         attendances.sortedBy {
             it.gigerName
         }.map {
             AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData(
-                status = "",
-                statusTextColorCode = "",
-                statusBackgroundColorCode = "",
+                status = it.getFinalAttendanceStatus(),
+                statusTextColorCode = it.getFinalStatusTextColorCode(),
+                statusBackgroundColorCode = it.getFinalStatusBackgroundColorCode(),
                 gigerImage = it.gigerName ?: "",
-                gigId = "",
-                gigerId = "",
-                gigerName = "",
-                gigerDesignation = "",
-                markedByText = "",
-                lastActiveText = "",
-                hasAttendanceConflict = false,
-                gigerAttendanceStatus = "",
-                viewModel = viewModel
+                gigId = it.id ?: "",
+                gigerId = it.gigerId ?: "",
+                gigerName = it.gigerName ?: "N/A",
+                gigerDesignation = it.jobProfile ?: "N/A",
+                markedByText = it.getMarkedByText(),
+                lastActiveText = it.getLastActiveText(),
+                hasAttendanceConflict = it.hasAttendanceConflict(),
+                gigerAttendanceStatus = "",//todo
+                viewModel = viewModel,
+                currentlyMarkingAttendanceForThisGig =  currentMarkingAttendanceForGigs.find { gigId -> it.gigerId == gigId } != null,
+                businessName = it.businessName ?: "N/A"
             )
         }
 

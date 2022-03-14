@@ -1,20 +1,11 @@
-package com.gigforce.giger_gigs.attendance_tl.adapters
+package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import androidx.recyclerview.widget.DiffUtil
+import com.gigforce.core.recyclerView.CoreDiffUtilCallback
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
-class TLAttendanceAdapterDiffUtil(
-    private val oldList: List<AttendanceRecyclerItemData>,
-    private val newList: List<AttendanceRecyclerItemData>
-) : DiffUtil.Callback() {
+class TLAttendanceAdapterDiffUtil : CoreDiffUtilCallback<AttendanceRecyclerItemData>() {
 
-    override fun getOldListSize(): Int {
-        return oldList.size
-    }
-
-    override fun getNewListSize(): Int {
-        return newList.size
-    }
 
     override fun areItemsTheSame(
         oldItemPosition: Int,

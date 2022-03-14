@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.attendance_tl
+package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 object StatusFilters {
 

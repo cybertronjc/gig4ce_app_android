@@ -943,7 +943,7 @@
         android:label="UploadPanCard" />
     <fragment
         android:id="@+id/gigerAttendanceUnderManagerFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.GigersAttendanceUnderManagerFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_list.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
     <fragment
         android:id="@+id/invoicesListFragment"
@@ -1230,12 +1230,31 @@
         android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
         android:label="PayoutListFilterFragment"/>
 
+    <fragment
+        android:id="@+id/gigerAttendanceDetailsFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_details.GigerAttendanceDetailsFragment"
+        android:label="GigerAttendanceDetailsFragment"/>
+
+    <dialog
+        android:id="@+id/markActiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check.MarkActiveConfirmationBottomSheetFragment"
+        android:label="MarkActiveConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/markInactiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance_confirmation.MarkInactiveConfirmationBottomSheetFragment"
+        android:label="MarkInactiveConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/resolveAttendanceConflictConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict.ResolveAttendanceConflictConfirmationBottomSheetFragment"
+        android:label="ResolveAttendanceConflictConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/selectMarkInactiveReasonsBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetFragment"
+        android:label="SelectMarkInactiveReasonsBottomSheetFragment" />
 
 
-=========
-        android:id="@+id/viewLiveLocationFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
-        android:label="ViewLiveLocationFragment" />
->>>>>>>>> Temporary merge branch 2
 </navigation>
 

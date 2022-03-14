@@ -19,7 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Payouts" />
+            app:titleText="Giger Attendance" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout"
