@@ -100,7 +100,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initViews() {
         joiningId?.let {
             dropScreenIntentModel =
-                DropScreenIntentModel(joiningId = it, false, false, "", "", "")
+                DropScreenIntentModel(joiningId = it, gigId,false, false, "", "", "")
         }
     }
 
@@ -196,7 +196,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                         it.joiningId,
                         it.gigerId,
                         it.gigerName,
-                        it.teamLeaderId
+                        it.teamLeaderId,
+                        gigId
                     )
                 }
             }
@@ -207,7 +208,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         joiningId : String,
         gigerId : String?,
         gigerName : String?,
-        teamLeaderId : String?
+        teamLeaderId : String?,
+        gigId : String?
     ) {
         ChangeTeamLeaderBottomSheetFragment.launch(
             arrayListOf(
@@ -215,7 +217,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     gigerUid = gigerId,
                     joiningId = joiningId,
                     gigerName = gigerName,
-                    teamLeaderId = teamLeaderId
+                    teamLeaderId = teamLeaderId,
+                    gigId = gigId
                 )
             ),
             childFragmentManager
@@ -318,6 +321,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 dropScreenIntentModel?.gigStartDate = it.gigStartDate
                 dropScreenIntentModel?.gigEndDate = it.gigEndDate
                 dropScreenIntentModel?.hasStartEndDate = true
+                dropScreenIntentModel?.gigId = gigId
             }
             if (!it.currentDate.isNullOrBlank()) {
                 dropScreenIntentModel?.currentDate = it.currentDate

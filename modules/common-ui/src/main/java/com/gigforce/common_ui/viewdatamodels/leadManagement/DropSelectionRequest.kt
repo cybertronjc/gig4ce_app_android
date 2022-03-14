@@ -15,6 +15,9 @@ data class DropSelectionRequest(
 @Parcelize
 data class DropDetail (
 
+    @SerializedName("gigId")
+    var gigId: String? = null,
+
     @SerializedName("joiningId")
     var joiningId: String? = null,
 
