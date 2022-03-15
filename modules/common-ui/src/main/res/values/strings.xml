@@ -104,4 +104,8 @@
     <string name="eight_hour_common_ui">8 hours</string>
     <string name="search_gigers_common_ui">Search Gigers</string>
     <string name="please_grant_location_permission_chat">Please Grant Location Permission</string>
+    <string name="select_other_cities_common_ui">Select Other Cities</string>
+    <string name="select_cluster_common_ui">Select Cluster</string>
+    <string name="input_salary_component_common_ui">Input Salary Components</string>
+    <string name="click_to_enter_salary_common_ui">Click to Enter Details</string>
 </resources>

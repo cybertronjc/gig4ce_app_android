@@ -67,7 +67,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 containerLayout,
                 it
             )
-            FieldTypes.DROP_DOWN -> inflateMultiSelectDropDown(
+            FieldTypes.DROP_DOWN -> inflateDropDown(
                 context,
                 containerLayout,
                 it
@@ -78,6 +78,21 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 it
             )
             FieldTypes.SIGNATURE_DRAWER -> inflateSignatureDrawer(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.OTHER_CITIES -> inflateSelectOtherCityView(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
                 context,
                 containerLayout,
                 it
@@ -187,6 +202,36 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         it: DynamicField
     ) {
         val view = DynamicTextFieldView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
+    private fun inflateSelectOtherCityView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicSelectOtherCitiesView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
+    private fun inflateSelectClusterView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicSelectClusterView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
+    private fun inflateInputSalaryView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicInputSalaryComponentView(context, null)
         containerLayout.addView(view)
         view.bind(it)
     }
