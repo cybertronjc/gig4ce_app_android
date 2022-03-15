@@ -195,12 +195,13 @@ class NewSelectionVerificationDocumentsForm3Fragment :
     ) {
         viewBinding.mainForm.nextButton.hideProgress(getString(R.string.submit_lead))
         viewBinding.mainForm.nextButton.isEnabled = true
+        navigation.navigateTo(LeadManagementNavDestinations.BOTTOM_SHEET_JOINING_ERROR, bundleOf("message" to error))
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.unable_to_submit_joining_request_lead))
-            .setMessage(error)
-            .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
-            .show()
+//        MaterialAlertDialogBuilder(requireContext())
+//            .setTitle(getString(R.string.unable_to_submit_joining_request_lead))
+//            .setMessage(error)
+//            .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
+//            .show()
     }
 
     private fun submittingJoiningRequest() {
