@@ -11,6 +11,9 @@ import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
+import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 
 class DynamicSelectClusterView(
     context: Context,
@@ -52,7 +55,21 @@ class DynamicSelectClusterView(
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
+        setTitle(fieldDetails.title)
+        settingFieldAsOptionalOrMandatory(fieldDetails)
+    }
 
+    private fun setTitle(title: String?) {
+        viewBinding.titleTextview.text = title
+    }
+
+    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
+        if (fieldDetails.mandatory) {
+            viewBinding.optionalTextview.gone()
+            viewBinding.titleTextview.addMandatorySymbolToTextEnd()
+        } else {
+            viewBinding.optionalTextview.visible()
+        }
     }
 
     override fun isEnteredOrSelectedDataValid(): Boolean {

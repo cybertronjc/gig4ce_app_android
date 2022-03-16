@@ -3,6 +3,7 @@ package com.gigforce.lead_management.ui.new_selection_form_2
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,7 +11,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,12 +26,11 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
@@ -44,11 +43,13 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
+import com.gigforce.lead_management.ui.DynamicFields.DynamicSelectOtherCitiesView
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
 import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
+import com.gigforce.lead_management.ui.other_cities.SelectOtherCitiesFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
 import com.gigforce.lead_management.ui.select_tls.SelectClientTlFragment
@@ -365,6 +366,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     ArrayList(state.cities),
                     state.locationType.toString()
                 )
+                is NewSelectionForm2ViewState.OpenSelectOtherCityScreen -> openSelectOtherCityScreen(
+                    ArrayList(state.cities),
+                    state.locationType.toString()
+                )
+                is NewSelectionForm2ViewState.OpenSelectClusterScreen -> openSelectClusterScreen(
+                    ArrayList(state.cities),
+                    state.locationType.toString()
+                )
+                is NewSelectionForm2ViewState.OpenInputSalaryScreen -> openInputSalaryScreen(
+                    ArrayList(state.cities),
+                    state.locationType.toString()
+                )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
                     state.selectedCity,
                     ArrayList(state.reportingLocations)
@@ -477,6 +490,48 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             bundleOf(
                 SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities,
                 SelectCityFragment.INTENT_ONSITE_OFFSITE to locationType
+            ),
+            getNavOptions()
+        )
+        hideSoftKeyboard()
+    }
+
+    private fun openSelectOtherCityScreen(
+        otherCities: ArrayList<OtherCityClusterItem>,
+        locationType: String
+    ) {
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECT_OTHER_CITY,
+            bundleOf(
+                SelectOtherCitiesFragment.INTENT_EXTRA_SELECTED_OTHER_CITIES to otherCities
+            ),
+            getNavOptions()
+        )
+        hideSoftKeyboard()
+    }
+
+    private fun openSelectClusterScreen(
+        otherCities: ArrayList<OtherCityClusterItem>,
+        locationType: String
+    ) {
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECT_OTHER_CITY,
+            bundleOf(
+                SelectOtherCitiesFragment.INTENT_EXTRA_SELECTED_OTHER_CITIES to otherCities
+            ),
+            getNavOptions()
+        )
+        hideSoftKeyboard()
+    }
+
+    private fun openInputSalaryScreen(
+        otherCities: ArrayList<OtherCityClusterItem>,
+        locationType: String
+    ) {
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECT_OTHER_CITY,
+            bundleOf(
+                SelectOtherCitiesFragment.INTENT_EXTRA_SELECTED_OTHER_CITIES to otherCities
             ),
             getNavOptions()
         )
@@ -671,6 +726,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         dynamicFields: List<DynamicField>
     ) = dynamicFieldsInflaterHelper.apply {
 
+        inflateScreenDynamicFields(
+            requireContext(),
+            viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer,
+            dynamicFields
+        )
+
         inflateDynamicFields(
             requireContext(),
             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
@@ -689,6 +750,71 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         val uri = Uri.fromParts("package", requireContext().packageName, null)
         intent.data = uri
         startActivity(intent)
+    }
+
+    fun inflateScreenDynamicFields(
+        context: Context,
+        containerLayout: LinearLayout,
+        fields: List<DynamicField>
+    ) = fields.apply {
+        containerLayout.removeAllViews()
+
+        fields.forEach {
+
+            compareFieldTypeAndInflateRequiredLayout(
+                context,
+                containerLayout,
+                it
+            )
+        }
+    }
+
+    private fun compareFieldTypeAndInflateRequiredLayout(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        when (it.fieldType) {
+            FieldTypes.OTHER_CITIES -> inflateSelectOtherCityView(
+                context,
+                containerLayout,
+                it
+            )
+//            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
+//                context,
+//                containerLayout,
+//                it
+//            )
+//            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
+//                context,
+//                containerLayout,
+//                it
+//            )
+            else -> {
+                logger.d(
+                    DynamicFieldsInflaterHelper.TAG,
+                    "skipping inflating ${it.id},${it.title} as it lacks fieldtype ${it.fieldType} doesnt match any present in app"
+                )
+            }
+        }
+    }
+
+    private fun inflateSelectOtherCityView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicSelectOtherCitiesView(
+            context,
+            null
+        )
+        containerLayout.addView(view)
+        view.setOnClickListener {
+            viewModel.handleEvent(
+                NewSelectionForm2Events.SelectOtherCityClicked
+            )
+        }
+        view.bind(it)
     }
 
 }

@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -46,12 +45,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/drop_shadow_background"
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:cardCornerRadius="6dp"
-            app:cardElevation="14dp">
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:id="@+id/select_other_city_layout"

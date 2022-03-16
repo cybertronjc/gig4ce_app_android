@@ -1229,10 +1229,21 @@
         android:id="@+id/payoutListFilterFragment"
         android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
         android:label="PayoutListFilterFragment"/>
+    <fragment
+        android:id="@+id/selectClusterFragment"
+        android:name="com.gigforce.lead_management.ui.select_cluster.SelectClusterFragment"
+        android:label="SelectClusterFragment" />
+    <fragment
+        android:id="@+id/selectOtherCitiesFragment"
+        android:name="com.gigforce.lead_management.ui.other_cities.SelectOtherCitiesFragment"
+        android:label="SelectOtherCitiesFragment" />
+    <fragment
+        android:id="@+id/inputSalaryComponentsFragment"
+        android:name="com.gigforce.lead_management.ui.input_salary_components.InputSalaryComponentsFragment"
+        android:label="InputSalaryComponentsFragment" />
 
 
-
-=========
+    =========
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
         android:label="ViewLiveLocationFragment" />

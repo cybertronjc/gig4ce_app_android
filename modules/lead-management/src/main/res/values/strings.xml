@@ -132,6 +132,7 @@
     <string name="type_client_id_here_lead">Type Client Id here</string>
     <string name="click_to_select_city_lead">Click to select city</string>
     <string name="select_city_lead">Select City</string>
+    <string name="select_other_city_lead">Select Other Cities</string>
     <string name="reporting_location_lead">Reporting Location</string>
     <string name="click_to_select_location_lead">Click to select location</string>
     <string name="client_tl_lead">Client TL</string>
@@ -221,6 +222,8 @@
     <string name="company_name_giger_gigs">Flipkart</string>
     <string name="call_text_giger_gigs">CALL GIGER</string>
     <string name="okay_giger_gigs">OKAY</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

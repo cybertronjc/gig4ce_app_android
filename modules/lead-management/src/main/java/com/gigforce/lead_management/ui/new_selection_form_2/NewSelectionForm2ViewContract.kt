@@ -29,6 +29,21 @@ sealed class NewSelectionForm2ViewState  {
         val locationType: String?
     ) : NewSelectionForm2ViewState()
 
+    data class OpenSelectOtherCityScreen(
+        val cities: List<OtherCityClusterItem>,
+        val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
+    data class OpenSelectClusterScreen(
+        val cities: List<OtherCityClusterItem>,
+        val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
+    data class OpenInputSalaryScreen(
+        val cities: List<OtherCityClusterItem>,
+        val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
     data class OpenSelectReportingScreen(
         var selectedCity : ReportingLocationsItem,
         val reportingLocations: List<ReportingLocationsItem>
@@ -80,6 +95,9 @@ sealed class NewSelectionForm2Events {
     ) :NewSelectionForm2Events()
 
     object SelectCityClicked : NewSelectionForm2Events()
+
+    object SelectOtherCityClicked : NewSelectionForm2Events()
+
 
     object SelectReportingLocationClicked : NewSelectionForm2Events()
 

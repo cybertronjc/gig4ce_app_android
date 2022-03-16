@@ -82,11 +82,11 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 containerLayout,
                 it
             )
-            FieldTypes.OTHER_CITIES -> inflateSelectOtherCityView(
-                context,
-                containerLayout,
-                it
-            )
+//            FieldTypes.OTHER_CITIES -> inflateSelectOtherCityView(
+//                context,
+//                containerLayout,
+//                it
+//            )
             FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
                 context,
                 containerLayout,
@@ -206,15 +206,18 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         view.bind(it)
     }
 
-    private fun inflateSelectOtherCityView(
-        context: Context,
-        containerLayout: LinearLayout,
-        it: DynamicField
-    ) {
-        val view = DynamicSelectOtherCitiesView(context, null)
-        containerLayout.addView(view)
-        view.bind(it)
-    }
+//    private fun inflateSelectOtherCityView(
+//        context: Context,
+//        containerLayout: LinearLayout,
+//        it: DynamicField
+//    ) {
+//        val view = DynamicSelectOtherCitiesView(
+//            context,
+//            null
+//        )
+//        containerLayout.addView(view)
+//        view.bind(it)
+//    }
 
     private fun inflateSelectClusterView(
         context: Context,

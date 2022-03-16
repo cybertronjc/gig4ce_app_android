@@ -1,12 +1,10 @@
 package com.gigforce.lead_management.ui.select_shift_timing
 
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer

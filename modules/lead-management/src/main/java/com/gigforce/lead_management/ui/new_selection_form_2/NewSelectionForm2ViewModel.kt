@@ -72,6 +72,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedDateOfJoining = event.date
             }
             NewSelectionForm2Events.SelectCityClicked -> openSelectCityScreen()
+            NewSelectionForm2Events.SelectOtherCityClicked -> openSelectOtherCityScreen()
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
@@ -241,6 +242,38 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     it.name
                 }
             )
+            _viewState.value = null
+        }
+    }
+
+    private fun openSelectOtherCityScreen() {
+        if (selectedCity == null) {
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
+                    )
+                }
+            )
+            _viewState.value = null
+        } else {
+            val otherCities = joiningLocationsAndTLs.reportingLocations.find { it.cityId == selectedCity?.cityId }?.clusters
+
+            otherCities?.onEach {
+                it.selected = it.id == selectedReportingLocation?.id
+            }
+
+            _viewState.value = otherCities?.sortedBy {
+                it.name
+            }?.let {
+                NewSelectionForm2ViewState.OpenSelectOtherCityScreen(
+                    it,
+                    ""
+                )
+            }
             _viewState.value = null
         }
     }
