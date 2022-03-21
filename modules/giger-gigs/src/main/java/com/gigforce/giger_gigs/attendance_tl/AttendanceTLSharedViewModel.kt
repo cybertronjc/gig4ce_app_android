@@ -14,10 +14,12 @@ sealed class SharedAttendanceTLSharedViewModelEvents {
 
     data class TLSelectedInactiveReasonConfirmationDialog(
         val gigId: String,
+        val reasonId : String,
         val reason: String
     ) : SharedAttendanceTLSharedViewModelEvents()
 
     data class TLSelectedResolveConfirmationDialog(
+        val gigId: String,
         val resolveId: String,
         val optionSelected: Boolean
     ) : SharedAttendanceTLSharedViewModelEvents()
@@ -41,21 +43,25 @@ class AttendanceTLSharedViewModel : ViewModel() {
 
     fun tlSelectedInactiveReasonConfirmationDialog(
         gigId: String,
+        reasonId: String,
         reason: String
     ) = viewModelScope.launch {
         _sharedEvents.emit(
             SharedAttendanceTLSharedViewModelEvents.TLSelectedInactiveReasonConfirmationDialog(
                 gigId = gigId,
+                reasonId = reasonId,
                 reason = reason
             )
         )
     }
 
     fun tlSelectedYesInResolveDialog(
+        gigId: String,
         resolveId: String
     ) = viewModelScope.launch {
         _sharedEvents.emit(
             SharedAttendanceTLSharedViewModelEvents.TLSelectedResolveConfirmationDialog(
+                gigId = gigId,
                 resolveId = resolveId,
                 optionSelected = true
             )
@@ -63,10 +69,12 @@ class AttendanceTLSharedViewModel : ViewModel() {
     }
 
     fun tlSelectedNoInResolveDialog(
+        gigId: String,
         resolveId: String
     ) = viewModelScope.launch {
         _sharedEvents.emit(
             SharedAttendanceTLSharedViewModelEvents.TLSelectedResolveConfirmationDialog(
+                gigId = gigId,
                 resolveId = resolveId,
                 optionSelected = false
             )

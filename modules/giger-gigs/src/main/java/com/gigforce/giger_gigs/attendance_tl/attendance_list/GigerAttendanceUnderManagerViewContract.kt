@@ -2,17 +2,35 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
+import com.gigforce.giger_gigs.models.GigAttendanceData
 import java.time.LocalDate
+import kotlin.random.Random
 
 class GigerAttendanceUnderManagerViewContract {
 
     sealed class State {
 
-        object ScreenLoaded : State()
+        object ScreenLoaded : State(){
+            override fun equals(other: Any?): Boolean {
+                return false
+            }
+
+            override fun hashCode(): Int {
+                return Random.nextInt()
+            }
+        }
 
         data class LoadingAttendanceList(
             val message: String?
-        ) : State()
+        ) : State(){
+            override fun equals(other: Any?): Boolean {
+                return false
+            }
+
+            override fun hashCode(): Int {
+                return Random.nextInt()
+            }
+        }
 
         data class ShowOrUpdateAttendanceListOnView(
             val date : LocalDate,
@@ -22,16 +40,44 @@ class GigerAttendanceUnderManagerViewContract {
             val attendanceItemData: List<AttendanceRecyclerItemData>,
             val showUpdateToast: Boolean,
             val tabsDataCounts : List<AttendanceStatusAndCountItemData>?
-        ) : State()
+        ) : State(){
+            override fun equals(other: Any?): Boolean {
+                return false
+            }
+
+            override fun hashCode(): Int {
+                return Random.nextInt()
+            }
+        }
 
         data class ErrorInLoadingOrUpdatingAttendanceList(
             val error: String
-        ) : State()
+        ) : State(){
+            override fun equals(other: Any?): Boolean {
+                return false
+            }
+
+            override fun hashCode(): Int {
+                return Random.nextInt()
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
     }
 
     sealed class UiEvent {
 
         data class AttendanceItemClicked(
+            val attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        ) : UiEvent()
+
+        data class AttendanceItemResolveClicked(
             val attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
         ) : UiEvent()
 
@@ -64,14 +110,13 @@ class GigerAttendanceUnderManagerViewContract {
         ) : UiEffect()
 
         data class ShowGigerDetailsScreen(
-            val date : LocalDate,
-            val gigerId : String
+            val gigId : String,
+            val gigAttendanceData : GigAttendanceData
         ) : UiEffect()
 
         data class ShowResolveAttendanceConflictScreen(
             val gigId : String,
-            val gigerMarkedAttendance : String,
-            val gigerName: String
+            val gigAttendanceData : GigAttendanceData
         ) : UiEffect()
     }
 }

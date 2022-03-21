@@ -2,11 +2,9 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.useCases.payouts.GetPayoutDetailsUseCase
-import com.gigforce.common_ui.viewmodels.payouts.Payout
-import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
+import com.gigforce.giger_gigs.models.GigAttendanceData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GigerAttendanceDetailsViewModel @Inject constructor(
-    private val logger: GigforceLogger
+    private val logger: GigforceLogger,
+    private val attendanceRepository: GigAttendanceRepository
 ) : ViewModel() {
 
     companion object {
@@ -34,8 +33,8 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     val viewEffects = _viewEffects.asSharedFlow()
 
     // Data
-    private lateinit var gigId : String
-    private var attendanceDetails: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
+    private lateinit var gigId: String
+    private var attendanceDetails: GigAttendanceData? = null
 
     fun handleEvent(
         event: GigerAttendanceDetailsViewContract.UiEvent
@@ -43,6 +42,29 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
         GigerAttendanceDetailsViewContract.UiEvent.ActiveButtonClicked -> activeButtonClicked()
         GigerAttendanceDetailsViewContract.UiEvent.InactiveButtonClicked -> inActiveButtonClicked()
         GigerAttendanceDetailsViewContract.UiEvent.ResolveButtonClicked -> resolveButtonClicked()
+        GigerAttendanceDetailsViewContract.UiEvent.AttendanceHistoryClicked -> attendanceHistoryClicked()
+        GigerAttendanceDetailsViewContract.UiEvent.CallGigerButtonClicked -> callGigerClicked()
+        GigerAttendanceDetailsViewContract.UiEvent.ChangeTLButtonClicked -> changeTLClicked()
+        GigerAttendanceDetailsViewContract.UiEvent.DropGigerClicked -> dropGigerClicked()
+    }
+
+    private fun changeTLClicked() = viewModelScope.launch {
+
+    }
+
+    private fun attendanceHistoryClicked() = viewModelScope.launch {
+
+    }
+
+    private fun dropGigerClicked()= viewModelScope.launch {
+
+    }
+
+    private fun callGigerClicked() = viewModelScope.launch {
+        val gigerMobileNo = attendanceDetails?.gigerMobileNo ?: return@launch
+        _viewEffects.emit(GigerAttendanceDetailsViewContract.UiEffect.CallGiger(
+            gigerMobileNo
+        ))
     }
 
     private fun activeButtonClicked() = viewModelScope.launch {
@@ -76,20 +98,11 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     }
 
     fun setGigerAttendanceReceivedFromPreviousScreen(
-        gigId: String,
-        gigAttendanceInfo : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        gigId: String
     ) = viewModelScope.launch {
 
         this@GigerAttendanceDetailsViewModel.gigId = gigId
-        this@GigerAttendanceDetailsViewModel.attendanceDetails = gigAttendanceInfo
-
-        _viewState.emit(
-            GigerAttendanceDetailsViewContract.State.ShowAttendanceDetails(
-                gigAttendanceInfo
-            )
-        )
-
-       // fetchAttendanceDetails(gigId)
+        fetchAttendanceDetails(gigId)
     }
 
     private fun fetchAttendanceDetails(
@@ -99,9 +112,11 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
         _viewState.emit(GigerAttendanceDetailsViewContract.State.LoadingAttendanceDetails(null))
         try {
 
-//            payout = getPayoutDetailsUseCase.getPayoutDetails(
-//                payoutId
-//            )
+            attendanceDetails = GigAttendanceData.fromGigAttendanceApiModel(
+                attendanceRepository.getAttendanceDetails(
+                    gigId
+                )
+            )
 
             _viewState.emit(
                 GigerAttendanceDetailsViewContract.State.ShowAttendanceDetails(

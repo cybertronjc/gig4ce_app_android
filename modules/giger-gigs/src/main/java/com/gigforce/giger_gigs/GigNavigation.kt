@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
+import com.gigforce.giger_gigs.models.GigAttendanceData
 import javax.inject.Inject
 
 class GigNavigation @Inject constructor(
@@ -61,16 +62,28 @@ class GigNavigation @Inject constructor(
     }
 
     fun openResolveAttendanceConflictDialog(
-        resolveId : String,
-        hasGigerMarkedHimselfActive: Boolean
+        gigId : String,
+        attendanceDetails : GigAttendanceData
     ){
         navigation.navigateTo(
             NAV_DESTINATION_RESOLVE_ATTENDANCE_CONFIRMATION_DIALOG,
             bundleOf(
-                GigAttendanceConstants.INTENT_EXTRA_RESOLVE_ID to resolveId,
-                GigAttendanceConstants.INTENT_HAS_GIGER_MARKED_HIMSELF_ACTIVE to hasGigerMarkedHimselfActive
+                GigAttendanceConstants.INTENT_EXTRA_GIG_ID to gigId,
+                GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS to attendanceDetails
             ),
             NavigationOptions.getNavOptions()
         )
     }
+
+    fun openGigDetailsScreen(
+        gigId: String,
+        attendanceDetails : GigAttendanceData
+    ) = navigation.navigateTo(
+        NAV_DESTINATION_ATTENDANCE_DETAILS,
+        bundleOf(
+            GigAttendanceConstants.INTENT_EXTRA_GIG_ID to gigId,
+            GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS to attendanceDetails
+        ),
+        NavigationOptions.getNavOptions()
+    )
 }

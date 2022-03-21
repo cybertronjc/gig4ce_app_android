@@ -1,70 +1,58 @@
 package com.gigforce.giger_gigs.attendance_tl.attendance_details
 
 import android.app.Dialog
-import android.app.DownloadManager
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.widget.LinearLayout
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewmodels.payouts.Payout
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
-import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
-import com.toastfix.toastcompatwrapper.ToastHandler
+import com.gigforce.giger_gigs.models.GigAttendanceData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGigerAttendanceDetailsBinding>(
-    fragmentName = TAG,
-    layoutId = R.layout.fragment_giger_attendance_details
-) {
+class GigerAttendanceDetailsFragment :
+    BaseBottomSheetDialogFragment<FragmentGigerAttendanceDetailsBinding>(
+        fragmentName = TAG,
+        layoutId = R.layout.fragment_giger_attendance_details
+    ) {
     companion object {
         const val TAG = "GigerAttendanceDetailsFragment"
     }
 
     private val viewModel: GigerAttendanceDetailsViewModel by viewModels()
     private lateinit var gigId: String
-    private lateinit var gigAttendanceDetails : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
-            gigAttendanceDetails = it.getParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS) ?: return@let
         }
 
         savedInstanceState?.let {
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
-            gigAttendanceDetails = it.getParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS) ?: return@let
         }
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         viewModel.setGigerAttendanceReceivedFromPreviousScreen(
-            gigId = gigId,
-            gigAttendanceInfo = gigAttendanceDetails
+            gigId = gigId
         )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID, gigId)
-//        outState.putParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS, gigAttendanceDetails)
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -84,12 +72,26 @@ class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGig
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog =  super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
 
     private fun initView() = viewBinding.apply {
+
+        this.mainLayout.apply {
+            this.callLayout.floatingActionButton.setImageResource(R.drawable.ic_call_phone_pink)
+            this.callLayout.textView.text = "Call"
+
+            this.changeTlLayout.floatingActionButton.setImageResource(R.drawable.ic_change_pink)
+            this.changeTlLayout.textView.text = "Change TL"
+
+            this.attendanceHistoryLayout.floatingActionButton.setImageResource(R.drawable.ic_calendar_pink)
+            this.attendanceHistoryLayout.textView.text = "Att. History"
+
+            this.dropGigerLayout.floatingActionButton.setImageResource(R.drawable.ic_block_pink)
+            this.dropGigerLayout.textView.text = "Drop Giger"
+        }
 
         this.mainLayout.activeButton.setOnClickListener {
             viewModel.handleEvent(GigerAttendanceDetailsViewContract.UiEvent.ActiveButtonClicked)
@@ -110,7 +112,9 @@ class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGig
                         it.error
                     )
                     is GigerAttendanceDetailsViewContract.State.LoadingAttendanceDetails -> showAttendanceLoading()
-                    is GigerAttendanceDetailsViewContract.State.ShowAttendanceDetails -> showAttendanceDetailsOnView(it.attendanceDetails)
+                    is GigerAttendanceDetailsViewContract.State.ShowAttendanceDetails -> showAttendanceDetailsOnView(
+                        it.attendanceDetails
+                    )
                 }
             }
         }
@@ -124,39 +128,6 @@ class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGig
                     is GigerAttendanceDetailsViewContract.UiEffect.OpenResolveAttendanceScreen -> TODO()
                 }
             }
-        }
-    }
-
-    private fun startDocumentDownload(
-        businessName: String,
-        url: String
-    ) {
-        try {
-            val filePathName = FirebaseUtils.extractFilePath(url)
-
-            val downloadRequest = DownloadManager.Request(Uri.parse(url)).run {
-                setTitle(filePathName)
-                setDescription(businessName)
-                setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    filePathName
-                )
-                setNotificationVisibility(
-                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
-                )
-            }
-
-            val downloadManager = requireContext()
-                .getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            downloadManager.enqueue(downloadRequest)
-
-            ToastHandler.showToast(
-                requireContext(),
-                "Saving file in Downloads,check notification...",
-                Toast.LENGTH_LONG
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -179,7 +150,7 @@ class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGig
     }
 
     private fun showAttendanceDetailsOnView(
-        attendanceDetails: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        attendanceDetails: GigAttendanceData
     ) = viewBinding.apply {
 
         stopShimmer(
@@ -194,9 +165,36 @@ class GigerAttendanceDetailsFragment : BaseBottomSheetDialogFragment<FragmentGig
     }
 
     private fun showInfoOnView(
-        attendanceDetails:  AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        attendanceDetails: GigAttendanceData
     ) = viewBinding.mainLayout.apply {
 
+        this.statusView.bind(
+            attendanceDetails.status,
+            attendanceDetails.statusBackgroundColorCode,
+            attendanceDetails.statusTextColorCode,
+            false
+        )
+        this.userImageImageview.loadProfilePicture(
+            attendanceDetails.gigerImage,
+            attendanceDetails.gigerImage
+        )
+        this.nameTextview.text = attendanceDetails.gigerName
+        this.lastActiveTextview.text = attendanceDetails.lastActiveText
+
+        this.gigerMarkedAttendanceStatus.isVisible = attendanceDetails.showGigerAttendanceLayout
+        this.gigerMarkedAttendanceStatus.bind(
+            attendanceDetails.status,
+            null ,//TODO
+            attendanceDetails.hasAttendanceConflict,
+            false
+        )
+
+        this.infoLayout.bind(
+            attendanceDetails
+        )
+
+        this.activeButton.isVisible = attendanceDetails.canTLMarkPresent
+        this.inactiveButton.isVisible = attendanceDetails.canTLMarkAbsent
     }
 
     private fun errorInLoadingAttendanceDetails(

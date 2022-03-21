@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.view.isVisible
 import com.gigforce.core.IViewHolder
+import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.attendance_list.GigerAttendanceUnderManagerViewContract
 import com.gigforce.giger_gigs.databinding.RecyclerRowGigerAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
@@ -25,8 +27,8 @@ class GigerAttendanceItemRecyclerItemView(
     private lateinit var viewBinding: RecyclerRowGigerAttendanceBinding
     private var viewData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
 
-    lateinit var viewForeground : View
-    lateinit var viewBackground : View
+    lateinit var viewForeground: View
+    lateinit var viewBackground: View
 
     private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
     private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy") //YYYY-MM-DD
@@ -39,6 +41,7 @@ class GigerAttendanceItemRecyclerItemView(
 
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
+        viewBinding.gigerAttendanceStatusView.setOnResolveButtonClickListener(this)
     }
 
     private fun setDefault() {
@@ -70,39 +73,85 @@ class GigerAttendanceItemRecyclerItemView(
             viewBinding.gigerDesignationTextview.text = it.gigerDesignation
             viewBinding.gigerLastActiveDateTextview.text = it.lastActiveText
             viewBinding.markedByTextview.text = it.markedByText
-            viewBinding.overallStatusTextview.bind(
-                it.status,
-                it.statusBackgroundColorCode,
-                it.statusTextColorCode
-            )
-        }
-    }
 
-    private fun formatPaymentDate(
-        paymentDate: String?
-    ): String {
-        return if (paymentDate != null) {
-            "Paid on : ${paidOnDateFormatter.format(isoDateFormatter.parse(paymentDate))}"
-        } else {
-            "Paid on : -"
+
+            if(it.currentlyMarkingAttendanceForThisGig){
+                viewBinding.gigerAttendanceStatusView.isVisible = it.showGigerAttendanceLayout
+
+                if(it.hasAttendanceConflict){
+
+                    viewBinding.overallStatusTextview.bind(
+                        it.status,
+                        it.statusBackgroundColorCode,
+                        it.statusTextColorCode,
+                        true
+                    )
+
+                    viewBinding.gigerAttendanceStatusView.bind(
+                        status = it.gigerAttendanceStatus ?: "Pending",
+                        markingTime = null,
+                        showResolveButton = it.hasAttendanceConflict,
+                        true
+                    )
+                } else{
+
+                    viewBinding.overallStatusTextview.bind(
+                        it.status,
+                        it.statusBackgroundColorCode,
+                        it.statusTextColorCode,
+                        true
+                    )
+
+                    viewBinding.gigerAttendanceStatusView.bind(
+                        status = it.gigerAttendanceStatus ?: "Pending",
+                        markingTime = null,
+                        showResolveButton = it.hasAttendanceConflict,
+                        true
+                    )
+                }
+
+            } else {
+
+                viewBinding.overallStatusTextview.bind(
+                    it.status,
+                    it.statusBackgroundColorCode,
+                    it.statusTextColorCode,
+                    false
+                )
+
+                viewBinding.gigerAttendanceStatusView.isVisible = it.showGigerAttendanceLayout
+                viewBinding.gigerAttendanceStatusView.bind(
+                    status = it.gigerAttendanceStatus ?: "Pending",
+                    markingTime = null,
+                    showResolveButton = it.hasAttendanceConflict,
+                    false
+                )
+            }
         }
     }
 
     override fun onClick(v: View?) {
 
         val currentViewData = viewData ?: return
-        currentViewData.viewModel.handleEvent(
-            GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemClicked(
-                currentViewData
+        when (v?.id) {
+            R.id.resolve_btn -> currentViewData.viewModel.handleEvent(
+                GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemResolveClicked(
+                    currentViewData
+                )
             )
-        )
+            else -> currentViewData.viewModel.handleEvent(
+                GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemClicked(
+                    currentViewData
+                )
+            )
+        }
     }
 
-    fun getGigDataOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData{
-        return  viewData ?: throw IllegalStateException("view data is null")
+    fun getGigDataOrThrow(): AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
+        return viewData ?: throw IllegalStateException("view data is null")
     }
 
-    fun getViewBinding() : RecyclerRowGigerAttendanceBinding{
+    fun getViewBinding(): RecyclerRowGigerAttendanceBinding {
         return viewBinding
     }
 }

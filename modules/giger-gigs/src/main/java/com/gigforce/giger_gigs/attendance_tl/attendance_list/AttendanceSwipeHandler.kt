@@ -3,6 +3,7 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_list
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.core.CoreViewHolder
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceStatus
 import com.gigforce.giger_gigs.attendance_tl.attendance_list.views.GigerAttendanceItemRecyclerItemView
@@ -30,14 +31,15 @@ class AttendanceSwipeHandler(
                 val gigData = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).getGigDataOrThrow()
 
                 return when {
-                    gigData.currentlyMarkingAttendanceForThisGig -> ItemTouchHelper.ACTION_STATE_IDLE // Disable swipe
-                    GigAttendanceStatus.ACTIVE.equals(gigData.status, true) && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
-                    GigAttendanceStatus.INACTIVE.equals(gigData.status, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-                    GigAttendanceStatus.PENDING.equals(gigData.status, true) && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
+                    gigData.currentlyMarkingAttendanceForThisGig -> ItemTouchHelper.ACTION_STATE_IDLE // Disabling swipe
+                    gigData.canTLMarkAbsent && declineSwipeActionEnabled && gigData.canTLMarkPresent && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+                    gigData.hasTLMarkedAttendance.not() && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
 
-                    else -> 0 //Disabling swipe
+                    gigData.canTLMarkAbsent && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
+                    gigData.canTLMarkPresent && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    gigData.hasTLMarkedAttendance.not() && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    gigData.hasTLMarkedAttendance.not() && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
+                    else -> ItemTouchHelper.ACTION_STATE_IDLE // Disabling swipe
                 }
 
             } catch (e: Exception) {
@@ -45,7 +47,7 @@ class AttendanceSwipeHandler(
                 return super.getSwipeDirs(recyclerView, viewHolder)
             }
         } else {
-            return 0 //Disabling swipe for view type that are not attendance items
+            return ItemTouchHelper.ACTION_STATE_IDLE //Disabling swipe for view type that are not attendance items
         }
     }
 

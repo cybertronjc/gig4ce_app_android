@@ -36,6 +36,10 @@ class SelectMarkInactiveReasonsBottomSheetViewModel @Inject constructor(
     private val _viewState = MutableLiveData<SelectMarkInactiveReasonsViewContract.UiState>()
     val viewState : LiveData<SelectMarkInactiveReasonsViewContract.UiState> = _viewState
 
+    init {
+        loadDeclineOptions(false)
+    }
+
     fun loadDeclineOptions(
         isUserTl : Boolean
     ) = viewModelScope.launch{

@@ -4,10 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import com.gigforce.giger_gigs.R
 
 class AttendanceStatusView(
@@ -19,6 +20,7 @@ class AttendanceStatusView(
 ) {
 
     private lateinit var textView: TextView
+    private lateinit var progressBar: ProgressBar
 
     init {
         setDefault()
@@ -36,14 +38,16 @@ class AttendanceStatusView(
         ).inflate(R.layout.layout_attendance_status, this, true)
 
         textView = view.findViewById(R.id.statusTextView)
+        progressBar = view.findViewById(R.id.progress_bar)
     }
 
     fun bind(
         status: String,
         statusBackGroundColorCode: String,
-        statusTextColorCode : String
+        statusTextColorCode: String,
+        showMarkAttendanceProgressBar: Boolean
     ) {
-        textView.text = status
+
 
         var background = textView.background
         background = DrawableCompat.wrap(background)
@@ -51,5 +55,13 @@ class AttendanceStatusView(
         DrawableCompat.setTint(background, Color.parseColor(statusBackGroundColorCode))
         textView.background = background
         textView.setTextColor(Color.parseColor(statusTextColorCode))
+
+        if (showMarkAttendanceProgressBar) {
+            progressBar.isVisible = true
+            textView.text = ""
+        } else {
+            progressBar.isVisible = false
+            textView.text = status
+        }
     }
 }

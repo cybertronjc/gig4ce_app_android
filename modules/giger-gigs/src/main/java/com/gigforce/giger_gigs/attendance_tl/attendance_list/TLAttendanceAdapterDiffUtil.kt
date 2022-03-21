@@ -52,7 +52,11 @@ class TLAttendanceAdapterDiffUtil : CoreDiffUtilCallback<AttendanceRecyclerItemD
                 newItem is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
             ) {
                 return oldItem.gigId == newItem.gigId &&
-                        oldItem.status == newItem.status 
+                        oldItem.status == newItem.status &&
+                        oldItem.hasAttendanceConflict == newItem.hasAttendanceConflict &&
+                        oldItem.currentlyMarkingAttendanceForThisGig == newItem.currentlyMarkingAttendanceForThisGig &&
+                        oldItem.showGigerAttendanceLayout == newItem.showGigerAttendanceLayout &&
+                        oldItem.gigerAttendanceStatus == newItem.gigerAttendanceStatus
             }
 
             return false

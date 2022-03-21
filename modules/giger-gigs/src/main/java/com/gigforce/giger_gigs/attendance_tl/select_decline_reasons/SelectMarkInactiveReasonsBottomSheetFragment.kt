@@ -147,6 +147,7 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
 
                 sharedViewModel.tlSelectedInactiveReasonConfirmationDialog(
                     gigId,
+                    checkedReasonId,
                     reason
                 )
                 dismiss()

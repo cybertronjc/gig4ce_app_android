@@ -28,6 +28,7 @@
     <color name="lipstick">#d72467</color>
     <color name="lipstick_2">#e42c64</color>
     <color name="lipstick_3">#e53369</color>
+    <color name="lipstick_10">#1AD72467</color>
 
     <color name="lipstick_light">#ECAFC1</color>
 
@@ -94,6 +95,7 @@
     <color name="text_yellow">#fa6400</color>
     <color name="text_orange">#f7b500</color>
     <color name="text_green">#468800</color>
+    <color name="text_green_10">#1A468800</color>
 
     <color name="status_bg_pending">#f5a623</color>
     <color name="status_bg_completed">#72a839</color>
@@ -117,4 +119,5 @@
     <color name="text_grey">#6F7070</color>
     <color name="inkDefault">#202325</color>
 
+    <color name="green_medium">#5CC568</color>
 </resources>

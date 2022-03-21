@@ -2,10 +2,7 @@ package com.gigforce.common_ui.remote
 
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
-import com.gigforce.common_ui.viewdatamodels.gig.GigApiModel
-import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceRequest
-import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
-import com.gigforce.common_ui.viewdatamodels.gig.MarkAttendanceRequest
+import com.gigforce.common_ui.viewdatamodels.gig.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -22,8 +19,19 @@ interface GigerAttendanceService {
         @Body request : GigAttendanceRequest
     ): Response<List<GigApiModel>>
 
-    @POST("attendance/markAttendance")
+    @POST("gigAttendance/markAttendance")
     suspend fun markAttendance(
         @Body markAttendanceRequest: MarkAttendanceRequest
-    ): Response<BaseResponse<String>>
+    ): Response<MarkAttendanceResponse>
+
+    @POST("gigAttendance/resolveAttendance")
+    suspend fun resolveAttendanceConflict(
+        @Body request: ResolveAttendanceRequest
+    ): Response<MarkAttendanceResponse>
+
+    @GET("gigAttendance/getAttendanceInfo")
+    suspend fun getGigDetailsWithAttendanceInfo(
+        @Query("gigId") gigId : String
+    ): Response<List<GigAttendanceApiModel>>
+
 }

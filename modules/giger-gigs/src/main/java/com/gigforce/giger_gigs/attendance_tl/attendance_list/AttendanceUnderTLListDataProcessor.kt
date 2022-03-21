@@ -1,6 +1,8 @@
 package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
 object AttendanceUnderTLListDataProcessor {
@@ -66,18 +68,25 @@ object AttendanceUnderTLListDataProcessor {
     ): List<GigAttendanceApiModel> {
         return attendance.run {
 
-            if (!currentlySearchTerm.isNullOrBlank()) {
                 this.filter {
 
-                    it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
-                            it.jobProfile?.contains(currentlySearchTerm, true) ?: false
+                    if (!currentlySearchTerm.isNullOrBlank()) {
+
+                        it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
+                                it.jobProfile?.contains(currentlySearchTerm, true) ?: false
+                    } else{
+                        true
+                    }
+                }
+            }.filter {
+                if(currentlySelectedStatus == StatusFilters.ENABLED){
+                    true
+                } else if(currentlySelectedStatus == StatusFilters.ACTIVE){
+                    it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT
+                } else {
+                    it.getFinalAttendanceStatus() == AttendanceStatus.ABSENT
                 }
             }
-
-            this.filter {
-                true
-            }
-        }
     }
 
     private fun mapPayoutsToPayoutItemView(
@@ -99,11 +108,18 @@ object AttendanceUnderTLListDataProcessor {
                 gigerDesignation = it.jobProfile ?: "N/A",
                 markedByText = it.getMarkedByText(),
                 lastActiveText = it.getLastActiveText(),
+                showGigerAttendanceLayout = it.hasUserAndTLMarkedDifferentAttendance(),
                 hasAttendanceConflict = it.hasAttendanceConflict(),
-                gigerAttendanceStatus = "",//todo
+                gigerAttendanceStatus = it.getGigerMarkedAttendance(),
+                tlMarkedAttendance = it.getTLMarkedAttendance(),
                 viewModel = viewModel,
                 currentlyMarkingAttendanceForThisGig =  currentMarkingAttendanceForGigs.find { gigId -> it.gigerId == gigId } != null,
-                businessName = it.businessName ?: "N/A"
+                businessName = it.businessName ?: "N/A",
+                gigerAttendanceMarkingTime = it.gigerAttedance?.checkInTime,
+                resolveId = it.resolveAttendanceId,
+                hasTLMarkedAttendance = it.hasTLMarkedAttendance(),
+                canTLMarkPresent = it.canTLMarkPresent(),
+                canTLMarkAbsent = it.canTLMarkAbsent()
             )
         }
 

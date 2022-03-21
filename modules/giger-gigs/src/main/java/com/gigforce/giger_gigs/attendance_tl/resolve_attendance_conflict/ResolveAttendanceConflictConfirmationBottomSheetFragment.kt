@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -29,6 +30,7 @@ import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
 import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.gigforce.giger_gigs.databinding.FragmentResolveAttendanceConflictConfirmationBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
+import com.gigforce.giger_gigs.models.GigAttendanceData
 import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,17 +46,19 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
 
     private val viewModel: AttendanceTLSharedViewModel by activityViewModels()
 
-    private lateinit var resolveId: String
-    private var hasGigerMarkedHimselfActive: Boolean = false
+    private lateinit var gigId: String
+    private lateinit var gigAttendanceData: GigAttendanceData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            resolveId = it.getString(GigAttendanceConstants.INTENT_EXTRA_RESOLVE_ID) ?: return@let
+            gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
+            gigAttendanceData = it.getParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS) ?: return@let
         }
 
         savedInstanceState?.let {
-            resolveId = it.getString(GigAttendanceConstants.INTENT_EXTRA_RESOLVE_ID) ?: return@let
+            gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
+            gigAttendanceData = it.getParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS) ?: return@let
         }
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
@@ -62,7 +66,8 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(GigAttendanceConstants.INTENT_EXTRA_RESOLVE_ID, resolveId)
+        outState.putString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID, gigId)
+        outState.putParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS, gigAttendanceData)
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -87,6 +92,7 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
 
     private fun initView() = viewBinding.apply {
 
+        val hasGigerMarkedHimselfActive = AttendanceStatus.PRESENT == gigAttendanceData.gigerAttendanceStatus
         if (hasGigerMarkedHimselfActive) {
             this.confirmationTextLabel.text = buildSpannedString {
                 append("Giger has marked ")
@@ -106,12 +112,18 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
         }
 
         this.yesButton.setOnClickListener {
-            viewModel.tlSelectedYesInResolveDialog(resolveId)
+            viewModel.tlSelectedYesInResolveDialog(
+                gigId,
+                gigAttendanceData.resolveId!!
+            )
             dismiss()
         }
 
         this.noButton.setOnClickListener {
-            viewModel.tlSelectedNoInResolveDialog(resolveId)
+            viewModel.tlSelectedNoInResolveDialog(
+                gigId,
+                gigAttendanceData.resolveId!!
+            )
             dismiss()
         }
     }

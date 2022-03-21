@@ -3,6 +3,11 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.gigforce.common_ui.datamodels.attendance.GigerAttedance
+import com.gigforce.common_ui.datamodels.attendance.TlAttendance
+import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.logger.GigforceLogger
@@ -28,7 +33,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private val gigersAttendanceRepository: GigersAttendanceRepository,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private var eventTracker: IEventTracker,
-    private val logger: GigforceLogger
+    private val logger: GigforceLogger,
+    private val attendanceRepository: GigAttendanceRepository
 ) : ViewModel() {
 
     companion object {
@@ -80,12 +86,32 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         is GigerAttendanceUnderManagerViewContract.UiEvent.FiltersApplied.TabChanged -> filterAttendanceByStatus(
             event.tab
         )
+        is GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemResolveClicked -> resolveButtonClicked(
+            event.attendance
+        )
+    }
+
+    private fun resolveButtonClicked(
+        attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+    ) = viewModelScope.launch {
+
+        _viewEffects.emit(
+            GigerAttendanceUnderManagerViewContract.UiEffect.ShowResolveAttendanceConflictScreen(
+                gigId = attendance.gigId,
+                gigAttendanceData = attendance.mapToGigAttendance()
+            )
+        )
     }
 
     private fun attendanceItemClicked(
         attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) = viewModelScope.launch {
-
+        _viewEffects.emit(
+            GigerAttendanceUnderManagerViewContract.UiEffect.ShowGigerDetailsScreen(
+                attendance.gigId,
+                attendance.mapToGigAttendance()
+            )
+        )
     }
 
     private fun businessHeaderClicked(
@@ -104,7 +130,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
     }
 
-    private fun fetchUsersAttendanceDate(
+    fun fetchUsersAttendanceDate(
         date: LocalDate
     ) = viewModelScope.launch(Dispatchers.IO) {
 
@@ -164,22 +190,34 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
             ).toMutableList()
 
+        val listToEmitCopy = attendanceShownOnScreen.map {
+
+            if (it is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData) {
+                it.copy()
+            } else {
+                (it as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData).copy()
+            }
+        }.toMutableList()
+
         _viewState.emit(
             GigerAttendanceUnderManagerViewContract.State.ShowOrUpdateAttendanceListOnView(
                 date = currentlyFetchingForDate,
                 attendanceSwipeControlsEnabled = !currentlyFetchingForDate.isBefore(LocalDate.now()),
                 enablePresentSwipeAction = currentlyFetchingForDate == LocalDate.now(),
                 enableDeclineSwipeAction = !currentlyFetchingForDate.isBefore(LocalDate.now()),
-                attendanceItemData = attendanceShownOnScreen,
+                attendanceItemData = listToEmitCopy,
                 showUpdateToast = showDataUpdatedToast,
                 tabsDataCounts = if (updateStatusTabsCount) prepareAttendanceTabsCountList() else null
             )
         )
     }
 
-    private fun filterAttendanceByStatus(
+    fun filterAttendanceByStatus(
         status: String
     ) = viewModelScope.launch(Dispatchers.IO) {
+        if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
+            return@launch
+        }
 
         currentlySelectedStatus = status
         processAttendanceListAndEmitToView(
@@ -188,9 +226,14 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
     }
 
-    private fun searchAttendance(
+    fun searchAttendance(
         searchTerm: String
     ) = viewModelScope.launch(Dispatchers.IO) {
+
+        if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
+            return@launch
+        }
+
         currentlySearchTerm = searchTerm
         processAttendanceListAndEmitToView(
             showDataUpdatedToast = false,
@@ -198,17 +241,26 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
     }
 
+
+    /**
+     * Attendance
+     * 1. Check-in
+     * 2. absent
+     * 3. resolve conflict
+     */
+
     fun markUserCheckedIn(
-        gigId: String,
-        gigerId : String,
-        gigerName: String,
-        businessName: String
+        gigId: String
     ) = viewModelScope.launch {
 
         if (currentMarkingAttendanceForGigs.contains(gigId)) {
             logger.d(TAG, "already marking attendance for gig-id $gigId is in progress , no-op")
             return@launch
         }
+
+        val currentlyMarkingAttendanceForGig = attendanceListRaw.find {
+            it.id == gigId
+        } ?: return@launch
 
         currentMarkingAttendanceForGigs.add(gigId)
         updateAttendanceMarkingStatusAndEmit(
@@ -217,32 +269,33 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
 
         try {
-            gigersAttendanceRepository.markUserAttendanceAsPresent(
-                gigId
+            attendanceRepository.markCheckIn(
+                gigId = gigId,
+                imagePathInFirebase = null,
+                latitude = null,
+                longitude = null,
+                markingAddress = null,
+                locationFake = null,
+                locationAccuracy = null
             )
-            attendanceShownOnScreen.find {
-                it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData && it.gigId == gigId
-            }?.let {
-                (it as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData).status =
-                    "Active"
-            }
 
-            val currentLoggedInTLId =
-                firebaseAuthStateListener.getCurrentSignInInfo()?.uid ?: "N/A"
-            val map = mapOf(
-                "Giger ID" to gigerId,
-                "TL ID" to currentLoggedInTLId,
-                "Business Name" to businessName
+
+            val currentLoggedInTLId = firebaseAuthStateListener.getCurrentSignInInfo()?.uid ?: "N/A"
+//            val map = mapOf(
+//                "Giger ID" to gigerId,
+//                "TL ID" to currentLoggedInTLId,
+//                "Business Name" to businessName
+//            )
+//            eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin", map))
+
+            currentMarkingAttendanceForGigs.remove(gigId)
+            updateAttendanceStatusInRawAndViewList(
+                gigId,
+                AttendanceStatus.PRESENT
             )
-            eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin", map))
-
             processAttendanceListAndEmitToView(
                 showDataUpdatedToast = false,
                 updateStatusTabsCount = true
-            )
-            updateAttendanceMarkingStatusAndEmit(
-                gigId,
-                true
             )
         } catch (e: Exception) {
 
@@ -257,25 +310,111 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
             _viewEffects.emit(
                 GigerAttendanceUnderManagerViewContract.UiEffect.ShowErrorUnableToMarkAttendanceForUser(
-                    error = "Unable to mark Present of $gigerName"
+                    error = "Unable to mark Present of ${currentlyMarkingAttendanceForGig.gigerName}"
                 )
             )
         }
     }
 
+    private fun updateAttendanceStatusInRawAndViewList(
+        gigId: String,
+        status: String
+    ) {
+        attendanceListRaw.find {
+            it.id == gigId
+        }?.let {
+
+            if (AttendanceType.OVERWRITE_BOTH == it.attendanceType) {
+
+                val gigerAttendanceObj = it.gigerAttedance?.apply {
+                    this.attendanceStatus =
+                        if (status == AttendanceStatus.PRESENT) StatusFilters.ACTIVE else StatusFilters.INACTIVE
+                    this.status = status
+                    this.markedBy = "TL"
+                    this.statusString = status
+                    this.statusTextColorCode = it.getDefaultTextColorCodeForStatus(status)
+                    this.statusBackgroundColorCode = it.getDefaultBackgroundColorCodeForStatus(status)
+                } ?: GigerAttedance(
+                    attendanceStatus = if (status == AttendanceStatus.PRESENT) StatusFilters.ACTIVE else StatusFilters.INACTIVE,
+                    status = status,
+                    markedBy = "TL",
+                    statusString = status,
+                    statusTextColorCode = it.getDefaultTextColorCodeForStatus(status),
+                    statusBackgroundColorCode = it.getDefaultBackgroundColorCodeForStatus(status),
+                    checkInTime = null,
+                    checkOutTime = null,
+                    checkInImage = null,
+                    checkOutImage = null
+                )
+                it.gigerAttedance = gigerAttendanceObj
+            } else {
+
+                val tlAttendanceObj = it.tlAttendance?.apply {
+                    this.attendanceStatus =
+                        if (status == AttendanceStatus.PRESENT) StatusFilters.ACTIVE else StatusFilters.INACTIVE
+                    this.status = status
+                    this.statusString = status
+                    this.statusTextColorCode = it.getDefaultTextColorCodeForStatus(status)
+                    this.statusBackgroundColorCode = it.getDefaultBackgroundColorCodeForStatus(status)
+                } ?: TlAttendance(
+                    attendanceStatus = if (status == AttendanceStatus.PRESENT) StatusFilters.ACTIVE else StatusFilters.INACTIVE,
+                    status = status,
+                    statusString = status,
+                    statusTextColorCode = it.getDefaultTextColorCodeForStatus(status),
+                    statusBackgroundColorCode = it.getDefaultBackgroundColorCodeForStatus(status),
+                    checkInTime = null,
+                    checkOutTime = null,
+                    checkInImage = null,
+                    checkOutImage = null
+                )
+                it.tlAttendance = tlAttendanceObj
+            }
+        }
+    }
+
+    private fun updateConflictStatusInRawAndViewList(
+        gigId: String,
+        optionSelected: Boolean
+    ) {
+        attendanceListRaw.find {
+            it.id == gigId
+        }?.let {
+
+            if (AttendanceType.OVERWRITE_BOTH == it.attendanceType) {
+
+                if(optionSelected){
+
+                    it.isResolved = true
+                    val tlAttendanceCurrent = it.tlAttendance ?: return@let
+
+                    val updatedTLAttendance = tlAttendanceCurrent.createNewCopyFromGigerAttendance(
+                        it.gigerAttedance!!
+                    )
+                    it.tlAttendance = updatedTLAttendance
+                } else{
+                    it.isResolved = true
+                }
+            }
+        }
+    }
+
+
+
 
     fun markUserAbsent(
         gigId: String,
-        gigerId: String,
-        reason: String,
-        gigerName: String,
-        businessName: String,
+        reasonId: String,
+        reason: String
     ) = viewModelScope.launch {
 
         if (currentMarkingAttendanceForGigs.contains(gigId)) {
             logger.d(TAG, "already marking attendance for gig-id $gigId is in progress , no-op")
             return@launch
         }
+
+        val currentlyMarkingAttendanceForGig = attendanceListRaw.find {
+            it.id == gigId
+        } ?: return@launch
 
         currentMarkingAttendanceForGigs.add(gigId)
         updateAttendanceMarkingStatusAndEmit(
@@ -284,9 +423,12 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
 
         try {
-            gigersAttendanceRepository.markUserAttendanceAsPresent(//todo change this
-                gigId
+            attendanceRepository.markDecline(
+                gigId,
+                reasonId,
+                reason
             )
+
             attendanceShownOnScreen.find {
                 it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData && it.gigId == gigId
             }?.let {
@@ -296,15 +438,25 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
                 val currentLoggedInTLId =
                     firebaseAuthStateListener.getCurrentSignInInfo()?.uid ?: "N/A"
+                val gigerId = currentlyMarkingAttendanceForGig.gigerId ?: "N/A"
                 val map = mapOf(
                     "Giger ID" to gigerId,
                     "TL ID" to currentLoggedInTLId,
-                    "Business Name" to businessName
+                    "Business Name" to currentlyMarkingAttendanceForGig.getBusinessNameNN()
                 )
-                eventTracker.pushEvent(TrackingEventArgs("tl_marked_checkin", map))//todo change here
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        "tl_marked_checkin",
+                        map
+                    )
+                )//todo change here
             }
 
             currentMarkingAttendanceForGigs.remove(gigId)
+            updateAttendanceStatusInRawAndViewList(
+                gigId,
+                AttendanceStatus.ABSENT
+            )
             updateAttendanceMarkingStatusAndEmit(
                 gigId,
                 true
@@ -322,7 +474,79 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
             _viewEffects.emit(
                 GigerAttendanceUnderManagerViewContract.UiEffect.ShowErrorUnableToMarkAttendanceForUser(
-                    error = "Unable to mark absent of $gigerName"
+                    error = "Unable to mark absent of ${currentlyMarkingAttendanceForGig.gigerName}"
+                )
+            )
+        }
+    }
+
+    fun resolveAttendanceConflict(
+        gigId: String,
+        resolveId: String,
+        optionSelected: Boolean
+    ) = viewModelScope.launch {
+
+
+        if (currentMarkingAttendanceForGigs.contains(gigId)) {
+            logger.d(TAG, "already marking attendance for gig-id $gigId is in progress , no-op")
+            return@launch
+        }
+
+        val currentlyMarkingAttendanceForGig = attendanceListRaw.find {
+            it.id == gigId
+        } ?: return@launch
+
+        currentMarkingAttendanceForGigs.add(gigId)
+        updateAttendanceMarkingStatusAndEmit(
+            gigId,
+            false
+        )
+
+        try {
+            attendanceRepository.resolveAttendanceConflict(
+                resolveId = resolveId,
+                optionSelected = optionSelected
+            )
+
+            updateConflictStatusInRawAndViewList(
+                gigId,
+                optionSelected
+            )
+
+            currentMarkingAttendanceForGigs.remove(gigId)
+            updateAttendanceMarkingStatusAndEmit(
+                gigId,
+                true
+            )
+
+            val currentLoggedInTLId =
+                firebaseAuthStateListener.getCurrentSignInInfo()?.uid ?: "N/A"
+            val gigerId = currentlyMarkingAttendanceForGig.gigerId ?: "N/A"
+            val map = mapOf(
+                "Giger ID" to gigerId,
+                "TL ID" to currentLoggedInTLId,
+                "Business Name" to currentlyMarkingAttendanceForGig.getBusinessNameNN()
+            )
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "tl_marked_checkin",
+                    map
+                )
+            )//todo change here
+        } catch (e: Exception) {
+
+            if (currentMarkingAttendanceForGigs.contains(gigId)) {
+                currentMarkingAttendanceForGigs.remove(gigId)
+            }
+
+            updateAttendanceMarkingStatusAndEmit(
+                gigId,
+                false
+            )
+
+            _viewEffects.emit(
+                GigerAttendanceUnderManagerViewContract.UiEffect.ShowErrorUnableToMarkAttendanceForUser(
+                    error = "Unable to mark absent of ${currentlyMarkingAttendanceForGig.gigerName}"
                 )
             )
         }
@@ -342,13 +566,22 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 markingAttendanceForThisGig
         }
 
+        val listToEmitCopy = attendanceShownOnScreen.map {
+
+            if (it is AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData) {
+                it.copy()
+            } else {
+                (it as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData).copy()
+            }
+        }.toMutableList()
+
         _viewState.emit(
             GigerAttendanceUnderManagerViewContract.State.ShowOrUpdateAttendanceListOnView(
                 date = currentlyFetchingForDate,
                 attendanceSwipeControlsEnabled = !currentlyFetchingForDate.isBefore(LocalDate.now()),
                 enablePresentSwipeAction = currentlyFetchingForDate == LocalDate.now(),
                 enableDeclineSwipeAction = !currentlyFetchingForDate.isBefore(LocalDate.now()),
-                attendanceItemData = attendanceShownOnScreen,
+                attendanceItemData = listToEmitCopy,
                 showUpdateToast = false,
                 tabsDataCounts = if (updateStatusTabsCount) prepareAttendanceTabsCountList() else null
             )
@@ -358,14 +591,16 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private fun prepareAttendanceTabsCountList() = listOf(
         AttendanceStatusAndCountItemData(
             status = StatusFilters.ENABLED,
-            attendanceCount = attendanceShownOnScreen.count(),
+            attendanceCount = attendanceShownOnScreen.count{
+                it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+            },
             statusSelected = currentlySelectedStatus == StatusFilters.ENABLED
         ),
         AttendanceStatusAndCountItemData(
             status = StatusFilters.ACTIVE,
             attendanceCount = attendanceShownOnScreen.count {
                 it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
-                        it.status == StatusFilters.ACTIVE
+                        it.status == AttendanceStatus.PRESENT
             },
             statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
         ),
@@ -373,10 +608,9 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             status = StatusFilters.INACTIVE,
             attendanceCount = attendanceShownOnScreen.count {
                 it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
-                        it.status == StatusFilters.INACTIVE
+                        it.status == AttendanceStatus.ABSENT
             },
             statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
         ),
     )
-
 }

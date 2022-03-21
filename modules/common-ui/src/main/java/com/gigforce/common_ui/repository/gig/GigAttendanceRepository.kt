@@ -1,11 +1,14 @@
 package com.gigforce.common_ui.repository.gig
 
 import android.content.SharedPreferences
+import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.GigerAttendanceService
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
 import com.gigforce.common_ui.viewdatamodels.gig.MarkAttendanceRequest
+import com.gigforce.common_ui.viewdatamodels.gig.ResolveAttendanceRequest
+import com.gigforce.common_ui.viewdatamodels.gig.ResolveAttendanceRequestOptions
 import com.gigforce.core.AppConstants
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.logger.GigforceLogger
 import com.google.firebase.firestore.CollectionReference
@@ -18,10 +21,10 @@ class GigAttendanceRepository @Inject constructor(
     private val gigAttendanceService: GigerAttendanceService,
     private val logger: GigforceLogger,
     private val firebaseFirestore: FirebaseFirestore,
-    private val sharedPreferences : SharedPreferences
+    private val sharedPreferences: SharedPreferences
 ) {
 
-    companion object{
+    companion object {
         private const val TAG = "GigAttendanceRepository"
 
         private const val ATTENDANCE_PRESENT = "present"
@@ -39,7 +42,7 @@ class GigAttendanceRepository @Inject constructor(
         private const val KEY_REASON_ID = "reason_id"
     }
 
-    private val configurationCollectionRef : CollectionReference by lazy {
+    private val configurationCollectionRef: CollectionReference by lazy {
         firebaseFirestore.collection("Configuration")
     }
 
@@ -62,11 +65,11 @@ class GigAttendanceRepository @Inject constructor(
                 "longitude" to longitude,
                 "locationFake" to locationFake,
                 "locationAccuracy" to locationAccuracy
-                 )
+            )
         )
 
         try {
-            gigAttendanceService.markAttendance(
+            val response = gigAttendanceService.markAttendance(
                 markAttendanceRequest = MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_PRESENT,
@@ -78,7 +81,11 @@ class GigAttendanceRepository @Inject constructor(
                     locationAccuracy = locationAccuracy,
                     locationFake = locationFake
                 )
-            )
+            ).bodyOrThrow()
+
+            if (!response.status) {
+                throw Exception(response.message)
+            }
 
             logger.d(
                 TAG,
@@ -118,7 +125,7 @@ class GigAttendanceRepository @Inject constructor(
         )
 
         try {
-            gigAttendanceService.markAttendance(
+            val response = gigAttendanceService.markAttendance(
                 markAttendanceRequest = MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_PRESENT,
@@ -130,7 +137,11 @@ class GigAttendanceRepository @Inject constructor(
                     locationAccuracy = locationAccuracy,
                     locationFake = locationFake
                 )
-            )
+            ).bodyOrThrow()
+
+            if (!response.status) {
+                throw Exception(response.message)
+            }
 
             logger.d(
                 TAG,
@@ -148,7 +159,7 @@ class GigAttendanceRepository @Inject constructor(
 
     suspend fun markDecline(
         gigId: String,
-        reasonId : String,
+        reasonId: String,
         reason: String
     ) {
         logger.d(
@@ -162,14 +173,18 @@ class GigAttendanceRepository @Inject constructor(
         )
 
         try {
-            gigAttendanceService.markAttendance(
+            val response = gigAttendanceService.markAttendance(
                 markAttendanceRequest = MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_ABSENT,
                     absentReason = reasonId,
                     absentReasonLocalizedText = reason
                 )
-            )
+            ).bodyOrThrow()
+
+            if (!response.status) {
+                throw Exception(response.message)
+            }
 
             logger.d(
                 TAG,
@@ -187,41 +202,45 @@ class GigAttendanceRepository @Inject constructor(
 
 
     suspend fun getDeclineOptions(
-        loadDataForTL : Boolean
-    ) : List<DeclineReason>{
+        loadDataForTL: Boolean
+    ): List<DeclineReason> {
 
-       val languageCode = sharedPreferences.getString(AppConstants.APP_LANGUAGE_CODE,null) ?: DEFAULT_LANGUAGE_CODE
+        val languageCode = sharedPreferences.getString(AppConstants.APP_LANGUAGE_CODE, null)
+            ?: DEFAULT_LANGUAGE_CODE
 
-       return if(loadDataForTL){
+        return if (loadDataForTL) {
             configurationCollectionRef.document(DOCUMENT_TL_DECLINE_OPTIONS)
-        } else{
+        } else {
             configurationCollectionRef.document(DOCUMENT_GIGER_DECLINE_OPTIONS)
         }.getOrThrow().run {
 
-            if(this.exists()){
+            if (this.exists()) {
                 try {
 
-                    if(get(languageCode) != null){
-                            desearalizeDeclineOptions(this.get(languageCode) as List<HashMap<String,String?>>)
-                    } else if(this.get(DEFAULT_LANGUAGE_CODE) != null){
-                        desearalizeDeclineOptions(this.get(DEFAULT_LANGUAGE_CODE) as List<HashMap<String,String?>>)
-                    } else{
+                    if (get(languageCode) != null) {
+                        desearalizeDeclineOptions(this.get(languageCode) as List<HashMap<String, String?>>)
+                    } else if (this.get(DEFAULT_LANGUAGE_CODE) != null) {
+                        desearalizeDeclineOptions(this.get(DEFAULT_LANGUAGE_CODE) as List<HashMap<String, String?>>)
+                    } else {
                         getDefaultDeclineOptions(loadDataForTL)
                     }
                 } catch (e: Exception) {
-                    throw IllegalStateException("Unable to fetch decline options, Reasons not in correct format",e)
+                    throw IllegalStateException(
+                        "Unable to fetch decline options, Reasons not in correct format",
+                        e
+                    )
                 }
             } else {
 
-               throw IllegalStateException("Unable to fetch decline options, Reasons not defined in configuration")
+                throw IllegalStateException("Unable to fetch decline options, Reasons not defined in configuration")
             }
         }
     }
 
     private fun desearalizeDeclineOptions(
-        listOnFB : List<java.util.HashMap<String,String?>>
-    ): List<DeclineReason>{
-       return listOnFB.map {
+        listOnFB: List<java.util.HashMap<String, String?>>
+    ): List<DeclineReason> {
+        return listOnFB.map {
             DeclineReason(
                 reasonId = it.get(KEY_REASON_ID) ?: "",
                 reason = it.get(KEY_REASON) ?: ""
@@ -231,5 +250,31 @@ class GigAttendanceRepository @Inject constructor(
 
     private fun getDefaultDeclineOptions(loadDataForTL: Boolean): List<DeclineReason> {
         return emptyList()
+    }
+
+    suspend fun resolveAttendanceConflict(
+        resolveId: String,
+        optionSelected: Boolean
+    ) {
+        val response = gigAttendanceService.resolveAttendanceConflict(
+            ResolveAttendanceRequest(
+                optionSelected = ResolveAttendanceRequestOptions.fromBoolean(optionSelected),
+                resolveId = resolveId
+            )
+        ).bodyOrThrow()
+
+        if (!response.status) {
+            throw Exception(response.message)
+        }
+    }
+
+    suspend fun getAttendanceDetails(
+        gigId: String
+    ): GigAttendanceApiModel {
+
+        return gigAttendanceService.getGigDetailsWithAttendanceInfo(
+            gigId
+        ).bodyOrThrow()
+            .firstOrNull() ?: throw Exception("No Gig details found")
     }
 }

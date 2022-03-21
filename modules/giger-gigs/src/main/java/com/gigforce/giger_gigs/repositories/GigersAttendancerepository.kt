@@ -36,7 +36,7 @@ class GigersAttendanceRepository @Inject constructor(
         date: LocalDate
     ): List<GigAttendanceApiModel> {
 
-        return  gigerAttendanceService.getGigersAttendance(
+        return gigerAttendanceService.getGigersAttendance(
             dateInYYYMMDD = date.format(dateFormatter)
         ).bodyOrThrow()
     }
