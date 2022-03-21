@@ -87,16 +87,16 @@ class DynamicFieldsInflaterHelper @Inject constructor(
 //                containerLayout,
 //                it
 //            )
-            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
-                context,
-                containerLayout,
-                it
-            )
-            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
-                context,
-                containerLayout,
-                it
-            )
+//            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
+//                context,
+//                containerLayout,
+//                it
+//            )
+//            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
+//                context,
+//                containerLayout,
+//                it
+//            )
             else -> {
                 logger.d(
                     TAG,
@@ -219,25 +219,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
 //        view.bind(it)
 //    }
 
-    private fun inflateSelectClusterView(
-        context: Context,
-        containerLayout: LinearLayout,
-        it: DynamicField
-    ) {
-        val view = DynamicSelectClusterView(context, null)
-        containerLayout.addView(view)
-        view.bind(it)
-    }
 
-    private fun inflateInputSalaryView(
-        context: Context,
-        containerLayout: LinearLayout,
-        it: DynamicField
-    ) {
-        val view = DynamicInputSalaryComponentView(context, null)
-        containerLayout.addView(view)
-        view.bind(it)
-    }
 
     private fun inflateAadhaarVerificationView(
         context: Context,

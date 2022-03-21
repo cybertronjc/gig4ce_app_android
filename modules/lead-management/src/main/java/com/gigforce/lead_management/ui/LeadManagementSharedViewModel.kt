@@ -35,6 +35,10 @@ sealed class LeadManagementSharedViewModelState {
         val otherCity: List<OtherCityClusterItem>
     ): LeadManagementSharedViewModelState()
 
+    data class ClusterSelected(
+        val cluster: OtherCityClusterItem
+    ): LeadManagementSharedViewModelState()
+
     data class ReportingLocationSelected(
         val citySelected: ReportingLocationsItem,
         val reportingLocation: ReportingLocationsItem
@@ -104,10 +108,10 @@ class LeadManagementSharedViewModel : ViewModel() {
     }
 
     fun otherCitySelected(
-        city: List<OtherCityClusterItem>
+        otherCities: List<OtherCityClusterItem>
     ) = viewModelScope.launch{
-        _viewState.value = LeadManagementSharedViewModelState.OtherCitySelected(city)
-        _viewStateFlow.emit(LeadManagementSharedViewModelState.OtherCitySelected(city))
+        _viewState.value = LeadManagementSharedViewModelState.OtherCitySelected(otherCities)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.OtherCitySelected(otherCities))
     }
 
     fun reportingLocationSelected(

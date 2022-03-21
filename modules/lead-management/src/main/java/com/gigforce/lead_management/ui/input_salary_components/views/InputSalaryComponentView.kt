@@ -1,0 +1,50 @@
+package com.gigforce.lead_management.ui.input_salary_components.views
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryDataItem
+import com.gigforce.core.extensions.onTextChanged
+import com.gigforce.lead_management.databinding.LayoutInputSalaryComponentViewBinding
+
+
+class InputSalaryComponentView(
+    context: Context,
+    attrs: AttributeSet?
+) : LinearLayout(
+    context,
+    attrs
+) {
+    private var viewBinding: LayoutInputSalaryComponentViewBinding
+    private lateinit var viewData: InputSalaryDataItem
+    private var editTextString: String = ""
+
+    init {
+        this.layoutParams =
+            LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        viewBinding = LayoutInputSalaryComponentViewBinding.inflate(
+            LayoutInflater.from(context),
+            this,
+            true
+        )
+
+        viewBinding.editText.onTextChanged {
+            editTextString = it
+        }
+    }
+
+    fun showData(salaryComponentData: InputSalaryDataItem) = viewBinding.apply {
+        viewData = salaryComponentData
+
+        if (viewData.name?.isNotEmpty() == true){
+            titleTextview.text = viewData.name
+        }
+
+
+    }
+}

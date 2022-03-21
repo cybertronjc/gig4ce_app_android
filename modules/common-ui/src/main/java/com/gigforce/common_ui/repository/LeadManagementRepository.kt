@@ -143,6 +143,14 @@ class LeadManagementRepository @Inject constructor(
         }
     }
 
+    suspend fun getSalaryComponents(
+        businessId: String,
+        type: String
+    ) : InputSalaryResponse = joiningProfileRemoteService.getSalaryComponents(
+        businessId = businessId,
+        type = type
+    ).bodyOrThrow()
+
     suspend fun getGigerJoiningInfo(
         joiningId: String
     ): GigerInfo = joiningProfileRemoteService.getJoiningInfo(joiningId).bodyOrThrow()

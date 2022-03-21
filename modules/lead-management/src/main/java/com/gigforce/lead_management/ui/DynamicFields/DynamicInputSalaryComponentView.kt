@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.dynamic_fields.types
+package com.gigforce.lead_management.ui.DynamicFields
 
 import android.content.Context
 import android.text.SpannedString
@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.gigforce.common_ui.databinding.LayoutDynamicInputSalaryComponentBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
@@ -14,6 +13,7 @@ import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.lead_management.databinding.LayoutDynamicInputSalaryComponentBinding
 
 class DynamicInputSalaryComponentView(
     context: Context,

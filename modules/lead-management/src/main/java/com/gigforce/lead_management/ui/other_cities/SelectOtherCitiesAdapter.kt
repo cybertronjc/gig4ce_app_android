@@ -93,7 +93,6 @@ class SelectOtherCitiesAdapter (
         val preSelectedItems = contacts.filter {
             it.selected
         }
-
         if(preSelectedItems.isNotEmpty()){
             this.selectedOtherCitiesList?.addAll(preSelectedItems)
         } else {
@@ -161,7 +160,8 @@ class SelectOtherCitiesAdapter (
             if (city.name?.isNotBlank() == true){
                 cityNameTv.text = city.name
             }
-            selectedCheckBox.isChecked = selectedId == city.id
+
+            selectedCheckBox.isChecked = city.selected
             selectedCheckBox.setOnClickListener {
                 val newPosition = adapterPosition
                 val city = filteredCityList[newPosition]

@@ -1,60 +1,105 @@
 package com.gigforce.lead_management.ui.input_salary_components
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryResponse
+import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.databinding.FragmentInputSalaryComponentsBinding
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.input_salary_components.views.InputSalaryComponentView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponentsBinding>(
+    fragmentName = TAG,
+    layoutId = R.layout.fragment_input_salary_components,
+    statusBarColor = R.color.lipstick_2
+) {
+    companion object {
+        private const val TAG = "InputSalaryComponentsFragment"
+        const val INTENT_EXTRA_BUSINESS_ID = "business_id"
+    }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [InputSalaryComponentsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class InputSalaryComponentsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    @Inject
+    lateinit var navigation: INavigation
+    private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private var businessId: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val viewModel: InputSalaryViewModel by viewModels()
+
+    override fun viewCreated(
+        viewBinding: FragmentInputSalaryComponentsBinding,
+        savedInstanceState: Bundle?
+    ) {
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
+        initViewModel()
+
+    }
+
+    private fun getDataFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            businessId = it.getString(INTENT_EXTRA_BUSINESS_ID) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            businessId = it.getString(INTENT_EXTRA_BUSINESS_ID) ?: return@let
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_input_salary_components, container, false)
+    private fun initViewModel() {
+
+        viewModel.getSalaryComponents(businessId.toString(), "salary")
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            val state = it ?: return@Observer
+            when(state) {
+                Lce.Loading -> showDataLoading()
+
+                is Lce.Content -> showSalaryComponents(state.content)
+
+                is Lce.Error -> showError(state.error)
+            }
+        })
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InputSalaryComponentsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            InputSalaryComponentsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun showError(error: String) {
+
     }
+
+    private fun showSalaryComponents(salaryResponse: InputSalaryResponse) = viewBinding.apply{
+        Log.d("salaryresponse", "${salaryResponse.data}")
+        if (salaryResponse.data?.isEmpty() == true) {
+            this.infoLayout.root.visible()
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show_lead)
+            this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        } else {
+            this.infoLayout.root.gone()
+
+            //add views into linear layout
+            salaryComponentsLayout.removeAllViewsInLayout()
+            salaryResponse.data?.forEachIndexed { index, inputSalaryDataItem ->
+                val view = InputSalaryComponentView(requireContext(), null)
+                view.showData(inputSalaryDataItem)
+                salaryComponentsLayout.addView(view)
+            }
+        }
+    }
+
+    private fun showDataLoading() {
+
+    }
+
+
 }

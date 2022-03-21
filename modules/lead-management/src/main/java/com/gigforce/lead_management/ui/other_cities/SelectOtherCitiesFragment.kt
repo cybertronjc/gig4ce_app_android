@@ -128,7 +128,6 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
 //            otherCityAdapter.setData(otherCityList)
             var updatedOtherCityList: ArrayList<OtherCityClusterItem> = arrayListOf()
             val groupedOtherCities = otherCityList.groupBy { it.name?.get(0) }
-            Log.d("groupedOtherCities", " $groupedOtherCities")
             groupedOtherCities.forEach{ (alphabet, otherCities) ->
                 updatedOtherCityList.add(
                     OtherCityClusterItem(alphabet.toString(), "", false, 1)

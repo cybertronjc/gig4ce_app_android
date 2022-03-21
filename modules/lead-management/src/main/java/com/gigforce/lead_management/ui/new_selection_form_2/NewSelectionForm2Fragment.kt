@@ -11,8 +11,10 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -43,14 +45,18 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
+import com.gigforce.lead_management.ui.DynamicFields.DynamicInputSalaryComponentView
+import com.gigforce.lead_management.ui.DynamicFields.DynamicSelectClusterView
 import com.gigforce.lead_management.ui.DynamicFields.DynamicSelectOtherCitiesView
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.input_salary_components.InputSalaryComponentsFragment
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
 import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.other_cities.SelectOtherCitiesFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
+import com.gigforce.lead_management.ui.select_cluster.SelectClusterFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
 import com.gigforce.lead_management.ui.select_tls.SelectClientTlFragment
 import com.github.razir.progressbutton.attachTextChangeAnimator
@@ -367,16 +373,15 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenSelectOtherCityScreen -> openSelectOtherCityScreen(
-                    ArrayList(state.cities),
+                    ArrayList(state.otherCities),
                     state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenSelectClusterScreen -> openSelectClusterScreen(
-                    ArrayList(state.cities),
+                    ArrayList(state.clusters),
                     state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenInputSalaryScreen -> openInputSalaryScreen(
-                    ArrayList(state.cities),
-                    state.locationType.toString()
+                    state.businessId
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
                     state.selectedCity,
@@ -515,9 +520,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         locationType: String
     ) {
         navigation.navigateTo(
-            LeadManagementNavDestinations.FRAGMENT_SELECT_OTHER_CITY,
+            LeadManagementNavDestinations.FRAGMENT_SELECT_CLUSTER,
             bundleOf(
-                SelectOtherCitiesFragment.INTENT_EXTRA_SELECTED_OTHER_CITIES to otherCities
+                SelectClusterFragment.INTENT_EXTRA_CLUSTER to otherCities
             ),
             getNavOptions()
         )
@@ -525,15 +530,13 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun openInputSalaryScreen(
-        otherCities: ArrayList<OtherCityClusterItem>,
-        locationType: String
+        businessId: String
     ) {
         navigation.navigateTo(
-            LeadManagementNavDestinations.FRAGMENT_SELECT_OTHER_CITY,
+            LeadManagementNavDestinations.FRAGMENT_INPUT_SALARY,
             bundleOf(
-                SelectOtherCitiesFragment.INTENT_EXTRA_SELECTED_OTHER_CITIES to otherCities
-            ),
-            getNavOptions()
+                InputSalaryComponentsFragment.INTENT_EXTRA_BUSINESS_ID to businessId
+            )
         )
         hideSoftKeyboard()
     }
@@ -678,8 +681,51 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         it.citySelected,
                         it.reportingLocation
                     )
+                    is LeadManagementSharedViewModelState.OtherCitySelected -> showSelectedOtherCities(
+                        it.otherCity
+                    )
+                    is LeadManagementSharedViewModelState.ClusterSelected -> showSelectedCluster(
+                        it.cluster
+                    )
                 }
             })
+    }
+
+    private fun showSelectedCluster(cluster: OtherCityClusterItem) {
+        //get other cities layout from container
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(1)
+        val clusterLabelTextView = view.findViewById<TextView>(R.id.cluster_selected_label)
+
+        viewModel.handleEvent(NewSelectionForm2Events.ClusterSelected(cluster))
+
+        if (clusterLabelTextView != null){
+            clusterLabelTextView.setText(cluster.name)
+            clusterLabelTextView.setTypeface(clusterLabelTextView.typeface, Typeface.BOLD)
+        }
+    }
+
+    private fun showSelectedOtherCities(otherCity: List<OtherCityClusterItem>) {
+        //make string from other cities
+        var otherCities = ""
+        otherCity.forEachIndexed { index, otherCityClusterItem ->
+            if (index != otherCity.size - 1){
+                otherCities = otherCities +  otherCityClusterItem.name + ", "
+            } else {
+                otherCities = otherCities +  otherCityClusterItem.name
+            }
+
+        }
+        //get other cities layout from container
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(0)
+        val otherCityLabelTextView = view.findViewById<TextView>(R.id.other_city_selected_label)
+
+        viewModel.handleEvent(NewSelectionForm2Events.OtherCitySelected(otherCity))
+
+        if (otherCityLabelTextView != null){
+            otherCityLabelTextView.setText(otherCities)
+            otherCityLabelTextView.setTypeface(otherCityLabelTextView.typeface, Typeface.BOLD)
+        }
+
     }
 
 
@@ -780,16 +826,16 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 containerLayout,
                 it
             )
-//            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
-//                context,
-//                containerLayout,
-//                it
-//            )
-//            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
-//                context,
-//                containerLayout,
-//                it
-//            )
+            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
+                context,
+                containerLayout,
+                it
+            )
             else -> {
                 logger.d(
                     DynamicFieldsInflaterHelper.TAG,
@@ -797,6 +843,39 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 )
             }
         }
+    }
+
+    private fun inflateSelectClusterView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicSelectClusterView(context, null)
+        containerLayout.addView(view)
+        view.setOnClickListener {
+            viewModel.handleEvent(
+                NewSelectionForm2Events.SelectClusterClicked
+            )
+        }
+        view.bind(it)
+    }
+
+    private fun inflateInputSalaryView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicInputSalaryComponentView(
+            context,
+            null
+        )
+        containerLayout.addView(view)
+        view.setOnClickListener {
+            viewModel.handleEvent(
+                NewSelectionForm2Events.InputSalaryComponentsClicked
+            )
+        }
+        view.bind(it)
     }
 
     private fun inflateSelectOtherCityView(

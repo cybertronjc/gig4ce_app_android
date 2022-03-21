@@ -5,6 +5,7 @@ import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import java.time.LocalDate
 
 sealed class NewSelectionForm2ViewState  {
@@ -30,18 +31,17 @@ sealed class NewSelectionForm2ViewState  {
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectOtherCityScreen(
-        val cities: List<OtherCityClusterItem>,
+        val otherCities: List<OtherCityClusterItem>,
         val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectClusterScreen(
-        val cities: List<OtherCityClusterItem>,
+        val clusters: List<OtherCityClusterItem>,
         val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class OpenInputSalaryScreen(
-        val cities: List<OtherCityClusterItem>,
-        val locationType: String?
+        var businessId: String
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(
@@ -98,6 +98,9 @@ sealed class NewSelectionForm2Events {
 
     object SelectOtherCityClicked : NewSelectionForm2Events()
 
+    object SelectClusterClicked: NewSelectionForm2Events()
+
+    object InputSalaryComponentsClicked: NewSelectionForm2Events()
 
     object SelectReportingLocationClicked : NewSelectionForm2Events()
 
@@ -110,6 +113,14 @@ sealed class NewSelectionForm2Events {
     data class CitySelected(
         val city: ReportingLocationsItem
     ) : NewSelectionForm2Events()
+
+    data class OtherCitySelected(
+        val otherCities: List<OtherCityClusterItem>
+    ): NewSelectionForm2Events()
+
+    data class ClusterSelected(
+        val cluster: OtherCityClusterItem
+    ): NewSelectionForm2Events()
 
     data class ReportingLocationSelected(
         val citySelected: ReportingLocationsItem,

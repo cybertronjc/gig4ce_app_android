@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
@@ -53,6 +54,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     //Data
     private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
+    private var selectedOtherCities: List<OtherCityClusterItem>? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private var secondaryPhoneNumber : String? = null
@@ -73,6 +75,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
             NewSelectionForm2Events.SelectCityClicked -> openSelectCityScreen()
             NewSelectionForm2Events.SelectOtherCityClicked -> openSelectOtherCityScreen()
+            NewSelectionForm2Events.SelectClusterClicked -> openSelectClusterScreen()
+            NewSelectionForm2Events.InputSalaryComponentsClicked -> openInputSalaryScreen(joiningRequest.business.id.toString())
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
@@ -80,6 +84,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
                 selectedReportingLocation = null
+            }
+            is NewSelectionForm2Events.OtherCitySelected -> {
+                selectedOtherCities = event.otherCities
             }
             is NewSelectionForm2Events.ClientTLSelected -> {
                 selectedTL = event.teamLeader
@@ -260,12 +267,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
             _viewState.value = null
         } else {
-            val otherCities = joiningLocationsAndTLs.reportingLocations.find { it.cityId == selectedCity?.cityId }?.clusters
+            val otherCities = joiningLocationsAndTLs.otherCities
 
-            otherCities?.onEach {
-                it.selected = it.id == selectedReportingLocation?.id
+            otherCities?.forEach { it1 ->
+                it1.selected = selectedOtherCities?.find { it.id == it1.id }?.selected == true
             }
-
+            Log.d("ViewModelOther", "$selectedOtherCities")
             _viewState.value = otherCities?.sortedBy {
                 it.name
             }?.let {
@@ -276,6 +283,48 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
             _viewState.value = null
         }
+    }
+
+    private fun openSelectClusterScreen() {
+        if (selectedCity == null) {
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
+                    )
+                }
+            )
+            _viewState.value = null
+        } else {
+            val clusters = joiningLocationsAndTLs.reportingLocations.find { it.cityId == selectedCity?.cityId }?.clusters
+
+            clusters?.onEach {
+                it.selected = it.id == selectedReportingLocation?.id
+            }
+
+            _viewState.value = clusters?.sortedBy {
+                it.name
+            }?.let {
+                NewSelectionForm2ViewState.OpenSelectClusterScreen(
+                    it,
+                    ""
+                )
+            }
+            _viewState.value = null
+        }
+    }
+
+    private fun openInputSalaryScreen(
+        businessId: String
+    ) {
+        _viewState.value =
+            NewSelectionForm2ViewState.OpenInputSalaryScreen(
+                businessId
+            )
+        _viewState.value = null
     }
 
     private fun openSelectBusinessTLScreen() {

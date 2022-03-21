@@ -115,7 +115,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val userUid = FirebaseAuth.getInstance().uid
-                val profileData = profileFirebaseRepository.getProfileData(userUid)
+                val profileData = profileFirebaseRepository.getProfileData("JZR43wGBEHRAYsbDCdm7fL6wf7n2")
                 viewBinding.teamLeaderName.text = profileData.name
             } catch (e: Exception) {
 
