@@ -124,7 +124,10 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
 
     private fun initView() = viewBinding.apply {
         selectionJoiningsToDrop.forEach {
-            selectionJoiningIdsToDrop.add(it.joiningId)
+
+            if(it.joiningId != null) {
+                selectionJoiningIdsToDrop.add(it.joiningId!!)
+            }
         }
         lastWorkingLayout.dateText.text = DateHelper.getDateInDDMMMYYYYComma(Date())
         selectedLastWorkingDate = DateHelper.getDateInYYYYMMDD(Date())
@@ -191,11 +194,18 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             dropSelectionButton.setOnClickListener {
                 //call drop api
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val gigId = selectionJoiningsToDrop.get(0).gigId
                 val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
                 val message = "Giger has not joined the gig"
                 val newCal = Calendar.getInstance()
                 val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate )
+                val dropDetail = DropDetail(
+                    joiningId = joiningId,
+                    gigId = gigId,
+                    lastWorkingDate = lastWorkingDate,
+                    message = message,
+                    droppedDate = droppedDate
+                )
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
 
@@ -216,11 +226,18 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             confirmButton.setOnClickListener {
                 //call drop api this will have the last working date
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val gigId =  selectionJoiningsToDrop.get(0).gigId
                 val lastWorkingDate = selectedLastWorkingDate
                 val message = "Giger has resigned after working"
                 val newCal = Calendar.getInstance()
                 val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate)
+                val dropDetail = DropDetail(
+                    joiningId = joiningId,
+                    gigId = gigId,
+                    lastWorkingDate = lastWorkingDate,
+                    message = message,
+                    droppedDate = droppedDate
+                )
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
             }
@@ -233,10 +250,17 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 //call drop api, current date is lesser than gig start date
                 val newCal = Calendar.getInstance()
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val gigId =  selectionJoiningsToDrop.get(0).gigId
                 val lastWorkingDate = DateHelper.getDateInYYYYMMDD(newCal.time)
                 val message = "Giger has not joined the gig"
                 val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate )
+                val dropDetail = DropDetail(
+                    joiningId = joiningId,
+                    gigId = gigId,
+                    lastWorkingDate = lastWorkingDate,
+                    message = message,
+                    droppedDate = droppedDate
+                )
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
             }

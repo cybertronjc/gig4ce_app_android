@@ -1,11 +1,16 @@
 package com.gigforce.wallet.payouts.payout_details.views
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.common_ui.ext.formatToCurrency
+import com.gigforce.common_ui.ext.pushOnclickListener
 import com.gigforce.common_ui.viewmodels.payouts.Payout
+import com.gigforce.core.extensions.visible
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.LayoutPayoutInfoBinding
 import com.google.android.material.card.MaterialCardView
@@ -57,6 +62,13 @@ class PayoutDetailsInfoLayout(
             imageView.loadImage(R.drawable.ic_money_person)
             titleTextView.text = "UTR No."
             valueTextView.text = ": ${data.utrNo ?: "-"}"
+            copyText.visible()
+            copyText.pushOnclickListener{
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("utr_no",data.utrNo.toString())
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(context,"${data.utrNo.toString()} copied to clipboard",Toast.LENGTH_LONG).show()
+            }
         }
 
         this.categoryLayout.apply {

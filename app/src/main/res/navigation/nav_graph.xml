@@ -1196,6 +1196,9 @@
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
         android:label="InvalidFormatBottomSheet"/>
 
+    <dialog android:id="@+id/UserAlreadyExistsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.UserAlreadyExistsBottomSheet"
+        android:label="UserAlreadyExistsBottomSheet"/>
     <fragment
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
@@ -1214,6 +1217,10 @@
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
         android:label="ChangeTeamLeaderBottomSheetFragment" />
+    <fragment
+        android:id="@+id/myDocumentsFragment"
+        android:name="com.gigforce.verification.mainverification.MyDocumentsFragment"
+        android:label="MyDocumentsFragment" />
 
     <fragment
         android:id="@+id/payoutMainFragment"
@@ -1254,6 +1261,11 @@
         android:id="@+id/selectMarkInactiveReasonsBottomSheetFragment"
         android:name="com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetFragment"
         android:label="SelectMarkInactiveReasonsBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
 
 
 </navigation>

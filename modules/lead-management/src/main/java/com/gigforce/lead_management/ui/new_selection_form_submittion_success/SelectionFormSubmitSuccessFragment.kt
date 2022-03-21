@@ -1,32 +1,21 @@
 package com.gigforce.lead_management.ui.new_selection_form_submittion_success
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.Html
-import android.text.SpannableStringBuilder
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
-import androidx.core.text.bold
 import androidx.fragment.app.activityViewModels
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionFormSuccessBinding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint

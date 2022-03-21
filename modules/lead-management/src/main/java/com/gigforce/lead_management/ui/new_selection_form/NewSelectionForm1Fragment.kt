@@ -37,7 +37,7 @@ import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm1Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel

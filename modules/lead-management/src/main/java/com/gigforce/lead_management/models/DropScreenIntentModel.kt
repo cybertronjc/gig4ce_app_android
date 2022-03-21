@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class DropScreenIntentModel(
-    var joiningId: String,
+    var joiningId: String? = null,
+    var gigId : String? ,
     var isBankVerified: Boolean = false,
     var hasStartEndDate: Boolean = false,
     var gigStartDate: String = "",

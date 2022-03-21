@@ -1,4 +1,4 @@
-package com.gigforce.lead_management
+package com.gigforce.common_ui.navigation
 
 object LeadManagementConstants {
 
@@ -21,6 +21,7 @@ object LeadManagementConstants {
     const val INTENT_EXTRA_JOINING_ID = "joining_id"
     const val INTENT_EXTRA_IS_ACTIVE = "is_active"
     const val INTENT_EXTRA_CURRENT_JOINING_USER_INFO = "current_joining_info"
+    const val INTENT_EXTRA_GIG_ID = "gig_id"
 
     const val INTENT_EXTRA_JOB_PROFILE_ICON = "job_profile_icon"
 

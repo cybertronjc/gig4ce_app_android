@@ -16,6 +16,7 @@ class NavForCommonModule(
         baseImplementation.registerRoute("${moduleName}/invite_friend", R.id.referrals_fragment)
         baseImplementation.registerRoute("${moduleName}/landingScreen", R.id.landinghomefragment)
         baseImplementation.registerRoute("${moduleName}/calendarScreen", R.id.mainHomeScreen)
+        baseImplementation.registerRoute("${moduleName}/attendanceImageConfirm", R.id.attendanceImageConfirmBottomSheet)
         baseImplementation.registerRoute(
             RequestDocumentTreeAccessFragment.REQUEST_DOCUMENT_TREE_ACCESS_FRAGMENT,
             R.id.requestDocumentTreeAccessFragment

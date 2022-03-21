@@ -306,7 +306,7 @@
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Reporting TL"
+                    android:text="Cluster Lead"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 

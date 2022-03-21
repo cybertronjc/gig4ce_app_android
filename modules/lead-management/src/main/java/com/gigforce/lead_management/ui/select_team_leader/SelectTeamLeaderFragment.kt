@@ -159,7 +159,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
 
     private fun initListeners() {
         viewBinding.toolbar.apply {
-            titleText.text = "Select Reporting TL"
+            titleText.text = getString(R.string.cluster_lead_lead)
             setBackButtonListener {
                 navigation.navigateUp()
             }
