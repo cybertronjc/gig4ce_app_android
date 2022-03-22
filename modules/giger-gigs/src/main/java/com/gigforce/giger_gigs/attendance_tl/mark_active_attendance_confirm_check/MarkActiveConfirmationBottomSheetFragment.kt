@@ -1,18 +1,27 @@
 package com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check
 
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
+import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetViewModel
+import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsViewContract
 import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MarkActiveConfirmationBottomSheetFragment :
@@ -24,7 +33,9 @@ class MarkActiveConfirmationBottomSheetFragment :
         const val TAG = "MarkActiveConfirmationBottomSheetFragment"
     }
 
-    private val viewModel: AttendanceTLSharedViewModel by activityViewModels()
+    private val viewModel: MarkActiveBottomSheetViewModel by viewModels()
+    private val sharedViewModel: AttendanceTLSharedViewModel by activityViewModels()
+
     private lateinit var gigId: String
     private var hasGigerMarkedHimselfInactive: Boolean = false
 
@@ -60,8 +71,55 @@ class MarkActiveConfirmationBottomSheetFragment :
 
         if (viewCreatedForTheFirstTime) {
             initView()
+            initViewModel()
         }
     }
+
+    private fun initViewModel() {
+        lifecycleScope.launchWhenCreated {
+
+            viewModel
+                .viewState
+                .collect {
+
+                    when (it) {
+
+                        is MarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingPresent -> errorWhileMarkingDecline(
+                            it.error
+                        )
+                        MarkInactiveReasonsViewContract.UiState.MarkingPresent -> showMarkingDecline()
+                        MarkInactiveReasonsViewContract.UiState.PresentMarkedSuccessfully -> dismiss()
+                        MarkInactiveReasonsViewContract.UiState.ScreenLoaded -> {}
+                    }
+                }
+        }
+    }
+
+    private fun errorWhileMarkingDecline(
+        error: String
+    ) = viewBinding.apply {
+
+        this.noButton.isEnabled = true
+        this.yesButton.isEnabled = true
+        this.yesButton.hideProgress("Yes")
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unable to mark present")
+            .setMessage(error)
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
+    }
+
+    private fun showMarkingDecline() = viewBinding.apply {
+
+        this.noButton.isEnabled = false
+        this.yesButton.isEnabled = false
+        this.yesButton.showProgress {
+            this.buttonText = "Marking Present.."
+            this.progressColor = Color.WHITE
+        }
+    }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -86,8 +144,10 @@ class MarkActiveConfirmationBottomSheetFragment :
         }
 
         this.yesButton.setOnClickListener {
-            viewModel.tlClickedYesInMarkActiveConfirmationDialog(gigId)
-            dismiss()
+            viewModel.markPresent(
+                gigId,
+                sharedViewModel
+            )
         }
 
         this.noButton.setOnClickListener {

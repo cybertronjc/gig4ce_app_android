@@ -20,7 +20,6 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -62,9 +61,6 @@ class GigersAttendanceUnderManagerFragment :
     companion object {
         const val TAG = "GigerAttendanceUnderManagerFrg"
     }
-
-    @Inject
-    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var navigation: INavigation
@@ -235,7 +231,7 @@ class GigersAttendanceUnderManagerFragment :
                 .viewState
                 .collect {
 
-                    logger.d(TAG,"state recevied : $it")
+                    logger.d(TAG, "state recevied : $it")
                     when (it) {
                         is GigerAttendanceUnderManagerViewContract.State.ErrorInLoadingOrUpdatingAttendanceList -> errorInLoadingAttendanceFromServer(
                             it.error,
@@ -284,9 +280,52 @@ class GigersAttendanceUnderManagerFragment :
                             it.gigId,
                             it.gigAttendanceData
                         )
+                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation -> openMarkActiveConfirmationDialog(
+                            it.gigId,
+                            it.hasGigerMarkedHimselfInActive
+                        )
+                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveConfirmationDialog -> openMarkInactiveConfirmationDialog(
+                            gigId = it.gigId
+                        )
+                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog -> openMarkInactiveSelectReasonDialog(
+                            gigId = it.gigId,
+                            popConfirmationDialog = false
+                        )
                     }
                 }
         }
+    }
+
+
+    private fun openMarkInactiveConfirmationDialog(
+        gigId: String
+    ) {
+        gigNavigation.openMarkInactiveConfirmationDialog(
+            gigId = gigId,
+            hasGigerMarkedHimselfActive = false
+        )
+    }
+
+    private fun openMarkInactiveSelectReasonDialog(
+        popConfirmationDialog: Boolean,
+        gigId: String
+    ) {
+        if (popConfirmationDialog)
+            navigation.navigateUp()
+
+        gigNavigation.openMarkInactiveReasonDialog(
+            gigId = gigId
+        )
+    }
+
+    private fun openMarkActiveConfirmationDialog(
+        gigId: String,
+        hasGigerMarkedHimselfInActive: Boolean
+    ) {
+        gigNavigation.openActiveConfirmationDialog(
+            gigId = gigId,
+            hasGigerMarkedHimselfInactive = hasGigerMarkedHimselfInActive
+        )
     }
 
     private fun showResolveAttendanceConflictScreen(
@@ -316,20 +355,12 @@ class GigersAttendanceUnderManagerFragment :
                 .collect {
 
                     when (it) {
-                        is SharedAttendanceTLSharedViewModelEvents.TLClickedYesInMarkActiveConfirmationDialog -> {
-                            viewModel.markUserCheckedIn(it.gigId)
-                        }
-                        is SharedAttendanceTLSharedViewModelEvents.TLSelectedInactiveReasonConfirmationDialog -> {
-                            viewModel.markUserAbsent(
-                                it.gigId,
-                                it.reasonId,
-                                it.reason
-                            )
-                        }
-                        is SharedAttendanceTLSharedViewModelEvents.TLSelectedResolveConfirmationDialog -> viewModel.resolveAttendanceConflict(
-                            it.gigId,
-                            it.resolveId,
-                            it.optionSelected
+                        is SharedAttendanceTLSharedViewModelEvents.AttendanceUpdated -> viewModel.updateAttendanceStatusInRawListAndEmit(
+                            it.attendance
+                        )
+                        is SharedAttendanceTLSharedViewModelEvents.OpenMarkInactiveReasonsDialog -> openMarkInactiveSelectReasonDialog(
+                            true,
+                            it.gigId
                         )
                     }
                 }
@@ -485,9 +516,10 @@ class GigersAttendanceUnderManagerFragment :
         )
         itemTouchHelper.startSwipe(viewHolder)
 
-        gigNavigation.openActiveConfirmationDialog(
-            attendanceData.gigId,
-            false
+        viewModel.handleEvent(
+            GigerAttendanceUnderManagerViewContract.UiEvent.UserRightSwipedForMarkingPresent(
+                attendanceData
+            )
         )
     }
 
@@ -499,8 +531,11 @@ class GigersAttendanceUnderManagerFragment :
             viewHolder.adapterPosition
         )
         itemTouchHelper.startSwipe(viewHolder)
-        gigNavigation.openMarkInactiveReasonDialog(
-            attendanceData.gigId
+
+        viewModel.handleEvent(
+            GigerAttendanceUnderManagerViewContract.UiEvent.UserLeftSwipedForMarkingAbsent(
+                attendanceData
+            )
         )
     }
 

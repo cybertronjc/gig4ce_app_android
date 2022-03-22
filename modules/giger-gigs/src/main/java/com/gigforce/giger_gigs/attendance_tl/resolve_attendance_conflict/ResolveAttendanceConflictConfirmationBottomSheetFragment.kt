@@ -3,6 +3,7 @@ package com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict
 import android.app.Dialog
 import android.app.DownloadManager
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -26,13 +27,19 @@ import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
+import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetViewModel
+import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsViewContract
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
 import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.gigforce.giger_gigs.databinding.FragmentResolveAttendanceConflictConfirmationBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.GigAttendanceData
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,7 +51,8 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
         const val TAG = "MarkActiveConfirmationBottomSheetFragment"
     }
 
-    private val viewModel: AttendanceTLSharedViewModel by activityViewModels()
+    private val viewModel: ResolveAttendanceConflictBottomSheetViewModel by viewModels()
+    private val sharedViewModel: AttendanceTLSharedViewModel by activityViewModels()
 
     private lateinit var gigId: String
     private lateinit var gigAttendanceData: GigAttendanceData
@@ -81,6 +89,7 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
 
         if (viewCreatedForTheFirstTime) {
             initView()
+            initViewModel()
         }
     }
 
@@ -112,19 +121,64 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
         }
 
         this.yesButton.setOnClickListener {
-            viewModel.tlSelectedYesInResolveDialog(
-                gigId,
-                gigAttendanceData.resolveId!!
+            viewModel.resolveConflict(
+                gigAttendanceData.resolveId!!,
+                true,
+                sharedViewModel
             )
-            dismiss()
         }
 
         this.noButton.setOnClickListener {
-            viewModel.tlSelectedNoInResolveDialog(
-                gigId,
-                gigAttendanceData.resolveId!!
+
+            viewModel.resolveConflict(
+                gigAttendanceData.resolveId!!,
+                false,
+                sharedViewModel
             )
-            dismiss()
+        }
+    }
+
+
+    private fun initViewModel() {
+        lifecycleScope.launchWhenCreated {
+
+            viewModel
+                .viewState
+                .collect {
+
+                    when (it) {
+                        ResolveAttendanceConflictViewContract.UiState.ConflictResolvedSuccessfully -> dismiss()
+                        is ResolveAttendanceConflictViewContract.UiState.ErrorWhileResolvingConflict -> errorWhileResolvingConflict(it.error)
+                        ResolveAttendanceConflictViewContract.UiState.ResolvingConflict -> resolvingConflict()
+                        ResolveAttendanceConflictViewContract.UiState.ScreenLoaded -> {}
+                    }
+                }
+        }
+    }
+
+
+    private fun errorWhileResolvingConflict(
+        error: String
+    ) = viewBinding.apply {
+
+        this.noButton.isEnabled = true
+        this.yesButton.isEnabled = true
+        this.yesButton.hideProgress("Yes")
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unable to resolve conflict")
+            .setMessage(error)
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
+    }
+
+    private fun resolvingConflict() = viewBinding.apply {
+
+        this.noButton.isEnabled = false
+        this.yesButton.isEnabled = false
+        this.yesButton.showProgress {
+            this.buttonText = "Resolving.."
+            this.progressColor = Color.WHITE
         }
     }
 }

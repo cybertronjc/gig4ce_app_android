@@ -79,7 +79,7 @@ class RetrofitServiceFactory @Inject constructor(
         put("AndroidAppBuildType", buildConfig.appBuildType)
 
         firebaseAuthStateListener.getCurrentSignInInfo()?.let {
-            put("LoggedInUserUid","5VfwKLLngYZYcngLYqjdi3Jk3IB3" /*it.uid*/) //todo replace this
+            put("LoggedInUserUid","FFLIJbcsHBdRknsFR0EZdvwBFnE3" /*it.uid*/) //todo replace this
         }
     }
 
@@ -107,6 +107,7 @@ class RetrofitServiceFactory @Inject constructor(
             .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()
             .serializeNulls()
+            .setPrettyPrinting()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create()
 

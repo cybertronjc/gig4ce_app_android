@@ -21,11 +21,7 @@ class GigerAttendanceDetailsViewContract {
             val error: String
         ) : State()
 
-        object ResolvingAttendance : State()
-
-        object MarkingPresent : State()
-
-        object MarkingAbsent : State()
+        object MarkingAttendance : State()
 
         data class ErrorWhileResolvingOrMarkingAttendance(
             val error : String
@@ -52,14 +48,20 @@ class GigerAttendanceDetailsViewContract {
     sealed class UiEffect {
 
         data class OpenResolveAttendanceScreen(
-            val gigId: String
+            val gigId: String,
+            val gigAttendanceData: GigAttendanceData
         ) : UiEffect()
 
         data class OpenMarkGigerActiveScreen(
+            val gigId : String,
+            val hasGigerMarkedHimselfInActive : Boolean
+        ) : UiEffect()
+
+        data class OpenMarkGigerInActiveConfirmationScreen(
             val gigId : String
         ) : UiEffect()
 
-        data class OpenMarkGigerInActiveScreen(
+        data class OpenSelectGigerInActiveReasonScreen(
             val gigId : String
         ) : UiEffect()
 

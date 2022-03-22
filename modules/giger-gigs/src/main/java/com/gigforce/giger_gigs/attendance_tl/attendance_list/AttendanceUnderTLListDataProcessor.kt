@@ -119,7 +119,8 @@ object AttendanceUnderTLListDataProcessor {
                 resolveId = it.resolveAttendanceId,
                 hasTLMarkedAttendance = it.hasTLMarkedAttendance(),
                 canTLMarkPresent = it.canTLMarkPresent(),
-                canTLMarkAbsent = it.canTLMarkAbsent()
+                canTLMarkAbsent = it.canTLMarkAbsent(),
+                attendanceType = it.getAttendanceTypeNN()
             )
         }
 

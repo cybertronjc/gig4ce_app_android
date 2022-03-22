@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -35,15 +37,17 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-class GigViewModel constructor(
-    private val gigsRepository: GigsRepository = GigsRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-
+@HiltViewModel
+class GigViewModel @Inject constructor(
+    private val gigsRepository: GigsRepository,
+    private val firebaseStorage: FirebaseStorage,
+    private val attendanceRepository: GigAttendanceRepository
 ) : ViewModel() {
     private val profileFirebaseRepository =
         GigerProfileFirebaseRepository()
@@ -144,14 +148,14 @@ class GigViewModel constructor(
         _markingAttendanceState.value = Lce.loading()
 
         try {
-            gigsRepository.markCheckIn(
+            attendanceRepository.markCheckIn(
                 gigId = gigId,
-                location = location,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkInTime = Timestamp.now(),
-                checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = remarks,
+                imagePathInFirebase = image,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                markingAddress = locationPhysicalAddress,
+                locationFake = location?.isFromMockProvider,
+                locationAccuracy = location?.accuracy,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_IN)
@@ -174,14 +178,14 @@ class GigViewModel constructor(
         _markingAttendanceState.value = Lce.loading()
 
         try {
-            gigsRepository.markCheckOut(
+            attendanceRepository.markCheckOut(
                 gigId = gigId,
-                location = location,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkOutTime = Timestamp.now(),
-                checkOutTimeAccToUser = checkOutTimeAccToUser,
-                remarks = remarks,
+                imagePathInFirebase = image,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                markingAddress = locationPhysicalAddress,
+                locationFake = location?.isFromMockProvider,
+                locationAccuracy = location?.accuracy,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
@@ -585,21 +589,11 @@ class GigViewModel constructor(
         _declineGig.value = Lse.loading()
 
         try {
-            val gig = getGigNow(gigId)
-
-            gigsRepository
-                .getCollectionReference()
-                .document(gig.gigId)
-                .updateOrThrow(
-                    mapOf(
-                        "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                        "declinedBy" to gig.gigerId,
-                        "declineReason" to reason,
-                        "declinedOn" to Timestamp.now(),
-                        "attendance" to null,
-                        "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
-                    )
-                )
+            attendanceRepository.markDecline(
+                gigId = gigId,
+                reasonId = reason,
+                reason = reason
+            )
 
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
@@ -618,17 +612,11 @@ class GigViewModel constructor(
             gigIds.forEach {
 
                 val gig = getGigNow(it)
-                gigsRepository
-                    .getCollectionReference()
-                    .document(gig.gigId)
-                    .updateOrThrow(
-                        mapOf(
-                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                            "declinedBy" to gig.gigerId,
-                            "declineReason" to reason,
-                            "declinedOn" to Timestamp.now()
-                        )
-                    )
+                attendanceRepository.markDecline(
+                    gigId = gig.gigId,
+                    reasonId = reason,
+                    reason = reason
+                )
             }
 
             _declineGig.value = Lse.success()

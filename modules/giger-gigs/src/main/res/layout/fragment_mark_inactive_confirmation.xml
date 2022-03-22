@@ -17,7 +17,7 @@
             android:layout_height="134dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
-            android:src="@drawable/ic_attendance_calendar"/>
+            android:src="@drawable/ic_calendar_time"/>
 
         <TextView
             android:id="@+id/attendance_label"
@@ -27,7 +27,7 @@
             android:layout_marginTop="40dp"
             android:fontFamily="@font/lato_bold"
             android:lineHeight="18sp"
-            android:text="Mark Giger Active"
+            android:text="Are you sure that giger is Inactive today?"
             android:textColor="@color/inkDefault"
             android:textFontWeight="700" />
 
@@ -39,7 +39,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/lato"
             android:lineHeight="18sp"
-            android:text="Are you sure that you want to mark giger active?"
+            android:text="Are you sure that giger is Inactive today?"
             android:textColor="@color/inkDefault"
             android:textFontWeight="400"
             android:textSize="12sp" />

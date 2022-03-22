@@ -156,4 +156,5 @@ dependencies {
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'com.akexorcist:localization:1.2.10'
+    implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
 }

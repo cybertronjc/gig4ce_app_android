@@ -5,6 +5,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.models.GigAttendanceData
+import java.time.LocalDate
 import javax.inject.Inject
 
 class GigNavigation @Inject constructor(
@@ -86,4 +87,23 @@ class GigNavigation @Inject constructor(
         ),
         NavigationOptions.getNavOptions()
     )
+
+    fun openGigAttendanceHistoryScreen(
+        gigDate : LocalDate,
+        gigTitle : String,
+        gigOrderId : String,
+        companyLogo : String,
+        companyName : String
+    ){
+        navigation.navigateTo(
+            "gig/gigMonthlyAttendanceFragment", bundleOf(
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to gigDate,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to companyLogo,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to companyName,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gigOrderId,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gigTitle
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
 }

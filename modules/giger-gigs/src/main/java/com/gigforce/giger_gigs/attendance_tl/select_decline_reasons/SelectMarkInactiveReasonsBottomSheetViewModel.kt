@@ -1,51 +1,43 @@
 package com.gigforce.giger_gigs.attendance_tl.select_decline_reasons
 
-import android.app.Dialog
-import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
-import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
-import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
-import com.gigforce.giger_gigs.databinding.FragmentMarkInactiveConfirmationBinding
-import com.gigforce.giger_gigs.databinding.FragmentSelectInactiveReasonBinding
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectMarkInactiveReasonsBottomSheetViewModel @Inject constructor(
     private val gigAttendanceRepository: GigAttendanceRepository,
-    private val logger : GigforceLogger
+    private val logger: GigforceLogger
 ) : ViewModel() {
 
-    companion object{
+    companion object {
 
         const val TAG = "DeclineGigViewModel"
     }
 
-    private val _viewState = MutableLiveData<SelectMarkInactiveReasonsViewContract.UiState>()
-    val viewState : LiveData<SelectMarkInactiveReasonsViewContract.UiState> = _viewState
+    private val _viewState = MutableStateFlow<SelectMarkInactiveReasonsViewContract.UiState>(
+        SelectMarkInactiveReasonsViewContract.UiState.LoadingDeclineOptions
+    )
+    val viewState = _viewState.asStateFlow()
 
     init {
         loadDeclineOptions(false)
     }
 
     fun loadDeclineOptions(
-        isUserTl : Boolean
-    ) = viewModelScope.launch{
+        isUserTl: Boolean
+    ) = viewModelScope.launch {
 
         _viewState.value = SelectMarkInactiveReasonsViewContract.UiState.LoadingDeclineOptions
-        logger.d(TAG,"loading decline options UserTl : $isUserTl.....")
+        logger.d(TAG, "loading decline options UserTl : $isUserTl.....")
 
         try {
 
@@ -59,7 +51,7 @@ class SelectMarkInactiveReasonsBottomSheetViewModel @Inject constructor(
                 declineOptions
             )
 
-            logger.d(TAG,"[Success] ${declineOptions.size} options loaded")
+            logger.d(TAG, "[Success] ${declineOptions.size} options loaded")
         } catch (e: Exception) {
 
             //load default reasons here
@@ -73,9 +65,48 @@ class SelectMarkInactiveReasonsBottomSheetViewModel @Inject constructor(
                 e
             )
         }
-
-
     }
 
 
+    fun markDecline(
+        gigId: String,
+        reasonId: String,
+        reason: String,
+        sharedViewModel: AttendanceTLSharedViewModel
+    ) = viewModelScope.launch {
+        if (_viewState.value is SelectMarkInactiveReasonsViewContract.UiState.MarkingDecline) {
+            logger.d(TAG, "already a decline process in progress, no-op")
+            return@launch
+        }
+
+        _viewState.emit(SelectMarkInactiveReasonsViewContract.UiState.MarkingDecline)
+        try {
+            val gigWithAttendanceUpdated = gigAttendanceRepository.markDecline(
+                gigId = gigId,
+                reasonId = reasonId,
+                reason = reason
+            )
+
+            sharedViewModel.attendanceUpdated(gigWithAttendanceUpdated)
+            _viewState.emit(SelectMarkInactiveReasonsViewContract.UiState.DeclineMarkedSuccessfully)
+
+        } catch (e: Exception) {
+            if(e is IOException){
+
+                //Internet Exception
+                _viewState.emit(
+                    SelectMarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingDecline(
+                        e.message ?: "Unable to mark decline"
+                    )
+                )
+            } else{
+
+                _viewState.emit(
+                    SelectMarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingDecline(
+                        e.message ?: "Unable to mark decline"
+                    )
+                )
+            }
+        }
+    }
 }

@@ -10,6 +10,7 @@ import com.gigforce.giger_gigs.GigCoreRecyclerViewBindings
 import com.gigforce.giger_gigs.attendance_tl.attendance_list.GigerAttendanceUnderManagerViewModel
 import com.gigforce.giger_gigs.repositories.GigersAttendanceRepository
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDate
 import kotlin.random.Random
 
 
@@ -56,6 +57,8 @@ open class AttendanceRecyclerItemData(
         var resolveId : String?,
         var currentlyMarkingAttendanceForThisGig : Boolean,
 
+        var attendanceType : String,
+
         val viewModel : GigerAttendanceUnderManagerViewModel
     ) : AttendanceRecyclerItemData(
         type = GigCoreRecyclerViewBindings.VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM
@@ -87,7 +90,12 @@ open class AttendanceRecyclerItemData(
                 clientId = "",
                 location = "",
                 scoutName = "",
-                businessLogo = null
+                businessLogo = null,
+                gigerMobileNo = "",
+                attendanceType = this.attendanceType,
+                gigOrderId = null,
+                gigDate = LocalDate.now(),
+                jobProfile = null,
             )
         }
     }
@@ -96,6 +104,7 @@ open class AttendanceRecyclerItemData(
 @Parcelize
 data class GigAttendanceData(
     var status: String,
+    val attendanceType : String,
     val statusTextColorCode : String,
     val statusBackgroundColorCode : String,
 
@@ -105,6 +114,9 @@ data class GigAttendanceData(
     val gigerName: String,
     val gigerMobileNo : String?,
     val gigerDesignation: String,
+    val gigOrderId: String?,
+    val gigDate: LocalDate,
+    val jobProfile: String?,
 
     val businessLogo : String?,
     val businessName: String,
@@ -139,7 +151,7 @@ data class GigAttendanceData(
                 status = gigApiModel.getFinalAttendanceStatus(),
                 statusTextColorCode = gigApiModel.getFinalStatusTextColorCode(),
                 statusBackgroundColorCode = gigApiModel.getFinalStatusBackgroundColorCode(),
-                gigerImage = "",
+                gigerImage = gigApiModel.getProfilePicture(),
                 gigId = gigApiModel.id ?: "",
                 gigerId = gigApiModel.gigerId ?: "",
                 gigerName = gigApiModel.gigerName ?: "",
@@ -163,6 +175,11 @@ data class GigAttendanceData(
                 scoutName = gigApiModel.scout?.name ?: "",
                 canTLMarkPresent = gigApiModel.canTLMarkPresent(),
                 canTLMarkAbsent = gigApiModel.canTLMarkAbsent(),
+                gigerMobileNo = gigApiModel.gigerMobile,
+                attendanceType = gigApiModel.getAttendanceTypeNN(),
+                gigOrderId = gigApiModel.gigOrderId,
+                gigDate = gigApiModel.getGigDate(),
+                jobProfile = gigApiModel.jobProfile,
             )
         }
     }

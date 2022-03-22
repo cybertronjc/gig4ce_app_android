@@ -2,7 +2,10 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.giger_gigs.models.GigAttendanceData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,38 +56,72 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     }
 
     private fun attendanceHistoryClicked() = viewModelScope.launch {
+        val gigDetails = attendanceDetails ?: return@launch
+        attendanceDetails?.gigOrderId ?: return@launch
 
+        _viewEffects.emit(
+            GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen(
+                gigOrderId = gigDetails.gigOrderId!!,
+                date =gigDetails.gigDate,
+                jobProfile = gigDetails.jobProfile,
+                companyName = gigDetails.businessName,
+                companyLogo = gigDetails.businessLogo
+            )
+        )
     }
 
-    private fun dropGigerClicked()= viewModelScope.launch {
+    private fun dropGigerClicked() = viewModelScope.launch {
 
     }
 
     private fun callGigerClicked() = viewModelScope.launch {
         val gigerMobileNo = attendanceDetails?.gigerMobileNo ?: return@launch
-        _viewEffects.emit(GigerAttendanceDetailsViewContract.UiEffect.CallGiger(
-            gigerMobileNo
-        ))
+        _viewEffects.emit(
+            GigerAttendanceDetailsViewContract.UiEffect.CallGiger(
+                gigerMobileNo
+            )
+        )
     }
 
     private fun activeButtonClicked() = viewModelScope.launch {
         val attendanceData = attendanceDetails ?: return@launch
 
-        _viewEffects.emit(
-            GigerAttendanceDetailsViewContract.UiEffect.OpenMarkGigerActiveScreen(
-                gigId = attendanceData.gigId
+        if (AttendanceType.OVERWRITE_BOTH == attendanceData.attendanceType) {
+
+            _viewEffects.emit(
+                GigerAttendanceDetailsViewContract.UiEffect.OpenMarkGigerActiveScreen(
+                    gigId = attendanceData.gigId,
+                    hasGigerMarkedHimselfInActive = false
+                )
             )
-        )
+        } else {
+            _viewEffects.emit(
+                GigerAttendanceDetailsViewContract.UiEffect.OpenMarkGigerActiveScreen(
+                    gigId = attendanceData.gigId,
+                    hasGigerMarkedHimselfInActive = attendanceData.gigerAttendanceStatus == AttendanceStatus.ABSENT
+                )
+            )
+        }
     }
 
     private fun inActiveButtonClicked() = viewModelScope.launch {
         val attendanceData = attendanceDetails ?: return@launch
 
-        _viewEffects.emit(
-            GigerAttendanceDetailsViewContract.UiEffect.OpenMarkGigerInActiveScreen(
-                gigId = attendanceData.gigId
+        if (AttendanceStatus.PRESENT == attendanceData.gigerAttendanceStatus) {
+
+            _viewEffects.emit(
+                GigerAttendanceDetailsViewContract.UiEffect.OpenMarkGigerInActiveConfirmationScreen(
+                    gigId = attendanceData.gigId
+                )
             )
-        )
+        } else {
+
+            _viewEffects.emit(
+                GigerAttendanceDetailsViewContract.UiEffect.OpenSelectGigerInActiveReasonScreen(
+                    gigId = attendanceData.gigId
+                )
+            )
+        }
     }
 
     private fun resolveButtonClicked() = viewModelScope.launch {
@@ -92,7 +129,8 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
 
         _viewEffects.emit(
             GigerAttendanceDetailsViewContract.UiEffect.OpenResolveAttendanceScreen(
-                gigId = attendanceData.gigId
+                gigId = attendanceData.gigId,
+                attendanceData
             )
         )
     }
@@ -142,4 +180,22 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     }
 
 
+
+    fun gigUpdateReceived(
+        attendance: GigAttendanceApiModel
+    ) = viewModelScope.launch {
+        val updatedGigId = attendance.id ?: return@launch
+        if(updatedGigId == gigId){
+
+            attendanceDetails = GigAttendanceData.fromGigAttendanceApiModel(
+                attendance
+            )
+
+            _viewState.emit(
+                GigerAttendanceDetailsViewContract.State.ShowAttendanceDetails(
+                    attendanceDetails!!
+                )
+            )
+        }
+    }
 }

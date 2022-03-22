@@ -10,27 +10,11 @@ class GigerAttendanceUnderManagerViewContract {
 
     sealed class State {
 
-        object ScreenLoaded : State(){
-            override fun equals(other: Any?): Boolean {
-                return false
-            }
-
-            override fun hashCode(): Int {
-                return Random.nextInt()
-            }
-        }
+        object ScreenLoaded : State()
 
         data class LoadingAttendanceList(
             val message: String?
-        ) : State(){
-            override fun equals(other: Any?): Boolean {
-                return false
-            }
-
-            override fun hashCode(): Int {
-                return Random.nextInt()
-            }
-        }
+        ) : State()
 
         data class ShowOrUpdateAttendanceListOnView(
             val date : LocalDate,
@@ -40,35 +24,11 @@ class GigerAttendanceUnderManagerViewContract {
             val attendanceItemData: List<AttendanceRecyclerItemData>,
             val showUpdateToast: Boolean,
             val tabsDataCounts : List<AttendanceStatusAndCountItemData>?
-        ) : State(){
-            override fun equals(other: Any?): Boolean {
-                return false
-            }
-
-            override fun hashCode(): Int {
-                return Random.nextInt()
-            }
-        }
+        ) : State()
 
         data class ErrorInLoadingOrUpdatingAttendanceList(
             val error: String
-        ) : State(){
-            override fun equals(other: Any?): Boolean {
-                return false
-            }
-
-            override fun hashCode(): Int {
-                return Random.nextInt()
-            }
-        }
-
-        override fun equals(other: Any?): Boolean {
-            return false
-        }
-
-        override fun hashCode(): Int {
-            return Random.nextInt()
-        }
+        ) : State()
     }
 
     sealed class UiEvent {
@@ -101,6 +61,14 @@ class GigerAttendanceUnderManagerViewContract {
         }
 
         object RefreshAttendanceClicked : UiEvent()
+
+        data class UserRightSwipedForMarkingPresent(
+            val attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        ) : UiEvent()
+
+        data class UserLeftSwipedForMarkingAbsent(
+            val attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        ) : UiEvent()
     }
 
     sealed class UiEffect {
@@ -118,5 +86,18 @@ class GigerAttendanceUnderManagerViewContract {
             val gigId : String,
             val gigAttendanceData : GigAttendanceData
         ) : UiEffect()
+
+        data class OpenMarkGigerActiveConfirmation(
+            val gigId: String,
+            val hasGigerMarkedHimselfInActive : Boolean
+        ) : UiEffect()
+
+        data class OpenMarkInactiveConfirmationDialog(
+            val gigId: String
+        ): UiEffect()
+
+        data class OpenMarkInactiveSelectReasonDialog(
+            val gigId: String
+        ): UiEffect()
     }
 }

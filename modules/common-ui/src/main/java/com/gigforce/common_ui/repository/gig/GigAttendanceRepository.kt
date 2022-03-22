@@ -53,8 +53,9 @@ class GigAttendanceRepository @Inject constructor(
         longitude: Double?,
         markingAddress: String?,
         locationFake: Boolean?,
-        locationAccuracy: Float?
-    ) {
+        locationAccuracy: Float?,
+        distanceBetweenGigAndUser : Float? = null
+    ) : GigAttendanceApiModel {
         logger.d(
             TAG,
             "Marking check-in ....",
@@ -85,19 +86,22 @@ class GigAttendanceRepository @Inject constructor(
 
             if (!response.status) {
                 throw Exception(response.message)
-            }
+            } else {
+                logger.d(
+                    TAG,
+                    "[Success] check-in marked"
+                )
 
-            logger.d(
-                TAG,
-                "[Success] check-in marked"
-            )
+                return response.data!!
+            }
         } catch (e: Exception) {
 
-            logger.eAndReThrow(
+            logger.e(
                 TAG,
                 "marking check-in through api",
                 e
             )
+            throw e
         }
     }
 
@@ -109,8 +113,9 @@ class GigAttendanceRepository @Inject constructor(
         longitude: Double?,
         markingAddress: String?,
         locationFake: Boolean?,
-        locationAccuracy: Float?
-    ) {
+        locationAccuracy: Float?,
+        distanceBetweenGigAndUser : Float?
+    ) : GigAttendanceApiModel{
         logger.d(
             TAG,
             "Marking check-out....",
@@ -141,19 +146,22 @@ class GigAttendanceRepository @Inject constructor(
 
             if (!response.status) {
                 throw Exception(response.message)
-            }
+            } else{
+                logger.d(
+                    TAG,
+                    "[Success] check-out marked"
+                )
 
-            logger.d(
-                TAG,
-                "[Success] check-out marked"
-            )
+                return response.data!!
+            }
         } catch (e: Exception) {
 
-            logger.eAndReThrow(
+            logger.e(
                 TAG,
                 "marking check-out through api",
                 e
             )
+            throw e
         }
     }
 
@@ -161,7 +169,7 @@ class GigAttendanceRepository @Inject constructor(
         gigId: String,
         reasonId: String,
         reason: String
-    ) {
+    ) : GigAttendanceApiModel{
         logger.d(
             TAG,
             "Declining gig....",
@@ -184,19 +192,22 @@ class GigAttendanceRepository @Inject constructor(
 
             if (!response.status) {
                 throw Exception(response.message)
-            }
+            } else{
+                logger.d(
+                    TAG,
+                    "[Failure] decline marked"
+                )
 
-            logger.d(
-                TAG,
-                "[Failure] decline marked"
-            )
+                return response.data!!
+            }
         } catch (e: Exception) {
 
-            logger.eAndReThrow(
+            logger.e(
                 TAG,
                 "marking decline through api",
                 e
             )
+            throw e
         }
     }
 
@@ -255,7 +266,7 @@ class GigAttendanceRepository @Inject constructor(
     suspend fun resolveAttendanceConflict(
         resolveId: String,
         optionSelected: Boolean
-    ) {
+    ) : GigAttendanceApiModel {
         val response = gigAttendanceService.resolveAttendanceConflict(
             ResolveAttendanceRequest(
                 optionSelected = ResolveAttendanceRequestOptions.fromBoolean(optionSelected),
@@ -265,6 +276,8 @@ class GigAttendanceRepository @Inject constructor(
 
         if (!response.status) {
             throw Exception(response.message)
+        } else{
+            return response.data!!
         }
     }
 

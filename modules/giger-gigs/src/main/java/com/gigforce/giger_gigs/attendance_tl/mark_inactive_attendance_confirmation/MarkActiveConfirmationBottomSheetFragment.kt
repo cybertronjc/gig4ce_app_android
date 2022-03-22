@@ -64,7 +64,7 @@ class MarkActiveConfirmationBottomSheetFragment : BaseBottomSheetDialogFragment<
     private fun initView() = viewBinding.apply {
 
         this.yesButton.setOnClickListener {
-            viewModel.tlClickedYesInMarkActiveConfirmationDialog(gigId)
+//            viewModel.tlClickedYesInMarkActiveConfirmationDialog(gigId)
         }
 
         this.noButton.setOnClickListener {

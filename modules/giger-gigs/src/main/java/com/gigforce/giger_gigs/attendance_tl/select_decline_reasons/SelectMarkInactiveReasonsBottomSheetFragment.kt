@@ -1,12 +1,14 @@
 package com.gigforce.giger_gigs.attendance_tl.select_decline_reasons
 
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
@@ -15,17 +17,21 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
-import com.gigforce.giger_gigs.databinding.FragmentMarkInactiveConfirmationBinding
 import com.gigforce.giger_gigs.databinding.FragmentSelectInactiveReasonBinding
+import com.github.razir.progressbutton.attachTextChangeAnimator
+import com.github.razir.progressbutton.bindProgressButton
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentSelectInactiveReasonBinding>(
-    fragmentName = TAG,
-    layoutId = R.layout.fragment_select_inactive_reason
-) {
+class SelectMarkInactiveReasonsBottomSheetFragment :
+    BaseBottomSheetDialogFragment<FragmentSelectInactiveReasonBinding>(
+        fragmentName = TAG,
+        layoutId = R.layout.fragment_select_inactive_reason
+    ) {
     companion object {
         const val TAG = "MarkActiveConfirmationBottomSheetFragment"
 
@@ -71,27 +77,69 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
     }
 
     private fun initViewModel() {
-        viewModel.viewState.observe(viewLifecycleOwner) {
+        lifecycleScope.launchWhenCreated {
 
-            when (it) {
-                is SelectMarkInactiveReasonsViewContract.UiState.ErrorWhileLoadingDeclineOptions -> showErrorInView(it.error)
-                SelectMarkInactiveReasonsViewContract.UiState.LoadingDeclineOptions -> showLoadingView()
-                is SelectMarkInactiveReasonsViewContract.UiState.ShowDeclineOptions -> showMainView(it.options)
-            }
+            viewModel
+                .viewState
+                .collect {
+
+                    when (it) {
+                        is SelectMarkInactiveReasonsViewContract.UiState.ErrorWhileLoadingDeclineOptions -> showErrorInView(
+                            it.error
+                        )
+                        SelectMarkInactiveReasonsViewContract.UiState.LoadingDeclineOptions -> showLoadingView()
+                        is SelectMarkInactiveReasonsViewContract.UiState.ShowDeclineOptions -> showMainView(
+                            it.options
+                        )
+                        SelectMarkInactiveReasonsViewContract.UiState.DeclineMarkedSuccessfully -> dismiss()
+                        is SelectMarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingDecline -> errorWhileMarkingDecline(
+                            it.error
+                        )
+                        SelectMarkInactiveReasonsViewContract.UiState.MarkingDecline -> showMarkingDecline()
+                    }
+                }
+        }
+    }
+
+    private fun errorWhileMarkingDecline(
+        error: String
+    ) = viewBinding.declineGigMainLayout.apply {
+
+        this.noButton.isEnabled = true
+        this.yesButton.isEnabled = true
+        this.yesButton.hideProgress("Yes")
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unable to mark absent")
+            .setMessage(error)
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
+    }
+
+    private fun showMarkingDecline() = viewBinding.declineGigMainLayout.apply {
+
+        this.noButton.isEnabled = false
+        this.yesButton.isEnabled = false
+        this.yesButton.showProgress {
+            this.buttonText = "Marking Absent.."
+            this.progressColor = Color.WHITE
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog =  super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
 
     private fun initView() = viewBinding.declineGigMainLayout.apply {
 
+        bindProgressButton(this.yesButton)
+        yesButton.attachTextChangeAnimator()
+
         reasonRadioGroup.setOnCheckedChangeListener { _, checkedId ->
 
-            if(reasonRadioGroup.checkedRadioButtonId == -1){
+            if (reasonRadioGroup.checkedRadioButtonId == -1) {
                 return@setOnCheckedChangeListener
             }
 
@@ -110,7 +158,7 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
         }
 
         this.yesButton.setOnClickListener {
-          //todo
+            //todo
 
             val checkedRadioButtonId = reasonRadioGroup.checkedRadioButtonId
             if (checkedRadioButtonId == -1) {
@@ -124,8 +172,10 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
                 return@setOnClickListener
             } else {
 
-                val checkedReason = reasonRadioGroup.findViewById<RadioButton>(reasonRadioGroup.checkedRadioButtonId).text.toString()
-                val checkedReasonId = reasonRadioGroup.findViewById<RadioButton>(reasonRadioGroup.checkedRadioButtonId).tag.toString()
+                val checkedReason =
+                    reasonRadioGroup.findViewById<RadioButton>(reasonRadioGroup.checkedRadioButtonId).text.toString()
+                val checkedReasonId =
+                    reasonRadioGroup.findViewById<RadioButton>(reasonRadioGroup.checkedRadioButtonId).tag.toString()
 
                 if (checkedReasonId == REASON_ID_OTHERS &&
                     reasonEt.text.isNullOrBlank()
@@ -145,14 +195,13 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
                     reasonRadioGroup.findViewById<RadioButton>(reasonRadioGroup.checkedRadioButtonId).text.toString()
                 }
 
-                sharedViewModel.tlSelectedInactiveReasonConfirmationDialog(
+                viewModel.markDecline(
                     gigId,
                     checkedReasonId,
-                    reason
+                    reason,
+                    sharedViewModel
                 )
-                dismiss()
             }
-
         }
 
         this.noButton.setOnClickListener {
@@ -160,7 +209,7 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
         }
     }
 
-    private fun showLoadingView() = viewBinding.apply{
+    private fun showLoadingView() = viewBinding.apply {
         declineGigMainLayout.root.invisible()
         progressBar.visible()
         errorLayout.gone()
@@ -168,7 +217,7 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
 
     private fun showErrorInView(
         error: String
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
         declineGigMainLayout.root.invisible()
         progressBar.gone()
         errorLayout.visible()
@@ -178,16 +227,18 @@ class SelectMarkInactiveReasonsBottomSheetFragment : BaseBottomSheetDialogFragme
 
     private fun showMainView(
         options: List<DeclineReason>
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
         errorLayout.gone()
         progressBar.gone()
         declineGigMainLayout.root.visible()
 
         options.toMutableList().apply {
-            add(DeclineReason(
-                reasonId = REASON_ID_OTHERS,
-                reason = getString(R.string.others_camel_case_giger_gigs)
-            ))
+            add(
+                DeclineReason(
+                    reasonId = REASON_ID_OTHERS,
+                    reason = getString(R.string.others_camel_case_giger_gigs)
+                )
+            )
         }.run {
 
             for (option in this) {

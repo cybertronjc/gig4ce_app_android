@@ -2,26 +2,19 @@ package com.gigforce.giger_gigs.attendance_tl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 sealed class SharedAttendanceTLSharedViewModelEvents {
 
-    data class TLClickedYesInMarkActiveConfirmationDialog(
-        val gigId: String
+    data class AttendanceUpdated(
+        val attendance : GigAttendanceApiModel
     ) : SharedAttendanceTLSharedViewModelEvents()
 
-    data class TLSelectedInactiveReasonConfirmationDialog(
-        val gigId: String,
-        val reasonId : String,
-        val reason: String
-    ) : SharedAttendanceTLSharedViewModelEvents()
-
-    data class TLSelectedResolveConfirmationDialog(
-        val gigId: String,
-        val resolveId: String,
-        val optionSelected: Boolean
+    data class OpenMarkInactiveReasonsDialog(
+        val gigId : String
     ) : SharedAttendanceTLSharedViewModelEvents()
 }
 
@@ -31,54 +24,16 @@ class AttendanceTLSharedViewModel : ViewModel() {
     private val _sharedEvents = MutableSharedFlow<SharedAttendanceTLSharedViewModelEvents>()
     val sharedEvents = _sharedEvents.asSharedFlow()
 
-    fun tlClickedYesInMarkActiveConfirmationDialog(
+    fun attendanceUpdated(
+        gigWithAttendanceUpdated: GigAttendanceApiModel
+    ) = viewModelScope.launch {
+        _sharedEvents.emit(SharedAttendanceTLSharedViewModelEvents.AttendanceUpdated(gigWithAttendanceUpdated))
+    }
+
+    fun openMarkInactiveReasonsDialog(
         gigId: String
     ) = viewModelScope.launch {
-        _sharedEvents.emit(
-            SharedAttendanceTLSharedViewModelEvents.TLClickedYesInMarkActiveConfirmationDialog(
-                gigId = gigId
-            )
-        )
-    }
-
-    fun tlSelectedInactiveReasonConfirmationDialog(
-        gigId: String,
-        reasonId: String,
-        reason: String
-    ) = viewModelScope.launch {
-        _sharedEvents.emit(
-            SharedAttendanceTLSharedViewModelEvents.TLSelectedInactiveReasonConfirmationDialog(
-                gigId = gigId,
-                reasonId = reasonId,
-                reason = reason
-            )
-        )
-    }
-
-    fun tlSelectedYesInResolveDialog(
-        gigId: String,
-        resolveId: String
-    ) = viewModelScope.launch {
-        _sharedEvents.emit(
-            SharedAttendanceTLSharedViewModelEvents.TLSelectedResolveConfirmationDialog(
-                gigId = gigId,
-                resolveId = resolveId,
-                optionSelected = true
-            )
-        )
-    }
-
-    fun tlSelectedNoInResolveDialog(
-        gigId: String,
-        resolveId: String
-    ) = viewModelScope.launch {
-        _sharedEvents.emit(
-            SharedAttendanceTLSharedViewModelEvents.TLSelectedResolveConfirmationDialog(
-                gigId = gigId,
-                resolveId = resolveId,
-                optionSelected = false
-            )
-        )
+        _sharedEvents.emit(SharedAttendanceTLSharedViewModelEvents.OpenMarkInactiveReasonsDialog(gigId))
     }
 
 }

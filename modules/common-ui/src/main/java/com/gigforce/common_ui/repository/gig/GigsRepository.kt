@@ -24,11 +24,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-open class GigsRepository : BaseFirestoreDBRepository() {
+@Singleton
+open class GigsRepository @Inject constructor() : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String =
         COLLECTION_NAME

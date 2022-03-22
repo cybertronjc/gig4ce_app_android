@@ -4,6 +4,8 @@ import com.gigforce.common_ui.ext.nonEmptyStringOrNull
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class GigAttendanceApiModel(
 
@@ -13,6 +15,11 @@ data class GigAttendanceApiModel(
     @field:SerializedName("GigerName")
     val gigerName: String? = null,
 
+    @field:SerializedName("profilePicThumbnail")
+    val profilePicThumbnail: String? = null,
+
+    @field:SerializedName("profileAvatarName")
+    val profileAvatarName: String? = null,
 
     @field: SerializedName("businessIcon")
     val businessIcon: String? = null,
@@ -22,6 +29,7 @@ data class GigAttendanceApiModel(
 
     @field:SerializedName("tlAttendance")
     var tlAttendance: TlAttendance? = null,
+
 
     @field:SerializedName("GigerMobile")
     val gigerMobile: String? = null,
@@ -48,7 +56,7 @@ data class GigAttendanceApiModel(
     val gigerId: String? = null,
 
     @field:SerializedName("isResolved")
-    var isResolved: Boolean? = false,
+    var isResolved: Boolean? = null,
 
     @field:SerializedName("resolveAttendanceId")
     val resolveAttendanceId: String? = null,
@@ -63,9 +71,23 @@ data class GigAttendanceApiModel(
     val clientId: String? = null,
 
     @field:SerializedName("scout")
-    val scout: GigersScout? = null
+    val scout: GigersScout? = null,
+
+    @field:SerializedName("GigOrderId")
+    val gigOrderId: String? = null,
 ) {
 
+    fun getProfilePicture() : String{
+        return profilePicThumbnail ?: profileAvatarName ?: return ""
+    }
+
+    fun getAttendanceTypeNN() : String{
+        if (attendanceType.isNullOrBlank() || AttendanceType.OVERWRITE_BOTH == attendanceType) {
+            return AttendanceType.OVERWRITE_BOTH
+        } else{
+            return AttendanceType.PARALLEL_ONLY_TL
+        }
+    }
 
     fun getTLMarkedAttendance(): String {
         if (attendanceType != null && attendanceType == AttendanceType.PARALLEL_ONLY_TL) {
@@ -152,8 +174,13 @@ data class GigAttendanceApiModel(
             }
 
         } else {
+
             return gigerAttedance?.statusBackgroundColorCode.nonEmptyStringOrNull()
-                ?: getDefaultBackgroundColorCodeForStatus(AttendanceStatus.PENDING)
+                ?: if (!gigerAttedance?.status.isNullOrBlank()) {
+                    getDefaultBackgroundColorCodeForStatus(gigerAttedance?.status)
+                } else {
+                    getDefaultBackgroundColorCodeForStatus(AttendanceStatus.PENDING)
+                }
         }
     }
 
@@ -177,8 +204,13 @@ data class GigAttendanceApiModel(
             }
 
         } else {
+
             return gigerAttedance?.statusTextColorCode.nonEmptyStringOrNull()
-                ?: getDefaultTextColorCodeForStatus(AttendanceStatus.PENDING)
+                ?: if (!gigerAttedance?.status.isNullOrBlank()) {
+                    getDefaultTextColorCodeForStatus(gigerAttedance?.status)
+                } else {
+                    getDefaultTextColorCodeForStatus(AttendanceStatus.PENDING)
+                }
         }
     }
 
@@ -197,22 +229,26 @@ data class GigAttendanceApiModel(
             return if (getFinalAttendanceStatus() != AttendanceStatus.PENDING) {
 
                 if (hasTLMarkedAttendance()) {
-                    "Marked by TL"
+                    "Marked by You"
                 } else {
                     "Marked by giger"
                 }
             } else {
                 ""
             }
-
         } else {
 
-            return if (hasTLMarkedAttendance() &&
+            return if (
+                hasTLMarkedAttendance() &&
                 hasGigerMarkedAttendance()
             ) {
-                "Marked by both"
+                if(getTLMarkedAttendance() == getGigerMarkedAttendance()){
+                    "Marked by both"
+                } else{
+                    "Marked by You"
+                }
             } else if (hasTLMarkedAttendance()) {
-                "Marked by TL"
+                "Marked by You"
             } else if (hasGigerMarkedAttendance()) {
                 "Marked by Giger"
             } else {
@@ -221,40 +257,47 @@ data class GigAttendanceApiModel(
         }
     }
 
+    fun getGigDate() : LocalDate{
+       return LocalDate.parse(
+           gigDate!!,
+           DateTimeFormatter.ISO_DATE
+       )
+    }
+
     fun canTLMarkPresent(): Boolean {
 
         return if (attendanceType == null || AttendanceType.OVERWRITE_BOTH == attendanceType) {
-            getFinalAttendanceStatus() != AttendanceStatus.PRESENT
+            getFinalAttendanceStatus() != AttendanceStatus.PRESENT && getGigDate() == LocalDate.now()
         } else {
-            getTLMarkedAttendance() != AttendanceStatus.PRESENT
+            getTLMarkedAttendance() != AttendanceStatus.PRESENT && getGigDate() == LocalDate.now()
         }
     }
 
     fun canTLMarkAbsent(): Boolean {
         return if (attendanceType == null || AttendanceType.OVERWRITE_BOTH == attendanceType) {
-            getFinalAttendanceStatus() != AttendanceStatus.ABSENT
+            getFinalAttendanceStatus() != AttendanceStatus.ABSENT && !getGigDate().isBefore(LocalDate.now())
         } else {
-            getTLMarkedAttendance() != AttendanceStatus.ABSENT
+            getTLMarkedAttendance() != AttendanceStatus.ABSENT && !getGigDate().isBefore(LocalDate.now())
         }
     }
 
-    fun getDefaultBackgroundColorCodeForStatus(
+    private fun getDefaultBackgroundColorCodeForStatus(
         status: String?
     ): String {
         return when (status) {
             AttendanceStatus.PRESENT -> "#33B642"
             AttendanceStatus.ABSENT -> "#E11900"
-            else -> "#FFC043"
+            else -> "#CDCFD0"
         }
     }
 
-    fun getDefaultTextColorCodeForStatus(
+    private fun getDefaultTextColorCodeForStatus(
         status: String?
     ): String {
         return when (status) {
             AttendanceStatus.PRESENT -> "#FFFFFF"
             AttendanceStatus.ABSENT -> "#FFFFFF"
-            else -> "#FFFFFF"
+            else -> "#000000"
         }
     }
 
@@ -294,25 +337,7 @@ data class TlAttendance(
 
     @field:SerializedName("checkOutImage")
     val checkOutImage: String? = null
-){
-
-    fun createNewCopyFromGigerAttendance(
-        gigerAttedance: GigerAttedance
-    ) : TlAttendance{
-
-       return  TlAttendance(
-            attendanceStatus = gigerAttedance.attendanceStatus,
-            status = gigerAttedance.status,
-            statusString = gigerAttedance.statusString,
-            statusTextColorCode = gigerAttedance.statusTextColorCode,
-            statusBackgroundColorCode = gigerAttedance.statusBackgroundColorCode,
-            checkInTime = gigerAttedance.checkInTime,
-            checkOutTime = gigerAttedance.checkOutTime,
-            checkInImage = gigerAttedance.checkInTime,
-            checkOutImage = gigerAttedance.checkOutTime
-        )
-    }
-}
+)
 
 data class GigerAttedance(
 
