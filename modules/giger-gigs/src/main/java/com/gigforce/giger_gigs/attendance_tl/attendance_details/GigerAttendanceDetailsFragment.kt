@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -15,7 +16,6 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.GigNavigation
 import com.gigforce.giger_gigs.R
@@ -24,6 +24,8 @@ import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEvents
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
 import com.gigforce.giger_gigs.models.GigAttendanceData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -103,7 +105,36 @@ class GigerAttendanceDetailsFragment :
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return dialog.apply {
+            setOnShowListener { dialog -> // In a previous life I used this method to get handles to the positive and negative buttons
+                // of a dialog in order to change their Typeface. Good ol' days.
+                val d: BottomSheetDialog = dialog as BottomSheetDialog
+
+                // This is gotten directly from the source of BottomSheetDialog
+                // in the wrapInBottomSheet() method
+                val bottomSheet =
+                    d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).apply {
+                        setState(BottomSheetBehavior.STATE_EXPANDED);
+                        setPeekHeight(0);
+                    }/*.addBottomSheetCallback(
+                        object  : BottomSheetBehavior.BottomSheetCallback(){
+
+                            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                                bottomSheet.post {
+                                    bottomSheet.requestLayout()
+                                    bottomSheet.invalidate()
+                                }
+                            }
+
+                            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                        }
+                    )*/
+                }
+            }
+        }
     }
 
     private fun initView() = viewBinding.apply {
@@ -203,7 +234,7 @@ class GigerAttendanceDetailsFragment :
         }
     }
 
-    private fun callGiger(phoneNumber : String) {
+    private fun callGiger(phoneNumber: String) {
 
         try {
             val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
@@ -235,16 +266,25 @@ class GigerAttendanceDetailsFragment :
         attendanceDetails: GigAttendanceData
     ) = viewBinding.apply {
 
+        shimmerContainer.gone()
         stopShimmer(
             shimmerContainer,
             R.id.shimmer_controller
         )
-        shimmerContainer.invisible()
+
         infoLayout.root.gone()
         mainLayout.root.visible()
 
         showInfoOnView(attendanceDetails)
+
+        dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            ?.apply {
+                postDelayed({
+                    requestLayout()
+                }, 400)
+            }
     }
+
 
     private fun showInfoOnView(
         attendanceDetails: GigAttendanceData
