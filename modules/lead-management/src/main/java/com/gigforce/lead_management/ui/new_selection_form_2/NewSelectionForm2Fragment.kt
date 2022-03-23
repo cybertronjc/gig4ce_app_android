@@ -720,15 +720,17 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     private fun showSelectedCluster(cluster: OtherCityClusterItem) {
         //get other cities layout from container
         val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(1)
-        val dynamicView = view as DynamicScreenFieldView
-        dynamicView.setData(cluster)
-        val clusterLabelTextView = view.findViewById<TextView>(R.id.cluster_selected_label)
+        if (view != null){
+            val dynamicView = view as DynamicScreenFieldView
+            dynamicView.setData(cluster)
+            val clusterLabelTextView = view.findViewById<TextView>(R.id.cluster_selected_label)
 
-        viewModel.handleEvent(NewSelectionForm2Events.ClusterSelected(cluster))
+            viewModel.handleEvent(NewSelectionForm2Events.ClusterSelected(cluster))
 
-        if (clusterLabelTextView != null){
-            clusterLabelTextView.setText(cluster.name)
-            clusterLabelTextView.setTypeface(clusterLabelTextView.typeface, Typeface.BOLD)
+            if (clusterLabelTextView != null){
+                clusterLabelTextView.setText(cluster.name)
+                clusterLabelTextView.setTypeface(clusterLabelTextView.typeface, Typeface.BOLD)
+            }
         }
     }
 
@@ -745,17 +747,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         }
         //get other cities layout from container
         val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(0)
-        val dynamicView = view as DynamicScreenFieldView
-        dynamicView.setData(otherCity)
-        val otherCityLabelTextView = view.findViewById<TextView>(R.id.other_city_selected_label)
+        if (view != null){
+            val dynamicView = view as DynamicScreenFieldView
+            dynamicView.setData(otherCity)
+            val otherCityLabelTextView = view.findViewById<TextView>(R.id.other_city_selected_label)
 
-        viewModel.handleEvent(NewSelectionForm2Events.OtherCitySelected(otherCity))
+            viewModel.handleEvent(NewSelectionForm2Events.OtherCitySelected(otherCity))
 
-        if (otherCityLabelTextView != null){
-            otherCityLabelTextView.setText(otherCities)
-            otherCityLabelTextView.setTypeface(otherCityLabelTextView.typeface, Typeface.BOLD)
+            if (otherCityLabelTextView != null){
+                otherCityLabelTextView.setText(otherCities)
+                otherCityLabelTextView.setTypeface(otherCityLabelTextView.typeface, Typeface.BOLD)
+            }
         }
-
     }
 
 
