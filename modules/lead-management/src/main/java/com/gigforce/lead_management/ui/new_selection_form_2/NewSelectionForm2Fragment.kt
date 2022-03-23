@@ -326,11 +326,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private fun validateDataAndSubmitData() =
         viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
-
+            val dynamicScreenFieldsData = validateDynamicScreenFieldsReturnFieldValueIfValid(viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer) ?: return@apply
             val dynamicFieldsData =
                 dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
                     ?: return@apply
-            val dynamicScreenFieldsData = validateDynamicScreenFieldsReturnFieldValueIfValid(viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer) ?: return@apply
             viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList(), dynamicScreenFieldsData.toMutableList()))
         }
 //
