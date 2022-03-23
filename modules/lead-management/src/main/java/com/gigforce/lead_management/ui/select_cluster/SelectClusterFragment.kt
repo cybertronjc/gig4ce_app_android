@@ -115,7 +115,7 @@ class SelectClusterFragment : BaseFragment2<FragmentSelectClusterBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (clusters.isEmpty()) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show_lead)
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_clusters_to_show_lead)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()

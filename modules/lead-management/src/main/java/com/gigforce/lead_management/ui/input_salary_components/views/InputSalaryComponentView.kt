@@ -50,6 +50,9 @@ class InputSalaryComponentView(
             titleTextview.text = viewData.name
         }
 
+        if (viewData.value != 0){
+            editText.setText(viewData.value.toString())
+        }
 
     }
 }

@@ -21,6 +21,7 @@ import com.gigforce.lead_management.viewModels.JoiningSubmissionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -279,7 +280,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
             otherCities?.forEach { it1 ->
                 it1.selected = selectedOtherCities?.find { it.id == it1.id }?.selected == true
             }
-            Log.d("ViewModelOther", "$selectedOtherCities")
             _viewState.value = otherCities?.sortedBy {
                 it.name
             }?.let {
@@ -308,8 +308,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
         } else {
             val clusters = joiningLocationsAndTLs.reportingLocations.find { it.cityId == selectedCity?.cityId }?.clusters
 
-            clusters?.onEach {
-                it.selected = it.id == selectedReportingLocation?.id
+            clusters?.forEach {
+                it.selected = it.id == selectedCluster?.id
             }
 
             _viewState.value = clusters?.sortedBy {
@@ -328,7 +328,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
         businessId: String,
         salaryResponse: InputSalaryResponse?
     ) {
-        Log.d("InputSalary", "$salaryResponse")
         _viewState.value =
             NewSelectionForm2ViewState.OpenInputSalaryScreen(
                 businessId,

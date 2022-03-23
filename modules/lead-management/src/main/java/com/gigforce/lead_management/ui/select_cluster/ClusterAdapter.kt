@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_cluster
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +74,7 @@ class ClusterAdapter(
         val preSelectedItems = contacts.filter {
             it.selected
         }
-
+        Log.d("PreselectedCluster", "$preSelectedItems")
         if(preSelectedItems.isNotEmpty()){
             this.selectedId = preSelectedItems.first().id
         } else {

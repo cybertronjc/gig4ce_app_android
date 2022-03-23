@@ -169,6 +169,7 @@
     <string name="select_reporting_location_lead">Select reporting location</string>
     <string name="no_reporting_location_to_show_lead">No reporting location to show</string>
     <string name="no_job_profile_to_show_lead">No Job Profile to show</string>
+    <string name="no_clusters_to_show_lead">No Cluster to show</string>
     <string name="no_salary_components_lead">No Salary Components to show</string>
     <string name="no_city_to_show_lead">No City to show</string>
     <string name="no_business_to_show_lead">No Business to show</string>
