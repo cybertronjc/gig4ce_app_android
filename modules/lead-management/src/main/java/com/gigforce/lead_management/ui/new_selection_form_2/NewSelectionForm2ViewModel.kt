@@ -91,6 +91,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedCluster = event.cluster
             }
             is NewSelectionForm2Events.SalaryAmountEntered -> {
+                Log.d("InputSalary1", "${event.salaryData}")
                 salaryAmountEntered = event.salaryData
             }
             is NewSelectionForm2Events.ClientTLSelected -> {
@@ -327,6 +328,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         businessId: String,
         salaryResponse: InputSalaryResponse?
     ) {
+        Log.d("InputSalary", "$salaryResponse")
         _viewState.value =
             NewSelectionForm2ViewState.OpenInputSalaryScreen(
                 businessId,

@@ -111,14 +111,16 @@ class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponent
         })
     }
 
-    private fun showError(error: String) {
-
+    private fun showError(error: String) = viewBinding.apply{
+        this.infoLayout.root.visible()
+        this.infoLayout.infoMessageTv.text = error
+        this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
     }
 
     private fun showSalaryComponents(salaryResponse: InputSalaryResponse) = viewBinding.apply{
         if (salaryResponse.data?.isEmpty() == true) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show_lead)
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_salary_components_lead)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()
