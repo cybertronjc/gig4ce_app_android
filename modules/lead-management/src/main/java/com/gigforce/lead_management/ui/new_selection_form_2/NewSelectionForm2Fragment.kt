@@ -25,10 +25,10 @@ import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.contacts.ContactsDelegate
 import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
-import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
+import com.gigforce.common_ui.dynamic_fields.DynamicScreenFieldView
+import com.gigforce.common_ui.dynamic_fields.data.*
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
@@ -330,8 +330,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             val dynamicFieldsData =
                 dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
                     ?: return@apply
-            viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
+            val dynamicScreenFieldsData = validateDynamicScreenFieldsReturnFieldValueIfValid(viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer) ?: return@apply
+            viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList(), dynamicScreenFieldsData.toMutableList()))
         }
+//
+//    private fun validateDynamicScreenData() =
+//        viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.apply {
+//
+//        }
 
     private fun initToolbar(
         viewBinding: FragmentNewSelectionForm2Binding
@@ -381,7 +387,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenInputSalaryScreen -> openInputSalaryScreen(
-                    state.businessId
+                    state.businessId,
+                    state.salaryData
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
                     state.selectedCity,
@@ -530,12 +537,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun openInputSalaryScreen(
-        businessId: String
+        businessId: String,
+        salaryData: InputSalaryResponse?
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_INPUT_SALARY,
             bundleOf(
-                InputSalaryComponentsFragment.INTENT_EXTRA_BUSINESS_ID to businessId
+                InputSalaryComponentsFragment.INTENT_EXTRA_BUSINESS_ID to businessId,
+                InputSalaryComponentsFragment.INTENT_EXTRA_SALARY_DATA to salaryData
             )
         )
         hideSoftKeyboard()
@@ -687,13 +696,33 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     is LeadManagementSharedViewModelState.ClusterSelected -> showSelectedCluster(
                         it.cluster
                     )
+                    is LeadManagementSharedViewModelState.SalaryAmountEntered -> showSalaryAmountEntered(
+                        it.salaryData
+                    )
                 }
             })
+    }
+
+    private fun showSalaryAmountEntered(salaryData: InputSalaryResponse) {
+        //get other cities layout from container
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(2)
+        val dynamicView = view as DynamicScreenFieldView
+        salaryData.data?.let { dynamicView.setData(it) }
+        val salaryLabelTextView = view.findViewById<TextView>(R.id.salary_amount_entered_label)
+
+        viewModel.handleEvent(NewSelectionForm2Events.SalaryAmountEntered(salaryData))
+
+        if (salaryLabelTextView != null){
+            salaryLabelTextView.setText("Salary Components Filled")
+            salaryLabelTextView.setTypeface(salaryLabelTextView.typeface, Typeface.BOLD)
+        }
     }
 
     private fun showSelectedCluster(cluster: OtherCityClusterItem) {
         //get other cities layout from container
         val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(1)
+        val dynamicView = view as DynamicScreenFieldView
+        dynamicView.setData(cluster)
         val clusterLabelTextView = view.findViewById<TextView>(R.id.cluster_selected_label)
 
         viewModel.handleEvent(NewSelectionForm2Events.ClusterSelected(cluster))
@@ -717,6 +746,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         }
         //get other cities layout from container
         val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(0)
+        val dynamicView = view as DynamicScreenFieldView
+        dynamicView.setData(otherCity)
         val otherCityLabelTextView = view.findViewById<TextView>(R.id.other_city_selected_label)
 
         viewModel.handleEvent(NewSelectionForm2Events.OtherCitySelected(otherCity))
@@ -894,6 +925,20 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             )
         }
         view.bind(it)
+    }
+
+    private fun validateDynamicScreenFieldsReturnFieldValueIfValid(
+        container: LinearLayout
+    ) : List<DataFromDynamicScreenField>? {
+        val dynamicScreenFieldsData = mutableListOf<DataFromDynamicScreenField>()
+        for (i in 0 until container.childCount) {
+
+            val dynamicFieldView = container.getChildAt(i) as DynamicScreenFieldView
+            val dataFromField = dynamicFieldView.validateDataAndReturnDataElseNull() ?: return null
+            dynamicScreenFieldsData.add(dataFromField)
+        }
+
+        return dynamicScreenFieldsData
     }
 
 }

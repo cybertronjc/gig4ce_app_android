@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.input_salary_components.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -19,7 +20,6 @@ class InputSalaryComponentView(
 ) {
     private var viewBinding: LayoutInputSalaryComponentViewBinding
     private lateinit var viewData: InputSalaryDataItem
-    private var editTextString: String = ""
 
     init {
         this.layoutParams =
@@ -34,7 +34,12 @@ class InputSalaryComponentView(
         )
 
         viewBinding.editText.onTextChanged {
-            editTextString = it
+            if (it.isNotEmpty()){
+                viewData.value = it.toInt()
+            } else {
+                viewData.value = 0
+            }
+
         }
     }
 

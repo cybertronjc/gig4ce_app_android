@@ -6,9 +6,9 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.repository.AuthRepository
 import com.gigforce.common_ui.repository.LeadManagementRepository
@@ -16,10 +16,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.ValidationHelper
-import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewModel
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
 import com.gigforce.lead_management.viewModels.JoiningSubmissionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -55,6 +52,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedOtherCities: List<OtherCityClusterItem>? = null
+    private var selectedCluster: OtherCityClusterItem? = null
+    private var salaryAmountEntered: InputSalaryResponse? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private var secondaryPhoneNumber : String? = null
@@ -76,7 +75,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
             NewSelectionForm2Events.SelectCityClicked -> openSelectCityScreen()
             NewSelectionForm2Events.SelectOtherCityClicked -> openSelectOtherCityScreen()
             NewSelectionForm2Events.SelectClusterClicked -> openSelectClusterScreen()
-            NewSelectionForm2Events.InputSalaryComponentsClicked -> openInputSalaryScreen(joiningRequest.business.id.toString())
+            NewSelectionForm2Events.InputSalaryComponentsClicked -> openInputSalaryScreen(joiningRequest.business.id.toString(), salaryAmountEntered)
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
@@ -88,6 +87,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             is NewSelectionForm2Events.OtherCitySelected -> {
                 selectedOtherCities = event.otherCities
             }
+            is NewSelectionForm2Events.ClusterSelected -> {
+                selectedCluster = event.cluster
+            }
+            is NewSelectionForm2Events.SalaryAmountEntered -> {
+                salaryAmountEntered = event.salaryData
+            }
             is NewSelectionForm2Events.ClientTLSelected -> {
                 selectedTL = event.teamLeader
             }
@@ -97,7 +102,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
                 validateDataAndSubmit(
-                    event.dataFromDynamicFields
+                    event.dataFromDynamicFields,
+                    event.dataFromDynamicScreenFields
                 )
             }
             is NewSelectionForm2Events.JoiningDataReceivedFromPreviousScreen -> {
@@ -318,11 +324,13 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     private fun openInputSalaryScreen(
-        businessId: String
+        businessId: String,
+        salaryResponse: InputSalaryResponse?
     ) {
         _viewState.value =
             NewSelectionForm2ViewState.OpenInputSalaryScreen(
-                businessId
+                businessId,
+                salaryResponse
             )
         _viewState.value = null
     }
@@ -439,7 +447,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     private fun validateDataAndSubmit(
-        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>,
+        dataFromDynamicScreenFields: MutableList<DataFromDynamicScreenField>
     ) {
 
         if (selectedCity == null) {
@@ -515,6 +524,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest.jobProfile.dynamicFields = emptyList()
 
         joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
+        joiningRequest.dataFromDynamicScreenFields = dataFromDynamicScreenFields
 
         if(verificationDynamicFields.isEmpty()){
             submitJoiningData(joiningRequest)

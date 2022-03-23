@@ -11,6 +11,7 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectClusterBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
@@ -100,15 +101,15 @@ class SelectClusterFragment : BaseFragment2<FragmentSelectClusterBinding>(
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = clusterAdapter
 
-//        okayButton.setOnClickListener {
-//            val selectedJobProfile = clusterAdapter.getSelectedBusiness() ?: return@setOnClickListener
-//            sharedViewModel.jobProfileSelected(selectedBusiness,selectedJobProfile)
-//
-//            navigation.popBackStack(
-//                LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
-//                false
-//            )
-//        }
+        okayButton.setOnClickListener {
+            val selectedCluster = clusterAdapter.getSelectedBusiness() ?: return@setOnClickListener
+            sharedViewModel.clusterSelected(selectedCluster)
+
+            navigation.popBackStack(
+                LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
+                false
+            )
+        }
     }
 
     private fun setDataOnView() = viewBinding.apply {

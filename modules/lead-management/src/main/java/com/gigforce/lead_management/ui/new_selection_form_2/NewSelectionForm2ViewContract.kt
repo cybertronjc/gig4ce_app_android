@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.text.SpannedString
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -41,7 +42,8 @@ sealed class NewSelectionForm2ViewState  {
     ) : NewSelectionForm2ViewState()
 
     data class OpenInputSalaryScreen(
-        var businessId: String
+        var businessId: String,
+        var salaryData: InputSalaryResponse?
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(
@@ -122,6 +124,10 @@ sealed class NewSelectionForm2Events {
         val cluster: OtherCityClusterItem
     ): NewSelectionForm2Events()
 
+    data class SalaryAmountEntered(
+        val salaryData: InputSalaryResponse
+    ): NewSelectionForm2Events()
+
     data class ReportingLocationSelected(
         val citySelected: ReportingLocationsItem,
         val reportingLocation: ReportingLocationsItem
@@ -140,6 +146,7 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class SubmitButtonPressed(
-        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
+        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>,
+        val dataFromDynamicScreenFields: MutableList<DataFromDynamicScreenField>
     ) : NewSelectionForm2Events()
 }

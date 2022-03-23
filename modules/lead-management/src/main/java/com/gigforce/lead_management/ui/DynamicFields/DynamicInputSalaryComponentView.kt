@@ -6,11 +6,18 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
+import com.gigforce.common_ui.dynamic_fields.DynamicScreenFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
+import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryDataItem
+import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryResponse
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.databinding.LayoutDynamicInputSalaryComponentBinding
@@ -21,20 +28,23 @@ class DynamicInputSalaryComponentView(
 ) : LinearLayout(
     context,
     attrs
-), DynamicFieldView {
+), DynamicScreenFieldView {
     private var viewBinding: LayoutDynamicInputSalaryComponentBinding
     private lateinit var viewData: DynamicField
     private var editTextString: String = ""
+    private var salaryAmountEntered: List<InputSalaryDataItem>? = null
 
     override val fieldType: String
-        get() = FieldTypes.DROP_DOWN
+        get() = FieldTypes.INPUT_SALARY
 
     override fun setError(error: SpannedString) {
-        TODO("Not yet implemented")
+        viewBinding.errorLayout.root.visible()
+        viewBinding.errorLayout.errorTextview.text = error
     }
 
     override fun removeError() {
-        TODO("Not yet implemented")
+        viewBinding.errorLayout.errorTextview.text = null
+        viewBinding.errorLayout.root.gone()
     }
 
     init {
@@ -59,6 +69,13 @@ class DynamicInputSalaryComponentView(
         settingFieldAsOptionalOrMandatory(fieldDetails)
     }
 
+    override fun setData(data: Any) {
+        data?.let {
+            salaryAmountEntered = data as List<InputSalaryDataItem>?
+            removeError()
+        }
+    }
+
     private fun setTitle(title: String?) {
         viewBinding.titleTextview.text = title
     }
@@ -73,10 +90,45 @@ class DynamicInputSalaryComponentView(
     }
 
     override fun isEnteredOrSelectedDataValid(): Boolean {
-        TODO("Not yet implemented")
+        return if (viewData.mandatory) {
+            salaryAmountEntered != null
+        } else {
+            true
+        }
     }
 
-    override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
-        TODO("Not yet implemented")
+    override fun validateDataAndReturnDataElseNull(): DataFromDynamicScreenField? {
+        return if (isEnteredOrSelectedDataValid()) {
+            removeError()
+            return DataFromDynamicScreenField(
+                id = viewData.id,
+                fieldType = fieldType,
+                title = viewData.title,
+                valueId = null,
+                value = salaryAmountEntered
+            )
+        } else {
+            checkDataAndSetError()
+            null
+        }
+    }
+
+    private fun checkDataAndSetError() {
+        if (viewData.mandatory) {
+
+            if (!isEnteredOrSelectedDataValid()) {
+
+                setError(buildSpannedString {
+                    bold {
+                        append(
+                            resources.getString(R.string.common_note_with_colon)
+                        )
+                    }
+                    append(" Please select ${viewData.title}")
+                })
+            } else {
+                removeError()
+            }
+        }
     }
 }

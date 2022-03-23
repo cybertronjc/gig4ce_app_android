@@ -39,6 +39,11 @@ sealed class LeadManagementSharedViewModelState {
         val cluster: OtherCityClusterItem
     ): LeadManagementSharedViewModelState()
 
+    data class SalaryAmountEntered(
+        val salaryData: InputSalaryResponse
+    ): LeadManagementSharedViewModelState()
+
+
     data class ReportingLocationSelected(
         val citySelected: ReportingLocationsItem,
         val reportingLocation: ReportingLocationsItem
@@ -112,6 +117,20 @@ class LeadManagementSharedViewModel : ViewModel() {
     ) = viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.OtherCitySelected(otherCities)
         _viewStateFlow.emit(LeadManagementSharedViewModelState.OtherCitySelected(otherCities))
+    }
+
+    fun clusterSelected(
+        cluster: OtherCityClusterItem
+    ) = viewModelScope.launch{
+        _viewState.value = LeadManagementSharedViewModelState.ClusterSelected(cluster)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.ClusterSelected(cluster))
+    }
+
+    fun salaryAmountEntered(
+        data: InputSalaryResponse
+    ) = viewModelScope.launch {
+        _viewState.value = LeadManagementSharedViewModelState.SalaryAmountEntered(data)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.SalaryAmountEntered(data))
     }
 
     fun reportingLocationSelected(
