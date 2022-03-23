@@ -1196,6 +1196,9 @@
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
         android:label="InvalidFormatBottomSheet"/>
 
+    <dialog android:id="@+id/UserAlreadyExistsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.UserAlreadyExistsBottomSheet"
+        android:label="UserAlreadyExistsBottomSheet"/>
     <fragment
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
@@ -1214,6 +1217,10 @@
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
         android:label="ChangeTeamLeaderBottomSheetFragment" />
+    <fragment
+        android:id="@+id/myDocumentsFragment"
+        android:name="com.gigforce.verification.mainverification.MyDocumentsFragment"
+        android:label="MyDocumentsFragment" />
 
     <fragment
         android:id="@+id/payoutMainFragment"
@@ -1229,13 +1236,10 @@
         android:id="@+id/payoutListFilterFragment"
         android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
         android:label="PayoutListFilterFragment"/>
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
 
-
-
-=========
-        android:id="@+id/viewLiveLocationFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
-        android:label="ViewLiveLocationFragment" />
->>>>>>>>> Temporary merge branch 2
 </navigation>
 

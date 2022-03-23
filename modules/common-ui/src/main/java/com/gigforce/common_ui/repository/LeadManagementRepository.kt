@@ -144,8 +144,12 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun getGigerJoiningInfo(
-        joiningId: String
-    ): GigerInfo = joiningProfileRemoteService.getJoiningInfo(joiningId).bodyOrThrow()
+        joiningId: String?,
+        gigId : String?
+    ): GigerInfo = joiningProfileRemoteService.getJoiningInfo(
+        id = joiningId ?: "NA",
+        gigId = gigId
+    ).bodyOrThrow()
 
     suspend fun createOrUpdateJoiningDocumentWithStatusSignUpPending(
         userUid: String,

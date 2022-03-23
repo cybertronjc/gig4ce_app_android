@@ -135,6 +135,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             && ValidationHelper.isValidIndianMobileNo(mobilePhoneNumber!!.substring(3))
             && selectedBusiness != null
             && selectedJobProfile != null
+            && selectedReportingTL!=null
         ) {
             _viewState.value = NewSelectionForm1ViewState.EnableSubmitButton
             return
@@ -410,9 +411,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
             checkForCurrentUserInTLListAndPreSelectTeamLeader()
-
+            selectedReportingTL = null
             _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
-                selectedTeamLeader = selectedReportingTL
+                selectedTeamLeader = null
             )
         } catch (e: Exception) {
             gigforceLogger.e(

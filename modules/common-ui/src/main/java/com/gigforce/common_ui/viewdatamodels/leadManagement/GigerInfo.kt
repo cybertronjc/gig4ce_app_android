@@ -4,6 +4,9 @@ import com.gigforce.core.datamodels.client_activation.Dependency
 import com.google.gson.annotations.SerializedName
 
 data class GigerInfo(
+    @SerializedName("_id")
+    val id: String?,
+
     @SerializedName("gigerName")
     val gigerName: String,
 
@@ -52,6 +55,9 @@ data class GigerInfo(
     @SerializedName("status")
     val status: String,
 
+    @SerializedName("isActive")
+    val isActive: Boolean,
+
     @SerializedName("checkList")
     val checkList: List<CheckListItem> = emptyList(),
 
@@ -63,6 +69,9 @@ data class GigerInfo(
 
     @SerializedName("recruitingTL")
     val recruitingTL: TeamLeader? = null,
+
+    @SerializedName("message")
+    val message: String? = null,
 
 ) {
 }

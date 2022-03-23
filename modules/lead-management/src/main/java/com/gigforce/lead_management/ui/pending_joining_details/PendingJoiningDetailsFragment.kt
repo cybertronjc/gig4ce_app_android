@@ -111,21 +111,21 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     }
 
     private fun getJoiningDetails() {
-        viewModel.getGigerJoiningInfo(joiningId)
+        viewModel.getGigerJoiningInfo(joiningId,null)
     }
 
     private fun initViewModel() {
 
         viewModel
             .viewState
-            .observe(viewLifecycleOwner,{
+            .observe(viewLifecycleOwner) {
 
                 when (it) {
                     is GigerInfoState.ErrorLoadingData -> showJoiningDetailsError(it.error)
                     is GigerInfoState.GigerInfoLoaded -> showJoiningDetails(it.gigerInfo)
                     GigerInfoState.LoadingDataFromServer -> showDetailsLoading()
                 }
-            })
+            }
     }
 
     private fun showJoiningDetailsError(

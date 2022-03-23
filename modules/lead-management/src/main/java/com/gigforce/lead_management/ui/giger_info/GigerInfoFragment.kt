@@ -32,7 +32,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
@@ -79,12 +79,12 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
 
-    private lateinit var joiningId: String
+    private var joiningId: String? =null
+    private var gigId: String? =null
     private lateinit var gigerUid: String
 
-    private var isActive: Boolean = false
     var hasStartEndDate = false
-    var dropScreenIntentModel: DropScreenIntentModel? = null
+    var dropScreenIntentModel: DropScreenIntentModel? = DropScreenIntentModel("", "",false, false, "", "", "")
 
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
@@ -99,14 +99,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViews() {
         joiningId?.let {
-            dropScreenIntentModel =
-                DropScreenIntentModel(joiningId = joiningId, false, false, "", "", "")
+            dropScreenIntentModel?.joiningId = it
         }
-
-        if (isActive) {
-            viewBinding.bottomButtonLayout.dropGigerBtn.visible()
-        } else {
-            viewBinding.bottomButtonLayout.dropGigerBtn.gone()
+        gigId?.let {
+            dropScreenIntentModel?.gigId = it
         }
     }
 
@@ -116,14 +112,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     ) {
         arguments?.let {
             gigerUid = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
-            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
-            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
+            gigId = it.getString(LeadManagementConstants.INTENT_EXTRA_GIG_ID)
         }
 
         savedInstanceState?.let {
             gigerUid = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
-            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
-            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
+            gigId = it.getString(LeadManagementConstants.INTENT_EXTRA_GIG_ID)
         }
     }
 
@@ -131,8 +127,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         outState: Bundle
     ) {
         super.onSaveInstanceState(outState)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_GIG_ID, gigId)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
-        outState.putBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE, isActive)
         outState.putString(CommonIntentExtras.INTENT_USER_ID, gigerUid)
     }
 
@@ -161,7 +157,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
     private fun initViewModel() {
-        viewModel.getGigerJoiningInfo(joiningId)
+        viewModel.getGigerJoiningInfo(
+            joiningId,
+            gigId
+        )
 
         //observe data
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
@@ -185,7 +184,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             sharedViewModel.viewStateFlow.collect {
                 when (it) {
                     is LeadManagementSharedViewModelState.JoiningsUpdated -> {
-                        viewModel.getGigerJoiningInfo(joiningId)
+                        viewModel.getGigerJoiningInfo(joiningId,gigId)
                     }
                 }
             }
@@ -199,7 +198,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                         it.joiningId,
                         it.gigerId,
                         it.gigerName,
-                        it.teamLeaderId
+                        it.teamLeaderId,
+                        gigId
                     )
                 }
             }
@@ -210,7 +210,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         joiningId : String,
         gigerId : String?,
         gigerName : String?,
-        teamLeaderId : String?
+        teamLeaderId : String?,
+        gigId : String?
     ) {
         ChangeTeamLeaderBottomSheetFragment.launch(
             arrayListOf(
@@ -218,7 +219,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     gigerUid = gigerId,
                     joiningId = joiningId,
                     gigerName = gigerName,
-                    teamLeaderId = teamLeaderId
+                    teamLeaderId = teamLeaderId,
+                    gigId = gigId
                 )
             ),
             childFragmentManager
@@ -253,6 +255,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
 
         gigerInfo.let {
+
+            viewBinding.bottomButtonLayout.dropGigerBtn.isVisible = it.isActive
             toolbar.showTitle(it.gigerName)
             toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": " + it.businessName ?: ""
@@ -319,6 +323,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 dropScreenIntentModel?.gigStartDate = it.gigStartDate
                 dropScreenIntentModel?.gigEndDate = it.gigEndDate
                 dropScreenIntentModel?.hasStartEndDate = true
+                dropScreenIntentModel?.gigId = gigId
             }
             if (!it.currentDate.isNullOrBlank()) {
                 dropScreenIntentModel?.currentDate = it.currentDate
@@ -425,20 +430,18 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun showErrorLoadingInfo(error: String) = viewBinding.apply {
         checklistLayout.removeAllViews()
+        toolbar.showTitle("")
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
-        mainScrollView.visible()
+        mainScrollView.gone()
+        bottomButtonLayout.root.gone()
+        joiningInfoErrorInfoLayout.root.visible()
+        joiningInfoErrorInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        joiningInfoErrorInfoLayout.infoMessageTv.text = error
 
-
-        MaterialAlertDialogBuilder(
-            requireContext()
-        ).setTitle("Unable to load info")
-            .setMessage(error)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
     }
 
     private fun initListeners() = viewBinding.apply {

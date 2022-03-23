@@ -489,14 +489,14 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-                if (messages.isEmpty()){
-                    chatRecyclerView.gone()
-                    shimmerContainer.gone()
-                    noChatLayout.visible()
-                }
-                else {
-                    messages.let {
-                        chatRecyclerView.collection = messages.map {
+                messages.let {
+                    if (it.isEmpty()) {
+                        chatRecyclerView.gone()
+                        shimmerContainer.gone()
+                        noChatLayout.visible()
+                    } else {
+
+                        chatRecyclerView.collection = it.map {
                             ChatMessageWrapper(
                                 message = it,
                                 oneToOneChatViewModel = viewModel,
@@ -509,10 +509,10 @@ class ChatPageFragment : Fragment(),
                         noChatLayout.gone()
                         shimmerContainer.gone()
 
-                        if (messages.isNotEmpty()) {
+                        if (it.isNotEmpty()) {
                             groupChatViewModel.checkForRecevinginfoElseMarkMessageAsReceived()
                             var recentLiveLocationMessage : ChatMessage? = null
-                            val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation && it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid}
+                            val messagesWithCurrentlySharingLiveLocation = it.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation && it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid }
                             if (messagesWithCurrentlySharingLiveLocation.isNotEmpty()){
                                 recentLiveLocationMessage = messagesWithCurrentlySharingLiveLocation.last()
                                 Log.d("locationupdate", "Sharing message with fragment ${recentLiveLocationMessage.id}")

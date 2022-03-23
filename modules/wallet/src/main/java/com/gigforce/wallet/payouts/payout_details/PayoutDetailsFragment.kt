@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.pushOnclickListener
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewmodels.payouts.Payout
@@ -23,6 +24,7 @@ import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.wallet.PayoutConstants
 import com.gigforce.wallet.R
 import com.gigforce.wallet.databinding.PayoutDetailsFragmentBinding
@@ -30,6 +32,7 @@ import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmentBinding>(
@@ -39,7 +42,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
     companion object {
         const val TAG = "PayoutDetailsFragment"
     }
-
+    @Inject lateinit var navigation : INavigation
     private val viewModel: PayoutDetailsViewModel by viewModels()
 
     private lateinit var payoutId: String
@@ -83,7 +86,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog =  super.onCreateDialog(savedInstanceState)
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
         return dialog
     }
 
@@ -94,6 +97,9 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
 
         this.mainLayout.downloadPayoutSlipButton.setOnClickListener {
             viewModel.handleEvent(PayoutDetailsContract.UiEvent.DownloadPayoutPDFClicked)
+        }
+        this.mainLayout.updateBankDetail.pushOnclickListener{
+            navigation.navigateTo("verification/bank_account_fragment")
         }
     }
 
@@ -230,6 +236,7 @@ class PayoutDetailsFragment : BaseBottomSheetDialogFragment<PayoutDetailsFragmen
 
         this.remarksTextview.text = payout.remarks
         this.downloadPayoutSlipButton.isVisible = !payout.payoutDocumentUrl.isNullOrBlank()
+        this.updateBankDetail.isVisible = !this.downloadPayoutSlipButton.isVisible
     }
 
     private fun errorInLoadingPayoutDetails(
