@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryDataItem
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.lead_management.databinding.LayoutInputSalaryComponentViewBinding
+import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListSearchRecyclerItemView
 
 
 class InputSalaryComponentView(
@@ -20,6 +22,12 @@ class InputSalaryComponentView(
 ) {
     private var viewBinding: LayoutInputSalaryComponentViewBinding
     private lateinit var viewData: InputSalaryDataItem
+
+    var amountTextChangeListener: AmountTextChangeListener? = null
+
+    fun setOnAmountTextChangeListener(listener: AmountTextChangeListener) {
+        this.amountTextChangeListener = listener
+    }
 
     init {
         this.layoutParams =
@@ -33,14 +41,14 @@ class InputSalaryComponentView(
             true
         )
 
-        viewBinding.editText.onTextChanged {
-            if (it.isNotEmpty()){
-                viewData.value = it.toInt()
-            } else {
-                viewData.value = 0
-            }
-
-        }
+//        viewBinding.editText.onTextChanged {
+//            if (it.isNotEmpty()){
+//                viewData.amount = it.toInt()
+//            } else {
+//                viewData.amount = 0
+//            }
+//            //amountTextChangeListener?.onAmountTextChanged(it)
+//        }
     }
 
     fun showData(salaryComponentData: InputSalaryDataItem) = viewBinding.apply {
@@ -48,11 +56,23 @@ class InputSalaryComponentView(
 
         if (viewData.name?.isNotEmpty() == true){
             titleTextview.text = viewData.name
+            viewBinding.titleTextview.addMandatorySymbolToTextEnd()
         }
 
-        if (viewData.value != 0){
-            editText.setText(viewData.value.toString())
+        if (viewData.amount != -1){
+            editText.setText(viewData.amount.toString())
         }
 
+    }
+
+    fun setCopyClickListener(
+        listener: OnClickListener
+    ) {
+        this.viewBinding.editText.onTextChanged { this }
+    }
+
+    interface AmountTextChangeListener {
+
+        fun onAmountTextChanged(text: String)
     }
 }

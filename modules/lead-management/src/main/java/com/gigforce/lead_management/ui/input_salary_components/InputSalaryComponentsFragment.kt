@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.leadManagement.InputSalaryResponse
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -39,6 +40,7 @@ class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponent
     lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var businessId: String? = null
+    var totalAmount = 0
     private var enteredSalaryData: InputSalaryResponse? = null
     private val viewModel: InputSalaryViewModel by viewModels()
 
@@ -65,13 +67,25 @@ class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponent
         }
         okayButton.isEnabled = true
         okayButton.setOnClickListener {
+
+        salaryComponentsLayout.forEachIndexed { index, view ->
+            val editText = view.findViewById<EditText>(R.id.edit_text)
+            val amountValue = editText.text.toString()
+            if (amountValue.isEmpty()){
+                totalAmount += 0
+            } else {
+                totalAmount += editText.text.toString().toInt()
+            }
+        }
+        Log.d("TotalAmount", "$totalAmount")
+        if (totalAmount != 0){
             salaryComponentsLayout.forEachIndexed { index, view ->
                 val editText = view.findViewById<EditText>(R.id.edit_text)
                 val amountValue = editText.text.toString()
                 if (amountValue.isEmpty()){
-                    enteredSalaryData?.data?.get(index)?.value = 0
+                    enteredSalaryData?.data?.get(index)?.amount = 0
                 } else {
-                    enteredSalaryData?.data?.get(index)?.value = editText.text.toString().toInt()
+                    enteredSalaryData?.data?.get(index)?.amount = editText.text.toString().toInt()
                 }
             }
             enteredSalaryData?.let { it1 -> sharedViewModel.salaryAmountEntered(it1) }
@@ -79,6 +93,9 @@ class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponent
                 LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
                 false
             )
+        } else {
+            showToast("Enter at least one salary input")
+        }
         }
     }
 
@@ -130,6 +147,16 @@ class InputSalaryComponentsFragment : BaseFragment2<FragmentInputSalaryComponent
             salaryResponse.data?.forEachIndexed { index, inputSalaryDataItem ->
                 val view = InputSalaryComponentView(requireContext(), null)
                 view.showData(inputSalaryDataItem)
+//                view.amountTextChangeListener = object : InputSalaryComponentView.AmountTextChangeListener {
+//                    override fun onAmountTextChanged(text: String) {
+//                        if (text.isNotEmpty()){
+//                            totalAmount
+//                        } else {
+//
+//                        }
+//                    }
+//
+//                }
                 salaryComponentsLayout.addView(view)
             }
         }

@@ -115,6 +115,7 @@ class SelectOtherCitiesAdapter (
             val filterResults = FilterResults()
             if (charString.isEmpty()) {
                 filterResults.values = originalCityList
+                Log.d("SearchText", "${constraint.toString()}")
             } else {
                 val filteredList = ArrayList<OtherCityClusterItem>()
                 for (contact in originalCityList) {
@@ -127,18 +128,50 @@ class SelectOtherCitiesAdapter (
                 }
                 filterResults.values = filteredList
             }
-
             return filterResults
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredCityList = results?.values as ArrayList<OtherCityClusterItem>
-            notifyDataSetChanged()
+            if (constraint.toString().isNotEmpty()) {
+                filteredCityList.clear()
+                val updatedFilteredList = results?.values as ArrayList<OtherCityClusterItem>
+                val groupedList = updatedFilteredList.groupBy { it.name?.get(0) }
+                groupedList.forEach { (alphabet, otherCities) ->
+                    filteredCityList.add(
+                        OtherCityClusterItem(alphabet.toString(), "", false, 1)
+                    )
+                    otherCities.forEach {
+                        it.viewType = 2
+                        filteredCityList.add(
+                            it
+                        )
+                    }
+                }
+                //filteredCityList = results?.values as ArrayList<OtherCityClusterItem>
+//                Log.d("SearchText", "${constraint.toString()}")
+//                if (constraint.toString().isEmpty()) {
+//                    filteredCityList = originalCityList
+//                    Log.d("SearchTextFiltered", "${filteredCityList} , original: $originalCityList")
+//                    this@SelectOtherCitiesAdapter.setData(originalCityList)
+//                } else {
+//                    Log.d(
+//                        "SearchTextFilteredNotEmpty",
+//                        "${filteredCityList} , original: $originalCityList"
+//                    )
+//                    this@SelectOtherCitiesAdapter.setData(filteredCityList)
+//                }
+                this@SelectOtherCitiesAdapter.setData(filteredCityList)
+                notifyDataSetChanged()
 
-            onCitySelectedListener?.onCityFiltered(
-                cityCountVisibleAfterFiltering =  filteredCityList.size,
-                selectedCityVisible  =  filteredCityList.find { selectedOtherCitiesList.contains(it) } != null
-            )
+                onCitySelectedListener?.onCityFiltered(
+                    cityCountVisibleAfterFiltering = filteredCityList.size,
+                    selectedCityVisible = filteredCityList.find {
+                        selectedOtherCitiesList.contains(
+                            it
+                        )
+                    } != null
+                )
+            }
         }
     }
 

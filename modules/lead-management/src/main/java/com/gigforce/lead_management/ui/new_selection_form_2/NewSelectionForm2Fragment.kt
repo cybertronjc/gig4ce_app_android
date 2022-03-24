@@ -705,15 +705,17 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     private fun showSalaryAmountEntered(salaryData: InputSalaryResponse) {
         //get other cities layout from container
         val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(2)
-        val dynamicView = view as DynamicScreenFieldView
-        salaryData.data?.let { dynamicView.setData(it) }
-        val salaryLabelTextView = view.findViewById<TextView>(R.id.salary_amount_entered_label)
+        if (view != null){
+            val dynamicView = view as DynamicScreenFieldView
+            salaryData.data?.let { dynamicView.setData(it) }
+            val salaryLabelTextView = view.findViewById<TextView>(R.id.salary_amount_entered_label)
 
-        viewModel.handleEvent(NewSelectionForm2Events.SalaryAmountEntered(salaryData))
+            viewModel.handleEvent(NewSelectionForm2Events.SalaryAmountEntered(salaryData))
 
-        if (salaryLabelTextView != null){
-            salaryLabelTextView.setText("Salary Components Filled")
-            salaryLabelTextView.setTypeface(salaryLabelTextView.typeface, Typeface.BOLD)
+            if (salaryLabelTextView != null){
+                salaryLabelTextView.setText("Salary Components Filled")
+                salaryLabelTextView.setTypeface(salaryLabelTextView.typeface, Typeface.BOLD)
+            }
         }
     }
 

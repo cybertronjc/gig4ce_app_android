@@ -24,23 +24,23 @@ data class InputSalaryDataItem(
     @field:SerializedName("_id")
     val _id: String? = null,
 
-    @field:SerializedName("isActive")
-    val isActive: Boolean? = null,
-
-    @field:SerializedName("forearning")
-    val forearning: Int? = null,
-
-    @field:SerializedName("forpayout")
-    val forpayout: Int? = null,
+//    @field:SerializedName("isActive")
+//    val isActive: Boolean? = null,
+//
+//    @field:SerializedName("forearning")
+//    val forearning: Int? = null,
+//
+//    @field:SerializedName("forpayout")
+//    val forpayout: Int? = null,
 
 //    @field:SerializedName("category")
 //    val category: String? = null,
 
-    @field:SerializedName("business")
-    val business: InputSalaryBusinessItem? = null,
+//    @field:SerializedName("business")
+//    val business: InputSalaryBusinessItem? = null,
 
-    @DoNotSerialize
-    var value : Int = 0,
+    @field:SerializedName("amount")
+    var amount : Int = -1,
 
 ) : Parcelable
 
