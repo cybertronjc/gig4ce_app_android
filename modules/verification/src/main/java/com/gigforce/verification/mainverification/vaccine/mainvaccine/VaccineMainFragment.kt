@@ -30,6 +30,7 @@ import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.*
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
@@ -326,6 +327,14 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                             okay_bn_bs.text = getString(R.string.next_veri)
                         } else {
                             okay_bn_bs.text = getString(R.string.skip_veri)
+                        }
+
+                        if (it.content.filter { it.vaccineId == "vaccine2" && it.status?.isNotEmpty() == true }.size > 0){
+                            vaccine_text.gone()
+                            vaccine_info_layout.gone()
+                        } else {
+                            vaccine_text.visible()
+                            vaccine_info_layout.visible()
                         }
 
                     }

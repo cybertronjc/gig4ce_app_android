@@ -58,15 +58,15 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
             data?.vaccineId?.let {
                 if (it.equals("vaccine1")){
                     setSubtitle(resources.getString(R.string.vaccine_1_subtitle_veri))
-                    cv_top.setBackgroundColor(resources.getColor(R.color.light_pink))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_pink_veri))
                     image.setImageDrawable(resources.getDrawable(R.drawable.ic_vaccine_dose_1))
                 } else if (it.equals("vaccine2")) {
                     setSubtitle(resources.getString(R.string.vaccine_2_subtitle_veri))
-                    cv_top.setBackgroundColor(resources.getColor(R.color.light_blue))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_blue_veri))
                     image.setImageDrawable(resources.getDrawable(R.drawable.ic_vaccine_dose_2))
                 } else if (it.equals("vaccine3")) {
                     setSubtitle(resources.getString(R.string.vaccine_3_subtitle_veri))
-                    cv_top.setBackgroundColor(resources.getColor(R.color.light_green))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_green_veri))
                     image.setImageDrawable(resources.getDrawable(R.drawable.ic_booster_dose))
                 }
             }

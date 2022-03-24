@@ -19,38 +19,48 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleText="@string/covid_vaccination_certificate_veri" />
 
+        <View
+            android:id="@+id/middleview"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBar"/>
+
         <TextView
             android:id="@+id/vaccine_text"
             style="@style/CardTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/size_20"
             android:textSize="@dimen/font14"
             android:fontFamily="@font/lato_bold"
             android:textColor="#202325"
+            android:visibility="invisible"
             android:text="@string/vaccine_text_veri"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar" />
+            app:layout_constraintTop_toBottomOf="@id/middleview" />
 
         <com.gigforce.core.recyclerView.CoreRecyclerView
             android:id="@+id/vaccinerv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginBottom="@dimen/dp_mid"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/downloadCertificateLL"
+            app:layout_constraintBottom_toTopOf="@+id/vaccine_info_layout"
             app:layout_constraintTop_toBottomOf="@+id/vaccine_text" />
 
         <LinearLayout
-            android:id="@+id/downloadCertificateLL"
+            android:id="@+id/vaccine_info_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_20"
             android:layout_marginRight="@dimen/size_20"
             android:layout_marginBottom="@dimen/size_20"
             android:orientation="horizontal"
+            android:visibility="invisible"
             android:padding="@dimen/size_16"
             android:background="@drawable/vaccine_info_background"
             app:layout_constraintBottom_toTopOf="@+id/okay_bn_bs"

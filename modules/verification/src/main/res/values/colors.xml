@@ -19,7 +19,7 @@
     <color name="gray_400">#FFBDBDBD</color>
     <color name="gray_600">#FF757575</color>
     <color name="black1">#202325</color>
-    <color name="light_blue">#E9F0FE</color>
-    <color name="light_pink">#FCEAEF</color>
-    <color name="light_green">#EBF8EC</color>
+    <color name="light_blue_veri">#F4F8FF</color>
+    <color name="light_pink_veri">#FEF5F7</color>
+    <color name="light_green_veri">#F3FBF4</color>
 </resources>
