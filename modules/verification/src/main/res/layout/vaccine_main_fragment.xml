@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_20"
             android:layout_marginRight="@dimen/size_20"
-            android:layout_marginBottom="@dimen/size_30"
+            android:layout_marginBottom="@dimen/size_20"
             android:orientation="horizontal"
             android:padding="@dimen/size_16"
             android:background="@drawable/vaccine_info_background"

@@ -99,6 +99,8 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
         appBar.setBackButtonListener {
             activity?.onBackPressed()
         }
+        appBar.makeBackgroundMoreRound()
+        appBar.changeBackButtonDrawable()
         okay_bn_bs.setOnClickListener {
             checkForNextDoc()
         }
