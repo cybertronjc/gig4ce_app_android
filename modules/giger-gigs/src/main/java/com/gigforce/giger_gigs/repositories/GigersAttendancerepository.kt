@@ -1,5 +1,6 @@
 package com.gigforce.giger_gigs.repositories
 
+import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.GigerAttendanceService
 import com.gigforce.common_ui.repository.gig.GigsRepository
@@ -33,25 +34,11 @@ class GigersAttendanceRepository @Inject constructor(
 
     suspend fun getAttendance(
         date: LocalDate
-    ): List<GigerAttendance> {
+    ): List<GigAttendanceApiModel> {
 
-        val loggedInUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
-        val getGigersAttendanceResponse = gigerAttendanceService.getGigersAttendance(
-            dateInYYYMMDD = date.format(dateFormatter),
-            managerLoginMobile = loggedInUser.phoneNumber!!
-        )
-
-        if (getGigersAttendanceResponse.isSuccessful) {
-            return getGigersAttendanceResponse.body()!!
-        } else {
-            CrashlyticsLogger.e(
-                TAG,
-                "fetching gigers attendance with params, date=${date.format(dateFormatter)}, managerLoginMobile=${loggedInUser.phoneNumber}",
-                Exception(getGigersAttendanceResponse.message())
-            )
-
-            throw Exception("Unable to fetch users attendance")
-        }
+        return gigerAttendanceService.getGigersAttendance(
+            dateInYYYMMDD = date.format(dateFormatter)
+        ).bodyOrThrow()
     }
 
 

@@ -107,6 +107,7 @@ class RetrofitServiceFactory @Inject constructor(
             .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()
             .serializeNulls()
+            .setPrettyPrinting()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create()
 

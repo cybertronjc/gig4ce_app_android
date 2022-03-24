@@ -109,6 +109,7 @@ object ImageMetaDataHelpers {
         image: Uri
     ): Long {
 
+
         var imageSize = 0L
         context.applicationContext.contentResolver.query(
             image,
@@ -190,10 +191,10 @@ object ImageMetaDataHelpers {
             val mime = MimeTypeMap.getSingleton()
             mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
 
-        } else if (ContentResolver.SCHEME_FILE.equals(uri.scheme)){
+        } else if (ContentResolver.SCHEME_FILE.equals(uri.scheme)) {
             //If scheme is a File
             MimeTypeMap.getSingleton().getMimeTypeFromExtension(uri.toFile().extension)
-        } else{
+        } else {
             null
         }
     }
@@ -220,20 +221,20 @@ object ImageMetaDataHelpers {
         val videoName = getImageName(content, uri)
         val videoSize = getImageLength(content, uri)
         val videoDuration = getVideoDuration(content, uri)
-        val videoThumbnail = getVideoThumbnail(content,uri)
+        val videoThumbnail = getVideoThumbnail(content, uri)
 
         return VideoInfo(
             name = videoName,
             size = videoSize,
             duration = videoDuration,
-            thumbnail =videoThumbnail
+            thumbnail = videoThumbnail
         )
     }
 
     fun getAudioInfo(
         context: Context,
         uri: Uri
-    ) : AudioInfo {
+    ): AudioInfo {
         val audioName = getImageName(context, uri)
         val audioSize = getImageLength(context, uri)
         val audioDuration = getVideoDuration(context, uri)
