@@ -89,7 +89,7 @@ class SelectOtherCitiesAdapter (
     }
 
     fun setData(contacts: ArrayList<OtherCityClusterItem>) {
-
+        selectedOtherCitiesList.clear()
         val preSelectedItems = contacts.filter {
             it.selected
         }
@@ -147,19 +147,6 @@ class SelectOtherCitiesAdapter (
                         )
                     }
                 }
-                //filteredCityList = results?.values as ArrayList<OtherCityClusterItem>
-//                Log.d("SearchText", "${constraint.toString()}")
-//                if (constraint.toString().isEmpty()) {
-//                    filteredCityList = originalCityList
-//                    Log.d("SearchTextFiltered", "${filteredCityList} , original: $originalCityList")
-//                    this@SelectOtherCitiesAdapter.setData(originalCityList)
-//                } else {
-//                    Log.d(
-//                        "SearchTextFilteredNotEmpty",
-//                        "${filteredCityList} , original: $originalCityList"
-//                    )
-//                    this@SelectOtherCitiesAdapter.setData(filteredCityList)
-//                }
                 this@SelectOtherCitiesAdapter.setData(filteredCityList)
                 notifyDataSetChanged()
 

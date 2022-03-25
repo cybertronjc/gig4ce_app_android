@@ -23,11 +23,11 @@ class InputSalaryComponentView(
     private var viewBinding: LayoutInputSalaryComponentViewBinding
     private lateinit var viewData: InputSalaryDataItem
 
-    var amountTextChangeListener: AmountTextChangeListener? = null
-
-    fun setOnAmountTextChangeListener(listener: AmountTextChangeListener) {
-        this.amountTextChangeListener = listener
-    }
+//    var amountTextChangeListener: AmountTextChangeListener? = null
+//
+//    fun setOnAmountTextChangeListener(listener: AmountTextChangeListener) {
+//        this.amountTextChangeListener = listener
+//    }
 
     init {
         this.layoutParams =
@@ -64,15 +64,15 @@ class InputSalaryComponentView(
         }
 
     }
-
-    fun setCopyClickListener(
-        listener: OnClickListener
-    ) {
-        this.viewBinding.editText.onTextChanged { this }
-    }
-
-    interface AmountTextChangeListener {
-
-        fun onAmountTextChanged(text: String)
-    }
+//
+//    fun setCopyClickListener(
+//        listener: OnClickListener
+//    ) {
+//        this.viewBinding.editText.onTextChanged { this }
+//    }
+//
+//    interface AmountTextChangeListener {
+//
+//        fun onAmountTextChanged(text: String)
+//    }
 }

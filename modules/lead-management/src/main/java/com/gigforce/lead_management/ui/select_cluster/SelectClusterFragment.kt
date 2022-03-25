@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -104,7 +105,7 @@ class SelectClusterFragment : BaseFragment2<FragmentSelectClusterBinding>(
         okayButton.setOnClickListener {
             val selectedCluster = clusterAdapter.getSelectedBusiness() ?: return@setOnClickListener
             sharedViewModel.clusterSelected(selectedCluster)
-
+            hideSoftKeyboard()
             navigation.popBackStack(
                 LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
                 false

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.OtherCityClusterItem
@@ -55,7 +56,7 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
     ) {
         getDataFrom(arguments,savedInstanceState)
         initListeners()
-        setDataOnView()
+        setDataOnView(otherCityList)
     }
 
     private fun getDataFrom(
@@ -97,7 +98,9 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
             setBackButtonDrawable(R.drawable.ic_chevron)
             searchTextChangeListener = object : SearchTextChangeListener {
                 override fun onSearchTextChanged(text: String) {
-                    otherCityAdapter.filter.filter(text)
+                    //otherCityAdapter.filter.filter(text)
+                    val filteredList = otherCityList.filter { it.name?.contains(text, true) == true}
+                    setDataOnView(filteredList as ArrayList<OtherCityClusterItem>)
                 }
             }
         }
@@ -108,6 +111,7 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
         okayButton.setOnClickListener {
             val selectedCities = otherCityAdapter.getSelectedOtherCities() ?: return@setOnClickListener
             sharedViewModel.otherCitySelected(selectedCities)
+            hideSoftKeyboard()
             okayButton.postDelayed({
                 navigation.popBackStack(
                     LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
@@ -118,8 +122,8 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
         }
     }
 
-    private fun setDataOnView() = viewBinding.apply {
-        if (otherCityList.isEmpty()) {
+    private fun setDataOnView(list: ArrayList<OtherCityClusterItem>) = viewBinding.apply {
+        if (list.isEmpty()) {
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
@@ -127,7 +131,7 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
             this.infoLayout.root.gone()
 //            otherCityAdapter.setData(otherCityList)
             var updatedOtherCityList: ArrayList<OtherCityClusterItem> = arrayListOf()
-            val groupedOtherCities = otherCityList.groupBy { it.name?.get(0) }
+            val groupedOtherCities = list.groupBy { it.name?.get(0) }
             groupedOtherCities.forEach{ (alphabet, otherCities) ->
                 updatedOtherCityList.add(
                     OtherCityClusterItem(alphabet.toString(), "", false, 1)
@@ -152,7 +156,7 @@ class SelectOtherCitiesFragment : BaseFragment2<FragmentSelectOtherCitiesBinding
         } else{
             viewBinding.okayButton.isEnabled = false
             viewBinding.infoLayout.root.visible()
-            viewBinding.infoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
+            viewBinding.infoLayout.infoMessageTv.text = getString(R.string.no_other_cities_to_show_lead)
             viewBinding.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         }
     }
