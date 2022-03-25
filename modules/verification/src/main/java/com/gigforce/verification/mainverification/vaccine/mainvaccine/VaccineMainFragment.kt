@@ -329,7 +329,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                             okay_bn_bs.text = getString(R.string.skip_veri)
                         }
 
-                        if (it.content.filter { it.vaccineId == "vaccine2" && it.status?.isNotEmpty() == true }.size > 0){
+                        if (it.content.filter { (it.vaccineId == "vaccine2" || it.vaccineId == "vaccine1") && it.status?.isNotEmpty() == true }.size > 1){
                             vaccine_text.gone()
                             vaccine_info_layout.gone()
                         } else {
