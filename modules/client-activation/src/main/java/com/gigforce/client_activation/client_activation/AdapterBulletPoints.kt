@@ -18,6 +18,8 @@ import com.gigforce.client_activation.R
 //import com.gigforce.client_activation.client_activation.models.BulletPoints
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.client_activation.BulletPoints
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.layout_rv_bullet_points.view.*
 
 class AdapterBulletPoints constructor(
@@ -38,11 +40,12 @@ class AdapterBulletPoints constructor(
         val bulletPoint = items[position]
         holder.itemView.tv_title.text = bulletPoint.title
         if (!bulletPoint.url.isNullOrEmpty()) {
+            holder.itemView.iv_bullets.visible()
             Glide.with(holder.itemView.context).load(bulletPoint.url).placeholder(
                 getCircularProgressDrawable(holder.itemView.context)
             ).into(holder.itemView.iv_bullets)
-        } else {
-            holder.itemView.iv_bullets.setImageResource(R.drawable.ic_play_gradient)
+        }else{
+            holder.itemView.iv_bullets.gone()
         }
         if (bulletPoint.type == "expanded") {
             setItem(
