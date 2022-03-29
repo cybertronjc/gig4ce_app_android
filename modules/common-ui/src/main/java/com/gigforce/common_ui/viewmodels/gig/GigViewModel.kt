@@ -107,7 +107,7 @@ class GigViewModel constructor(
             val currentTime = LocalDateTime.now()
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
 
-            if (minutes < 15L) {
+            if (minutes < 2L) {
                 Log.d(
                     "GigViewModel",
                     "Ignoring checkout call as difference between checkin-time and current time is less than 15 mins"
