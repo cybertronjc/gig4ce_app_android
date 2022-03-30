@@ -59,7 +59,7 @@ class HelpDetailSectionFragment : Fragment() {
                 })
 
         recyclerGenericAdapter.list = getQuestions(1)
-        recyclerGenericAdapter.setLayout(R.layout.fragment_help_detail_section)
+        recyclerGenericAdapter.setLayout(R.layout.help_section_detail_item)
         category_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.VERTICAL,
