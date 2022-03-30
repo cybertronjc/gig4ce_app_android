@@ -8,13 +8,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_app.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.help_section_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HelpDetailSectionFragment : Fragment() {
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +35,6 @@ class HelpDetailSectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
-
     }
 
     private fun setRecyclerView() {
