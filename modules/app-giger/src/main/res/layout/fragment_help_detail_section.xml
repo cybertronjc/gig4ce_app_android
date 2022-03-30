@@ -6,11 +6,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".help.HelpDetailSectionFragment">
 
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="Help" />
+
     <TextView
         android:id="@+id/textView16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Please choose one of the following"
         android:paddingTop="@dimen/size8"
         android:paddingBottom="@dimen/size8"
         android:layout_marginTop="@dimen/size_20"
@@ -22,7 +30,7 @@
         android:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appBar2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_rv"

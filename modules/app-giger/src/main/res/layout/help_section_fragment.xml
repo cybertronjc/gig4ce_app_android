@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".help.HelpSectionFragment">
 
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="Help" />
 
     <TextView
         android:id="@+id/textView16"
@@ -22,7 +30,7 @@
         android:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appBar2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_rv"
