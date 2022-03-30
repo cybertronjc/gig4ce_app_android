@@ -104,6 +104,8 @@ class HelpDetailSectionFragment : Fragment() {
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.textView19).visible()
                             obj.openCard = true
+                            val map = mapOf("Question Title" to obj?.question.toString())
+                            eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_QUESTION_SELECT, map))
                         }
                     }
 
@@ -112,12 +114,16 @@ class HelpDetailSectionFragment : Fragment() {
                         viewHolder.getView(R.id.section2).visible()
                         viewHolder.getView(R.id.thanks_message).gone()
                         obj.viewstatus = 1
+                        val map = mapOf("Question Title" to obj?.question.toString())
+                        eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_NOT_USEFUL, map))
                     }
                     viewHolder.getView(R.id.textView20).setOnClickListener{
                         viewHolder.getView(R.id.section2).gone()
                         viewHolder.getView(R.id.section1).gone()
                         viewHolder.getView(R.id.thanks_message).visible()
                         obj.viewstatus = 2
+                        val map = mapOf("Question Title" to obj?.question.toString())
+                        eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_USEFUL, map))
                     }
 
 

@@ -82,9 +82,11 @@ class HelpSectionFragment : Fragment() {
                         try {
 
                             helpMasterData.get(position).questions?.let {
-                                if(it.size>0)
-                                navigation.navigateTo("HelpDetailSectionFragment", bundleOf("data" to helpMasterData.get(position)) )
-                                else showToast("Questions not found!!")
+                                if(it.size>0) {
+                                    navigation.navigateTo("HelpDetailSectionFragment", bundleOf("data" to helpMasterData.get(position)) )
+                                    val map = mapOf("Section Title" to obj?.name.toString())
+                                    eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_CATEGORY_SELECT, map))
+                                } else showToast("Questions not found!!")
                             }
                         }catch (e:Exception){
 
