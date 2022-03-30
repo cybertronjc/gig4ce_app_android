@@ -38,10 +38,13 @@ class HelpSectionFragment : Fragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<HelpSectionDM> =
             RecyclerGenericAdapter<HelpSectionDM>(
                 activity?.applicationContext,
-                { view, position, item -> navigation.navigateTo("HelpDetailSectionFragment") },
+                { view, position, item -> showToast("click listner") },
                 { obj, viewHolder, position ->
                     val title: TextView = viewHolder.getView(R.id.textView17) as TextView
                     title.text = obj?.name
+                    viewHolder.getView(R.id.top_layout).setOnClickListener{
+                        navigation.navigateTo("HelpDetailSectionFragment")
+                    }
                 })
 
         recyclerGenericAdapter.list = getData()
