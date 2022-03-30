@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.help_section_fragment.*
@@ -39,10 +42,36 @@ class HelpSectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
         eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_OPEN, null))
+        observer()
     }
 
+    private fun observer() {
+        viewModel.helpSectionLiveData.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is Lce.Loading -> {
+
+                }
+                is Lce.Content -> {
+                    if(it.content.isEmpty()){
+                        showToast("Data not found")
+                    }else{
+                        helpMasterData.addAll(it.content)
+                        recyclerGenericAdapter?.notifyDataSetChanged()
+                    }
+                }
+                is Lce.Error ->{
+
+                }
+            }
+        })
+    }
+
+    val helpMasterData = ArrayList<HelpSectionDM>()
+    var recyclerGenericAdapter: RecyclerGenericAdapter<HelpSectionDM>?=null
     private fun setRecyclerView() {
-        val recyclerGenericAdapter: RecyclerGenericAdapter<HelpSectionDM> =
+        helpMasterData.clear()
+//        helpMasterData.addAll(getData())
+        recyclerGenericAdapter=
             RecyclerGenericAdapter<HelpSectionDM>(
                 activity?.applicationContext,
                 { view, position, item -> showToast("click listner") },
@@ -50,12 +79,21 @@ class HelpSectionFragment : Fragment() {
                     val title: TextView = viewHolder.getView(R.id.textView17) as TextView
                     title.text = obj?.name
                     viewHolder.getView(R.id.top_layout).setOnClickListener{
-                        navigation.navigateTo("HelpDetailSectionFragment")
+                        try {
+
+                            helpMasterData.get(position).questions?.let {
+                                if(it.size>0)
+                                navigation.navigateTo("HelpDetailSectionFragment", bundleOf("data" to helpMasterData.get(position)) )
+                                else showToast("Questions not found!!")
+                            }
+                        }catch (e:Exception){
+
+                        }
                     }
                 })
 
-        recyclerGenericAdapter.list = getData()
-        recyclerGenericAdapter.setLayout(R.layout.help_section_cat_item)
+        recyclerGenericAdapter?.list = helpMasterData
+        recyclerGenericAdapter?.setLayout(R.layout.help_section_cat_item)
         category_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.VERTICAL,

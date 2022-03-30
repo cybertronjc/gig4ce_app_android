@@ -31,10 +31,27 @@ class HelpDetailSectionFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help_detail_section, container, false)
     }
-
+    var helpSectionDMData:HelpSectionDM? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRecyclerView()
+        arguments?.let {
+            try {
+                helpSectionDMData = it.get("data") as HelpSectionDM
+                initializeAll()
+                setRecyclerView()
+            }catch (e:Exception){
+
+            }
+        }
+
+
+    }
+
+    private fun initializeAll() {
+        helpSectionDMData?.let {
+            textView16.text = it.name
+
+        }
     }
 
     private fun setRecyclerView() {
@@ -43,30 +60,71 @@ class HelpDetailSectionFragment : Fragment() {
                 activity?.applicationContext,
                 { view, position, item -> showToast("") },
                 { obj, viewHolder, position ->
-                    val title: TextView = viewHolder.getView(R.id.textView17) as TextView
-                    title.text = obj?.question
-                    viewHolder.getView(R.id.textView22).setOnClickListener{
-                        viewHolder.getView(R.id.section2).visible()
-                        viewHolder.getView(R.id.section1).gone()
-                        viewHolder.getView(R.id.thanks_message).gone()
+                    val question: TextView = viewHolder.getView(R.id.textView17) as TextView
+                    question.text = obj?.question
+
+                    val answer: TextView = viewHolder.getView(R.id.textView19) as TextView
+                    answer.text = obj?.answer
+
+                    if(obj.openCard == false){
+                        viewHolder.getView(R.id.textView19).gone()
+                        viewHolder.getView(R.id.detail_section).gone()
+                    }else{
+                        viewHolder.getView(R.id.textView19).visible()
+                        viewHolder.getView(R.id.detail_section).visible()
                     }
-                    viewHolder.getView(R.id.textView20).setOnClickListener{
-                        viewHolder.getView(R.id.section2).gone()
-                        viewHolder.getView(R.id.section1).gone()
-                        viewHolder.getView(R.id.thanks_message).visible()
+                    obj.viewstatus?.let {
+                        if(it == 0){
+                            viewHolder.getView(R.id.textView19).visible()
+                            viewHolder.getView(R.id.detail_section).visible()
+                            viewHolder.getView(R.id.section1).visible()
+                            viewHolder.getView(R.id.section2).gone()
+                            viewHolder.getView(R.id.thanks_message).gone()
+                        }else if(it == 1){
+                            viewHolder.getView(R.id.textView19).visible()
+                            viewHolder.getView(R.id.detail_section).visible()
+                            viewHolder.getView(R.id.section1).gone()
+                            viewHolder.getView(R.id.section2).visible()
+                            viewHolder.getView(R.id.thanks_message).gone()
+                        }else if(it == 2){
+                            viewHolder.getView(R.id.textView19).visible()
+                            viewHolder.getView(R.id.detail_section).visible()
+                            viewHolder.getView(R.id.section1).gone()
+                            viewHolder.getView(R.id.section2).gone()
+                            viewHolder.getView(R.id.thanks_message).visible()
+                        }
                     }
 
                     viewHolder.getView(R.id.top_layout).setOnClickListener{
                         if(viewHolder.getView(R.id.detail_section).visibility == View.VISIBLE){
                             viewHolder.getView(R.id.detail_section).gone()
+                            viewHolder.getView(R.id.textView19).gone()
+                            obj.openCard = false
                         }else{
                             viewHolder.getView(R.id.detail_section).visible()
+                            viewHolder.getView(R.id.textView19).visible()
+                            obj.openCard = true
                         }
                     }
 
+                    viewHolder.getView(R.id.textView22).setOnClickListener{
+                        viewHolder.getView(R.id.section1).gone()
+                        viewHolder.getView(R.id.section2).visible()
+                        viewHolder.getView(R.id.thanks_message).gone()
+                        obj.viewstatus = 1
+                    }
+                    viewHolder.getView(R.id.textView20).setOnClickListener{
+                        viewHolder.getView(R.id.section2).gone()
+                        viewHolder.getView(R.id.section1).gone()
+                        viewHolder.getView(R.id.thanks_message).visible()
+                        obj.viewstatus = 2
+                    }
+
+
+
                 })
 
-        recyclerGenericAdapter.list = getQuestions(1)
+        recyclerGenericAdapter.list = helpSectionDMData?.questions
         recyclerGenericAdapter.setLayout(R.layout.help_section_detail_item)
         category_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
