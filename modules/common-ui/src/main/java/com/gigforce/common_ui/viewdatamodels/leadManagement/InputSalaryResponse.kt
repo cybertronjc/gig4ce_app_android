@@ -25,7 +25,7 @@ data class InputSalaryDataItem(
     val _id: String? = null,
 
     @field:SerializedName("isActive")
-    val isActive: Boolean? = null,
+    val isActive: Boolean? = false,
 //
 //    @field:SerializedName("forearning")
 //    val forearning: Int? = null,
