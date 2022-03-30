@@ -11,7 +11,7 @@ data class InputSalaryResponse(
     val success: Boolean? = null,
 
     @field:SerializedName("data")
-    val data: List<InputSalaryDataItem>? = null
+    var data: List<InputSalaryDataItem>? = null
 
 ) : Parcelable
 
@@ -24,8 +24,8 @@ data class InputSalaryDataItem(
     @field:SerializedName("_id")
     val _id: String? = null,
 
-//    @field:SerializedName("isActive")
-//    val isActive: Boolean? = null,
+    @field:SerializedName("isActive")
+    val isActive: Boolean? = null,
 //
 //    @field:SerializedName("forearning")
 //    val forearning: Int? = null,

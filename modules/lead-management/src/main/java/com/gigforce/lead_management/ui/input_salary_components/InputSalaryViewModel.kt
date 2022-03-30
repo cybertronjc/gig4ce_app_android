@@ -38,6 +38,8 @@ class InputSalaryViewModel @Inject constructor(
                 businessId,
                 type = type
             )
+            val updatedList = salaryComponents.data?.filter { it.isActive == true }
+            salaryComponents.data = updatedList
             _viewState.value = Lce.content(salaryComponents)
 
             logger.d(TAG, "received ${salaryComponents} salary Components from server")
