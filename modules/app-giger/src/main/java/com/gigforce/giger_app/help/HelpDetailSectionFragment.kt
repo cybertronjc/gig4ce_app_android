@@ -51,8 +51,12 @@ class HelpDetailSectionFragment : Fragment() {
                 activity?.applicationContext,
                 { view, position, item -> showToast("") },
                 { obj, viewHolder, position ->
-                    val title: TextView = viewHolder.getView(R.id.textView17) as TextView
-                    title.text = obj?.question
+                    val question: TextView = viewHolder.getView(R.id.textView17) as TextView
+                    question.text = obj?.question
+
+                    val answer: TextView = viewHolder.getView(R.id.textView19) as TextView
+                    answer.text = obj?.answer
+
                     if(obj.openCard == false){
                         viewHolder.getView(R.id.textView19).gone()
                         viewHolder.getView(R.id.detail_section).gone()
