@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.ext.pushOnclickListener
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.FeaturesBSViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeaturesBSFragment : Fragment() {
     val viewModel: FeaturesBSViewModel by activityViewModels()
-
+    @Inject lateinit var navigation : INavigation
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     override fun onCreateView(
@@ -39,6 +41,9 @@ class FeaturesBSFragment : Fragment() {
     private fun initViews() {
         application_version.text =
             getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
+        application_version.pushOnclickListener{
+            navigation.navigateTo("HelpSectionFragment")
+        }
     }
 
     override fun onResume() {

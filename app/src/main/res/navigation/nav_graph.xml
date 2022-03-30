@@ -1227,6 +1227,14 @@
         android:name="com.gigforce.wallet.payouts.PayoutMainFragment"
         android:label="PayoutMainFragment"/>
 
+    <fragment android:id="@+id/HelpSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpSectionFragment"
+        android:label="HelpSectionFragment"/>
+
+    <fragment android:id="@+id/HelpDetailSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpDetailSectionFragment"
+        android:label="HelpDetailSectionFragment"/>
+
     <dialog
         android:id="@+id/payoutDetailsBottomSheet"
         android:name="com.gigforce.wallet.payouts.payout_details.PayoutDetailsFragment"
