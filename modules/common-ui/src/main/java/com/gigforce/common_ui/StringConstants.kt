@@ -102,7 +102,9 @@ enum class StringConstants(val value: String) {
     VACCINATION_VIA_DEEP_LINK("deeplink_vaccination"),
     HOMESCREEN_SP("deeplink_homescreen"),
     PAYOUT_DEEP_LINK("PAYOUT_DEEP_LINK"),
-    PAYOUT_SP("payout")
+    PAYOUT_SP("payout"),
+    HELP_SECTION_DEEP_LINK("HELP_SECTION_DEEP_LINK"),
+    HELP_SECTION_SP("help_section")
 
 
 
