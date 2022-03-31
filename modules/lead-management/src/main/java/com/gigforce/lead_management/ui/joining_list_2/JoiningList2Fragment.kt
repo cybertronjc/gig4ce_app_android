@@ -260,6 +260,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         changeBackButtonDrawable()
         makeBackgroundMoreRound()
         makeTitleBold()
+        makeHelpVisible(true)
         setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })

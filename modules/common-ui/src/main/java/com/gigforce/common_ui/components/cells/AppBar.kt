@@ -294,6 +294,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (visible) viewBinding.profilePicComp.visible() else viewBinding.profilePicComp.gone()
     }
 
+    fun makeHelpVisible(visible: Boolean) {
+        if (visible) viewBinding.helpImageButton.visible() else viewBinding.helpImageButton.gone()
+    }
+
     fun makeOnlineImageVisible(visible: Boolean){
         if (visible) viewBinding.userOnlineIv.visible() else viewBinding.userOnlineIv.gone()
     }

@@ -136,6 +136,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
+            makeHelpVisible(true)
             changeBackButtonDrawable()
             makeBackgroundMoreRound()
             makeTitleBold()
