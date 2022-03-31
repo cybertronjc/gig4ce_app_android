@@ -1452,10 +1452,10 @@ class ChatPageFragment : Fragment(),
                         usersMentioned,
                         communityFooter.getReplyToMessage()
                     )
-
                 communityFooter.closeReplyUi()
                     type = "Group"
                 }
+                communityFooter.hideAttachmentOptionView()
                 var map = mapOf("chat_type" to type, "message_type" to "Text")
                 eventTracker.pushEvent(
                     TrackingEventArgs(
