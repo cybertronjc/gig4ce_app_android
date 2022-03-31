@@ -11,7 +11,7 @@ class NavForVerificationModule(
         val moduleName = "verification"
         baseImplementation.registerRoute("${moduleName}", R.id.verification)
 
-        baseImplementation.registerRoute("${moduleName}/main", R.id.gigerVerificationFragment)
+        baseImplementation.registerRoute("${moduleName}/main", R.id.myDocumentsFragment)
 //        baseImplementation.registerRoute("${moduleName}/DLCA", R.id.fragment_upload_dl_cl_act) // need to check if require
         baseImplementation.registerRoute("${moduleName}/AADHAR", R.id.uploadAadharCard)
         baseImplementation.registerRoute("${moduleName}/PAN", R.id.uploadPanCard)
@@ -47,5 +47,8 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/VaccineUploadSuccessfulBS",R.id.VaccineUploadSuccessfulBS)
         baseImplementation.registerRoute("${moduleName}/CertificateDownloadBS",R.id.CertificateDownloadBS)
         baseImplementation.registerRoute("${moduleName}/InvalidFormatBottomSheet",R.id.InvalidFormatBottomSheet)
+
+        //new main verification with compliance
+        baseImplementation.registerRoute("${moduleName}/myDocuments", R.id.myDocumentsFragment)
     }
 }

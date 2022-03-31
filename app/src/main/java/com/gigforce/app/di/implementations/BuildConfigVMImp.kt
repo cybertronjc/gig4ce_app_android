@@ -19,6 +19,7 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getVerificationKycOcrResult(): String = BuildConfig.KYC_OCR_URL
     override fun getKycVerificationUrl(): String = BuildConfig.KYC_VERIFY_URL
     override fun getKycUserConsentUrl(): String = BuildConfig.KYC_USER_CONSENT
+    override fun getComplianceDataUrl(): String = BuildConfig.COMPLIANCE_DATA
     override fun getEventBridgeUrl(): String = BuildConfig.EVENT_BRIDGE_URL
     override fun getListingBaseUrl(): String = BuildConfig.LISTING_BASE_URL
     override fun getBaseUrl(): String = BuildConfig.BASE_URL

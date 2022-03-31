@@ -23,6 +23,9 @@ data class ChangeTeamLeaderRequestItem(
     var teamLeaderId : String?,
 
     @SerializedName("joiningId")
-    val joiningId : String?
+    val joiningId : String?,
+
+    @SerializedName("gigId")
+    val gigId : String?,
 
 ) : Parcelable

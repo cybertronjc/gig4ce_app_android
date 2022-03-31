@@ -609,7 +609,7 @@ class GigPage2Fragment : Fragment(),
 
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
 
-            if (minutes > 15L) {
+            if (minutes > 2L) {
                 checkInCheckOutSliderBtn.visible()
                 checkInCheckOutSliderBtn.text = getString(R.string.check_out_common_ui)
             } else {

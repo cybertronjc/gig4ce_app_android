@@ -40,6 +40,9 @@ class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: 
     private val _vaccineConfigLiveData = MutableLiveData<Lce<List<VaccineCertDetailsDM>>>()
     val vaccineConfigLiveData: LiveData<Lce<List<VaccineCertDetailsDM>>> = _vaccineConfigLiveData
 
+    private val _vaccineLiveData = MutableLiveData<Lce<VaccineCertDetailsDM>>()
+    val vaccineLiveData: LiveData<Lce<VaccineCertDetailsDM>> = _vaccineLiveData
+
     private val _fileUploadLiveData = MutableLiveData<Lce<VaccineFileUploadResDM>>()
     val vaccineFileUploadResLiveData: LiveData<Lce<VaccineFileUploadResDM>> = _fileUploadLiveData
 

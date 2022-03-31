@@ -9,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
@@ -29,7 +32,7 @@ import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-enum class BackgroundType(val value: Int){
+enum class BackgroundType(val value: Int) {
 
 
     Default(AppConstants.BACKGROUND_TYPE_DEFAULT),
@@ -38,77 +41,85 @@ enum class BackgroundType(val value: Int){
     GreyBar(AppConstants.BACKGROUND_TYPE_GREYBAR);
 
     companion object {
-        private val VALUES = values();
+        private val VALUES = values()
         fun getByValue(value: Int) = VALUES.first { it.value == value }
     }
 }
 
 @AndroidEntryPoint
-class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context, attributeSet),
-        IViewHolder, AppBarClicks.OnSearchClickListener{
+class AppBar(context: Context, attributeSet: AttributeSet) : FrameLayout(context, attributeSet),
+    IViewHolder, AppBarClicks.OnSearchClickListener {
 
     @Inject
     lateinit var userinfo: UserInfoImp
+
     @Inject
     lateinit var navigation: INavigation
 
     private lateinit var viewBinding: AppBarLayoutBinding
 
-     var titleText: TextView
-//     var subTitleText: TextView
-     var backImageButton: ImageButton
-//     var menuImageButton: ImageButton
-     var searchImageButton: ImageButton
-     var filterImageButton: ImageButton
-     var refreshImageButton: ImageButton
-     var filterDotImageButton: ImageButton
-     var filterFrameLayout: FrameLayout
-//     var stepsTextView: TextView
-     var search_item: EditText
+    var titleText: TextView
+
+    //     var subTitleText: TextView
+    var backImageButton: ImageButton
+
+    //     var menuImageButton: ImageButton
+    var helpImageButton : View
+    var searchImageButton: ImageButton
+    var filterImageButton: ImageButton
+    var refreshImageButton: ImageButton
+    var filterDotImageButton: ImageButton
+    var filterFrameLayout: FrameLayout
+
+    //     var stepsTextView: TextView
+    var search_item: EditText
 //     var profilePic: AppProfilePicComponent
 //     var mainImageView: GigforceImageView
 //     var onlineImage: ImageView
 
-     var onBackClickListener: View.OnClickListener? = null
-     var searchTextChangeListener: SearchTextChangeListener? = null
-     private lateinit var subTitleTV: TextView
-     private var optionMenuClickListener: PopupMenu.OnMenuItemClickListener? = null
-     @MenuRes
-     private var menu: Int = -1
-     private var subtitleEnabled = false
+    var onBackClickListener: View.OnClickListener? = null
+    var searchTextChangeListener: SearchTextChangeListener? = null
+    private lateinit var subTitleTV: TextView
+    private var optionMenuClickListener: PopupMenu.OnMenuItemClickListener? = null
+
+    @MenuRes
+    private var menu: Int = -1
+    private var subtitleEnabled = false
 
     fun setOnSearchTextChangeListener(listener: SearchTextChangeListener) {
         this.searchTextChangeListener = listener
     }
-     private var _backGroundType: BackgroundType = BackgroundType.Default
-        var backGroundType:BackgroundType
-            get() = _backGroundType
-            set(value) {
-                this._backGroundType = value
-                val backgroundRes = when(value){
-                    BackgroundType.Default -> R.drawable.white_app_bar_background
-                    BackgroundType.PinkBar -> R.drawable.app_bar_background
-                    BackgroundType.WhiteBar -> R.drawable.white_app_bar_background
-                    BackgroundType.GreyBar -> R.drawable.grey_app_bar_bg
-                    else -> R.drawable.white_app_bar_background
-                }
 
-                this.background = context.resources.getDrawable(backgroundRes)
+    private var _backGroundType: BackgroundType = BackgroundType.Default
+    var backGroundType: BackgroundType
+        get() = _backGroundType
+        set(value) {
+            this._backGroundType = value
+            val backgroundRes = when (value) {
+                BackgroundType.Default -> R.drawable.white_app_bar_background
+                BackgroundType.PinkBar -> R.drawable.app_bar_background
+                BackgroundType.WhiteBar -> R.drawable.white_app_bar_background
+                BackgroundType.GreyBar -> R.drawable.grey_app_bar_bg
+                else -> R.drawable.white_app_bar_background
             }
 
-         var searchClickListener: AppBarClicks.OnSearchClickListener? = null
-     fun setOnSearchClickListener(listener: AppBarClicks.OnSearchClickListener){
-         this.searchClickListener = listener
-     }
+            this.background = context.resources.getDrawable(backgroundRes)
+        }
+
+    var searchClickListener: AppBarClicks.OnSearchClickListener? = null
+    fun setOnSearchClickListener(listener: AppBarClicks.OnSearchClickListener) {
+        this.searchClickListener = listener
+    }
+
     var menuClickListener: AppBarClicks.OnMenuClickListener? = null
-    fun setOnMenuClickListener(listener: AppBarClicks.OnMenuClickListener){
+    fun setOnMenuClickListener(listener: AppBarClicks.OnMenuClickListener) {
         this.menuClickListener = listener
     }
 
     var setProfilePicture: String
         get() = userinfo.getData().profilePicPath
         set(value) {
-            value?.let {
+            value.let {
                 viewBinding.profilePicComp.setProfilePic(value)
             }
 
@@ -126,17 +137,28 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
             true
         )
 
-        val styledAttributeSet = context.obtainStyledAttributes(attributeSet, R.styleable.AppBar, 0, 0)
+        val styledAttributeSet =
+            context.obtainStyledAttributes(attributeSet, R.styleable.AppBar, 0, 0)
 
         val app_title = styledAttributeSet.getText(R.styleable.AppBar_titleText)
-        val isSearchVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isSearchVisible, false)
-        val isMenuItemVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isMenuItemVisible, false)
-        val isRefreshVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isRefreshVisible, false)
-        val isProfileVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isProfileVisible, false)
+        val isSearchVisible =
+            styledAttributeSet.getBoolean(R.styleable.AppBar_isSearchVisible, false)
+        val isMenuItemVisible =
+            styledAttributeSet.getBoolean(R.styleable.AppBar_isMenuItemVisible, false)
+        val isRefreshVisible =
+            styledAttributeSet.getBoolean(R.styleable.AppBar_isRefreshVisible, false)
+        val isProfileVisible =
+            styledAttributeSet.getBoolean(R.styleable.AppBar_isProfileVisible, false)
         val searchHint = styledAttributeSet.getString(R.styleable.AppBar_searchHint)
-        val isFilterVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isFilterVisible, false)
+        val isFilterVisible =
+            styledAttributeSet.getBoolean(R.styleable.AppBar_isFilterVisible, false)
         val isStepsVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isStepsVisible, false)
-        this.backGroundType = BackgroundType.getByValue(styledAttributeSet.getInt(R.styleable.AppBar_backgroundType, 0))
+        this.backGroundType = BackgroundType.getByValue(
+            styledAttributeSet.getInt(
+                R.styleable.AppBar_backgroundType,
+                0
+            )
+        )
 
 
 //        titleText = findViewById(R.id.textTitle)
@@ -153,19 +175,20 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 //        stepsTextView = findViewById(R.id.steps)
 //        mainImageView = findViewById(R.id.iv_profile)
 //        onlineImage = findViewById(R.id.user_online_iv)
-          titleText = viewBinding.textTitle
-          search_item = viewBinding.searchItem
-          backImageButton = viewBinding.backImageButton
-          filterFrameLayout = viewBinding.filterImageFrame
-          filterDotImageButton = viewBinding.filterDot
-          filterImageButton = viewBinding.filterImageButton
-          refreshImageButton = viewBinding.refreshImageButton
-          searchImageButton = viewBinding.searchImageButton
+        helpImageButton = viewBinding.helpImageButton
+        titleText = viewBinding.textTitle
+        search_item = viewBinding.searchItem
+        backImageButton = viewBinding.backImageButton
+        filterFrameLayout = viewBinding.filterImageFrame
+        filterDotImageButton = viewBinding.filterDot
+        filterImageButton = viewBinding.filterImageButton
+        refreshImageButton = viewBinding.refreshImageButton
+        searchImageButton = viewBinding.searchImageButton
 
-        if (app_title.isNotEmpty()){
+        if (app_title.isNotEmpty()) {
             viewBinding.textTitle.visible()
             setAppBarTitle(app_title)
-        }else {
+        } else {
             setAppBarTitle("")
             viewBinding.textTitle.invisible()
         }
@@ -176,7 +199,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         makeRefreshVisible(isRefreshVisible)
         makeFilterVisible(isFilterVisible)
         searchHint?.let { setHint(it) }
-        userinfo.getData().profilePicPath?.let {
+        userinfo.getData().profilePicPath.let {
             setProfilePicture = it
         }
 
@@ -197,10 +220,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     private fun makeFilterVisible(filterVisible: Boolean) {
-        if (filterVisible){
+        if (filterVisible) {
             viewBinding.filterImageButton.visible()
             viewBinding.filterImageFrame.visible()
-        }  else{
+        } else {
             viewBinding.filterImageButton.gone()
             viewBinding.filterImageFrame.gone()
         }
@@ -221,6 +244,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
             }
         }
     }
+
     fun hideSearchOption() {
         viewBinding.searchItem.setText("")
         viewBinding.searchItem.gone()
@@ -229,7 +253,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     private fun setColorsOnViews(backgroundType: BackgroundType) {
-        when(backgroundType.value){
+        when (backgroundType.value) {
             AppConstants.BACKGROUND_TYPE_PINKBAR -> {
                 viewBinding.backImageButton.setColorFilter(context.resources.getColor(R.color.white))
                 viewBinding.textTitle.setTextColor(context.resources.getColor(R.color.white))
@@ -260,9 +284,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
     fun setAppBarTitle(appTitle: CharSequence?) {
-        viewBinding.textTitle.setText(appTitle.toString())
+        viewBinding.textTitle.text = appTitle.toString()
     }
-    fun makeTitleBold(){
+
+    fun makeTitleBold() {
         viewBinding.textTitle.setTypeface(null, Typeface.BOLD)
     }
 
@@ -280,37 +305,49 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.subTitleTV.visibility = View.GONE
     }
 
-    fun makeBackgroundMoreRound(){
+    fun makeBackgroundMoreRound() {
         this.background = context.resources.getDrawable(R.drawable.app_bar_background_more_rounded)
     }
 
-    fun setSteps(step: String){
-        viewBinding.steps.setText(step)
+    fun setSteps(step: String) {
+        viewBinding.steps.text = step
     }
-    fun setHint(text: String){
-        viewBinding.searchItem.setHint(text)
+
+    fun setHint(text: String) {
+        viewBinding.searchItem.hint = text
     }
-    fun makeProfileVisible(visible: Boolean){
+
+    fun makeProfileVisible(visible: Boolean) {
         if (visible) viewBinding.profilePicComp.visible() else viewBinding.profilePicComp.gone()
     }
 
-    fun makeOnlineImageVisible(visible: Boolean){
+    fun makeHelpVisible(visible: Boolean) {
+        if (visible) {
+            viewBinding.helpImageButton.visible()
+            viewBinding.helpImageButton.setOnClickListener {
+                navigation.navigateTo("HelpSectionFragment")
+            }
+        } else viewBinding.helpImageButton.gone()
+    }
+
+    fun makeOnlineImageVisible(visible: Boolean) {
         if (visible) viewBinding.userOnlineIv.visible() else viewBinding.userOnlineIv.gone()
     }
 
-    fun makeRefreshVisible(visible: Boolean){
+    fun makeRefreshVisible(visible: Boolean) {
         if (visible) viewBinding.refreshImageButton.visible() else viewBinding.refreshImageButton.gone()
     }
 
-    fun makeStepsVisible(visible: Boolean){
+    fun makeStepsVisible(visible: Boolean) {
         if (visible) viewBinding.steps.visible() else viewBinding.steps.gone()
     }
 
 
-    fun makeSearchVisible(visible: Boolean){
-         if (visible) viewBinding.searchImageButton.visible() else viewBinding.searchImageButton.invisible()
+    fun makeSearchVisible(visible: Boolean) {
+        if (visible) viewBinding.searchImageButton.visible() else viewBinding.searchImageButton.invisible()
     }
-    fun makeMenuItemVisible(visible: Boolean){
+
+    fun makeMenuItemVisible(visible: Boolean) {
         if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.gone()
     }
 
@@ -320,7 +357,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
 
-    fun changeBackButtonDrawable(){
+    fun changeBackButtonDrawable() {
         viewBinding.backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
     }
 
@@ -356,11 +393,20 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean, replyEnable: Boolean,  forwardEnable: Boolean,  selectedSize: String){
-        if (visible){
+    fun makeChatOptionsVisible(
+        visible: Boolean,
+        copyEnable: Boolean,
+        deleteEnable: Boolean,
+        infoEnable: Boolean,
+        downloadEnable: Boolean,
+        replyEnable: Boolean,
+        forwardEnable: Boolean,
+        selectedSize: String
+    ) {
+        if (visible) {
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
-        } else{
+        } else {
             viewBinding.mainLayout.visible()
             viewBinding.chatOptionsLayout.gone()
         }
@@ -383,10 +429,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     fun setBackButtonDrawable(
-        @DrawableRes drawable : Int
-    ){
+        @DrawableRes drawable: Int
+    ) {
         viewBinding.backImageButton.setImageDrawable(
-            ResourcesCompat.getDrawable(resources,drawable,null)
+            ResourcesCompat.getDrawable(resources, drawable, null)
         )
     }
 
@@ -426,12 +472,12 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.forwardButton.setOnClickListener(listener)
     }
 
-    fun showForwardProgress(){
+    fun showForwardProgress() {
         viewBinding.forwardButton.invisible()
         viewBinding.forwardProgressBar.visible()
     }
 
-    fun hideForwardProgress(){
+    fun hideForwardProgress() {
         viewBinding.forwardProgressBar.gone()
         viewBinding.forwardButton.visible()
     }
@@ -463,16 +509,17 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     fun openSoftKeyboard(view: View) {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(
-                InputMethod.SHOW_FORCED,
-                0
+            InputMethod.SHOW_FORCED,
+            0
         )
     }
 
     override fun onSearchClick(v: View) {
         Log.d("Click", "Search")
-        if (viewBinding.searchItem.isVisible){
+        if (viewBinding.searchItem.isVisible) {
             viewBinding.searchItem.gone()
             viewBinding.textTitle.visible()
             viewBinding.searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_search_icon))
@@ -480,8 +527,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
             hideKeyboard(viewBinding.searchItem)
             viewBinding.searchItem.clearFocus()
 
-        }
-        else{
+        } else {
             viewBinding.searchItem.visible()
             viewBinding.textTitle.gone()
             viewBinding.searchItem.requestFocus()
@@ -496,12 +542,11 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
     fun setSubTitle(
-        subTitle : String
-    ){
+        subTitle: String
+    ) {
         viewBinding.subTitleTV.visible()
         viewBinding.subTitleTV.text = subTitle
     }
-
 
 
 }

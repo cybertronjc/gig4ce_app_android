@@ -3,4 +3,6 @@
     <color name="topBarDark">#d72467</color>
     <color name="status_bar_pink">#e53369</color>
     <color name="warm_grey">#888888</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>

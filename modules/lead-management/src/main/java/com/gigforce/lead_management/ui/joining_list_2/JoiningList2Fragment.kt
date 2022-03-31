@@ -126,7 +126,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                             gigerUid = it.gigerId,
                             gigerName = it.gigerName,
                             teamLeaderId = null,
-                            joiningId = it._id
+                            joiningId = it._id,
+                            gigId = null
                         )
                     }
                 )
@@ -160,7 +161,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                                     gigerUid = it.gigerId,
                                     gigerName = it.gigerName,
                                     teamLeaderId = null,
-                                    joiningId = it._id
+                                    joiningId = it._id,
+                                    gigId = null
                                 )
                             }
                         )
@@ -258,6 +260,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         changeBackButtonDrawable()
         makeBackgroundMoreRound()
         makeTitleBold()
+        makeHelpVisible(true)
+        listeners()
         setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })
@@ -275,6 +279,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             navigation.navigateTo("LeadMgmt/joiningFilter", bundleOf(
                 StringConstants.INTENT_FILTER_DAYS_NUMBER.value to filterDaysFM
             ))
+        }
+    }
+
+    private fun listeners() {
+        viewBinding.appBarComp.helpImageButton.setOnClickListener{
+            navigation.navigateTo("HelpSectionFragment")
         }
     }
 

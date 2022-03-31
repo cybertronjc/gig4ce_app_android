@@ -7,12 +7,17 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import com.gigforce.common_ui.CommonIntentExtras
+import com.gigforce.common_ui.navigation.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.RecyclerRowGigerAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
@@ -37,6 +42,9 @@ class AttendanceGigerAttendanceRecyclerItemView(
     @Inject
     lateinit var eventTracker: IEventTracker
 
+    @Inject
+    lateinit var navigation : INavigation
+
     init {
         setDefault()
         inflate()
@@ -45,6 +53,7 @@ class AttendanceGigerAttendanceRecyclerItemView(
 
     private fun setListenersOnView() {
         viewBinding.callGigerBtn.setOnClickListener(this)
+        viewBinding.root.setOnClickListener(this)
     }
 
     private fun setDefault() {
@@ -121,14 +130,28 @@ class AttendanceGigerAttendanceRecyclerItemView(
 
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
-        eventTracker.pushEvent(
-            TrackingEventArgs(
-                "tl_call_giger", null
+
+        if(v?.id == R.id.call_giger_btn){
+
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    "tl_call_giger", null
+                )
             )
-        )
-        val intent =
-            Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", currentViewData.gigerPhoneNumber, null))
-        context.startActivity(intent)
+            val intent =
+                Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", currentViewData.gigerPhoneNumber, null))
+            context.startActivity(intent)
+        } else{
+          val gigId = currentViewData.gigId
+          //navigate to joining details screen
+          navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
+                bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_GIG_ID to currentViewData.gigId,
+                    CommonIntentExtras.INTENT_USER_ID to viewData?.gigerId
+                )
+          )
+        }
     }
 
     fun getGigDataOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {

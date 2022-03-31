@@ -25,8 +25,8 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementConstants
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

@@ -2,7 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 
 class NavForLeadManagmentModule(
     baseImplementation: BaseNavigationImpl
@@ -35,5 +35,7 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SHOW_DOC_IMAGES, R.id.showCheckListDocsBottomSheet)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_PENDING_JOINING_DETAILS, R.id.pendingJoiningDetailsFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_3, R.id.newSelectionVerificationDocumentsForm3Fragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.BOTTOM_SHEET_JOINING_ERROR, R.id.UserAlreadyExistsBottomSheet)
+
     }
 }

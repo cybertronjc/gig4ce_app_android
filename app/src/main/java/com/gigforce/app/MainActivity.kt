@@ -43,7 +43,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.KeyboardUtils
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
-import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
@@ -373,6 +373,14 @@ class MainActivity : BaseActivity(),
                         intent
                     )
                 }
+                intent.getBooleanExtra(
+                    StringConstants.HELP_SECTION_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleHelpSectionDeeplink(
+                        intent
+                    )
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -397,7 +405,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
     }
 
     private fun handlePayoutDeeplink(
@@ -415,13 +424,26 @@ class MainActivity : BaseActivity(),
         )
     }
 
+    private fun handleHelpSectionDeeplink(
+        intent: Intent
+    ) {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+
+        navController.popBackStack()
+        navController.navigate(R.id.HelpSectionFragment)
+    }
+
     private fun handleDrivingLicenceNav() {
         if (!isUserLoggedIn()) {
             proceedWithNormalNavigation()
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.drivingLicenseFragment)
     }
 
@@ -431,7 +453,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.signatureImageCaptureDialogFragment)
     }
 
@@ -441,7 +464,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.VaccineMainFragment)
     }
 
@@ -451,7 +475,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.adharDetailInfoFragment)
     }
 
@@ -461,7 +486,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.panCardFragment)
     }
 
@@ -471,7 +497,8 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.gigerVerificationFragment)
+        navController.navigate(R.id.myDocumentsFragment)
+        //navController.navigate(R.id.gigerVerificationFragment)
         navController.navigate(R.id.bank_account_fragment)
     }
 
@@ -694,6 +721,7 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
+                navController.navigate(R.id.myDocumentsFragment)
                 navController.navigate(
                     R.id.gigerVerificationFragment,
                     intent.extras
@@ -742,25 +770,29 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
                 navController.popAllBackStates()
                 navController.navigate(R.id.onboardingLoaderfragment)
-                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.myDocumentsFragment)
+                //navController.navigate(R.id.gigerVerificationFragment)
                 navController.navigate(R.id.panCardFragment)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_DL_SCREEN -> {
                 navController.popAllBackStates()
                 navController.navigate(R.id.onboardingLoaderfragment)
-                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.myDocumentsFragment)
+                //navController.navigate(R.id.gigerVerificationFragment)
                 navController.navigate(R.id.drivingLicenseFragment)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_BANK_SCREEN -> {
                 navController.popAllBackStates()
                 navController.navigate(R.id.onboardingLoaderfragment)
-                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.myDocumentsFragment)
+                //navController.navigate(R.id.gigerVerificationFragment)
                 navController.navigate(R.id.bank_account_fragment)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_AADHAAR_SCREEN -> {
                 navController.popAllBackStates()
                 navController.navigate(R.id.onboardingLoaderfragment)
-                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.myDocumentsFragment)
+                //navController.navigate(R.id.gigerVerificationFragment)
                 navController.navigate(R.id.adharDetailInfoFragment)
             }
             else -> {

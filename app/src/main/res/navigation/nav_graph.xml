@@ -1196,6 +1196,9 @@
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
         android:label="InvalidFormatBottomSheet"/>
 
+    <dialog android:id="@+id/UserAlreadyExistsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.UserAlreadyExistsBottomSheet"
+        android:label="UserAlreadyExistsBottomSheet"/>
     <fragment
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
@@ -1214,11 +1217,23 @@
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
         android:label="ChangeTeamLeaderBottomSheetFragment" />
+    <fragment
+        android:id="@+id/myDocumentsFragment"
+        android:name="com.gigforce.verification.mainverification.MyDocumentsFragment"
+        android:label="MyDocumentsFragment" />
 
     <fragment
         android:id="@+id/payoutMainFragment"
         android:name="com.gigforce.wallet.payouts.PayoutMainFragment"
         android:label="PayoutMainFragment"/>
+
+    <fragment android:id="@+id/HelpSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpSectionFragment"
+        android:label="HelpSectionFragment"/>
+
+    <fragment android:id="@+id/HelpDetailSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpDetailSectionFragment"
+        android:label="HelpDetailSectionFragment"/>
 
     <dialog
         android:id="@+id/payoutDetailsBottomSheet"
@@ -1241,6 +1256,10 @@
         android:id="@+id/inputSalaryComponentsFragment"
         android:name="com.gigforce.lead_management.ui.input_salary_components.InputSalaryComponentsFragment"
         android:label="InputSalaryComponentsFragment" />
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
 
 
     =========

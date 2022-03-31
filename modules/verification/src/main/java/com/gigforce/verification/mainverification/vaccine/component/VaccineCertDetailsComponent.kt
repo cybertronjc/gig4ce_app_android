@@ -6,21 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.lifecycle.get
 import com.gigforce.core.ICustomClickListener
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
-import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.vaccine_cert_details_component.view.*
+import kotlinx.android.synthetic.main.vaccine_certificate_component_layout.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,7 +28,7 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         view = LayoutInflater.from(context)
-            .inflate(R.layout.vaccine_cert_details_component, this, true)
+            .inflate(R.layout.vaccine_certificate_component_layout, this, true)
         attrs?.let {
             val styledAttributeSet =
                 context.obtainStyledAttributes(it, R.styleable.SimpleCardComponent1, 0, 0)
@@ -47,7 +42,11 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
     lateinit var navigation: INavigation
 
     fun setTitle(title: String) {
-        vaccineTitle.text = title
+        tv_title.text = title
+    }
+
+    fun setSubtitle(subtitle: String) {
+        tv_desc.text = subtitle
     }
 
     override fun bind(data: Any?) {
@@ -56,12 +55,25 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
             data.vaccineLabel?.let {
                 setTitle(it)
             }
+            data?.vaccineId?.let {
+                if (it.equals("vaccine1")){
+                    setSubtitle(resources.getString(R.string.vaccine_1_subtitle_veri))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_pink_veri))
+                    image.setImageDrawable(resources.getDrawable(R.drawable.ic_vaccine_dose_1))
+                } else if (it.equals("vaccine2")) {
+                    setSubtitle(resources.getString(R.string.vaccine_2_subtitle_veri))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_blue_veri))
+                    image.setImageDrawable(resources.getDrawable(R.drawable.ic_vaccine_dose_2))
+                } else if (it.equals("vaccine3")) {
+                    setSubtitle(resources.getString(R.string.vaccine_3_subtitle_veri))
+                    cv_top.setBackgroundColor(resources.getColor(R.color.light_green_veri))
+                    image.setImageDrawable(resources.getDrawable(R.drawable.ic_booster_dose))
+                }
+            }
             if (data.pathOnFirebase?.isNotBlank() == true) {
                 download_icon.visible()
                 edit_icon.visible()
-                statusIconUploaded.visible()
-                statusIconNotUploaded.gone()
-                rightArrow.gone()
+                primary_action.gone()
 
                 download_icon.setOnClickListener {
                     try {
@@ -73,24 +85,27 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
             } else {
                 download_icon.gone()
                 edit_icon.gone()
-                statusIconUploaded.gone()
-                statusIconNotUploaded.visible()
-                rightArrow.visible()
+                primary_action.visible()
             }
 
-
-
-            data.getNavArgs().let {
-                it?.let { navData ->
-                    card_view.setOnClickListener {
-                        try {
-                            itemClickListener?.onItemClick(view, 0, data)
-                            navigation.navigateTo(navData.navPath, args = navData.args)
-                        }catch (e:Exception){
-                        }
-                    }
+            primary_action.setOnClickListener { it1 ->
+                try {
+                    itemClickListener?.onItemClick(it1, 0, data)
+                }catch (e:Exception){
                 }
             }
+
+//            data.getNavArgs().let {
+//                it?.let { navData ->
+//                    primary_action.setOnClickListener { it1 ->
+//                        try {
+//                            itemClickListener?.onItemClick(it1, 0, data)
+//                            navigation.navigateTo(navData.navPath, args = navData.args)
+//                        }catch (e:Exception){
+//                        }
+//                    }
+//                }
+//            }
 
         }
     }

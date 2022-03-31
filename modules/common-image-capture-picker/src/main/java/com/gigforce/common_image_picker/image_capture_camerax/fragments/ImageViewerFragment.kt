@@ -95,6 +95,22 @@ class ImageViewerFragment : Fragment() {
         findViews(view)
         Glide.with(requireContext()).load(image).into(imageView)
         initViewModel()
+        checkForImageConfirmation()
+    }
+
+    private fun checkForImageConfirmation() {
+        childFragmentManager.setFragmentResultListener("imageConfirm", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getInt("confirm")
+            if (result == 0){
+                sharedCameraViewModel.clickedImageDiscarded()
+            }else{
+                viewModel.faceNotDetectedStillUploadImage(
+                    requireContext().applicationContext,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
+            }
+        }
     }
 
 
@@ -180,13 +196,9 @@ class ImageViewerFragment : Fragment() {
                     is ImageViewerViewState.ErrorWhileFaceDetection -> {
 
                         progressBar.visibility = View.GONE
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to detect face")
-                            .setMessage(getString(R.string.something_seems_off_common) )
-                            .setPositiveButton(getString(R.string.okay_common)) { _, _ ->
-                                sharedCameraViewModel.clickedImageDiscarded()
-                            }
-                            .show()
+                        AttendanceImageConfirmBottomSheet.launch(
+                            childFragmentManager
+                        )
                     }
                     is ImageViewerViewState.ImageUploadFailed -> {
 
