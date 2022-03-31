@@ -146,6 +146,8 @@ class HelpDetailSectionFragment : Fragment() {
                                 )
                                 context?.startActivity(intent)
                             }
+                            val map = mapOf("Question Title" to obj.question.toString())
+                            eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_CALL_HELPLINE, map))
                         }
 
                     }
