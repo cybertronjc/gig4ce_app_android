@@ -13,21 +13,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+        <View
+            android:layout_width="@dimen/size_16"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/iv_bullets"
             android:layout_width="@dimen/size_24"
             android:layout_height="@dimen/size_24"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginRight="@dimen/size_8"
             android:layout_marginTop="@dimen/size_24" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_8"
             android:layout_marginTop="@dimen/size_27"
             android:layout_marginEnd="@dimen/size_16"
             android:gravity="center|start"

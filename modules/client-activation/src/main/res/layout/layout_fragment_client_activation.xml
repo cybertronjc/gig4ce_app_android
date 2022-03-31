@@ -123,8 +123,8 @@
                android:layout_height="wrap_content"
                android:src="@drawable/ic_earning_icon"
                android:layout_marginStart="16dp"
-               android:layout_marginTop="2dp"
-               android:layout_marginBottom="2dp"
+               android:layout_marginTop="4dp"
+               android:layout_marginBottom="4dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintTop_toTopOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"/>
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_20"
                 android:fontFamily="@font/lato"
-                android:gravity="center"
+                android:gravity="left"
                 android:lineSpacingExtra="@dimen/size_14"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
@@ -164,11 +164,12 @@
                     android:id="@+id/tv_active_locations"
                     android:layout_width="166dp"
                     android:layout_height="19dp"
-                    android:text="@string/active_locations"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_24"
-                    android:layout_marginStart="@dimen/size_16"/>
+                    android:text="@string/active_locations"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/font_16"
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_preferred_locations_client_activation"
@@ -306,18 +307,14 @@
 
     <TextView
         android:id="@+id/tv_mark_as_interest_role_details"
+        style="@style/primary_button_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_marginStart="@dimen/size_18"
         android:layout_marginEnd="@dimen/size_14"
-        android:layout_marginBottom="@dimen/size_44"
-        android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
-        android:gravity="center_horizontal"
-        android:minHeight="@dimen/size_36"
-        android:paddingTop="@dimen/size_14"
-        android:paddingBottom="@dimen/size_12"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        android:text="abc"
+        android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
