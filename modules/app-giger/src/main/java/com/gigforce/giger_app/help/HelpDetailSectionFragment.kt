@@ -10,13 +10,22 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_app.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.help_section_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HelpDetailSectionFragment : Fragment() {
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,6 +116,8 @@ class HelpDetailSectionFragment : Fragment() {
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.textView19).visible()
                             obj.openCard = true
+                            val map = mapOf("Question Title" to obj?.question.toString())
+                            eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_QUESTION_SELECT, map))
                         }
                     }
 
@@ -115,12 +126,16 @@ class HelpDetailSectionFragment : Fragment() {
                         viewHolder.getView(R.id.section2).visible()
                         viewHolder.getView(R.id.thanks_message).gone()
                         obj.viewstatus = 1
+                        val map = mapOf("Question Title" to obj?.question.toString())
+                        eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_NOT_USEFUL, map))
                     }
                     viewHolder.getView(R.id.textView20).setOnClickListener {
                         viewHolder.getView(R.id.section2).gone()
                         viewHolder.getView(R.id.section1).gone()
                         viewHolder.getView(R.id.thanks_message).visible()
                         obj.viewstatus = 2
+                        val map = mapOf("Question Title" to obj?.question.toString())
+                        eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_USEFUL, map))
                     }
                     viewHolder.getView(R.id.call).setOnClickListener {
                         obj?.helpLineNumber?.let {

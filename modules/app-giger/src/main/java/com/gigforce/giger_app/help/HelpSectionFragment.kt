@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
@@ -25,6 +27,10 @@ class HelpSectionFragment : Fragment() {
     private val viewModel: HelpSectionViewModel by activityViewModels()
     @Inject
     lateinit var navigation : INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +41,7 @@ class HelpSectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
+        eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_OPEN, null))
         observer()
         listeners()
     }
@@ -82,9 +89,11 @@ class HelpSectionFragment : Fragment() {
                         try {
 
                             helpMasterData.get(position).questions?.let {
-                                if(it.size>0)
-                                navigation.navigateTo("HelpDetailSectionFragment", bundleOf("data" to helpMasterData.get(position)) )
-                                else showToast("Questions not found!!")
+                                if(it.size>0) {
+                                    navigation.navigateTo("HelpDetailSectionFragment", bundleOf("data" to helpMasterData.get(position)) )
+                                    val map = mapOf("Section Title" to obj?.name.toString())
+                                    eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_CATEGORY_SELECT, map))
+                                } else showToast("Questions not found!!")
                             }
                         }catch (e:Exception){
 
