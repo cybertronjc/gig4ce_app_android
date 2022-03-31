@@ -1,11 +1,13 @@
 package com.gigforce.giger_app.help
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
@@ -22,7 +24,8 @@ class HelpDetailSectionFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help_detail_section, container, false)
     }
-    var helpSectionDMData:HelpSectionDM? = null
+
+    var helpSectionDMData: HelpSectionDM? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
@@ -30,12 +33,18 @@ class HelpDetailSectionFragment : Fragment() {
                 helpSectionDMData = it.get("data") as HelpSectionDM
                 initializeAll()
                 setRecyclerView()
-            }catch (e:Exception){
+            } catch (e: Exception) {
 
             }
         }
+        listeners()
 
+    }
 
+    private fun listeners() {
+        appBar2.setBackButtonListener{
+            activity?.onBackPressed()
+        }
     }
 
     private fun initializeAll() {
@@ -57,31 +66,30 @@ class HelpDetailSectionFragment : Fragment() {
                     val answer: TextView = viewHolder.getView(R.id.textView19) as TextView
                     answer.text = obj?.answer
 
-                    if(obj.openCard == false){
+                    if (obj.openCard == false) {
                         viewHolder.getView(R.id.textView19).gone()
                         viewHolder.getView(R.id.detail_section).gone()
-                    }else{
+                    } else {
                         viewHolder.getView(R.id.textView19).visible()
                         viewHolder.getView(R.id.detail_section).visible()
                     }
                     obj.viewstatus?.let {
-                        if(it == -1){
+                        if (it == -1) {
                             viewHolder.getView(R.id.textView19).gone()
                             viewHolder.getView(R.id.detail_section).gone()
-                        }
-                        else if(it == 0){
+                        } else if (it == 0) {
                             viewHolder.getView(R.id.textView19).visible()
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.section1).visible()
                             viewHolder.getView(R.id.section2).gone()
                             viewHolder.getView(R.id.thanks_message).gone()
-                        }else if(it == 1){
+                        } else if (it == 1) {
                             viewHolder.getView(R.id.textView19).visible()
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.section1).gone()
                             viewHolder.getView(R.id.section2).visible()
                             viewHolder.getView(R.id.thanks_message).gone()
-                        }else if(it == 2){
+                        } else if (it == 2) {
                             viewHolder.getView(R.id.textView19).visible()
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.section1).gone()
@@ -90,31 +98,42 @@ class HelpDetailSectionFragment : Fragment() {
                         }
                     }
 
-                    viewHolder.getView(R.id.top_layout).setOnClickListener{
-                        if(viewHolder.getView(R.id.detail_section).visibility == View.VISIBLE){
+                    viewHolder.getView(R.id.top_layout).setOnClickListener {
+                        if (viewHolder.getView(R.id.detail_section).visibility == View.VISIBLE) {
                             viewHolder.getView(R.id.detail_section).gone()
                             viewHolder.getView(R.id.textView19).gone()
                             obj.openCard = false
-                        }else{
+                        } else {
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.textView19).visible()
                             obj.openCard = true
                         }
                     }
 
-                    viewHolder.getView(R.id.textView22).setOnClickListener{
+                    viewHolder.getView(R.id.textView22).setOnClickListener {
                         viewHolder.getView(R.id.section1).gone()
                         viewHolder.getView(R.id.section2).visible()
                         viewHolder.getView(R.id.thanks_message).gone()
                         obj.viewstatus = 1
                     }
-                    viewHolder.getView(R.id.textView20).setOnClickListener{
+                    viewHolder.getView(R.id.textView20).setOnClickListener {
                         viewHolder.getView(R.id.section2).gone()
                         viewHolder.getView(R.id.section1).gone()
                         viewHolder.getView(R.id.thanks_message).visible()
                         obj.viewstatus = 2
                     }
+                    viewHolder.getView(R.id.call).setOnClickListener {
+                        obj?.helpLineNumber?.let {
+                            if (it.length > 0) {
+                                val intent = Intent(
+                                    Intent.ACTION_DIAL,
+                                    Uri.fromParts("tel", it, null)
+                                )
+                                context?.startActivity(intent)
+                            }
+                        }
 
+                    }
 
 
                 })

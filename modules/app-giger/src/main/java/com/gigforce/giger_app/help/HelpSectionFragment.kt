@@ -36,6 +36,13 @@ class HelpSectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
         observer()
+        listeners()
+    }
+
+    private fun listeners() {
+        appBar2.setBackButtonListener{
+            activity?.onBackPressed()
+        }
     }
 
     private fun observer() {
