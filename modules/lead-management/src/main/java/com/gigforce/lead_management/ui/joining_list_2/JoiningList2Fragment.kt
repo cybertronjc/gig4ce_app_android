@@ -19,6 +19,7 @@ import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.navigation.LeadManagementConstants
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -27,8 +28,8 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
-import com.gigforce.common_ui.navigation.LeadManagementConstants
-import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
+//import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData

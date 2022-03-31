@@ -7,31 +7,32 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.databinding.LayoutDynamicFieldDropDownBinding
+import com.gigforce.common_ui.databinding.LayoutDynamicMultiSelectDropDownBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicFieldData
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicFieldData
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.parcel.Parcelize
 
-
-class DynamicDropDownView(
+class DynamicMultiSelectDropDown(
     context: Context,
     attrs: AttributeSet?
 ) : LinearLayout(
     context,
     attrs
 ), DynamicFieldView {
-    private var viewBinding: LayoutDynamicFieldDropDownBinding
+    private var viewBinding: LayoutDynamicMultiSelectDropDownBinding
     private lateinit var viewData: DynamicField
     private var editTextString: String = ""
 
@@ -44,7 +45,7 @@ class DynamicDropDownView(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        viewBinding = LayoutDynamicFieldDropDownBinding.inflate(
+        viewBinding = LayoutDynamicMultiSelectDropDownBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -68,7 +69,6 @@ class DynamicDropDownView(
         }
     }
 
-
     private fun setDataOnSpinner(
         title: String?,
         dataToShow: List<DynamicFieldData>
@@ -88,6 +88,26 @@ class DynamicDropDownView(
         )
 
         adapter = spinnerAdapter
+
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                if (position > 0){
+                    val view = LayoutInflater.from(context).inflate(R.layout.layout_dynamic_selected_item_chip_layout, null)
+
+                    val chipText: TextView = view.findViewById(R.id.chip_text)
+                    chipText.setText(dataToShow.get(position - 1).value)
+
+                    viewBinding.selectedItemsLayout.addView(view)
+                }
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
     }
 
     private fun setTitle(title: String?) {
@@ -174,7 +194,7 @@ class DynamicDropDownView(
                 setError(buildSpannedString {
                     bold {
                         append(
-                            resources.getString(R.string.common_note_with_colon)
+                            resources.getString(com.gigforce.common_ui.R.string.common_note_with_colon)
                         )
                     }
                     append(" Please select ${viewData.title}")

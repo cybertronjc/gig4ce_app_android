@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,11 +39,9 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm1Binding
-import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
-import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
 import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment

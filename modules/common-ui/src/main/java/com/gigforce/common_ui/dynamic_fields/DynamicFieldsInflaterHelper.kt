@@ -82,6 +82,21 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 containerLayout,
                 it
             )
+//            FieldTypes.OTHER_CITIES -> inflateSelectOtherCityView(
+//                context,
+//                containerLayout,
+//                it
+//            )
+//            FieldTypes.SELECT_CLUSTER -> inflateSelectClusterView(
+//                context,
+//                containerLayout,
+//                it
+//            )
+//            FieldTypes.INPUT_SALARY -> inflateInputSalaryView(
+//                context,
+//                containerLayout,
+//                it
+//            )
             else -> {
                 logger.d(
                     TAG,
@@ -161,6 +176,16 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         view.bind(it)
     }
 
+    private fun inflateMultiSelectDropDown(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField
+    ) {
+        val view = DynamicMultiSelectDropDown(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
     private fun inflateDatePicker(
         context: Context,
         containerLayout: LinearLayout,
@@ -180,6 +205,21 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         containerLayout.addView(view)
         view.bind(it)
     }
+
+//    private fun inflateSelectOtherCityView(
+//        context: Context,
+//        containerLayout: LinearLayout,
+//        it: DynamicField
+//    ) {
+//        val view = DynamicSelectOtherCitiesView(
+//            context,
+//            null
+//        )
+//        containerLayout.addView(view)
+//        view.bind(it)
+//    }
+
+
 
     private fun inflateAadhaarVerificationView(
         context: Context,

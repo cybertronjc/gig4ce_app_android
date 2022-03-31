@@ -2,9 +2,11 @@ package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.text.SpannedString
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import java.time.LocalDate
 
 sealed class NewSelectionForm2ViewState  {
@@ -27,6 +29,21 @@ sealed class NewSelectionForm2ViewState  {
     data class OpenSelectCityScreen(
         val cities: List<ReportingLocationsItem>,
         val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
+    data class OpenSelectOtherCityScreen(
+        val otherCities: List<OtherCityClusterItem>,
+        val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
+    data class OpenSelectClusterScreen(
+        val clusters: List<OtherCityClusterItem>,
+        val locationType: String?
+    ) : NewSelectionForm2ViewState()
+
+    data class OpenInputSalaryScreen(
+        var businessId: String,
+        var salaryData: InputSalaryResponse?
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(
@@ -81,6 +98,12 @@ sealed class NewSelectionForm2Events {
 
     object SelectCityClicked : NewSelectionForm2Events()
 
+    object SelectOtherCityClicked : NewSelectionForm2Events()
+
+    object SelectClusterClicked: NewSelectionForm2Events()
+
+    object InputSalaryComponentsClicked: NewSelectionForm2Events()
+
     object SelectReportingLocationClicked : NewSelectionForm2Events()
 
     object SelectClientTLClicked : NewSelectionForm2Events()
@@ -92,6 +115,18 @@ sealed class NewSelectionForm2Events {
     data class CitySelected(
         val city: ReportingLocationsItem
     ) : NewSelectionForm2Events()
+
+    data class OtherCitySelected(
+        val otherCities: List<OtherCityClusterItem>
+    ): NewSelectionForm2Events()
+
+    data class ClusterSelected(
+        val cluster: OtherCityClusterItem
+    ): NewSelectionForm2Events()
+
+    data class SalaryAmountEntered(
+        val salaryData: InputSalaryResponse
+    ): NewSelectionForm2Events()
 
     data class ReportingLocationSelected(
         val citySelected: ReportingLocationsItem,
@@ -111,6 +146,7 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class SubmitButtonPressed(
-        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
+        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>,
+        val dataFromDynamicScreenFields: MutableList<DataFromDynamicScreenField>
     ) : NewSelectionForm2Events()
 }

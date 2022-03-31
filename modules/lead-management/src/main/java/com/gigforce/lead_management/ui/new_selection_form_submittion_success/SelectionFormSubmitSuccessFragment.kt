@@ -4,12 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
-import com.gigforce.common_ui.ext.showToast
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.AppConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.common_ui.navigation.LeadManagementNavDestinations
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionFormSuccessBinding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
