@@ -373,6 +373,14 @@ class MainActivity : BaseActivity(),
                         intent
                     )
                 }
+                intent.getBooleanExtra(
+                    StringConstants.HELP_SECTION_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleHelpSectionDeeplink(
+                        intent
+                    )
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -414,6 +422,18 @@ class MainActivity : BaseActivity(),
         payoutNavigation.openPayoutList(
             payoutId
         )
+    }
+
+    private fun handleHelpSectionDeeplink(
+        intent: Intent
+    ) {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+
+        navController.popBackStack()
+        navController.navigate(R.id.HelpSectionFragment)
     }
 
     private fun handleDrivingLicenceNav() {

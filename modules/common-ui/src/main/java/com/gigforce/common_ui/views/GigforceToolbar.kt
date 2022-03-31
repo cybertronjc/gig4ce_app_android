@@ -50,6 +50,8 @@ class GigforceToolbar(
     private var subtitleEnabled = false
     private var searchListenerCalledFirstTime = false
 
+    private lateinit var helpImageButton : View
+
     @MenuRes
     private var menu: Int = -1
 
@@ -74,7 +76,7 @@ class GigforceToolbar(
 //                .build()
 
         backButton = nnView.findViewById(R.id.back_arrow)
-
+        helpImageButton = nnView.findViewById(R.id.helpImageButton)
         toolbarImageView = nnView.findViewById(R.id.toolbar_image_iv)
         titleTV = nnView.findViewById(R.id.titleTV)
         subTitleTV = nnView.findViewById(R.id.subTitleTV)
@@ -84,6 +86,13 @@ class GigforceToolbar(
 
         searchLayout = nnView.findViewById(R.id.search_layout)
         searchEditText = nnView.findViewById(R.id.search_et)
+    }
+
+    fun setHelpImageButtonClickListener(listener: View.OnClickListener){
+        helpImageButton.visible()
+        helpImageButton.setOnClickListener{
+            listener.onClick(it)
+        }
     }
 
     val isSearchCurrentlyShown: Boolean get() = searchLayout.isVisible

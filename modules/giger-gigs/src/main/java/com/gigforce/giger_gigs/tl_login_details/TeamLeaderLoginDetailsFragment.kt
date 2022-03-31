@@ -33,7 +33,6 @@ import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.team_leader_login_details_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -136,6 +135,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
+            makeHelpVisible(true)
             changeBackButtonDrawable()
             makeBackgroundMoreRound()
             makeTitleBold()
@@ -147,6 +147,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
         }
 
     }
+
 
     private fun checkForApplyFilter() {
         val navController = findNavController()
