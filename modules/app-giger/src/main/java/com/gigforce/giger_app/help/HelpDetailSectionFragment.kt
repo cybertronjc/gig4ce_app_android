@@ -65,7 +65,11 @@ class HelpDetailSectionFragment : Fragment() {
                         viewHolder.getView(R.id.detail_section).visible()
                     }
                     obj.viewstatus?.let {
-                        if(it == 0){
+                        if(it == -1){
+                            viewHolder.getView(R.id.textView19).gone()
+                            viewHolder.getView(R.id.detail_section).gone()
+                        }
+                        else if(it == 0){
                             viewHolder.getView(R.id.textView19).visible()
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.section1).visible()
