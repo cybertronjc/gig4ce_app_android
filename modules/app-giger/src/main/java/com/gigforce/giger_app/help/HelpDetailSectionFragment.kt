@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,9 +79,13 @@ class HelpDetailSectionFragment : Fragment() {
                     if (obj.openCard == false) {
                         viewHolder.getView(R.id.textView19).gone()
                         viewHolder.getView(R.id.detail_section).gone()
+                        (viewHolder.getView(R.id.imageView2) as ImageView).setImageResource(R.drawable.ic_arrow_up_24)
+
+
                     } else {
                         viewHolder.getView(R.id.textView19).visible()
                         viewHolder.getView(R.id.detail_section).visible()
+                        (viewHolder.getView(R.id.imageView2) as ImageView).setImageResource(R.drawable.ic_arrow_down_24)
                     }
                     obj.viewstatus?.let {
                         if (it == -1) {
@@ -112,10 +117,12 @@ class HelpDetailSectionFragment : Fragment() {
                             viewHolder.getView(R.id.detail_section).gone()
                             viewHolder.getView(R.id.textView19).gone()
                             obj.openCard = false
+                            (viewHolder.getView(R.id.imageView2) as ImageView).setImageResource(R.drawable.ic_arrow_up_24)
                         } else {
                             viewHolder.getView(R.id.detail_section).visible()
                             viewHolder.getView(R.id.textView19).visible()
                             obj.openCard = true
+                            (viewHolder.getView(R.id.imageView2) as ImageView).setImageResource(R.drawable.ic_arrow_down_24)
                             val map = mapOf("Question Title" to obj?.question.toString())
                             eventTracker.pushEvent(TrackingEventArgs(HelpSectionAnalyticsEvents.EVENT_HELP_QUESTION_SELECT, map))
                         }

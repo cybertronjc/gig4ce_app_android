@@ -6,32 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <TextView
-        android:id="@+id/textView17"
-        style="@style/black_small_bold"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/above_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginTop="@dimen/size_20"
-        android:gravity="left"
-        android:text="Login Summary"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10"
-        android:layout_marginRight="@dimen/size_20"
-        android:layout_marginBottom="@dimen/size_10"
-        android:src="@drawable/ic_grey_right_arrow"
-        app:layout_constraintBottom_toBottomOf="@+id/textView17"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView17" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/textView17"
+            style="@style/black_small_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:gravity="left"
+            android:text="Login Summary"/>
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:layout_marginRight="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_10"
+            android:src="@drawable/ic_arrow_up_24"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView19"
@@ -47,7 +48,7 @@
         android:text="TL workspace icon is visible once the offer letter is generated. If it is pending, please email to the Gigforce HR team."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        app:layout_constraintTop_toBottomOf="@+id/above_layout" />
 
     <RelativeLayout
         android:id="@+id/detail_section"
