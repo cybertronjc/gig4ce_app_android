@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,6 +18,7 @@ import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.R
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.help_section_fragment.*
 import javax.inject.Inject
@@ -30,6 +32,14 @@ class HelpSectionFragment : Fragment() {
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
