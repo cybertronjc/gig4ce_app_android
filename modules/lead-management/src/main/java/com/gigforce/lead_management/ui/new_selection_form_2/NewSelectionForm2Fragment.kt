@@ -112,7 +112,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth + 1)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
                 viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(newCal.time)
                 viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(newCal.time.toLocalDate()))
@@ -125,7 +125,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             cal.get(Calendar.MONTH),
             cal.get(Calendar.DAY_OF_MONTH)
         )
-        datePickerDialog.datePicker.minDate = cal.timeInMillis
+        datePickerDialog.datePicker.minDate = cal.timeInMillis + (1000 * 60 * 60 * 24) //adding one day
         datePickerDialog
     }
 
@@ -278,7 +278,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding: FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
-        viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(LocalDateTime.from(Date().toInstant()).plusDays(1))
+        val cal = Calendar.getInstance()
+        cal.time = Date()
+        cal.add(Calendar.DATE, 1)
+        viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(cal.time)
 
         selectCityLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm2Events.SelectCityClicked)
