@@ -1,5 +1,6 @@
 package com.gigforce.app.di
 
+import com.gigforce.common_ui.remote.GigService
 import com.gigforce.common_ui.remote.PayoutRetrofitService
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import dagger.Module
@@ -18,6 +19,13 @@ abstract class RemoteModule {
             retrofitServiceFactory: RetrofitServiceFactory
         ): PayoutRetrofitService {
             return retrofitServiceFactory.prepareService(PayoutRetrofitService::class.java)
+        }
+
+        @Provides
+        fun provideGigRetrofitService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): GigService {
+            return retrofitServiceFactory.prepareService(GigService::class.java)
         }
     }
 }

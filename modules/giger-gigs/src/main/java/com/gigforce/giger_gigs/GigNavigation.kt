@@ -1,10 +1,10 @@
 package com.gigforce.giger_gigs
 
 import androidx.core.os.bundleOf
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import java.time.LocalDate
 import javax.inject.Inject
 

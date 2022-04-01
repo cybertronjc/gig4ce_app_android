@@ -2,6 +2,7 @@ package com.gigforce.common_ui.repository.gig
 
 import android.content.SharedPreferences
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.gigforce.common_ui.ext.bodyOrErrorBodyElseThrow
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.GigerAttendanceService
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
@@ -115,7 +116,7 @@ class GigAttendanceRepository @Inject constructor(
         locationFake: Boolean?,
         locationAccuracy: Float?,
         distanceBetweenGigAndUser : Float?
-    ) : GigAttendanceApiModel{
+    ) : GigAttendanceApiModel {
         logger.d(
             TAG,
             "Marking check-out....",
@@ -142,7 +143,7 @@ class GigAttendanceRepository @Inject constructor(
                     locationAccuracy = locationAccuracy,
                     locationFake = locationFake
                 )
-            ).bodyOrThrow()
+            ).bodyOrErrorBodyElseThrow()
 
             if (!response.status) {
                 throw Exception(response.message)
@@ -169,7 +170,7 @@ class GigAttendanceRepository @Inject constructor(
         gigId: String,
         reasonId: String,
         reason: String
-    ) : GigAttendanceApiModel{
+    ) : GigAttendanceApiModel {
         logger.d(
             TAG,
             "Declining gig....",

@@ -6,8 +6,8 @@ import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

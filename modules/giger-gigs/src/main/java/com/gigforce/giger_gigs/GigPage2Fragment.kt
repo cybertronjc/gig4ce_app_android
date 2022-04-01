@@ -516,14 +516,14 @@ class GigPage2Fragment : Fragment(),
                     }
                     is Lce.Error -> {
                         checkInCheckOutSliderBtn.isEnabled = true
-                        showAlertDialog(getString(R.string.error_marking_attendance_giger_gigs) + it)
+                        showAlertDialog(getString(R.string.error_marking_attendance_giger_gigs) + it.error)
                     }
                     else -> {
                     }
                 }
             })
 
-        viewModel.watchGig(gigId, true)
+        viewModel.fetchGigDetails(gigId, true)
     }
 
     private fun plantLocationTrackers() {
@@ -746,7 +746,7 @@ class GigPage2Fragment : Fragment(),
 
 
         val optionsList = mutableListOf<OtherOption>()
-        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
+        if (viewModel.currentGig?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
         }
 
@@ -808,7 +808,7 @@ class GigPage2Fragment : Fragment(),
                 //navigate to show offer letter
                 navigation.navigateToDocViewerActivity(
                     requireActivity(),
-                    viewModel.gigOrder?.offerLetter.toString() ?: "",
+                    viewModel.currentGig?.offerLetter.toString() ?: "",
                     "OFFER_LETTER"
                 )
             }

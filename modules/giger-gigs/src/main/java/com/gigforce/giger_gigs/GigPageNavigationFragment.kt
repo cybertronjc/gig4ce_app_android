@@ -110,7 +110,7 @@ class GigPageNavigationFragment : Fragment() {
             arguments?.getString(INTENT_EXTRA_GIG_ID)
         }
 
-        viewModel.watchGig(gigId!!)
+        viewModel.fetchGigDetails(gigId!!)
     }
 
     private fun setDatOnView(gig: Gig) {

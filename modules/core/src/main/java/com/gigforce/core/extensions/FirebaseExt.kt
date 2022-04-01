@@ -1,16 +1,19 @@
 package com.gigforce.core.extensions
 
 import android.net.Uri
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StreamDownloadTask
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ClosedSendChannelException
-import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -148,4 +151,35 @@ suspend fun StorageReference.getStreamOrThrow(
         .addOnFailureListener { cont.resumeWithException(it) }
 }
 
+fun String.toFirebaseTimestamp(): Timestamp {
+
+    val parsedDateTime = LocalDateTime.parse(
+        this,
+        DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    )
+    val convertedDateTime: ZonedDateTime = parsedDateTime.atOffset(
+        ZoneOffset.UTC
+    ).atZoneSameInstant(
+        ZoneOffset.ofHoursMinutes(5,30)
+    )
+
+    return Timestamp(
+        Date.from(convertedDateTime.toInstant())
+    )
+}
+
+fun String?.toFirebaseTimestampOrNull(): Timestamp? {
+    val timeStampString = this ?: return null
+
+    val localDateTime = LocalDateTime.parse(
+        timeStampString,
+        DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    ).run {
+        plusHours(5L)
+        plusMinutes(30L)
+    }
+    return Timestamp(
+        localDateTime.toDate
+    )
+}
 

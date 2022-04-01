@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.navigation.gig.GigNavigation
 import com.gigforce.common_ui.utils.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.AppConstants
@@ -40,7 +41,10 @@ import javax.inject.Inject
 class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameLayout(context, attrs),
         IViewHolder{
 
-@Inject
+    @Inject
+    lateinit var gigNavigation: GigNavigation
+
+    @Inject
     lateinit var navigation: INavigation
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -94,6 +98,9 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
 
     override fun bind(obj: Any?) {
         if (obj is Gig) {
+            cardView.setOnClickListener {
+                gigNavigation.openGigPage(obj.gigId)
+            }
             ivContact.setImageResource(R.drawable.ic_phone_white_24dp)
             ivContact.setColorFilter(
                 ContextCompat.getColor(

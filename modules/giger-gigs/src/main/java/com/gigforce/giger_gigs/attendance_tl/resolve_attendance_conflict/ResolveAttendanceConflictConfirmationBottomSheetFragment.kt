@@ -1,14 +1,8 @@
 package com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict
 
 import android.app.Dialog
-import android.app.DownloadManager
-import android.content.Context
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -16,31 +10,18 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.startShimmer
-import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
-import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetViewModel
-import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsViewContract
-import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
-import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.gigforce.giger_gigs.databinding.FragmentResolveAttendanceConflictConfirmationBinding
-import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentResolveAttendanceConflictConfirmationBinding>(

@@ -1,8 +1,8 @@
 package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import java.time.LocalDate
 import kotlin.random.Random
 

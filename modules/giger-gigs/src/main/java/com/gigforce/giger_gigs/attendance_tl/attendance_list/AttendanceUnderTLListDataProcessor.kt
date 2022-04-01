@@ -2,7 +2,6 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
-import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
 object AttendanceUnderTLListDataProcessor {
@@ -36,8 +35,8 @@ object AttendanceUnderTLListDataProcessor {
                         AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData(
                             businessName = businessName,
                             enabledCount = attendance.count(),
-                            activeCount = 0,
-                            inActiveCount = 0,
+                            activeCount = attendance.count { it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT },
+                            inActiveCount = attendance.count { it.getFinalAttendanceStatus() != AttendanceStatus.PRESENT },
                             expanded = false,
                             viewModel = gigerAttendanceUnderManagerViewModel
                         )
@@ -68,25 +67,25 @@ object AttendanceUnderTLListDataProcessor {
     ): List<GigAttendanceApiModel> {
         return attendance.run {
 
-                this.filter {
+            this.filter {
 
-                    if (!currentlySearchTerm.isNullOrBlank()) {
+                if (!currentlySearchTerm.isNullOrBlank()) {
 
-                        it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
-                                it.jobProfile?.contains(currentlySearchTerm, true) ?: false
-                    } else{
-                        true
-                    }
-                }
-            }.filter {
-                if(currentlySelectedStatus == StatusFilters.ENABLED){
-                    true
-                } else if(currentlySelectedStatus == StatusFilters.ACTIVE){
-                    it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT
+                    it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
+                            it.jobProfile?.contains(currentlySearchTerm, true) ?: false
                 } else {
-                    it.getFinalAttendanceStatus() == AttendanceStatus.ABSENT
+                    true
                 }
             }
+        }.filter {
+            if (currentlySelectedStatus == StatusFilters.ENABLED) {
+                true
+            } else if (currentlySelectedStatus == StatusFilters.ACTIVE) {
+                AttendanceStatus.PRESENT == it.getFinalAttendanceStatus()
+            } else {
+                AttendanceStatus.ABSENT == it.getFinalAttendanceStatus() || AttendanceStatus.PENDING == it.getFinalAttendanceStatus()
+            }
+        }
     }
 
     private fun mapPayoutsToPayoutItemView(
@@ -101,7 +100,7 @@ object AttendanceUnderTLListDataProcessor {
                 status = it.getFinalAttendanceStatus(),
                 statusTextColorCode = it.getFinalStatusTextColorCode(),
                 statusBackgroundColorCode = it.getFinalStatusBackgroundColorCode(),
-                gigerImage = it.gigerName ?: "",
+                gigerImage = it.profilePicThumbnail ?: it.profileAvatarName ?: "",
                 gigId = it.id ?: "",
                 gigerId = it.gigerId ?: "",
                 gigerName = it.gigerName ?: "N/A",
@@ -113,7 +112,7 @@ object AttendanceUnderTLListDataProcessor {
                 gigerAttendanceStatus = it.getGigerMarkedAttendance(),
                 tlMarkedAttendance = it.getTLMarkedAttendance(),
                 viewModel = viewModel,
-                currentlyMarkingAttendanceForThisGig =  currentMarkingAttendanceForGigs.find { gigId -> it.gigerId == gigId } != null,
+                currentlyMarkingAttendanceForThisGig = currentMarkingAttendanceForGigs.find { gigId -> it.gigerId == gigId } != null,
                 businessName = it.businessName ?: "N/A",
                 gigerAttendanceMarkingTime = it.gigerAttedance?.checkInTime,
                 resolveId = it.resolveAttendanceId,

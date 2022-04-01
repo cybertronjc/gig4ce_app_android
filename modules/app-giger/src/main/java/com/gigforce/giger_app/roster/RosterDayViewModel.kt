@@ -29,18 +29,20 @@ import com.gigforce.giger_app.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-@RequiresApi(Build.VERSION_CODES.O)
-class RosterDayViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository()
+@HiltViewModel
+class RosterDayViewModel @Inject constructor(
+    private val gigsRepository: GigsRepository
 ) : ViewModel() {
 
     var currentDateTime: MutableLiveData<LocalDateTime> = MutableLiveData(LocalDateTime.now())
@@ -479,10 +481,6 @@ class RosterDayViewModel constructor(
             Log.d("HOURVIEW", "inactive hour")
             widget.isDisabled = true
         }
-    }
-
-    companion object {
-        fun newInstance() = RosterDayViewModel()
     }
 
 

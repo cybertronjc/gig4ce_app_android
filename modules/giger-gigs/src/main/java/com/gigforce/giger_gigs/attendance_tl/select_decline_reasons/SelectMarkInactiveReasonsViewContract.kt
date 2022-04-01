@@ -1,6 +1,5 @@
 package com.gigforce.giger_gigs.attendance_tl.select_decline_reasons
 
-import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
 
 sealed class SelectMarkInactiveReasonsViewContract {

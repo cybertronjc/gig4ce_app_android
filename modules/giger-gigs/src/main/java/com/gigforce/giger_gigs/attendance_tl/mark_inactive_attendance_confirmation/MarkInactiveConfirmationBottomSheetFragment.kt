@@ -2,8 +2,6 @@ package com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance_confirmat
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -14,7 +12,6 @@ import com.gigforce.giger_gigs.GigNavigation
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.gigforce.giger_gigs.databinding.FragmentMarkInactiveConfirmationBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -1,11 +1,17 @@
 package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import android.app.DatePickerDialog
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +26,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -32,7 +39,6 @@ import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEv
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,7 +85,9 @@ class GigersAttendanceUnderManagerFragment :
 
         val defaultDate = LocalDate.now()
         val datePickerDialog = DatePickerDialog(
-            requireContext(), { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+            requireContext(),
+            R.style.DatePickerTheme,
+            { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
                 val date = LocalDate.of(
                     year,
                     month + 1,
@@ -141,9 +149,9 @@ class GigersAttendanceUnderManagerFragment :
 
         lifecycleScope.launch {
 
-            viewBinding.appBarComp.showSubtitle(
-                simpleDateFormat.format(LocalDate.now())
-            )
+//            viewBinding.appBarComp.showSubtitle(
+//                simpleDateFormat.format(LocalDate.now())
+//            )
 
             viewBinding.appBarComp.apply {
 
@@ -181,6 +189,22 @@ class GigersAttendanceUnderManagerFragment :
                 GigerAttendanceUnderManagerViewContract.UiEvent.RefreshAttendanceClicked
             )
         }
+
+        swipeDirectionTextSwitcher.setFactory {
+            val textView = TextView(requireContext())
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f)
+            textView.setTextColor(ResourcesCompat.getColor(resources, android.R.color.black, null))
+
+            val font = ResourcesCompat.getFont(requireContext(), R.font.lato)
+            textView.typeface = font
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                textView.lineHeight = 12
+            }
+            textView
+        }
+        swipeDirectionTextSwitcher.setInAnimation(requireContext(), R.anim.animscale_in)
+        swipeDirectionTextSwitcher.setOutAnimation(requireContext(), R.anim.animscale_out)
     }
 
     private fun setDefaultTabs() = viewBinding.tablayout.apply {
@@ -254,9 +278,27 @@ class GigersAttendanceUnderManagerFragment :
                                 )
                             }
 
-                            viewBinding.appBarComp.showSubtitle(
-                                simpleDateFormat.format(it.date)
-                            )
+                            val showingDataForDateFormatted = simpleDateFormat.format(it.date)
+                            if (showingDataForDateFormatted != viewBinding.appBarComp.getSubTitleText()) {
+                                //If date is same then user might have just expanded/collapsed some layout
+
+                                viewBinding.appBarComp.showSubtitle(
+                                    showingDataForDateFormatted
+                                )
+                                if (it.attendanceSwipeControlsEnabled) {
+                                    viewBinding.swipeDirectionLabelLayout.isVisible = true
+
+                                    viewBinding.swipeDirectionTextSwitcher.setText(
+                                        if (it.enablePresentSwipeAction && it.enableDeclineSwipeAction) {
+                                            "Swipe right to mark present and left to mark absent."
+                                        } else {
+                                            "Swipe left to mark absent."
+                                        }
+                                    )
+                                } else {
+                                    viewBinding.swipeDirectionLabelLayout.isVisible = false
+                                }
+                            }
                         }
                     }
                 }
@@ -400,6 +442,8 @@ class GigersAttendanceUnderManagerFragment :
         swipeTouchHandler.markPresentSwipeActionEnabled = enablePresentSwipeAction
         swipeTouchHandler.declineSwipeActionEnabled = enableDeclineSwipeAction
 
+
+
         stopShimmer(
             shimmerContainer,
             R.id.shimmer_controller
@@ -464,6 +508,7 @@ class GigersAttendanceUnderManagerFragment :
 
         if (recyclerView.childCount == 0) {
 
+            swipeDirectionLabelLayout.isVisible = false
             infoLayout.root.visible()
             infoLayout.infoMessageTv.text = error
         } else {
@@ -482,6 +527,7 @@ class GigersAttendanceUnderManagerFragment :
 
         if (recyclerView.childCount == 0) {
 
+            swipeDirectionLabelLayout.isVisible = false
             shimmerContainer.visible()
             swipeRefresh.isRefreshing = false
 

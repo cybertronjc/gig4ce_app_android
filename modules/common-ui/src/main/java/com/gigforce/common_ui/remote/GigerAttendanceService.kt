@@ -1,7 +1,6 @@
 package com.gigforce.common_ui.remote
 
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
-import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.common_ui.viewdatamodels.gig.*
 import retrofit2.Response
 import retrofit2.http.*

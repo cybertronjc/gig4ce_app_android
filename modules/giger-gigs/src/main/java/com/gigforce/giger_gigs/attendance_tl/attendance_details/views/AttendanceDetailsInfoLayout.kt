@@ -5,10 +5,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.common_ui.TextDrawable
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.extensions.capitalizeWords
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.LayoutAttendanceInfoBinding
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import com.google.android.material.card.MaterialCardView
 
 class AttendanceDetailsInfoLayout(

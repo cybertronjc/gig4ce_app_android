@@ -6,8 +6,6 @@ import com.gigforce.common_ui.remote.GigerAttendanceService
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceRequest
-import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
-import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener

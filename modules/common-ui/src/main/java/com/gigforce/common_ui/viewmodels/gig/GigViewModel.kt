@@ -13,10 +13,12 @@ import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.google.firebase.Timestamp
@@ -47,8 +49,14 @@ import kotlin.coroutines.suspendCoroutine
 class GigViewModel @Inject constructor(
     private val gigsRepository: GigsRepository,
     private val firebaseStorage: FirebaseStorage,
-    private val attendanceRepository: GigAttendanceRepository
+    private val attendanceRepository: GigAttendanceRepository,
+    private val logger : GigforceLogger
 ) : ViewModel() {
+
+    companion object{
+        const val TAG = "GigViewModel"
+    }
+
     private val profileFirebaseRepository =
         GigerProfileFirebaseRepository()
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -57,7 +65,6 @@ class GigViewModel @Inject constructor(
 
     var currentGig: Gig? = null
 
-    var gigOrder: GigOrder? = null
 
 
     private val currentUser: FirebaseUser by lazy {
@@ -97,6 +104,7 @@ class GigViewModel @Inject constructor(
         if (!gig.isCheckInMarked()) {
 
             markCheckIn(
+                gig = gig,
                 gigId = gig.gigId,
                 location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
@@ -105,6 +113,7 @@ class GigViewModel @Inject constructor(
                 remarks = remarks,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
+
         } else if (!gig.isCheckOutMarked()) {
 
             val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
@@ -120,6 +129,7 @@ class GigViewModel @Inject constructor(
             }
 
             markCheckOut(
+                gig = gig,
                 gigId = gig.gigId,
                 location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
@@ -137,6 +147,7 @@ class GigViewModel @Inject constructor(
     }
 
     private suspend fun markCheckIn(
+        gig: Gig,
         gigId: String,
         location: Location?,
         distanceBetweenGigAndUser: Float,
@@ -160,13 +171,28 @@ class GigViewModel @Inject constructor(
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_IN)
             _markingAttendanceState.value = null
+
+
+            val updatedGig = gig.copy(
+                attendance = GigAttendance(
+                    checkInMarked = true,
+                    checkInTime = Date(),
+                    checkInLat = location?.latitude ?: 0.0,
+                    checkInLong = location?.longitude ?: 0.0,
+                    checkInImage = image,
+                    checkInAddress = locationPhysicalAddress
+                )
+            )
+            currentGig = updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
         } catch (e: Exception) {
-            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = Lce.error(e.message ?: "Unable to mark check-in")
             _markingAttendanceState.value = null
         }
     }
 
     private suspend fun markCheckOut(
+        gig: Gig,
         gigId: String,
         location: Location?,
         distanceBetweenGigAndUser: Float,
@@ -190,8 +216,32 @@ class GigViewModel @Inject constructor(
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
             _markingAttendanceState.value = null
+
+            Date().toLocalDate()
+            val updatedAttendanceItem = gig.attendance ?: GigAttendance(
+                checkInMarked = true,
+                checkInTime = Date(),
+                checkInLat = location?.latitude ?: 0.0,
+                checkInLong = location?.longitude ?: 0.0,
+                checkInImage = image,
+                checkInAddress = locationPhysicalAddress
+            ).apply {
+                setCheckout(
+                    checkOutMarked = true,
+                    checkOutTime = Date(),
+                    checkOutLat = location?.latitude ?: 0.0,
+                    checkOutLong = location?.longitude ?: 0.0,
+                    checkOutImage = image,
+                    checkOutAddress = locationPhysicalAddress
+                )
+            }
+            val updatedGig = gig.copy(
+                attendance = updatedAttendanceItem
+            )
+            currentGig = updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
         } catch (e: Exception) {
-            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = Lce.error(e.message ?: "Unable to mark check-out")
             _markingAttendanceState.value = null
         }
     }
@@ -233,19 +283,26 @@ class GigViewModel @Inject constructor(
     private val _gigDetails = MutableLiveData<Lce<Gig>>()
     val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
 
-    fun watchGig(gigId: String, shouldGetContactdetails: Boolean = false) {
+    fun fetchGigDetails(
+        gigId: String,
+        shouldGetContactdetails: Boolean = false
+    ) = viewModelScope.launch {
         _gigDetails.value = Lce.loading()
-        mWatchUpcomingRepoRegistration = gigsRepository
-            .getCollectionReference()
-            .document(gigId)
-            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+        logger.d(TAG,"Fetching gig details $gigId...")
 
-                if (documentSnapshot != null) {
-                    extractGigData(documentSnapshot, shouldGetContactdetails)
-                } else {
-                    _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
-                }
-            }
+        try {
+
+            val gig =  gigsRepository.getGigDetails(gigId)
+            currentGig = gig
+            _gigDetails.value = Lce.content(gig)
+            logger.d(TAG,"[Success] gig details fetched")
+        } catch (e: Exception) {
+
+            _gigDetails.value = Lce.error(
+                e.message ?: "Unable to load Gig Details"
+            )
+            logger.e(TAG,"[Failure] gig details fetched error",e)
+        }
     }
 
     fun getGigWithDetails(gigId: String) = viewModelScope.launch {
@@ -387,12 +444,6 @@ class GigViewModel @Inject constructor(
 
             gig
         }.onSuccess {
-
-            gigOrder = try {
-                getGigOrder(it.gigOrderId)
-            }catch (e: Exception){
-                null
-            }
             //gigOrder = getGigOrder(it.gigOrderId)
             _gigDetails.value = Lce.content(it)
         }.onFailure {

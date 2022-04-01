@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.datamodels.attendance
+package com.gigforce.common_ui.viewdatamodels.gig
 
 import com.google.gson.annotations.SerializedName
 

@@ -100,22 +100,12 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             it.id == attendance.gigId
         } ?: return@launch
 
-        if (rightSwipedAttendance.attendanceType.isNullOrBlank() || AttendanceType.OVERWRITE_BOTH == rightSwipedAttendance.attendanceType) {
-
-            _viewEffects.emit(
-                GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation(
-                    gigId = attendance.gigId,
-                    hasGigerMarkedHimselfInActive = false
-                )
+        _viewEffects.emit(
+            GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation(
+                gigId = attendance.gigId,
+                hasGigerMarkedHimselfInActive = rightSwipedAttendance.getGigerMarkedAttendance() == AttendanceStatus.ABSENT
             )
-        } else {
-            _viewEffects.emit(
-                GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation(
-                    gigId = attendance.gigId,
-                    hasGigerMarkedHimselfInActive = attendance.gigerAttendanceStatus == AttendanceStatus.ABSENT
-                )
-            )
-        }
+        )
     }
 
     private fun userLeftSwipedForMarkingAbsent(

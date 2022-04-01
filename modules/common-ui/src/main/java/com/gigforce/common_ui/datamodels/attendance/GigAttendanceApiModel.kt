@@ -3,6 +3,8 @@ package com.gigforce.common_ui.datamodels.attendance
 import com.gigforce.common_ui.ext.nonEmptyStringOrNull
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
+import com.gigforce.common_ui.viewdatamodels.gig.GigLocation
+import com.gigforce.common_ui.viewdatamodels.gig.GigersScout
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -80,6 +82,7 @@ data class GigAttendanceApiModel(
     fun getProfilePicture() : String{
         return profilePicThumbnail ?: profileAvatarName ?: return ""
     }
+
 
     fun getAttendanceTypeNN() : String{
         if (attendanceType.isNullOrBlank() || AttendanceType.OVERWRITE_BOTH == attendanceType) {

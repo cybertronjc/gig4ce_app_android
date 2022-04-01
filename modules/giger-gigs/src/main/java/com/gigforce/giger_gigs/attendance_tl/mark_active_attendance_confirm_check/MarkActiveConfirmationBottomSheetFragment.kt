@@ -14,8 +14,7 @@ import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
-import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetViewModel
-import com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsViewContract
+
 import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress

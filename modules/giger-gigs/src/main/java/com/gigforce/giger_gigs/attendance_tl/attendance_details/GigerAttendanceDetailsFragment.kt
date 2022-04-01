@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
@@ -14,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.utils.dp2Px
+import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -23,7 +26,6 @@ import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
 import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEvents
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
-import com.gigforce.giger_gigs.models.GigAttendanceData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -307,7 +309,7 @@ class GigerAttendanceDetailsFragment :
         this.gigerMarkedAttendanceStatus.isVisible = attendanceDetails.showGigerAttendanceLayout
         if (attendanceDetails.gigerAttendanceStatus != null) {
             this.gigerMarkedAttendanceStatus.bind(
-                attendanceDetails.gigerAttendanceStatus,
+                attendanceDetails.gigerAttendanceStatus!!,
                 null,//TODO
                 attendanceDetails.hasAttendanceConflict,
                 false
@@ -332,6 +334,42 @@ class GigerAttendanceDetailsFragment :
 
             this.activeButton.isVisible = attendanceDetails.canTLMarkPresent
             this.inactiveButton.isVisible = attendanceDetails.canTLMarkAbsent
+
+            if (attendanceDetails.canTLMarkPresent && attendanceDetails.canTLMarkAbsent) {
+                val params = this.activeButton.layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(
+                    params.leftMargin,
+                    params.topMargin,
+                    30,
+                    params.bottomMargin,
+                )
+
+                val params2 = this.inactiveButton.layoutParams as ViewGroup.MarginLayoutParams
+                params2.setMargins(
+                    30,
+                    params2.topMargin,
+                    params2.rightMargin,
+                    params2.bottomMargin,
+                )
+            } else {
+
+                val params = this.activeButton.layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(
+                    params.leftMargin,
+                    params.topMargin,
+                    0,
+                    params.bottomMargin,
+                )
+
+                val params2 = this.inactiveButton.layoutParams as ViewGroup.MarginLayoutParams
+                params2.setMargins(
+                    0,
+                    params2.topMargin,
+                    params2.rightMargin,
+                    params2.bottomMargin,
+                )
+            }
+
         } else {
             this.attendanceTextview.isVisible = false
             this.attendanceActionButtonsLayout.isVisible = false
