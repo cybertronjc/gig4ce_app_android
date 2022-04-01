@@ -282,6 +282,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         cal.time = Date()
         cal.add(Calendar.DATE, 1)
         viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(cal.time)
+        viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(cal.time.toLocalDate()))
 
         selectCityLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm2Events.SelectCityClicked)
