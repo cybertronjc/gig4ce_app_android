@@ -62,6 +62,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -111,7 +112,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth + 1)
 
                 viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(newCal.time)
                 viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(newCal.time.toLocalDate()))
@@ -277,7 +278,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding: FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
-        viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(Date())
+        viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(LocalDateTime.from(Date().toInstant()).plusDays(1))
 
         selectCityLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm2Events.SelectCityClicked)
