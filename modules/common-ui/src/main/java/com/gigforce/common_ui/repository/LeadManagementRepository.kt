@@ -728,11 +728,13 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun getTeamLeadersForSelection(
-        showFetchAllTLs: Boolean
+        showFetchAllTLs: Boolean,
+        businessId: String
     ): List<TeamLeader> {
 
         return joiningProfileRemoteService
             .getTeamLeadersForSelection(
+                businessId,
                 showFetchAllTLs
             )
             .bodyOrThrow()

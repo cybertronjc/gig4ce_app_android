@@ -31,7 +31,8 @@ sealed class NewSelectionForm1ViewState {
 
     data class OpenSelectTLScreen(
         val selectedTLId : String?,
-        val shouldShowAllTls : Boolean
+        val shouldShowAllTls : Boolean,
+        val selectedBusinessId: String
     ) : NewSelectionForm1ViewState()
 
     object CheckingForUserDetailsFromProfiles : NewSelectionForm1ViewState()

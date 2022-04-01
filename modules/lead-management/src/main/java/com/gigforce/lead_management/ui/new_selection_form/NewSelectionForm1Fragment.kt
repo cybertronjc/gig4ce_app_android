@@ -342,7 +342,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 )
                 is NewSelectionForm1ViewState.OpenSelectTLScreen -> openSelectTLScreen(
                     state.selectedTLId,
-                    state.shouldShowAllTls
+                    state.shouldShowAllTls,
+                    state.selectedBusinessId
                 )
 
                 //Data submit states
@@ -368,13 +369,15 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun openSelectTLScreen(
         selectedTLId : String?,
-        shouldShowAllTls : Boolean
+        shouldShowAllTls : Boolean,
+        businessId: String
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS,
             bundleOf(
                 SelectTeamLeaderFragment.INTENT_EXTRA_SELECTED_TL_ID to selectedTLId,
-                SelectTeamLeaderFragment.INTENT_EXTRA_SHOW_ALL_TLS to shouldShowAllTls
+                SelectTeamLeaderFragment.INTENT_EXTRA_SHOW_ALL_TLS to shouldShowAllTls,
+                SelectTeamLeaderFragment.INTENT_EXTRA_SELECTED_BUSINESS to businessId
             ),
             getNavOptions()
         )
@@ -527,11 +530,11 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             }, 300)
         }
 
-        if(selectedTeamLeader != null) {
-            showSelectedTeamLeader(
-                selectedTeamLeader
-            )
-        }
+//        if(selectedTeamLeader != null) {
+//            showSelectedTeamLeader(
+//                selectedTeamLeader
+//            )
+//        }
     }
 
 
@@ -607,6 +610,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         //reseting job profile selected
         selectedJobProfileLabel.text = getString(R.string.click_to_select_job_profile_lead)
         selectedJobProfileLabel.typeface = Typeface.DEFAULT
+
+        //reset cluster lead selected
+        selectedReportingTlLabel.text =
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()
