@@ -612,7 +612,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         selectedJobProfileLabel.typeface = Typeface.DEFAULT
 
         //reset cluster lead selected
-        selectedReportingTlLabel.text =
+        selectedReportingTlLabel.text = getString(R.string.click_to_select)
+        selectedReportingTlLabel.typeface = Typeface.DEFAULT
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()

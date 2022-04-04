@@ -128,6 +128,7 @@
     <string name="select_job_profile1_lead">Select Job Profile</string>
     <string name="click_to_select_job_profile_lead">Click to select Job Profile</string>
     <string name="giger_client_id_lead">Giger Client ID</string>
+    <string name="click_to_select">Click to select</string>
     <string name="optional_lead">(Optional)</string>
     <string name="type_client_id_here_lead">Type Client Id here</string>
     <string name="click_to_select_city_lead">Click to select city</string>
