@@ -504,4 +504,6 @@
     <string name="file_format_is_invalid_veri">File Format is Invalid!</string>
     <string name="invalid_format_desc_veri">File cannot be uploaded because of unsupported file format. Only files with following formats are allowed: .pdf.</string>
     <string name="no_compliance_generated_veri">Compliance not Generated!</string>
+    <string name="character_certificate_veri">Character Certificate</string>
+    <string name="character_certificate_details_veri">Please upload your character certificate here.</string>
 </resources>

@@ -11,6 +11,7 @@ import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
+import com.gigforce.core.datamodels.verification.CharacterCertificateDataModel
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.logger.GigforceLogger
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -111,6 +112,32 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             FirebaseCrashlytics.getInstance()
                 .log("Exception : kycOcrVerification Method ${complianceStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${complianceStatus.message()}")
+        }
+    }
+
+    suspend fun getCharacterCertificate(): CharacterCertificateResponse {
+        val characterStatus = kycService.getCharacterCertificateData(
+            iBuildConfigVM.getCharacterCertificateDataUrl()
+        )
+
+        if (characterStatus.isSuccessful){
+            return  characterStatus.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : getCharacterCertificate Method ${characterStatus.message()}")
+            throw Exception("Issue in KYC Ocr result ${characterStatus.message()}")
+        }
+    }
+
+    suspend fun submitCharacterCertificate(file: MultipartBody.Part): VaccineFileUploadResDM {
+        val characterCertificateResponse = kycService.uploadCharacterCertificate(
+            iBuildConfigVM.getBaseUrl()+"kyc/characterCertificate", file)
+        if (characterCertificateResponse.isSuccessful){
+            return characterCertificateResponse.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : submitCharacterCertificate Method ${characterCertificateResponse?.message()}")
+            throw Exception("Issue in character certification submission ${characterCertificateResponse?.errorBody()}")
         }
     }
 

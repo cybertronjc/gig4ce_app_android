@@ -53,4 +53,16 @@ interface VerificationKycService {
     suspend fun getComplianceData(
         @Url getComplianceDataUrl: String
     ): Response<ComplianceDataModel>
+
+    @GET
+    suspend fun getCharacterCertificateData(
+        @Url getCharacterDataUrl: String
+    ): Response<CharacterCertificateResponse>
+
+    @Multipart
+    @POST
+    suspend fun uploadCharacterCertificate(
+        @Url getUploadCharacterUrl: String,
+        @Part file: MultipartBody.Part
+    ): Response<VaccineFileUploadResDM>
 }

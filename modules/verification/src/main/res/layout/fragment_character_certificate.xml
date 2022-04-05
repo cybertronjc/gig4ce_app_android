@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".mainverification.character_certificate.CharacterCertificateFragment">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarCharacter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundType="PinkBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/character_certificate_veri" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/appBarCharacter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingStart="20dp"
+            android:paddingTop="22dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="@dimen/size_30"
+            android:layout_marginBottom="@dimen/size_10"
+            android:background="@color/light_pink"
+            android:paddingBottom="16dp"
+            >
+
+                <RelativeLayout
+                    android:id="@+id/image_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="110dp"
+                        android:layout_height="90dp"
+                        android:src="@drawable/ic_character_certificate_icon"
+                        android:adjustViewBounds="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/CardTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="@dimen/font14"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/black"
+                    android:text="@string/character_certificate_veri"
+                    app:layout_constraintEnd_toEndOf="@+id/upload_button"
+                    app:layout_constraintStart_toEndOf="@+id/image_rl"
+                    app:layout_constraintTop_toTopOf="@+id/image_rl" />
+
+                <TextView
+                    android:id="@+id/tv_desc"
+                    style="@style/CardSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="@dimen/font_12"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/character_certificate_details_veri"
+                    app:layout_constraintEnd_toEndOf="@+id/upload_button"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/upload_button"
+                    style="@style/ActionButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Upload Now"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+                <ImageView
+                    android:id="@+id/edit_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vaccine_edit_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/download_icon"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/download_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/size_20"
+                        android:layout_marginLeft="@dimen/dp_mid"
+                        android:src="@drawable/download_icon_ver"/>
+                </LinearLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/progressBarC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyle"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/okay_button"
+            style="@style/primary_button_style"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_marginBottom="@dimen/dp_normal"
+            android:text="@string/skip_veri"
+            android:textAllCaps="true"
+            android:layout_marginLeft="@dimen/dp_mid"
+            android:layout_marginRight="@dimen/dp_mid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

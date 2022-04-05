@@ -47,6 +47,7 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/VaccineUploadSuccessfulBS",R.id.VaccineUploadSuccessfulBS)
         baseImplementation.registerRoute("${moduleName}/CertificateDownloadBS",R.id.CertificateDownloadBS)
         baseImplementation.registerRoute("${moduleName}/InvalidFormatBottomSheet",R.id.InvalidFormatBottomSheet)
+        baseImplementation.registerRoute("${moduleName}/characterCertificate",R.id.characterCertificateFragment)
 
         //new main verification with compliance
         baseImplementation.registerRoute("${moduleName}/myDocuments", R.id.myDocumentsFragment)
