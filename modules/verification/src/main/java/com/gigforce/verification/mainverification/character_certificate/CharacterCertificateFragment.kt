@@ -34,6 +34,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.databinding.FragmentCharacterCertificateBinding
@@ -232,8 +233,13 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
                 }
                 is Lce.Content -> {
                     progressBarC.gone()
-                    navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
-                    viewModel.getCharacterData()
+                    if (it.content.status == true){
+                        navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
+                        viewModel.getCharacterData()
+                    } else {
+                        showToast("Certificate upload failed, try again")
+                    }
+
                 }
                 is Lce.Error -> {
                     progressBarC.gone()
@@ -324,6 +330,10 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
                         RequestBody.create(MediaType.parse(mimeType), byteArr)
                     val pdfname: String =
                         java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
+                    val reqBodyUpdatedBy =
+                        RequestBody.create(MediaType.parse("text/plain"), FirebaseAuthStateListener.getInstance().getCurrentSignInInfo()?.uid.toString())
+                    val reqBodyUpdatedAt =
+                        RequestBody.create(MediaType.parse("text/plain"), Date().toString())
                     mutliplartFile =
                         MultipartBody.Part.createFormData(
                             "file",
@@ -332,7 +342,9 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
                         )
                     mutliplartFile?.let {
                         viewModel.uploadCharacterCertificate(
-                            it
+                            it,
+                            reqBodyUpdatedBy,
+                            reqBodyUpdatedAt
                         )
                     }
                 } else {

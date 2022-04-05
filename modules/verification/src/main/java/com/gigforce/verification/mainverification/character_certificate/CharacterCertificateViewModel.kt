@@ -21,16 +21,19 @@ import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import com.gigforce.verification.mainverification.vaccine.DownloadFileService
 import com.gigforce.verification.mainverification.vaccine.IntermediateVaccinationRepo
 import com.gigforce.verification.mainverification.vaccine.mainvaccine.FileDownloaded
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -65,13 +68,15 @@ class CharacterCertificateViewModel @Inject constructor(private val verification
         }
     }
 
-    fun uploadCharacterCertificate(file: MultipartBody.Part) =
+    fun uploadCharacterCertificate(file: MultipartBody.Part, updatedBy: RequestBody, updatedAt: RequestBody) =
         viewModelScope.launch {
             try {
                 _fileUploadLiveData.value = Lce.Loading
                 _fileUploadLiveData.value = Lce.content(
                     verificationKycRepo.submitCharacterCertificate(
-                        file
+                        file,
+                        updatedBy,
+                        updatedAt
                     )
                 )
             } catch (e: Exception) {

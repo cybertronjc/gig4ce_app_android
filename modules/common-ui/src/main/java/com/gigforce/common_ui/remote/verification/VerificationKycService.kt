@@ -3,9 +3,12 @@ package com.gigforce.common_ui.remote.verification
 
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.common_ui.viewdatamodels.verification.SubmitSignatureRequest
+import com.google.firebase.Timestamp
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 
 interface VerificationKycService {
 
@@ -63,6 +66,8 @@ interface VerificationKycService {
     @POST
     suspend fun uploadCharacterCertificate(
         @Url getUploadCharacterUrl: String,
+        @Part("updatedBy") updatedBy: RequestBody,
+        @Part("updatedAt") updatedAt: RequestBody,
         @Part file: MultipartBody.Part
     ): Response<VaccineFileUploadResDM>
 }
