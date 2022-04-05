@@ -374,6 +374,8 @@ class GigsRepository @Inject constructor(
         val upcomingGigs = gigService.getNext7DaysUpcomingGigs().bodyOrThrow()
         val mappedGigs = upcomingGigs.map {
             it.toGig()
+        }.filter {
+            !it.isCheckInAndCheckOutMarked()
         }
         emit(mappedGigs)
     }

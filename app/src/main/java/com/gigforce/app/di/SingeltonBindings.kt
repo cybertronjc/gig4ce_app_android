@@ -16,6 +16,7 @@ import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Binds
 import dagger.Module
@@ -54,6 +55,12 @@ abstract class SingeltonBindings {
         @Provides
         fun provideFirebaseStorage(): FirebaseStorage {
             return FirebaseStorage.getInstance()
+        }
+
+        @Singleton
+        @Provides
+        fun provideFirebaseRemoteConfig() : FirebaseRemoteConfig{
+            return FirebaseRemoteConfig.getInstance()
         }
 
         @Provides

@@ -14,8 +14,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
-class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
-    ViewModel(), DataCallbacks.ResponseCallbacks {
+class GigHistoryViewModel(
+    private val repositoryCallbacks: DataCallbacks
+    ) : ViewModel(), DataCallbacks.ResponseCallbacks {
     var eventState: Int = AdapterGigHistory.EVENT_PAST
     private var lastVisibleItem: DocumentSnapshot? = null
     var isLastPage: Boolean = false

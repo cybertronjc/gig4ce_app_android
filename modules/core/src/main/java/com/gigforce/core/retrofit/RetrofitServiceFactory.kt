@@ -1,6 +1,7 @@
 package com.gigforce.core.retrofit
 
 
+import android.util.Log
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.exceptions.InternalServerErrorException
 import com.gigforce.core.logger.GigforceLogger

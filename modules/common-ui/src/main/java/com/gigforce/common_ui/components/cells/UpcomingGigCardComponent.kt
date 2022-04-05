@@ -38,14 +38,16 @@ import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameLayout(context, attrs),
-        IViewHolder{
+class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs),
+    IViewHolder {
 
     @Inject
     lateinit var gigNavigation: GigNavigation
 
     @Inject
     lateinit var navigation: INavigation
+
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
@@ -78,6 +80,7 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
         )
         context.startActivity(intent)
     }
+
     val cardView = this.findViewById<View>(R.id.card_view)
     val ivContact = this.findViewById<ImageView>(R.id.iv_call)
     val iv_message = this.findViewById<ImageView>(R.id.iv_message)
@@ -115,11 +118,14 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
 
                 messageCardView.visible()
                 messageCardView.setOnClickListener {
-                       navigation.navigateTo("chats/chatPage", bundleOf(
+                    navigation.navigateTo(
+                        "chats/chatPage", bundleOf(
                             AppConstants.INTENT_EXTRA_CHAT_TYPE to AppConstants.CHAT_TYPE_USER,
                             AppConstants.INTENT_EXTRA_OTHER_USER_ID to obj.agencyContact?.uid,
                             AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE to obj.agencyContact?.profilePicture,
-                            AppConstants.INTENT_EXTRA_OTHER_USER_NAME to obj.agencyContact?.name))
+                            AppConstants.INTENT_EXTRA_OTHER_USER_NAME to obj.agencyContact?.name
+                        )
+                    )
                     navigation.navigateTo("chat")
                 }
 
@@ -130,24 +136,24 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
                         val bundle = Bundle()
                         val map = obj.chatInfo
                         bundle.putString(
-                                AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE,
+                            AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE,
                             AppConstants.IMAGE_URL
                         )
                         bundle.putString(
-                                AppConstants.INTENT_EXTRA_OTHER_USER_NAME,
+                            AppConstants.INTENT_EXTRA_OTHER_USER_NAME,
                             AppConstants.CONTACT_NAME
                         )
                         bundle.putString(
-                                AppConstants.INTENT_EXTRA_CHAT_TYPE,
+                            AppConstants.INTENT_EXTRA_CHAT_TYPE,
                             ChatConstants.CHAT_TYPE_USER
                         )
 
                         bundle.putString(
-                                AppConstants.INTENT_EXTRA_CHAT_HEADER_ID,
+                            AppConstants.INTENT_EXTRA_CHAT_HEADER_ID,
                             map?.get("chatHeaderId") as String
                         )
                         bundle.putString(
-                                AppConstants.INTENT_EXTRA_OTHER_USER_ID,
+                            AppConstants.INTENT_EXTRA_OTHER_USER_ID,
                             map?.get("otherUserId") as String
                         )
                         bundle.putString(
@@ -192,9 +198,11 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
                 GigStatus.NO_SHOW -> {
 
                     checkInTV.setOnClickListener {
-                        navigation.navigateTo("gig/attendance", bundleOf(
+                        navigation.navigateTo(
+                            "gig/attendance", bundleOf(
                                 AppConstants.INTENT_EXTRA_GIG_ID to obj.gigId
-                        ))
+                            )
+                        )
                     }
 
                     if (obj.isCheckInAndCheckOutMarked()) {
@@ -215,16 +223,11 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
 
             if (obj.isGigOfToday()) {
 
-                val gigTiming = if (obj.endDateTime != null)
-                    "${timeFormatter.format(obj.startDateTime.toDate())} - ${
-                    timeFormatter.format(
-                        obj.endDateTime.toDate()
-                    )
-                    }"
-                else
-                    "${timeFormatter.format(obj.startDateTime.toDate())} - "
-                textView67.text = gigTiming
-
+                textView67.text = buildString {
+                    append(timeFormatter.format(obj.startDateTime.toDate()))
+                    append(" - ")
+                    append(timeFormatter.format(obj.endDateTime.toDate()))
+                }
             } else {
                 val date = DateHelper.getDateInDDMMYYYY(obj.startDateTime.toDate())
                 textView67.text = date
@@ -238,19 +241,13 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
 //
 //            }
 
-            if (obj.gigContactDetails?.contactNumber != null) {
-
-                callView.visible()
-                callView.setOnClickListener{
-
-            }
-            } else if (!obj.agencyContact?.contactNumber.isNullOrEmpty()) {
+            if (!obj.agencyContact?.contactNumber.isNullOrEmpty()) {
 
                 callView.visible()
                 callView.setOnClickListener {
                     callManager(obj?.agencyContact?.contactNumber)
                     if (obj.gigContactDetails?.contactNumber != null &&
-                            obj.gigContactDetails?.contactNumber != 0L
+                        obj.gigContactDetails?.contactNumber != 0L
                     ) {
                         callManager(obj.gigContactDetails?.contactNumber.toString())
 
@@ -299,7 +296,7 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
         }
 
 
-        }
     }
+}
 
 

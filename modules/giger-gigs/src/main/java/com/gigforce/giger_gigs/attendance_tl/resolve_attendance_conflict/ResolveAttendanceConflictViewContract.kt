@@ -6,7 +6,9 @@ sealed class ResolveAttendanceConflictViewContract {
 
         object ScreenLoaded : UiState()
 
-        object ResolvingConflict : UiState()
+        data class ResolvingConflict(
+            val optionSelected : Boolean
+        ) : UiState()
 
         object ConflictResolvedSuccessfully: UiState()
 

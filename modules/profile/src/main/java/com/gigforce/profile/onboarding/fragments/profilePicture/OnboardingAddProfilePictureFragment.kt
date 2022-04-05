@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -30,7 +29,7 @@ import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
@@ -47,7 +46,6 @@ import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_onboarding_profile_picture.*
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -86,7 +84,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
     private val imageCropOptions: ImageCropOptions
         get() {
 
-            val newFileName = "Onboarding-profile-${DateHelper.getFullDateTimeStamp()}.png"
+            val newFileName = "Onboarding-profile-${DateUtil.getFullDateTimeStamp()}.png"
             val imageFile = File(requireContext().filesDir, newFileName)
 
             return ImageCropOptions

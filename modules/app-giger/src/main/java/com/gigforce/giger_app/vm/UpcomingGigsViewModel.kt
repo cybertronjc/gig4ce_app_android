@@ -38,7 +38,7 @@ class UpcomingGigsViewModel @Inject constructor(
                     _data.value = it
                 }
         }catch (e:Exception){
-
+                e.printStackTrace()
         }
     }
 

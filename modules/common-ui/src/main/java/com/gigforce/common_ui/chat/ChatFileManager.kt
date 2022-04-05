@@ -5,7 +5,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import com.gigforce.common_ui.MimeTypes
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject
@@ -75,7 +75,7 @@ class ChatFileManager @Inject constructor(
         mimeType: String = MimeTypes.PNG
     ): Uri {
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-        val newFileName = "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
+        val newFileName = "IMG-${DateUtil.getFullDateTimeStamp()}.$extension"
 
         val file = File(
             imageFilesDirectory,

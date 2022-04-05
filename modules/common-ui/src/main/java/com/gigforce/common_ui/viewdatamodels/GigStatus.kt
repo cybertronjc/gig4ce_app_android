@@ -75,11 +75,7 @@ enum class GigStatus constructor(
 
         fun fromGig(gig: Gig): GigStatus {
 
-            return if (gig.openNewGig()) {
-                getGigStatus(gig)
-            } else {
-                getGigStatusLegacy(gig)
-            }
+            return getGigStatus(gig)
         }
 
         private fun getGigStatusLegacy(gig: Gig): GigStatus {

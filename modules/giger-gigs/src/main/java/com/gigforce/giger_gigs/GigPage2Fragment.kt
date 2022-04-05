@@ -608,13 +608,30 @@ class GigPage2Fragment : Fragment(),
             val currentTime = LocalDateTime.now()
 
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
 
-            if (minutes > 15L) {
+            if (minutes > minTimeBtwCheckInCheckOut) {
                 checkInCheckOutSliderBtn.visible()
                 checkInCheckOutSliderBtn.text = getString(R.string.check_out_common_ui)
             } else {
                 checkInCheckOutSliderBtn.gone()
             }
+        }
+    }
+
+    private fun getMinAllowedTimeBetweenCheckInAndCheckOut(): Long {
+        val minTimeBtwCheckInCheckOutString = try {
+            firebaseRemoteConfig.getLong(
+                REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT
+            )
+        } catch (e: Exception) {
+            0L
+        }
+
+        return if (minTimeBtwCheckInCheckOutString < 1L) {
+            2L
+        } else {
+            minTimeBtwCheckInCheckOutString
         }
     }
 
@@ -1288,5 +1305,6 @@ class GigPage2Fragment : Fragment(),
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
+        const val REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT = "min_time_btw_check_in_check_out"
     }
 }

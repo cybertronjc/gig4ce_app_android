@@ -77,6 +77,9 @@ data class GigAttendanceApiModel(
 
     @field:SerializedName("GigOrderId")
     val gigOrderId: String? = null,
+
+    @field:SerializedName("lastActiveString")
+    val lastActiveString: String? = null,
 ) {
 
     fun getProfilePicture() : String{
@@ -218,7 +221,7 @@ data class GigAttendanceApiModel(
     }
 
     fun getLastActiveText(): String {
-        return "Last active -"
+        return lastActiveString ?: "Last active : N/A"
     }
 
     fun hasAttendanceConflict(): Boolean {

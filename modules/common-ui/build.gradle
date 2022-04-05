@@ -129,5 +129,6 @@ dependencies {
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+    implementation 'com.google.firebase:firebase-config-ktx:20.0.3'
 
 }

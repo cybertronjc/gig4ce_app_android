@@ -37,7 +37,7 @@ class ResolveAttendanceConflictBottomSheetViewModel @Inject constructor(
             return@launch
         }
 
-        _viewState.emit(ResolveAttendanceConflictViewContract.UiState.ResolvingConflict)
+        _viewState.emit(ResolveAttendanceConflictViewContract.UiState.ResolvingConflict(optionSelected))
         try {
             val gigWithAttendanceUpdated = gigAttendanceRepository.resolveAttendanceConflict(
                 resolveId = resolveId,

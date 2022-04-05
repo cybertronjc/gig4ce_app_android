@@ -13,10 +13,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.gigforce.core.base.BaseActivity
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.image.ImageUtils
@@ -206,7 +205,7 @@ class CaptureLocationActivity : BaseActivity(), OnMapReadyCallback,
         if (googleMap != null) {
             googleMap!!.snapshot {
 
-                val file = File(filesDir,"map-${DateHelper.getFullDateTimeStamp()}.png")
+                val file = File(filesDir,"map-${DateUtil.getFullDateTimeStamp()}.png")
                 ImageUtils.writeBitmapToDisk(it,file)
 
                 val resultIntent = Intent()

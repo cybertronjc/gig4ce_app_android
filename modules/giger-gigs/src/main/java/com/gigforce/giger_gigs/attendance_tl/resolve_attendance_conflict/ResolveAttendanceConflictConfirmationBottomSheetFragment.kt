@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.OptionSelected
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
@@ -130,7 +131,7 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
                     when (it) {
                         ResolveAttendanceConflictViewContract.UiState.ConflictResolvedSuccessfully -> dismiss()
                         is ResolveAttendanceConflictViewContract.UiState.ErrorWhileResolvingConflict -> errorWhileResolvingConflict(it.error)
-                        ResolveAttendanceConflictViewContract.UiState.ResolvingConflict -> resolvingConflict()
+                        is ResolveAttendanceConflictViewContract.UiState.ResolvingConflict -> resolvingConflict(it.optionSelected)
                         ResolveAttendanceConflictViewContract.UiState.ScreenLoaded -> {}
                     }
                 }
@@ -145,6 +146,7 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
         this.noButton.isEnabled = true
         this.yesButton.isEnabled = true
         this.yesButton.hideProgress("Yes")
+        this.noButton.hideProgress("No")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unable to resolve conflict")
@@ -153,13 +155,23 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
             .show()
     }
 
-    private fun resolvingConflict() = viewBinding.apply {
+    private fun resolvingConflict(
+        optionSelected: Boolean
+    ) = viewBinding.apply {
 
         this.noButton.isEnabled = false
         this.yesButton.isEnabled = false
-        this.yesButton.showProgress {
-            this.buttonText = "Resolving.."
-            this.progressColor = Color.WHITE
+
+        if(optionSelected) {
+            this.yesButton.showProgress {
+                this.buttonText = "Resolving.."
+                this.progressColor = Color.WHITE
+            }
+        } else{
+            this.noButton.showProgress {
+                this.buttonText = "Resolving.."
+                this.progressColor = ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+            }
         }
     }
 }

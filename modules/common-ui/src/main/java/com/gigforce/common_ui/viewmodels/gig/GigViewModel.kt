@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -50,11 +51,13 @@ class GigViewModel @Inject constructor(
     private val gigsRepository: GigsRepository,
     private val firebaseStorage: FirebaseStorage,
     private val attendanceRepository: GigAttendanceRepository,
-    private val logger : GigforceLogger
+    private val logger: GigforceLogger,
+    private val firebaseRemoteConfig : FirebaseRemoteConfig
 ) : ViewModel() {
 
-    companion object{
+    companion object {
         const val TAG = "GigViewModel"
+        const val REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT = "min_time_btw_check_in_check_out"
     }
 
     private val profileFirebaseRepository =
@@ -64,7 +67,6 @@ class GigViewModel @Inject constructor(
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
     var currentGig: Gig? = null
-
 
 
     private val currentUser: FirebaseUser by lazy {
@@ -120,7 +122,8 @@ class GigViewModel @Inject constructor(
             val currentTime = LocalDateTime.now()
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
 
-            if (minutes < 15L) {
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
+            if (minutes < minTimeBtwCheckInCheckOut) {
                 Log.d(
                     "GigViewModel",
                     "Ignoring checkout call as difference between checkin-time and current time is less than 15 mins"
@@ -143,6 +146,21 @@ class GigViewModel @Inject constructor(
                 log("GigViewModel : Gig Id - ${gig.gigId}")
                 recordException(IllegalStateException("GigViewModel : markAttendance called but check-in and checkout both are marked"))
             }
+        }
+    }
+
+    private fun getMinAllowedTimeBetweenCheckInAndCheckOut(): Long {
+        val minTimeBtwCheckInCheckOutString = try {
+            firebaseRemoteConfig.getLong(
+                REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT
+            )
+        } catch (e: Exception) {
+            0L
+        }
+        return if (minTimeBtwCheckInCheckOutString < 1L) {
+            2L
+        } else {
+            minTimeBtwCheckInCheckOutString
         }
     }
 
@@ -217,7 +235,6 @@ class GigViewModel @Inject constructor(
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
             _markingAttendanceState.value = null
 
-            Date().toLocalDate()
             val updatedAttendanceItem = gig.attendance ?: GigAttendance(
                 checkInMarked = true,
                 checkInTime = Date(),
@@ -225,7 +242,8 @@ class GigViewModel @Inject constructor(
                 checkInLong = location?.longitude ?: 0.0,
                 checkInImage = image,
                 checkInAddress = locationPhysicalAddress
-            ).apply {
+            )
+            updatedAttendanceItem.apply {
                 setCheckout(
                     checkOutMarked = true,
                     checkOutTime = Date(),
@@ -268,7 +286,11 @@ class GigViewModel @Inject constructor(
                     gigs.add(it)
                 }
             } catch (e: Exception) {
-                CrashlyticsLogger.e("GigViewModel - extractGigs","while desearializing gig data",e)
+                CrashlyticsLogger.e(
+                    "GigViewModel - extractGigs",
+                    "while desearializing gig data",
+                    e
+                )
             }
         }
 
@@ -288,20 +310,20 @@ class GigViewModel @Inject constructor(
         shouldGetContactdetails: Boolean = false
     ) = viewModelScope.launch {
         _gigDetails.value = Lce.loading()
-        logger.d(TAG,"Fetching gig details $gigId...")
+        logger.d(TAG, "Fetching gig details $gigId...")
 
         try {
 
-            val gig =  gigsRepository.getGigDetails(gigId)
+            val gig = gigsRepository.getGigDetails(gigId)
             currentGig = gig
             _gigDetails.value = Lce.content(gig)
-            logger.d(TAG,"[Success] gig details fetched")
+            logger.d(TAG, "[Success] gig details fetched")
         } catch (e: Exception) {
 
             _gigDetails.value = Lce.error(
                 e.message ?: "Unable to load Gig Details"
             )
-            logger.e(TAG,"[Failure] gig details fetched error",e)
+            logger.e(TAG, "[Failure] gig details fetched error", e)
         }
     }
 
@@ -369,7 +391,7 @@ class GigViewModel @Inject constructor(
 
             if (shouldGetContactdetails
                 && gig.businessContact != null
-                && (gig.businessContact?.uid != null || gig.businessContact?.uuid != null )
+                && (gig.businessContact?.uid != null || gig.businessContact?.uuid != null)
             ) {
 
                 val businessContactUid = gig.businessContact?.uid ?: gig.businessContact?.uuid
@@ -485,7 +507,7 @@ class GigViewModel @Inject constructor(
 
     }
 
-    suspend fun getGigOrder(gigorderId: String) : GigOrder?{
+    suspend fun getGigOrder(gigorderId: String): GigOrder? {
         try {
             var myGIgOrder: GigOrder? = GigOrder()
             val await = gigsRepository.db.collection("Gig_Order")
@@ -496,7 +518,7 @@ class GigViewModel @Inject constructor(
             }
 
             return myGIgOrder
-        }catch (e: Exception){
+        } catch (e: Exception) {
             return GigOrder()
         }
     }
@@ -635,7 +657,7 @@ class GigViewModel @Inject constructor(
     fun declineGig(
         gigId: String,
         reason: String,
-        isDeclinedByTL : Boolean
+        isDeclinedByTL: Boolean
     ) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 

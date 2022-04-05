@@ -4,13 +4,9 @@ import com.gigforce.common_ui.datamodels.attendance.GigerAttedance
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.datamodels.gigpage.JobProfile
-import com.gigforce.core.extensions.toDate
-import com.gigforce.core.extensions.toFirebaseTimestampOrNull
+import com.gigforce.core.date.DateUtil
 import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 data class GigInfoBasicApiModel(
 
@@ -88,16 +84,16 @@ data class GigInfoBasicApiModel(
 			cancellationReason = "",
 			companyName = null,
 			companyLogo = null,
-			startDateTime = startDateTime.toFirebaseTimestampOrNull()!!,
-			checkInBeforeTime = checkInBeforeBuffer.toFirebaseTimestampOrNull()!!,
-			checkInBeforeBufferTime = checkInBeforeBuffer.toFirebaseTimestampOrNull()!!,
-			checkInAfterBufferTime = checkInAfterBuffer.toFirebaseTimestampOrNull()!!,
-			checkInAfterTime = checkInAfterSlot.toFirebaseTimestampOrNull()!!,
-			endDateTime = endDateTime.toFirebaseTimestampOrNull()!!,
-			checkOutBeforeTime = checkOutAfterSlot.toFirebaseTimestampOrNull()!!,
-			checkOutBeforeBufferTime = checkOutBeforeBuffer.toFirebaseTimestampOrNull()!!,
-			checkOutAfterBufferTime = checkOutAfterBuffer.toFirebaseTimestampOrNull()!!,
-			checkOutAfterTime = checkOutAfterSlot.toFirebaseTimestampOrNull()!!,
+			startDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(startDateTime!!),
+			checkInBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeSlot!!),
+			checkInBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeBuffer!!),
+			checkInAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterBuffer!!),
+			checkInAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterSlot!!),
+			endDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(endDateTime!!),
+			checkOutBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeSlot!!),
+			checkOutBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeBuffer!!),
+			checkOutAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterBuffer!!),
+			checkOutAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterSlot!!),
 			agencyContact = null,
 			businessContact = null,
 			assignedOn = Timestamp.now(),
@@ -136,13 +132,13 @@ data class GigInfoBasicApiModel(
 			} else {
 				GigAttendance().apply {
 					this.checkInMarked = attendance.checkInTime != null
-					this.checkInTime = attendance.checkInTime.toDate()
+					this.checkInTime = DateUtil.getDateFromUTCDateTimeStringOrNull(attendance.checkInTime)
 					this.checkInLat =  0.0
 					this.checkInLong =  0.0
 					this.checkInImage = attendance.checkInImage ?: ""
 
 					this.checkOutMarked = attendance.checkOutTime != null
-					this.checkOutTime = attendance.checkOutTime.toDate()
+					this.checkOutTime = DateUtil.getDateFromUTCDateTimeStringOrNull(attendance.checkOutTime)
 					this.checkOutLat =  0.0
 					this.checkOutLong =  0.0
 				}
@@ -157,21 +153,5 @@ data class GigInfoBasicApiModel(
 		)
 	}
 
-	private fun String?.toDate(): Date? {
-		if (this == null) {
-			return null
-		} else {
-			val localDateTime = LocalDateTime.parse(
-				this,
-				DateTimeFormatter.ISO_OFFSET_DATE_TIME
-			)
-			localDateTime.plusHours(5L)
-			localDateTime.plusMinutes(30L)
-			val dateFromServer =  localDateTime.toDate
-
-			val newTime : Long = dateFromServer.time + 19800000L //5.5 Hour
-			return Date(newTime)
-		}
-	}
 }
 

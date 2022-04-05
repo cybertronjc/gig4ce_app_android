@@ -273,7 +273,7 @@ class GigAttendanceRepository @Inject constructor(
                 optionSelected = ResolveAttendanceRequestOptions.fromBoolean(optionSelected),
                 resolveId = resolveId
             )
-        ).bodyOrThrow()
+        ).bodyOrErrorBodyElseThrow()
 
         if (!response.status) {
             throw Exception(response.message)

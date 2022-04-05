@@ -151,35 +151,4 @@ suspend fun StorageReference.getStreamOrThrow(
         .addOnFailureListener { cont.resumeWithException(it) }
 }
 
-fun String.toFirebaseTimestamp(): Timestamp {
-
-    val parsedDateTime = LocalDateTime.parse(
-        this,
-        DateTimeFormatter.ISO_OFFSET_DATE_TIME
-    )
-    val convertedDateTime: ZonedDateTime = parsedDateTime.atOffset(
-        ZoneOffset.UTC
-    ).atZoneSameInstant(
-        ZoneOffset.ofHoursMinutes(5,30)
-    )
-
-    return Timestamp(
-        Date.from(convertedDateTime.toInstant())
-    )
-}
-
-fun String?.toFirebaseTimestampOrNull(): Timestamp? {
-    val timeStampString = this ?: return null
-
-    val localDateTime = LocalDateTime.parse(
-        timeStampString,
-        DateTimeFormatter.ISO_OFFSET_DATE_TIME
-    ).run {
-        plusHours(5L)
-        plusMinutes(30L)
-    }
-    return Timestamp(
-        localDateTime.toDate
-    )
-}
 
