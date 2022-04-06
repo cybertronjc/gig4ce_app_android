@@ -37,6 +37,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.verification.R
 import com.gigforce.verification.databinding.FragmentCharacterCertificateBinding
 import com.gigforce.verification.util.VerificationConstants
 import com.google.firebase.auth.FirebaseAuth
@@ -194,6 +195,7 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
                         downloadIcon.visible()
                         it.content.data?.path.let {
                             currentFilePath = it
+                            tvDesc.text = getString(R.string.character_certificate_uploaded_details_veri)
                         }
                     }
 
@@ -207,24 +209,24 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
             }
         })
 
-        viewModel.fileDownloaded.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                Lce.Loading -> {
-                    progressBarC.visible()
-                }
-                is Lce.Content -> {
-                    progressBarC.gone()
-                    navigation.navigateTo("verification/CertificateDownloadBS")
-                }
-                is Lce.Error -> {
-                    progressBarC.gone()
-                    Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
-                }
-                else -> {
-
-                }
-            }
-        })
+//        viewModel.fileDownloaded.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                Lce.Loading -> {
+//                    progressBarC.visible()
+//                }
+//                is Lce.Content -> {
+//                    progressBarC.gone()
+//                    navigation.navigateTo("verification/CertificateDownloadBS")
+//                }
+//                is Lce.Error -> {
+//                    progressBarC.gone()
+//                    Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
+//                }
+//                else -> {
+//
+//                }
+//            }
+//        })
 
         viewModel.characterFileUploadResLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -406,7 +408,10 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
 
             val downloadManager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             downloadManager.enqueue(downloadRequest)
-            showToast("Saving file in Downloads, check notification...")
+            navigation.navigateTo("verification/CertificateDownloadBS", bundleOf(
+                "title" to "Saving file in Downloads, check notification..."
+            ))
+            //showToast("Saving file in Downloads, check notification...")
         } catch (e: Exception) {
             e.printStackTrace()
         }

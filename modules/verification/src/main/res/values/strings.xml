@@ -499,11 +499,12 @@
     <string name="try_again_veri">TRY AGAIN</string>
     <string name="certificate_uploaded_veri">Certificate Uploaded</string>
     <string name="successfully_veri">Successfully!</string>
-    <string name="certificate_downloaded_veri">Certificate Downloaded</string>
+    <string name="certificate_downloaded_veri">Certificate Downloaded Successfully</string>
     <string name="not_vaccinated_veri">Not vaccinated</string>
     <string name="file_format_is_invalid_veri">File Format is Invalid!</string>
     <string name="invalid_format_desc_veri">File cannot be uploaded because of unsupported file format. Only files with following formats are allowed: .pdf.</string>
     <string name="no_compliance_generated_veri">Compliance not Generated!</string>
     <string name="character_certificate_veri">Character Certificate</string>
-    <string name="character_certificate_details_veri">Please upload your character certificate here.</string>
+    <string name="character_certificate_details_veri">Please upload your character certificate here.</string>\
+    <string name="character_certificate_uploaded_details_veri">Click to download or edit the character certificate.</string>
 </resources>

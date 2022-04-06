@@ -42,8 +42,8 @@ class CharacterCertificateViewModel @Inject constructor(private val verification
     private val _characterLiveData = MutableLiveData<Lce<CharacterCertificateResponse>>()
     val characterLiveData: LiveData<Lce<CharacterCertificateResponse>> = _characterLiveData
 
-    private val _fileDownloaded = MutableLiveData<Lce<FileDownloaded>>()
-    val fileDownloaded: LiveData<Lce<FileDownloaded>> = _fileDownloaded
+//    private val _fileDownloaded = MutableLiveData<Lce<FileDownloaded>>()
+//    val fileDownloaded: LiveData<Lce<FileDownloaded>> = _fileDownloaded
 
     private val _fileUploadLiveData = MutableLiveData<Lce<VaccineFileUploadResDM>>()
     val characterFileUploadResLiveData: LiveData<Lce<VaccineFileUploadResDM>> = _fileUploadLiveData
@@ -85,39 +85,39 @@ class CharacterCertificateViewModel @Inject constructor(private val verification
 
         }
 
-    fun downloadFile(url: String) = viewModelScope.launch {
-        try {
-            _fileDownloaded.value = Lce.Loading
-            val fullDownloadLink = FirebaseStorage.getInstance().reference.child(url).getDownloadUrlOrThrow().toString()
-
-            val dirRef = gigforceDirectory
-            if (!dirRef.exists()) dirRef.mkdirs()
-            // download file from Server
-            val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
-
-            val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
-            val fileRef = File(dirRef, fileName)
-
-            if (response.isSuccessful) {
-                val body = response.body()!!
-                if (!FileUtils.writeResponseBodyToDisk(body, fileRef)) {
-                    _fileDownloaded.value = Lce.error("File not able to download in storage!!")
-                }else{
-                    try {
-                        MediaStoreApiHelpers.saveDocumentToDownloads(context, fileRef.toUri())
-                        _fileDownloaded.value = Lce.content(FileDownloaded(true))
-                    }catch (e:Exception){
-                        _fileDownloaded.value = Lce.error("Error : File not able to download!!")
-                    }
-                }
-            } else {
-                _fileDownloaded.value = Lce.error("File not able to download through network!!")
-            }
-
-        } catch (e: Exception) {
-            Log.e("downloaddata","exception")
-        }
-    }
+//    fun downloadFile(url: String) = viewModelScope.launch {
+//        try {
+//            _fileDownloaded.value = Lce.Loading
+//            val fullDownloadLink = FirebaseStorage.getInstance().reference.child(url).getDownloadUrlOrThrow().toString()
+//
+//            val dirRef = gigforceDirectory
+//            if (!dirRef.exists()) dirRef.mkdirs()
+//            // download file from Server
+//            val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
+//
+//            val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
+//            val fileRef = File(dirRef, fileName)
+//
+//            if (response.isSuccessful) {
+//                val body = response.body()!!
+//                if (!FileUtils.writeResponseBodyToDisk(body, fileRef)) {
+//                    _fileDownloaded.value = Lce.error("File not able to download in storage!!")
+//                }else{
+//                    try {
+//                        MediaStoreApiHelpers.saveDocumentToDownloads(context, fileRef.toUri())
+//                        _fileDownloaded.value = Lce.content(FileDownloaded(true))
+//                    }catch (e:Exception){
+//                        _fileDownloaded.value = Lce.error("Error : File not able to download!!")
+//                    }
+//                }
+//            } else {
+//                _fileDownloaded.value = Lce.error("File not able to download through network!!")
+//            }
+//
+//        } catch (e: Exception) {
+//            Log.e("downloaddata","exception")
+//        }
+//    }
 
 
 
