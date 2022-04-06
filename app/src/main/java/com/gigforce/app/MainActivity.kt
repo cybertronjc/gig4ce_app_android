@@ -22,10 +22,7 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.common_ui.AppDialogsInterface
-import com.gigforce.common_ui.ConfirmationDialogOnClickListener
-import com.gigforce.common_ui.MimeTypes
-import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.*
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.core.IOnBackPressedOverride
@@ -381,6 +378,14 @@ class MainActivity : BaseActivity(),
                         intent
                     )
                 }
+                intent.getBooleanExtra(
+                    StringConstants.COMPLIANCE_DEEP_LINK.value,
+                    false
+                ) -> {
+                    handleComplianceDeeplink(
+                        intent
+                    )
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -434,6 +439,20 @@ class MainActivity : BaseActivity(),
 
         navController.popBackStack()
         navController.navigate(R.id.HelpSectionFragment)
+    }
+
+    private fun handleComplianceDeeplink(
+        intent: Intent
+    ) {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+
+        navController.popBackStack()
+        navController.navigate(R.id.myDocumentsFragment, bundleOf(
+            CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB to 1
+        ))
     }
 
     private fun handleDrivingLicenceNav() {

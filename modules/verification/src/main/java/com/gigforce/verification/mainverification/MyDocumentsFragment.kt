@@ -34,6 +34,7 @@ class MyDocumentsFragment : BaseFragment2<FragmentMyDocumentsBinding>(
 
     private var title = ""
     var selectedTab = 0
+    var deepLinkTab: Int? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +44,11 @@ class MyDocumentsFragment : BaseFragment2<FragmentMyDocumentsBinding>(
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
+            deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB) ?: 0
         } ?: run {
             arguments?.let {
                 title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
+                deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB) ?: 0
             }
         }
     }
@@ -84,6 +87,12 @@ class MyDocumentsFragment : BaseFragment2<FragmentMyDocumentsBinding>(
             tab.layoutParams = layoutParams
             viewBinding.verificationTabLayout.requestLayout()
         }
+
+        viewBinding.verificationTabLayout.selectTab(deepLinkTab?.let {
+            viewBinding.verificationTabLayout.getTabAt(
+                it
+            )
+        })
 
         //viewBinding.viewPager.registerOnPageChangeCallback(viewPagePageChangeCallback)
     }

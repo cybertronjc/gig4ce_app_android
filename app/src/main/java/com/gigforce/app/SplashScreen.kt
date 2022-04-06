@@ -173,6 +173,16 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            } else if(param == "compliance"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.COMPLIANCE_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.COMPLIANCE_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             }else {
                                 resetDeeplinkSharedPreferences()
                             }
@@ -314,6 +324,10 @@ class SplashScreen : AppCompatActivity() {
         )
         sharedPreAndCommonUtilInterface.saveDataBoolean(
             StringConstants.HELP_SECTION_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.COMPLIANCE_SP.value,
             false
         )
     }

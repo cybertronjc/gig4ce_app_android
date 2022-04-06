@@ -1260,6 +1260,10 @@
         android:id="@+id/attendanceImageConfirmBottomSheet"
         android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
         android:label="AttendanceImageConfirmBottomSheet" />
+    <fragment
+        android:id="@+id/complianceDocsFragment"
+        android:name="com.gigforce.verification.mainverification.compliance.ComplianceDocsFragment"
+        android:label="ComplianceDocsFragment" />
 
 
     =========
