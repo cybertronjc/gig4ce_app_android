@@ -31,7 +31,7 @@ sealed class GigerInfoState {
 sealed class GigerInfoEffects {
 
     data class OpenChangeTeamLeaderScreen(
-        val joiningId: String,
+        val joiningId: String?,
         val gigerId : String?,
         val gigerName : String?,
         val teamLeaderId : String
@@ -99,7 +99,7 @@ class GigerInfoViewModel @Inject constructor(
 
         _viewEffects.emit(
             GigerInfoEffects.OpenChangeTeamLeaderScreen(
-                joiningId = currentJoiningId!!,
+                joiningId = currentJoiningId,
                 gigerId = joiningInfo.gigerId,
                 gigerName = joiningInfo.gigerName,
                 teamLeaderId = authStateListener.getCurrentSignInUserInfoOrThrow().uid
