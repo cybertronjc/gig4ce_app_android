@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -237,7 +238,10 @@ class CharacterCertificateFragment : Fragment(), IOnBackPressedOverride {
                     progressBarC.gone()
                     if (it.content.status == true){
                         navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
-                        viewModel.getCharacterData()
+                        Handler().postDelayed({
+                            viewModel.getCharacterData()
+                        }, 2000)
+
                     } else {
                         showToast("Certificate upload failed, try again")
                     }
