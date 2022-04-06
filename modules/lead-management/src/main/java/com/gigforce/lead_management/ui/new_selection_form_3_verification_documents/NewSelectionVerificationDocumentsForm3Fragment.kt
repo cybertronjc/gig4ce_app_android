@@ -2,7 +2,6 @@ package com.gigforce.lead_management.ui.new_selection_form_3_verification_docume
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels

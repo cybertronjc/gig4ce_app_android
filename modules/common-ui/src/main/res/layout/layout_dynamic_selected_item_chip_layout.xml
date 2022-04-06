@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/size_4"
+    android:background="@drawable/selected_item_chip_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/chip_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_4"
+        android:layout_marginBottom="@dimen/size_4"
+        android:layout_marginStart="@dimen/size_8"
+        android:text="Selected chip"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/close_chip"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="@dimen/size_8"
+        android:layout_marginStart="@dimen/size_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_baseline_close_24"
+        app:layout_constraintStart_toEndOf="@id/chip_text"
+        app:layout_constraintTop_toTopOf="@id/chip_text"
+        app:layout_constraintBottom_toBottomOf="@id/chip_text"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

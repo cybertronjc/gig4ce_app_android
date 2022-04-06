@@ -75,4 +75,10 @@ interface JoiningProfileService {
     suspend fun changeTeamLeadersOfGigers(
         @Body changeTeamLeaderRequest : ChangeTeamLeaderRequest
     ): Response<ChangeTLResponse>
+
+    @GET("earning/components/{businessId}")
+    suspend fun getSalaryComponents(
+        @Path("businessId") businessId: String,
+        @Query("type") type: String,
+    ): Response<InputSalaryResponse>
 }

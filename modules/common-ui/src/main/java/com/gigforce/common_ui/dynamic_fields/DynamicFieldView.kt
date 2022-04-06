@@ -3,10 +3,7 @@ package com.gigforce.common_ui.dynamic_fields
 import android.text.SpannedString
 import android.widget.TextView
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
-import com.gigforce.common_ui.dynamic_fields.data.VerificationStatus
+import com.gigforce.common_ui.dynamic_fields.data.*
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.datamodels.verification.VerificationUserSubmittedData
@@ -31,6 +28,20 @@ interface DynamicFieldView : BaseDynamicFieldView {
     fun isEnteredOrSelectedDataValid(): Boolean
 
     fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField?
+}
+
+interface  DynamicScreenFieldView: BaseDynamicFieldView {
+    fun bind(
+        fieldDetails: DynamicField
+    )
+
+    fun setData(
+        data: Any
+    )
+
+    fun isEnteredOrSelectedDataValid(): Boolean
+
+    fun validateDataAndReturnDataElseNull(): DataFromDynamicScreenField?
 }
 
 interface DynamicVerificationFieldView : BaseDynamicFieldView {

@@ -94,4 +94,6 @@
     <string name="my_documents_app_giger">My Documents</string>
     <string name="payouts_app_giger">Payout</string>
     <string name="tl_workspace_app_giger">Tl Workspace</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

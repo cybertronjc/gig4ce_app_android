@@ -15,5 +15,6 @@
     <color name="blue_dot">#407BFF</color>
     <color name="filter_text_color">#202325</color>
     <color name="bottom_view_divider">#EBEBEB</color>
+    <color name="text_color">#757575</color>
 
 </resources>

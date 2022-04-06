@@ -1227,6 +1227,14 @@
         android:name="com.gigforce.wallet.payouts.PayoutMainFragment"
         android:label="PayoutMainFragment"/>
 
+    <fragment android:id="@+id/HelpSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpSectionFragment"
+        android:label="HelpSectionFragment"/>
+
+    <fragment android:id="@+id/HelpDetailSectionFragment"
+        android:name="com.gigforce.giger_app.help.HelpDetailSectionFragment"
+        android:label="HelpDetailSectionFragment"/>
+
     <dialog
         android:id="@+id/payoutDetailsBottomSheet"
         android:name="com.gigforce.wallet.payouts.payout_details.PayoutDetailsFragment"
@@ -1267,6 +1275,18 @@
         android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
         android:label="AttendanceImageConfirmBottomSheet" />
 
+    <fragment
+        android:id="@+id/selectClusterFragment"
+        android:name="com.gigforce.lead_management.ui.select_cluster.SelectClusterFragment"
+        android:label="SelectClusterFragment" />
+    <fragment
+        android:id="@+id/selectOtherCitiesFragment"
+        android:name="com.gigforce.lead_management.ui.other_cities.SelectOtherCitiesFragment"
+        android:label="SelectOtherCitiesFragment" />
+    <fragment
+        android:id="@+id/inputSalaryComponentsFragment"
+        android:name="com.gigforce.lead_management.ui.input_salary_components.InputSalaryComponentsFragment"
+        android:label="InputSalaryComponentsFragment" />
 
 </navigation>
 

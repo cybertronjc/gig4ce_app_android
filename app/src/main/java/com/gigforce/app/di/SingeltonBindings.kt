@@ -12,6 +12,7 @@ import com.gigforce.core.retrofit.GeneratePaySlipService
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.giger_app.help.HelpSectionService
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.service.SyncPref
@@ -145,6 +146,12 @@ abstract class SingeltonBindings {
             return retrofitServiceFactory.prepareService(GigerAttendanceService::class.java)
         }
 
+        @Provides
+        fun provideHelpSectionService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): HelpSectionService {
+            return retrofitServiceFactory.prepareService(HelpSectionService::class.java)
+        }
 
 
 
