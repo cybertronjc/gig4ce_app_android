@@ -23,7 +23,7 @@ data class ChangeTeamLeaderRequestItem(
     var teamLeaderId : String?,
 
     @SerializedName("joiningId")
-    val joiningId : String?,
+    val joiningId : String? = null,
 
     @SerializedName("gigId")
     val gigId : String?,
