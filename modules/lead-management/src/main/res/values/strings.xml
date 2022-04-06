@@ -126,12 +126,14 @@
     <string name="select_business_lead">Select Business</string>
     <string name="click_to_select_business_lead">Click to select Business</string>
     <string name="select_job_profile1_lead">Select Job Profile</string>
+    <string name="select_cluster_lead">Select Cluster</string>
     <string name="click_to_select_job_profile_lead">Click to select Job Profile</string>
     <string name="giger_client_id_lead">Giger Client ID</string>
     <string name="optional_lead">(Optional)</string>
     <string name="type_client_id_here_lead">Type Client Id here</string>
     <string name="click_to_select_city_lead">Click to select city</string>
     <string name="select_city_lead">Select City</string>
+    <string name="select_other_city_lead">Select Other Cities</string>
     <string name="reporting_location_lead">Reporting Location</string>
     <string name="click_to_select_location_lead">Click to select location</string>
     <string name="client_tl_lead">Client TL</string>
@@ -167,6 +169,9 @@
     <string name="select_reporting_location_lead">Select reporting location</string>
     <string name="no_reporting_location_to_show_lead">No reporting location to show</string>
     <string name="no_job_profile_to_show_lead">No Job Profile to show</string>
+    <string name="no_other_cities_to_show_lead">No Other Cities to show</string>
+    <string name="no_clusters_to_show_lead">No Cluster to show</string>
+    <string name="no_salary_components_lead">No Salary Components to show</string>
     <string name="no_city_to_show_lead">No City to show</string>
     <string name="no_business_to_show_lead">No Business to show</string>
     <string name="pending_lead">Pending</string>

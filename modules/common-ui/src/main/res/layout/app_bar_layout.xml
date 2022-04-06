@@ -182,7 +182,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/refreshImageButton"
+            app:layout_constraintEnd_toStartOf="@id/helpImageButton"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
@@ -208,7 +208,43 @@
                 />
         </FrameLayout>
 
+            <LinearLayout
+                android:id="@+id/helpImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                android:background="@drawable/help_section_background"
+                app:tint="@color/white"
+                android:layout_marginEnd="@dimen/size_16"
+                android:src="@drawable/ic_search_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/refreshImageButton"
+                app:layout_constraintTop_toTopOf="parent" >
 
+                <TextView
+                    android:id="@+id/helpText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Help"
+                    android:fontFamily="@font/lato"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_marginBottom="@dimen/size_6"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:textColor="@color/white"/>
+
+                <ImageView
+                    android:id="@+id/helpIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_marginBottom="@dimen/size_6"
+                    android:layout_marginStart="@dimen/size_6"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/size_10"
+                    android:src="@drawable/ic_help_vector"/>
+
+            </LinearLayout>
 
         <com.gigforce.common_ui.components.cells.AppProfilePicComponent
             android:id="@+id/profilePicComp"

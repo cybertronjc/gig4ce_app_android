@@ -2,6 +2,7 @@ package com.gigforce.common_ui.viewdatamodels.leadManagement
 
 import android.os.Parcelable
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -22,6 +23,9 @@ data class SubmitJoiningRequest(
 
     @SerializedName("dataFromDynamicFields")
     var dataFromDynamicFields : List<DataFromDynamicInputField>,
+
+    @SerializedName("dataFromDynamicScreenFields")
+    var dataFromDynamicScreenFields : List<DataFromDynamicScreenField>? = null,
 
     @SerializedName("assignGigsFrom")
     var assignGigsFrom: String = "",

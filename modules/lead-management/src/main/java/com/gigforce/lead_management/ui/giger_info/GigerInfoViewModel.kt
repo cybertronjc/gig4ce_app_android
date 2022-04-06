@@ -74,7 +74,7 @@ class GigerInfoViewModel @Inject constructor(
                 gigId
             )
             gigerInfo = gigerJoiningDetails
-            currentJoiningId = gigerJoiningDetails.gigerId
+            //currentJoiningId = gigerJoiningDetails.gigerId
 
             if (gigerJoiningDetails.message.isNullOrBlank())
                 _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)

@@ -89,6 +89,7 @@
     <color name="colorChipTextClicked">#F5F5F5</color>
     <color name="colorChipCloseInactive">#757575</color>
     <color name="colorChipCloseClicked">#F5F5F5</color>
+    <color name="contentGrayColor">#757575</color>
 
     <color name="grey_transparetn">#4B979797</color>
     <color name="text_yellow">#fa6400</color>

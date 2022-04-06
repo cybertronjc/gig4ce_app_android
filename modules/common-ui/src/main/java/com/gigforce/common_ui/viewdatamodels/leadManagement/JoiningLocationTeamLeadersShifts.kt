@@ -16,6 +16,9 @@ data class JoiningLocationTeamLeadersShifts(
 	@field:SerializedName("shiftTiming")
 	val shiftTiming: List<ShiftTimingItem>,
 
+	@field:SerializedName("otherCities")
+	val otherCities: List<OtherCityClusterItem>,
+
 )
 
 @Parcelize
@@ -35,6 +38,9 @@ data class ReportingLocationsItem(
 
 	@field:SerializedName("type")
 	val type: String? = null,
+
+	@field:SerializedName("clusters")
+	val clusters: List<OtherCityClusterItem>? = null,
 
 	@DoNotSerialize
 	var selected : Boolean = false,
@@ -68,4 +74,19 @@ data class ShiftTimingItem(
 
 	@field:SerializedName("id")
 	val id: String? = null
+) : Parcelable
+
+@Parcelize
+data class OtherCityClusterItem(
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@DoNotSerialize
+	var selected : Boolean = false,
+
+	@DoNotSerialize
+	var viewType : Int = 1,
 ) : Parcelable

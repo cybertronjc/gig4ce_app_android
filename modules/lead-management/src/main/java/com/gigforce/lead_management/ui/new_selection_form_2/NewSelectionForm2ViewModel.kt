@@ -1,13 +1,14 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicScreenField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.repository.AuthRepository
 import com.gigforce.common_ui.repository.LeadManagementRepository
@@ -15,14 +16,12 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.ValidationHelper
-import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewModel
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
 import com.gigforce.lead_management.viewModels.JoiningSubmissionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -53,6 +52,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
     //Data
     private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
+    private var selectedOtherCities: List<OtherCityClusterItem>? = null
+    private var selectedCluster: OtherCityClusterItem? = null
+    private var salaryAmountEntered: InputSalaryResponse? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private var secondaryPhoneNumber : String? = null
@@ -72,6 +74,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedDateOfJoining = event.date
             }
             NewSelectionForm2Events.SelectCityClicked -> openSelectCityScreen()
+            NewSelectionForm2Events.SelectOtherCityClicked -> openSelectOtherCityScreen()
+            NewSelectionForm2Events.SelectClusterClicked -> openSelectClusterScreen()
+            NewSelectionForm2Events.InputSalaryComponentsClicked -> openInputSalaryScreen(joiningRequest.business.id.toString(), salaryAmountEntered)
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
@@ -79,6 +84,16 @@ class NewSelectionForm2ViewModel @Inject constructor(
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
                 selectedReportingLocation = null
+            }
+            is NewSelectionForm2Events.OtherCitySelected -> {
+                selectedOtherCities = event.otherCities
+            }
+            is NewSelectionForm2Events.ClusterSelected -> {
+                selectedCluster = event.cluster
+            }
+            is NewSelectionForm2Events.SalaryAmountEntered -> {
+                Log.d("InputSalary1", "${event.salaryData}")
+                salaryAmountEntered = event.salaryData
             }
             is NewSelectionForm2Events.ClientTLSelected -> {
                 selectedTL = event.teamLeader
@@ -89,7 +104,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
                 validateDataAndSubmit(
-                    event.dataFromDynamicFields
+                    event.dataFromDynamicFields,
+                    event.dataFromDynamicScreenFields
                 )
             }
             is NewSelectionForm2Events.JoiningDataReceivedFromPreviousScreen -> {
@@ -245,6 +261,81 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
     }
 
+    private fun openSelectOtherCityScreen() {
+        if (selectedCity == null) {
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
+                    )
+                }
+            )
+            _viewState.value = null
+        } else {
+            val otherCities = joiningLocationsAndTLs.otherCities
+
+            otherCities?.forEach { it1 ->
+                it1.selected = selectedOtherCities?.find { it.id == it1.id }?.selected == true
+            }
+            _viewState.value = otherCities?.sortedBy {
+                it.name
+            }?.let {
+                NewSelectionForm2ViewState.OpenSelectOtherCityScreen(
+                    it,
+                    ""
+                )
+            }
+            _viewState.value = null
+        }
+    }
+
+    private fun openSelectClusterScreen() {
+        if (selectedCity == null) {
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
+                    )
+                }
+            )
+            _viewState.value = null
+        } else {
+            val clusters = joiningLocationsAndTLs.reportingLocations.find { it.cityId == selectedCity?.cityId }?.clusters
+
+            clusters?.forEach {
+                it.selected = it.id == selectedCluster?.id
+            }
+
+            _viewState.value = clusters?.sortedBy {
+                it.name
+            }?.let {
+                NewSelectionForm2ViewState.OpenSelectClusterScreen(
+                    it,
+                    ""
+                )
+            }
+            _viewState.value = null
+        }
+    }
+
+    private fun openInputSalaryScreen(
+        businessId: String,
+        salaryResponse: InputSalaryResponse?
+    ) {
+        _viewState.value =
+            NewSelectionForm2ViewState.OpenInputSalaryScreen(
+                businessId,
+                salaryResponse
+            )
+        _viewState.value = null
+    }
+
     private fun openSelectBusinessTLScreen() {
 
         joiningLocationsAndTLs.businessTeamLeaders.onEach {
@@ -357,7 +448,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     private fun validateDataAndSubmit(
-        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>,
+        dataFromDynamicScreenFields: MutableList<DataFromDynamicScreenField>
     ) {
 
         if (selectedCity == null) {
@@ -433,6 +525,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest.jobProfile.dynamicFields = emptyList()
 
         joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
+        joiningRequest.dataFromDynamicScreenFields = dataFromDynamicScreenFields
 
         if(verificationDynamicFields.isEmpty()){
             submitJoiningData(joiningRequest)

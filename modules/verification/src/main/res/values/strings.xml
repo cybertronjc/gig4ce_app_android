@@ -507,4 +507,8 @@
     <string name="character_certificate_veri">Character Certificate</string>
     <string name="character_certificate_details_veri">Please upload your character certificate here.</string>\
     <string name="character_certificate_uploaded_details_veri">Click to download or edit the character certificate.</string>
+    <string name="vaccine_text_veri">Please upload your vaccination certificates.</string>
+    <string name="vaccine_1_subtitle_veri">Have you taken your first step forward to fight COVID and “Vaccinated”.</string>
+    <string name="vaccine_2_subtitle_veri">Have you taken your second step forward to fight COVID and “Vaccinated”.</string>
+    <string name="vaccine_3_subtitle_veri">Have you taken your final step forward to fight COVID and “Vaccinated”.</string>
 </resources>
