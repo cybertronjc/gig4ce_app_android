@@ -504,4 +504,8 @@
     <string name="file_format_is_invalid_veri">File Format is Invalid!</string>
     <string name="invalid_format_desc_veri">File cannot be uploaded because of unsupported file format. Only files with following formats are allowed: .pdf.</string>
     <string name="no_compliance_generated_veri">Compliance not Generated!</string>
+    <string name="vaccine_text_veri">Please upload your vaccination certificates.</string>
+    <string name="vaccine_1_subtitle_veri">Have you taken your first step forward to fight COVID and “Vaccinated”.</string>
+    <string name="vaccine_2_subtitle_veri">Have you taken your second step forward to fight COVID and “Vaccinated”.</string>
+    <string name="vaccine_3_subtitle_veri">Have you taken your final step forward to fight COVID and “Vaccinated”.</string>
 </resources>

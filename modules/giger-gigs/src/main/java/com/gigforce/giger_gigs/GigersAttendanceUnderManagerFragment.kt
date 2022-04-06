@@ -95,6 +95,13 @@ class GigersAttendanceUnderManagerFragment : Fragment(),
         initView()
         initViewModel()
         getAttendanceFor(LocalDate.now())
+        listeners()
+    }
+
+    private fun listeners() {
+        viewBinding.toolbar.setHelpImageButtonClickListener{
+            navigation.navigateTo("HelpSectionFragment")
+        }
     }
 
     var title = ""
