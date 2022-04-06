@@ -157,7 +157,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
     private fun initViewModel() {
-        Log.d("JoiningId", "$joiningId")
         viewModel.getGigerJoiningInfo(
             joiningId,
             gigId
