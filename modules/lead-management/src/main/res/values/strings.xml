@@ -229,5 +229,7 @@
     <string name="selection_failed_lm">Selection Failed !</string>
     <string name="giger_already_enable_lm">Giger is already enabled in another job profile.</string>
     <string name="cluster_lead_lead">Cluster Lead</string>
+    <string name="call_team_leader_lead">Call Team Leader</string>
+    <string name="select_team_leader_to_call_lead">Please select which team leader you want to call....</string>
 
 </resources>
