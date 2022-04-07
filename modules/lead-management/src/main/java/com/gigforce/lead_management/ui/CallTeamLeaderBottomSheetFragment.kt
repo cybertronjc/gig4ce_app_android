@@ -1,11 +1,15 @@
 package com.gigforce.lead_management.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentCallTeamLeaderBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +26,8 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
         const val INTENT_REPORTING_TL = "reporting_tl"
 
         fun launch(
-            recruitingTl: TeamLeader,
-            reportingTl: TeamLeader,
+            recruitingTl: TeamLeader?,
+            reportingTl: TeamLeader?,
             childFragmentManager : FragmentManager
         ){
             CallTeamLeaderBottomSheetFragment().apply {
@@ -104,18 +108,52 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
         initListeners()
     }
 
-    private fun initViews() = viewBinding.apply{
+    private fun initViews() = viewBinding.apply {
         //set data
         recruitingTl?.let {
             recruitingTlCard.txtTitle.text = it.name
             recruitingTlCard.txtSubtitle.text = it.mobileNumber
+            recruitingTlCard.tlOption.text = "Recruiting TL"
+            context?.let { it1 ->
+                GlideApp.with(it1)
+                    .load(it.profilePicture)
+                    .placeholder(getCircularProgressDrawable(it1))
+                    .into(recruitingTlCard.tlProfileImage)
+            }
+        }
+
+        reportingTl?.let {
+            reportingTlCard.txtTitle.text = it.name
+            reportingTlCard.txtSubtitle.text = it.mobileNumber
+            reportingTlCard.tlOption.text = "Reporting TL"
+            context?.let { it1 ->
+                GlideApp.with(it1)
+                    .load(it.profilePicture)
+                    .placeholder(getCircularProgressDrawable(it1))
+                    .into(reportingTlCard.tlProfileImage)
+            }
         }
     }
 
-    private fun initListeners() {
+    private fun initListeners() = viewBinding.apply{
 
         //call click
+        recruitingTlCard.callIcon.setOnClickListener {
+            callManager(recruitingTl.mobileNumber)
+        }
 
+        reportingTlCard.callIcon.setOnClickListener {
+            callManager(reportingTl.mobileNumber)
+        }
+
+    }
+
+    private fun callManager(number : String?) {
+        val intent = Intent(
+            Intent.ACTION_DIAL,
+            Uri.fromParts("tel", number, null)
+        )
+        context?.startActivity(intent)
     }
 
 }

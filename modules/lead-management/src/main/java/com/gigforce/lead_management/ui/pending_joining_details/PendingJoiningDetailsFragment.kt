@@ -53,7 +53,8 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     lateinit var eventTracker: IEventTracker
 
     private var gigerPhone = ""
-    private  var tlListToCall: ArrayList<TeamLeader> = arrayListOf()
+    private  var recruitingTl: TeamLeader? = null
+    private  var reportingTl: TeamLeader? = null
     private lateinit var joiningId : String
     private val viewModel : GigerInfoViewModel by viewModels()
 
@@ -97,14 +98,11 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
         viewBinding.bottomButtonLayout.callLayout.setOnClickListener {
             //show recruiting and reporting TL list
-            if (tlListToCall.isNotEmpty()) {
                 CallTeamLeaderBottomSheetFragment.launch(
-                    tlListToCall,
+                    recruitingTl,
+                    reportingTl,
                     childFragmentManager
                 )
-            } else {
-                showToast("No Team leader available to call")
-            }
 
         }
     }
@@ -189,13 +187,8 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
             gigerPhone = it.teamLeaderMobileNo.toString()
 
-            it.recruitingTL?.let {
-                tlListToCall.add(it)
-            }
-
-            it.reportingTeamLeader?.let {
-                tlListToCall.add(it)
-            }
+            recruitingTl = it.recruitingTL
+            reportingTl = it.reportingTeamLeader
 
             context?.let { it1 ->
                 GlideApp.with(it1)
