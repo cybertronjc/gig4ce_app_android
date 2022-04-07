@@ -7,10 +7,12 @@ import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
@@ -21,6 +23,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentPendingJoiningDetailsBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.ui.CallTeamLeaderBottomSheetFragment
 import com.gigforce.lead_management.ui.giger_info.GigerInfoState
 import com.gigforce.lead_management.ui.giger_info.GigerInfoViewModel
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
@@ -50,6 +53,7 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     lateinit var eventTracker: IEventTracker
 
     private var gigerPhone = ""
+    private  var tlListToCall: ArrayList<TeamLeader> = arrayListOf()
     private lateinit var joiningId : String
     private val viewModel : GigerInfoViewModel by viewModels()
 
@@ -89,6 +93,19 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
                     Uri.fromParts("tel", gigerPhone, null)
                 )
             context?.startActivity(intent)
+        }
+
+        viewBinding.bottomButtonLayout.callLayout.setOnClickListener {
+            //show recruiting and reporting TL list
+            if (tlListToCall.isNotEmpty()) {
+                CallTeamLeaderBottomSheetFragment.launch(
+                    tlListToCall,
+                    childFragmentManager
+                )
+            } else {
+                showToast("No Team leader available to call")
+            }
+
         }
     }
 
@@ -171,6 +188,14 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
             overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
 
             gigerPhone = it.teamLeaderMobileNo.toString()
+
+            it.recruitingTL?.let {
+                tlListToCall.add(it)
+            }
+
+            it.reportingTeamLeader?.let {
+                tlListToCall.add(it)
+            }
 
             context?.let { it1 ->
                 GlideApp.with(it1)

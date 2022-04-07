@@ -1,60 +1,121 @@
 package com.gigforce.lead_management.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
+import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.databinding.FragmentCallTeamLeaderBottomSheetBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentCallTeamLeaderBottomSheetBinding>(
+    fragmentName = "CallTeamLeaderBottomSheetFragment",
+    layoutId = R.layout.fragment_call_team_leader_bottom_sheet
+) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CallTeamLeaderBottomSheetFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CallTeamLeaderBottomSheetFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        const val TAG = "DropSelectionFragment2"
+        const val INTENT_RECRUITING_TL = "recruiting_tl"
+        const val INTENT_REPORTING_TL = "reporting_tl"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        fun launch(
+            recruitingTl: TeamLeader,
+            reportingTl: TeamLeader,
+            childFragmentManager : FragmentManager
+        ){
+            CallTeamLeaderBottomSheetFragment().apply {
+                arguments = bundleOf(
+                    INTENT_RECRUITING_TL to recruitingTl,
+                    INTENT_REPORTING_TL to reportingTl
+                    )
+            }.show(childFragmentManager,TAG)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_call_team_leader_bottom_sheet, container, false)
+    private lateinit var recruitingTl: TeamLeader
+    private lateinit var reportingTl: TeamLeader
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        arguments?.let {
+            recruitingTl = it.getParcelable<TeamLeader>(
+                INTENT_RECRUITING_TL
+            ) ?: return@let
+            reportingTl = it.getParcelable<TeamLeader>(
+                INTENT_REPORTING_TL
+            ) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            recruitingTl = it.getParcelable<TeamLeader>(
+                INTENT_RECRUITING_TL
+            ) ?: return@let
+            reportingTl = it.getParcelable<TeamLeader>(
+                INTENT_REPORTING_TL
+            ) ?: return@let
+        }
+        logDataReceivedFromBundles()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CallTeamLeaderBottomSheetFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CallTeamLeaderBottomSheetFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(
+            INTENT_RECRUITING_TL,
+            recruitingTl
+        )
+
+        outState.putParcelable(
+            INTENT_REPORTING_TL,
+            reportingTl
+        )
     }
+
+    private fun logDataReceivedFromBundles() {
+        if (::recruitingTl.isInitialized) {
+            logger.d(logTag, "Recruiting TL received from bundles : $recruitingTl")
+        } else {
+            logger.e(
+                logTag,
+                "no Recruiting TL received from bundles",
+                Exception("no Recruiting TL received from bundles")
+            )
+        }
+
+        if (::reportingTl.isInitialized) {
+            logger.d(logTag, "Reporting TL received from bundles : $reportingTl")
+        } else {
+            logger.e(
+                logTag,
+                "no Reporting TL received from bundles",
+                Exception("no Reporting TL received from bundles")
+            )
+        }
+    }
+
+    override fun viewCreated(
+        viewBinding: FragmentCallTeamLeaderBottomSheetBinding,
+        savedInstanceState: Bundle?
+    ) {
+        initViews()
+        initListeners()
+    }
+
+    private fun initViews() = viewBinding.apply{
+        //set data
+        recruitingTl?.let {
+            recruitingTlCard.txtTitle.text = it.name
+            recruitingTlCard.txtSubtitle.text = it.mobileNumber
+        }
+    }
+
+    private fun initListeners() {
+
+        //call click
+
+    }
+
 }

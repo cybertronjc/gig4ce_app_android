@@ -4,6 +4,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_20"
         android:orientation="vertical">
 
         <TextView
@@ -29,39 +30,14 @@
             android:text="@string/select_team_leader_to_call_lead"
             android:layout_marginTop="20dp" />
 
+        <include
+            android:id="@+id/recruitingTlCard"
+            layout="@layout/call_team_leader_layout" />
 
-
-        <TextView
-            android:id="@+id/drop_selection_direct"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginStart="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_40"
-            android:layout_marginEnd="@dimen/size_20"
-            android:background="@drawable/bottom_primary_button_background"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/drop_selection_lead"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginStart="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_20"
-            android:layout_marginEnd="@dimen/size_20"
-            android:layout_marginBottom="@dimen/size_16"
-            android:background="@drawable/bottom_secondary_button_background"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/cancel_lead"
-            android:textAlignment="center"
-            android:textColor="@color/pink_text" />
-
+        <include
+            android:id="@+id/reportingTlCard"
+            layout="@layout/call_team_leader_layout"
+            />
 
     </LinearLayout>
 </layout>
