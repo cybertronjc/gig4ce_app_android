@@ -1264,6 +1264,10 @@
         android:id="@+id/complianceDocsFragment"
         android:name="com.gigforce.verification.mainverification.compliance.ComplianceDocsFragment"
         android:label="ComplianceDocsFragment" />
+    <fragment
+        android:id="@+id/characterCertificateFragment"
+        android:name="com.gigforce.verification.mainverification.character_certificate.CharacterCertificateFragment"
+        android:label="CharacterCertificateFragment" />
 
 
     =========

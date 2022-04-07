@@ -36,6 +36,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
 
         const val INTENT_EXTRA_SHOW_ALL_TLS = "show_all_tls"
         const val INTENT_EXTRA_SELECTED_TL_ID = "selected_tl_id"
+        const val INTENT_EXTRA_SELECTED_BUSINESS = "selected_business_id"
     }
 
     @Inject
@@ -43,6 +44,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
 
     private var shouldLoadAllTls : Boolean = false
     private var selectedTLId : String? = null
+    private var selectedBusinessId: String? = null
 
     private val viewModel: SelectTeamLeaderViewModel by viewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
@@ -61,11 +63,13 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
         arguments?.let {
             shouldLoadAllTls = it.getBoolean(INTENT_EXTRA_SHOW_ALL_TLS,false)
             selectedTLId = it.getString(INTENT_EXTRA_SELECTED_TL_ID)
+            selectedBusinessId = it.getString(INTENT_EXTRA_SELECTED_BUSINESS)
         }
 
         savedInstanceState?.let {
             shouldLoadAllTls = it.getBoolean(INTENT_EXTRA_SHOW_ALL_TLS,false)
             selectedTLId = it.getString(INTENT_EXTRA_SELECTED_TL_ID)
+            selectedBusinessId = it.getString(INTENT_EXTRA_SELECTED_BUSINESS)
         }
 
         viewModel.selectedTlID = selectedTLId
@@ -84,7 +88,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
 
         if (viewCreatedForTheFirstTime) {
             checkOrUnCheckInitialStateOfCheckBox()
-            viewModel.fetchTeamLeaders(shouldLoadAllTls)
+            viewModel.fetchTeamLeaders(shouldLoadAllTls, selectedBusinessId.toString())
 
             initListeners()
             initViewModel()
@@ -172,7 +176,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
         }
 
         viewBinding.mainForm.loadAllTlSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            viewModel.fetchTeamLeaders(isChecked)
+            viewModel.fetchTeamLeaders(isChecked, selectedBusinessId.toString())
         }
 
         viewBinding.mainForm.recyclerView.layoutManager = LinearLayoutManager(requireContext())
