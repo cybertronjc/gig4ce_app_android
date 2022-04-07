@@ -34,6 +34,7 @@
                 android:layout_height="18dp"
                 android:layout_marginStart="4dp"
                 android:gravity="top"
+                android:visibility="gone"
                 android:lineSpacingExtra="1sp"
                 android:textAppearance="@style/body_primary"
                 android:translationY="-0.6sp" />
