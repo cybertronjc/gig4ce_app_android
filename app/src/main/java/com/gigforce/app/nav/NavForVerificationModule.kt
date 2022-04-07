@@ -51,5 +51,6 @@ class NavForVerificationModule(
 
         //new main verification with compliance
         baseImplementation.registerRoute("${moduleName}/myDocuments", R.id.myDocumentsFragment)
+        baseImplementation.registerRoute("${moduleName}/complianceFragment", R.id.complianceDocsFragment)
     }
 }
