@@ -12,6 +12,8 @@ import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentCallTeamLeaderBottomSheetBinding
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -114,10 +116,13 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
             recruitingTlCard.txtTitle.text = it.name
             recruitingTlCard.txtSubtitle.text = it.mobileNumber
             recruitingTlCard.tlOption.text = "Recruiting TL"
+
             context?.let { it1 ->
+                var profilePicRef: StorageReference =
+                    FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
                 GlideApp.with(it1)
-                    .load(it.profilePicture)
-                    .placeholder(getCircularProgressDrawable(it1))
+                    .load(profilePicRef)
+                    .placeholder(resources.getDrawable(R.drawable.ic_user_2))
                     .into(recruitingTlCard.tlProfileImage)
             }
         }
@@ -127,10 +132,13 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
             reportingTlCard.txtSubtitle.text = it.mobileNumber
             reportingTlCard.tlOption.text = "Reporting TL"
             context?.let { it1 ->
-                GlideApp.with(it1)
-                    .load(it.profilePicture)
-                    .placeholder(getCircularProgressDrawable(it1))
-                    .into(reportingTlCard.tlProfileImage)
+                var profilePicRef: StorageReference =
+                    FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
+                    GlideApp.with(it1)
+                        .load(profilePicRef)
+                        .placeholder(resources.getDrawable(R.drawable.ic_user_2))
+                        .into(reportingTlCard.tlProfileImage)
+
             }
         }
     }
