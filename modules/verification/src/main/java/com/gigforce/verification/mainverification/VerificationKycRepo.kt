@@ -11,13 +11,17 @@ import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
+import com.gigforce.core.datamodels.verification.CharacterCertificateDataModel
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.logger.GigforceLogger
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.util.*
 import javax.inject.Inject
 
 class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService, private val gigforceLogger: GigforceLogger) :
@@ -111,6 +115,32 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             FirebaseCrashlytics.getInstance()
                 .log("Exception : kycOcrVerification Method ${complianceStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${complianceStatus.message()}")
+        }
+    }
+
+    suspend fun getCharacterCertificate(): CharacterCertificateResponse {
+        val characterStatus = kycService.getCharacterCertificateData(
+            iBuildConfigVM.getCharacterCertificateDataUrl()
+        )
+
+        if (characterStatus.isSuccessful){
+            return  characterStatus.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : getCharacterCertificate Method ${characterStatus.message()}")
+            throw Exception("Issue in KYC Ocr result ${characterStatus.message()}")
+        }
+    }
+
+    suspend fun submitCharacterCertificate(file: MultipartBody.Part, updatedBy: RequestBody, updatedAt: RequestBody): VaccineFileUploadResDM {
+        val characterCertificateResponse = kycService.uploadCharacterCertificate(
+            iBuildConfigVM.getBaseUrl()+"kyc/characterCertificate",updatedBy, updatedAt,  file)
+        if (characterCertificateResponse.isSuccessful){
+            return characterCertificateResponse.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : submitCharacterCertificate Method ${characterCertificateResponse?.message()}")
+            throw Exception("Issue in character certification submission ${characterCertificateResponse?.errorBody()}")
         }
     }
 

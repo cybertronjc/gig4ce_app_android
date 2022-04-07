@@ -112,6 +112,16 @@ class VerificationMainViewModel @Inject constructor(
             )
         )
 
+        allDocs.add(
+            SimpleCardDVM(
+                "Character Certificate",
+                appContext.getString(R.string.pending_status_veri),
+                R.drawable.ic_signature_icon,
+                "verification/characterCertificate",
+                false
+            )
+        )
+
 
 
         _allDocumentsData.value = allDocs
@@ -195,6 +205,18 @@ class VerificationMainViewModel @Inject constructor(
                             image = R.drawable.ic_signature_icon,
                             navpath= SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
                             color = if (doc?.signature?.signaturePathOnFirebase != null) "GREEN" else ""
+                        )
+                    )
+
+                    allDocs.add(
+                        SimpleCardDVM(
+                            title ="Character Certificate",
+                            subtitle = if (doc?.character_certificate?.path != null) appContext.getString(
+                                R.string.submitted_status_veri
+                            ) else appContext.getString(R.string.tap_to_select),
+                            image = R.drawable.ic_signature_icon,
+                            navpath= "verification/characterCertificate",
+                            color = if (doc?.character_certificate?.path != null) "GREEN" else ""
                         )
                     )
 
