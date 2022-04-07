@@ -38,7 +38,7 @@ class InputSalaryViewModel @Inject constructor(
                 businessId,
                 type = type
             )
-            val updatedList = salaryComponents.data?.filter { it.isActive == true }
+            val updatedList = salaryComponents.data?.filter { it.isActive == true && it.business?.isActive == true}
             salaryComponents.data = updatedList
             _viewState.value = Lce.content(salaryComponents)
 
