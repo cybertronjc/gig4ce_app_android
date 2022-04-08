@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.attendance_tl.select_decline_reasons
+package com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -78,7 +78,10 @@ class GigersAttendanceRepository @Inject constructor(
                 year = year,
                 gigOrderId = gigOrderId
             )
-        ).bodyOrThrow().map { it.toGigModel()}
+        ).bodyOrThrow()
+           .map {
+               it.toGig()
+           }
     }
 
 

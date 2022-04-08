@@ -20,4 +20,19 @@ interface GigService {
         @Query("gigId") gigId: String
     ): Response<List<GigApiModel>>
 
+    @GET("gigAttendance/getGigersGigs")
+    suspend fun getPastGigs(
+        @Query("type") type : String = "past",
+        @Query("limit") limit : Long,
+        @Query("offset") offset : Long
+    ): Response<List<GigInfoBasicApiModel>>
+
+
+    @GET("gigAttendance/getGigersGigs")
+    suspend fun getUpcomingGigs(
+        @Query("type") type : String = "upcoming",
+        @Query("limit") limit : Long,
+        @Query("offset") offset : Long
+    ): Response<List<GigInfoBasicApiModel>>
+
 }

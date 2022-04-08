@@ -2,11 +2,10 @@ package com.gigforce.giger_app.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.lifecycle.get
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.client_activation.R
+import com.gigforce.common_image_picker.image_capture_camerax.utils.decodeExifOrientation
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
 import com.gigforce.common_ui.navigation.gig.GigNavigation
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
@@ -35,7 +34,9 @@ class UpcomingGigsComponent(context: Context, attrs: AttributeSet?) :
     private var viewModel: UpcomingGigsViewModel? = null
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this.rootView)!!).get()
+
+
+        viewModel = ViewModelProvider(findViewTreeViewModelStoreOwner()!!).get()
         viewModel?.data?.observeForever {
                 try {
                     if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {

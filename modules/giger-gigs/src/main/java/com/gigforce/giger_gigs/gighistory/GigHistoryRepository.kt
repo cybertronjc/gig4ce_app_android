@@ -1,16 +1,24 @@
 package com.gigforce.giger_gigs.gighistory
 
 import android.util.Log
+import com.gigforce.common_ui.ext.bodyOrThrow
+import com.gigforce.common_ui.remote.GigService
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 //import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import java.time.ZoneOffset
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
+@Singleton
+class GigHistoryRepository @Inject constructor(
+    private val gigsService: GigService
+) : BaseFirestoreDBRepository(), DataCallbacks {
 
     var listener: ListenerRegistration? = null
     var onGoingListener: ListenerRegistration? = null
@@ -57,31 +65,30 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
     }
 
-
-    override fun getUpComingGigs(
+    override suspend fun getUpComingGigs(
         responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
+        offset: Long,
         limit: Long
     ) {
 
-        val gigQuery = if (lastVisible != null) getCollectionReference()
-            .whereEqualTo("gigerId", getUID())
-            .whereGreaterThan("startDateTime", Date())
-            .orderBy("startDateTime", Query.Direction.ASCENDING)
-            .startAfter(lastVisible)
-            .limit(limit)
-        else
-            getCollectionReference()
-                .whereEqualTo("gigerId", getUID())
-                .whereGreaterThan("startDateTime", Date())
-                .orderBy("startDateTime", Query.Direction.ASCENDING)
-                .limit(limit)
+        Log.d("TAG", "Get Upcoming called ,offset =  $offset")
+        try {
+            val gigs = gigsService.getUpcomingGigs(
+                offset = offset,
+                limit = limit
+            ).bodyOrThrow().map {
+                it.toGig()
+            }
 
-        Log.d("TAG", "Get Upcoming called , ${lastVisible != null}")
-        listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            Log.d("TAG", "Get Upcoming called , ${querySnapshot?.size()}")
-            firebaseFirestoreException?.printStackTrace()
-            responseCallbacks.upcomingGigsResponse(querySnapshot, firebaseFirestoreException);
+            responseCallbacks.upcomingGigsResponse(
+                gigs,
+                null
+            )
+        } catch (e: Exception) {
+            responseCallbacks.upcomingGigsResponse(
+                null,
+                e
+            )
         }
     }
 

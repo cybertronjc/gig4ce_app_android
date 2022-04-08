@@ -14,6 +14,7 @@ import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_gigs.R
 import com.google.firebase.storage.FirebaseStorage
@@ -67,13 +68,14 @@ class AdapterOnGoingGigs(
         holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.getFullCompanyName()}"
         holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
         holder.itemView.tv_rating_rv_gig_hist.text = gig?.gigRating.toString()
+        holder.itemView.rl_on_going_gig_hist.invisible()
         holder.itemView.tv_punch_in_time_rv_gig_hist.text = "--:--"
         holder.itemView.tv_punch_out_time_rv_gig_hist.text = "--:--"
         gig?.attendance?.checkInTime?.let {
-            holder.itemView.tv_punch_in_time_rv_gig_hist.text = timeFormatter.format(it)
+//            holder.itemView.tv_punch_in_time_rv_gig_hist.text = timeFormatter.format(it)
         }
         gig?.attendance?.checkOutTime?.let {
-            holder.itemView.tv_punch_out_time_rv_gig_hist.text = timeFormatter.format(it)
+//            holder.itemView.tv_punch_out_time_rv_gig_hist.text = timeFormatter.format(it)
         }
         setBrandLogo(gig ?: Gig(), holder)
         PushDownAnim.setPushDownAnimTo(holder.itemView)

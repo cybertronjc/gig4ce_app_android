@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,20 +47,11 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
 
     @Inject
     lateinit var navigation: INavigation
-    private val viewModelFactory by lazy {
-        ViewModelProviderFactory(
-            GigHistoryViewModel(
-                GigHistoryRepository()
-            )
-        )
-    }
-    private val viewModel: GigHistoryViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(GigHistoryViewModel::class.java)
-    }
+    private val viewModel: GigHistoryViewModel by viewModels()
+
     private val adapter by lazy {
         activity?.let { AdapterGigHistory(it) }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

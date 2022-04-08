@@ -8,6 +8,7 @@ import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class GigerAttendanceDetailsViewModel @Inject constructor(
     private val logger: GigforceLogger,
-    private val attendanceRepository: GigAttendanceRepository
+    private val attendanceRepository: GigAttendanceRepository,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
     companion object {
@@ -53,6 +55,22 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
 
     private fun changeTLClicked() = viewModelScope.launch {
 
+        val gigDetails = attendanceDetails ?: return@launch
+        attendanceDetails?.gigOrderId ?: return@launch
+        val currentLoggedInUser = try {
+            firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+        } catch (e: Exception) {
+            return@launch
+        }
+
+        _viewEffects.emit(
+            GigerAttendanceDetailsViewContract.UiEffect.OpenChangeTLScreen(
+                gigId = gigId,
+                gigerId = gigDetails.gigerId,
+                gigerName = gigDetails.gigerName,
+                teamLeaderUid = currentLoggedInUser.uid
+            )
+        )
     }
 
     private fun attendanceHistoryClicked() = viewModelScope.launch {

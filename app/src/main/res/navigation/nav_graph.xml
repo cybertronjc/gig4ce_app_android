@@ -1257,7 +1257,7 @@
 
     <dialog
         android:id="@+id/markInactiveConfirmationBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance_confirmation.MarkInactiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.MarkInactiveConfirmationBottomSheetFragment"
         android:label="MarkInactiveConfirmationBottomSheetFragment" />
 
     <dialog
@@ -1267,7 +1267,7 @@
 
     <dialog
         android:id="@+id/selectMarkInactiveReasonsBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.select_decline_reasons.SelectMarkInactiveReasonsBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.SelectMarkInactiveReasonsBottomSheetFragment"
         android:label="SelectMarkInactiveReasonsBottomSheetFragment" />
 
     <dialog

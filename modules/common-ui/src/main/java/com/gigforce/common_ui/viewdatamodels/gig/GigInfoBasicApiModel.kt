@@ -62,7 +62,16 @@ data class GigInfoBasicApiModel(
 	val designation: String? = null,
 
 	@field:SerializedName("attendance")
-	val attendance: GigerAttedance? = null
+	val attendance: GigerAttedance? = null,
+
+	@field:SerializedName("legalEntity")
+	val legalEntityApiModel: LegalEntityApiModel? = null,
+
+	@field:SerializedName("profile")
+	val jobProfile: Profile? = null,
+
+	@field:SerializedName("agencyContact")
+	val agencyContact: AgencyContact? = null
 ){
 
 
@@ -94,7 +103,7 @@ data class GigInfoBasicApiModel(
 			checkOutBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeBuffer!!),
 			checkOutAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterBuffer!!),
 			checkOutAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterSlot!!),
-			agencyContact = null,
+			agencyContact = agencyContact?.toContactPerson(),
 			businessContact = null,
 			assignedOn = Timestamp.now(),
 			checkInBeforeTimeBufferInMins = 0,
@@ -109,12 +118,8 @@ data class GigInfoBasicApiModel(
 			isMonthlyGig = false,
 			isFullDay = false,
 			gigOrderId = "",
-			profile = JobProfile(
-				id = null,
-				activationCode = null,
-				title = null
-			),
-			legalEntity = null,
+			profile = jobProfile?.toJobProfilePresentationModel() ?: JobProfile(),
+			legalEntity = legalEntityApiModel?.toPresentationLegalEnitityModel(),
 			keywords = listOf(),
 			gigRating = 0.0f,
 			gigUserFeedback = null,

@@ -4,6 +4,7 @@ package com.gigforce.giger_gigs.gighistory
 //import com.gigforce.core.datamodels.gigpage.DocChange
 import android.view.View
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.DocChange
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.viewdatamodels.GigStatus
@@ -13,12 +14,18 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import javax.inject.Inject
 
-class GigHistoryViewModel(
+@HiltViewModel
+class GigHistoryViewModel  @Inject constructor(
     private val repositoryCallbacks: DataCallbacks
     ) : ViewModel(), DataCallbacks.ResponseCallbacks {
     var eventState: Int = AdapterGigHistory.EVENT_PAST
     private var lastVisibleItem: DocumentSnapshot? = null
+    private var lastVisibleItemIndex = 0
     var isLastPage: Boolean = false
     var isLoading: Boolean = true
     var pastGigs: Boolean = true
@@ -67,7 +74,7 @@ class GigHistoryViewModel(
 
     override fun onGoingGigsResponse(
         querySnapshot: QuerySnapshot?,
-        error: FirebaseFirestoreException?,
+        error: Exception?,
         initialLoading: Boolean
     ) {
         if (querySnapshot != null) observableOnGoingGigs.value = GigsResponse(
@@ -116,18 +123,22 @@ class GigHistoryViewModel(
 
     }
 
+
     override fun upcomingGigsResponse(
-        querySnapshot: QuerySnapshot?,
-        error: FirebaseFirestoreException?
+        gigs: List<Gig>?,
+        error: Exception?
     ) {
-        if (querySnapshot != null) {
-            if (querySnapshot.documents.isNotEmpty())
-                lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
-            isLastPage = querySnapshot.documents.size < limit
+
+        if (gigs != null) {
+            if (gigs.isNotEmpty()){
+                lastVisibleItemIndex += gigs.size
+            }
+
+            isLastPage = gigs.size < limit
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Upcoming Gigs Loaded Successfully",
-                getGigsWithId(querySnapshot, false, fetchOnGoing = false, getUpcomingGig = true)
+                ArrayList(gigs)
             )
             repositoryCallbacks.removeListener()
         } else {
@@ -163,22 +174,28 @@ class GigHistoryViewModel(
     }
 
 
-    fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
+    fun getGigs(pastGigs: Boolean, resetPageCount: Boolean)  = viewModelScope.launch{
         showProgress(true)
-        this.pastGigs = pastGigs
+        this@GigHistoryViewModel.pastGigs = pastGigs
         if (resetPageCount) {
             isLastPage = false
             isLoading = true
             lastVisibleItem = null
-
+            lastVisibleItemIndex = 0
         }
         if (pastGigs) {
-            repositoryCallbacks.getPastGigs(this, lastVisibleItem, limit)
+            repositoryCallbacks.getPastGigs(
+                this@GigHistoryViewModel,
+                lastVisibleItem,
+                limit
+            )
         } else {
-            repositoryCallbacks.getUpComingGigs(this, lastVisibleItem, limit)
+            repositoryCallbacks.getUpComingGigs(
+                this@GigHistoryViewModel,
+                lastVisibleItemIndex /limit ,
+                limit
+            )
         }
-
-
     }
 
     fun showProgress(show: Boolean) {

@@ -2,21 +2,26 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_details
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.utils.dp2Px
+import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigation
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
+import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -28,10 +33,13 @@ import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEv
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class GigerAttendanceDetailsFragment :
@@ -39,12 +47,16 @@ class GigerAttendanceDetailsFragment :
         fragmentName = TAG,
         layoutId = R.layout.fragment_giger_attendance_details
     ) {
+
     companion object {
         const val TAG = "GigerAttendanceDetailsFragment"
     }
 
     @Inject
     lateinit var gigNavigation: GigNavigation
+
+    @Inject
+    lateinit var leadManagementNavigation: LeadManagementNavigation
 
     private val viewModel: GigerAttendanceDetailsViewModel by viewModels()
     private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
@@ -60,7 +72,6 @@ class GigerAttendanceDetailsFragment :
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
         }
 
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         viewModel.setGigerAttendanceReceivedFromPreviousScreen(
             gigId = gigId
         )
@@ -79,6 +90,10 @@ class GigerAttendanceDetailsFragment :
         viewBinding: FragmentGigerAttendanceDetailsBinding,
         savedInstanceState: Bundle?
     ) {
+        val bottomSheet  = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT);
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT);
 
         if (viewCreatedForTheFirstTime) {
 
@@ -119,21 +134,8 @@ class GigerAttendanceDetailsFragment :
 
                 bottomSheet?.let {
                     BottomSheetBehavior.from(it).apply {
-                        setState(BottomSheetBehavior.STATE_EXPANDED);
-                        setPeekHeight(0);
-                    }/*.addBottomSheetCallback(
-                        object  : BottomSheetBehavior.BottomSheetCallback(){
-
-                            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                                bottomSheet.post {
-                                    bottomSheet.requestLayout()
-                                    bottomSheet.invalidate()
-                                }
-                            }
-
-                            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-                        }
-                    )*/
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                    }
                 }
             }
         }
@@ -154,6 +156,9 @@ class GigerAttendanceDetailsFragment :
             this.changeTlLayout.floatingActionButton.setImageResource(R.drawable.ic_change_pink)
             this.changeTlLayout.textView.text = "Change TL"
             this.changeTlLayout.root.setOnClickListener {
+                viewModel.handleEvent(GigerAttendanceDetailsViewContract.UiEvent.ChangeTLButtonClicked)
+            }
+            this.changeTlLayout.floatingActionButton.setOnClickListener {
                 viewModel.handleEvent(GigerAttendanceDetailsViewContract.UiEvent.ChangeTLButtonClicked)
             }
 
@@ -222,7 +227,12 @@ class GigerAttendanceDetailsFragment :
                     is GigerAttendanceDetailsViewContract.UiEffect.CallGiger -> callGiger(
                         it.phoneNumber
                     )
-                    is GigerAttendanceDetailsViewContract.UiEffect.OpenChangeTLScreen -> TODO()
+                    is GigerAttendanceDetailsViewContract.UiEffect.OpenChangeTLScreen -> openChangeTlScreen(
+                        it.gigId,
+                        it.gigerId,
+                        it.gigerName,
+                        it.teamLeaderUid
+                    )
                     is GigerAttendanceDetailsViewContract.UiEffect.OpenDropGigerScreen -> TODO()
                     is GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen -> gigNavigation.openGigAttendanceHistoryScreen(
                         gigDate = it.date,
@@ -234,6 +244,25 @@ class GigerAttendanceDetailsFragment :
                 }
             }
         }
+    }
+
+    private fun openChangeTlScreen(
+        gigId: String,
+        gigerId: String?,
+        gigerName: String?,
+        teamLeaderUid: String
+    ) {
+        leadManagementNavigation.openChangeTLBottomSheet(
+            arrayListOf(
+                ChangeTeamLeaderRequestItem(
+                    gigerUid = gigerId,
+                    gigerName = gigerName,
+                    teamLeaderId = teamLeaderUid,
+                    joiningId = null,
+                    gigId = gigId
+                )
+            )
+        )
     }
 
     private fun callGiger(phoneNumber: String) {
@@ -340,13 +369,13 @@ class GigerAttendanceDetailsFragment :
                 params.setMargins(
                     params.leftMargin,
                     params.topMargin,
-                    30,
+                    24,
                     params.bottomMargin,
                 )
 
                 val params2 = this.inactiveButton.layoutParams as ViewGroup.MarginLayoutParams
                 params2.setMargins(
-                    30,
+                    24,
                     params2.topMargin,
                     params2.rightMargin,
                     params2.bottomMargin,

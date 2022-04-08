@@ -1,12 +1,15 @@
 package com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +21,8 @@ import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.databinding.FragmentMarkActiveConfirmationBinding
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -38,6 +43,7 @@ class MarkActiveConfirmationBottomSheetFragment :
     private lateinit var gigId: String
     private var hasGigerMarkedHimselfInactive: Boolean = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,8 +55,6 @@ class MarkActiveConfirmationBottomSheetFragment :
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
             hasGigerMarkedHimselfInactive = it.getBoolean(GigAttendanceConstants.INTENT_HAS_GIGER_MARKED_HIMSELF_INACTIVE)
         }
-
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -67,6 +71,10 @@ class MarkActiveConfirmationBottomSheetFragment :
         viewBinding: FragmentMarkActiveConfirmationBinding,
         savedInstanceState: Bundle?
     ) {
+        val bottomSheet  = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
 
         if (viewCreatedForTheFirstTime) {
             initView()
@@ -83,12 +91,12 @@ class MarkActiveConfirmationBottomSheetFragment :
 
                     when (it) {
 
-                        is MarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingPresent -> errorWhileMarkingDecline(
+                        is MarkActiveViewContract.UiState.ErrorWhileMarkingPresent -> errorWhileMarkingDecline(
                             it.error
                         )
-                        MarkInactiveReasonsViewContract.UiState.MarkingPresent -> showMarkingDecline()
-                        MarkInactiveReasonsViewContract.UiState.PresentMarkedSuccessfully -> dismiss()
-                        MarkInactiveReasonsViewContract.UiState.ScreenLoaded -> {}
+                        MarkActiveViewContract.UiState.MarkingPresent -> showMarkingDecline()
+                        MarkActiveViewContract.UiState.PresentMarkedSuccessfully -> dismiss()
+                        MarkActiveViewContract.UiState.ScreenLoaded -> {}
                     }
                 }
         }
@@ -123,7 +131,20 @@ class MarkActiveConfirmationBottomSheetFragment :
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return dialog.apply {
+            setOnShowListener { dialog ->
+
+                //Makes the Bottom Open full , without it opens half
+                val d: BottomSheetDialog = dialog as BottomSheetDialog
+                val bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                    }
+                }
+            }
+        }
     }
 
     private fun initView() = viewBinding.apply {

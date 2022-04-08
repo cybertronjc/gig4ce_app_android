@@ -2,6 +2,8 @@ package com.gigforce.common_ui.viewmodels.gig
 
 import android.location.Location
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -40,6 +42,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -52,7 +56,7 @@ class GigViewModel @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
     private val attendanceRepository: GigAttendanceRepository,
     private val logger: GigforceLogger,
-    private val firebaseRemoteConfig : FirebaseRemoteConfig
+    private val firebaseRemoteConfig: FirebaseRemoteConfig
 ) : ViewModel() {
 
     companion object {
@@ -75,6 +79,11 @@ class GigViewModel @Inject constructor(
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
+
+    private val declineButtonVisibilityChangeCheckRunnable = CheckInButtonEnableCheckingRunnable()
+    private val scheduledThreadPoolExecutor: ScheduledThreadPoolExecutor by lazy {
+        ScheduledThreadPoolExecutor(1)
+    }
 
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
@@ -203,6 +212,7 @@ class GigViewModel @Inject constructor(
             )
             currentGig = updatedGig
             _gigDetails.postValue(Lce.content(updatedGig))
+            attachCheckInButtonVisibilityCheckRunnable()
         } catch (e: Exception) {
             _markingAttendanceState.value = Lce.error(e.message ?: "Unable to mark check-in")
             _markingAttendanceState.value = null
@@ -316,6 +326,7 @@ class GigViewModel @Inject constructor(
 
             val gig = gigsRepository.getGigDetails(gigId)
             currentGig = gig
+
             _gigDetails.value = Lce.content(gig)
             logger.d(TAG, "[Success] gig details fetched")
         } catch (e: Exception) {
@@ -564,6 +575,7 @@ class GigViewModel @Inject constructor(
         mWatchUpcomingRepoRegistration?.remove()
         mWatchSingleGigRegistration?.remove()
         mWatchTodaysGigRegistration?.remove()
+        detachCheckInButtonVisibilityCheckRunnable()
     }
 
 
@@ -571,6 +583,7 @@ class GigViewModel @Inject constructor(
     val submitGigRatingState: LiveData<Lse> get() = _submitGigRatingState
 
     fun submitGigFeedback(
+        sharedGigViewModel: SharedGigViewModel,
         gigId: String,
         rating: Float,
         feedback: String,
@@ -589,6 +602,10 @@ class GigViewModel @Inject constructor(
                     )
                 )
 
+            sharedGigViewModel.userRatedGig(
+                rating,
+                feedback
+            )
             _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {
             _submitGigRatingState.value = Lse.error(e.message!!)
@@ -854,5 +871,82 @@ class GigViewModel @Inject constructor(
 
     fun getUid(): String {
         return gigsRepository.getUID()
+    }
+
+
+    private inner class CheckInButtonEnableCheckingRunnable : Runnable {
+
+        override fun run() {
+            val gig = currentGig ?: return
+
+            val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
+            val currentTime = LocalDateTime.now()
+            val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
+            if (minutes < minTimeBtwCheckInCheckOut) {
+                logger.d(
+                    TAG,
+                    "CheckInButtonEnableCheckingRunnable() - Diff between checkin and earliest checkout time - $minutes , min minutes btw checkin and checkout $minTimeBtwCheckInCheckOut mins"
+                )
+            } else {
+                logger.d(
+                    TAG,
+                    "CheckInButtonEnableCheckingRunnable() - Enabling checkout button..."
+                )
+
+                _gigDetails.postValue(Lce.content(gig))
+                detachCheckInButtonVisibilityCheckRunnable()
+            }
+        }
+    }
+
+    private fun attachCheckInButtonVisibilityCheckRunnable() {
+        logger.d(
+            TAG,
+            "attaching declineButtonVisibilityChangeCheckRunnable..."
+        )
+
+        try {
+            scheduledThreadPoolExecutor.scheduleWithFixedDelay(
+                declineButtonVisibilityChangeCheckRunnable,
+                1L,
+                1L,
+                TimeUnit.MINUTES
+            )
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "Unable to detach checkRu runnable",
+                e
+            )
+        }
+
+    }
+
+    private fun detachCheckInButtonVisibilityCheckRunnable() {
+
+        try {
+            logger.d(
+                TAG,
+                "detaching declineButtonVisibilityChangeCheckRunnable..."
+            )
+
+            scheduledThreadPoolExecutor.remove(declineButtonVisibilityChangeCheckRunnable)
+            scheduledThreadPoolExecutor.purge()
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "Unable to detach detachCheckInButtonVisibilityCheckRunnable runnable",
+                e
+            )
+        }
+    }
+
+    fun userRatedTheGig(rating: Float, feedback: String?) {
+        val gig = currentGig ?: return
+        gig.gigUserFeedback = feedback
+        gig.gigRating = rating
+        _gigDetails.postValue(Lce.content(gig))
     }
 }

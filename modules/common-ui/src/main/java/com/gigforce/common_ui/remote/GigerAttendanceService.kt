@@ -12,11 +12,10 @@ interface GigerAttendanceService {
         @Query("attendanceDate") dateInYYYMMDD: String
     ): Response<List<GigAttendanceApiModel>>
 
-
-    @POST("gigerAttendanceReport/attendanceHistoryList")
+    @POST("gigAttendance/attendanceHistory")
     suspend fun getGigOrderAttendanceMonthly(
         @Body request : GigAttendanceRequest
-    ): Response<List<GigApiModel>>
+    ): Response<List<GigInfoBasicApiModel>>
 
     @POST("gigAttendance/markAttendance")
     suspend fun markAttendance(

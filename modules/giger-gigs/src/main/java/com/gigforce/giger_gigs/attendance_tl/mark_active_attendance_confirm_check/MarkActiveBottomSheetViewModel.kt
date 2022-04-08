@@ -22,8 +22,8 @@ class MarkActiveBottomSheetViewModel @Inject constructor(
         const val TAG = "MarkActiveBottomSheetViewModel"
     }
 
-    private val _viewState = MutableStateFlow<MarkInactiveReasonsViewContract.UiState>(
-        MarkInactiveReasonsViewContract.UiState.ScreenLoaded
+    private val _viewState = MutableStateFlow<MarkActiveViewContract.UiState>(
+        MarkActiveViewContract.UiState.ScreenLoaded
     )
     val viewState = _viewState.asStateFlow()
 
@@ -31,12 +31,12 @@ class MarkActiveBottomSheetViewModel @Inject constructor(
         gigId: String,
         sharedViewModel: AttendanceTLSharedViewModel
     ) = viewModelScope.launch {
-        if (_viewState.value is MarkInactiveReasonsViewContract.UiState.MarkingPresent) {
+        if (_viewState.value is MarkActiveViewContract.UiState.MarkingPresent) {
             logger.d(TAG, "already a decline process in progress, no-op")
             return@launch
         }
 
-        _viewState.emit(MarkInactiveReasonsViewContract.UiState.MarkingPresent)
+        _viewState.emit(MarkActiveViewContract.UiState.MarkingPresent)
         try {
             val gigWithAttendanceUpdated = gigAttendanceRepository.markCheckIn(
                 gigId = gigId,
@@ -50,13 +50,13 @@ class MarkActiveBottomSheetViewModel @Inject constructor(
             )
 
             sharedViewModel.attendanceUpdated(gigWithAttendanceUpdated)
-            _viewState.emit(MarkInactiveReasonsViewContract.UiState.PresentMarkedSuccessfully)
+            _viewState.emit(MarkActiveViewContract.UiState.PresentMarkedSuccessfully)
 
         } catch (e: Exception) {
 
 
             _viewState.emit(
-                MarkInactiveReasonsViewContract.UiState.ErrorWhileMarkingPresent(
+                MarkActiveViewContract.UiState.ErrorWhileMarkingPresent(
                     e.message ?: "Unable to mark present"
                 )
             )

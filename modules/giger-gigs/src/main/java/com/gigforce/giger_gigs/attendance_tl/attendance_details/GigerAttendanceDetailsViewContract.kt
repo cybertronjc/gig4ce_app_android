@@ -74,7 +74,10 @@ class GigerAttendanceDetailsViewContract {
         ) : UiEffect()
 
         data class OpenChangeTLScreen(
-            val gigId : String
+            val gigId : String,
+            val gigerId : String?,
+            val gigerName : String?,
+            val teamLeaderUid : String
         ) : UiEffect()
 
         data class OpenMonthlyAttendanceScreen(

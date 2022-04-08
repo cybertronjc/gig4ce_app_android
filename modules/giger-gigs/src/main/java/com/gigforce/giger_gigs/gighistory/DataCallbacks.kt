@@ -1,12 +1,17 @@
 package com.gigforce.giger_gigs.gighistory
 
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import java.lang.Exception
 
 interface DataCallbacks {
-    fun getOnGoingGigs(responseCallbacks: ResponseCallbacks, initialLoading: Boolean)
+    fun getOnGoingGigs(
+        responseCallbacks: ResponseCallbacks,
+        initialLoading: Boolean
+    )
 
     fun getPastGigs(
         responseCallbacks: ResponseCallbacks,
@@ -14,9 +19,9 @@ interface DataCallbacks {
         limit: Long
     )
 
-    fun getUpComingGigs(
+    suspend fun getUpComingGigs(
         responseCallbacks: ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
+        offset: Long,
         limit: Long
     )
 
@@ -27,9 +32,22 @@ interface DataCallbacks {
 
 
     interface ResponseCallbacks {
-        fun onGoingGigsResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?, initialLoading: Boolean)
-        fun pastGigsResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
-        fun upcomingGigsResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
+        fun onGoingGigsResponse(
+            querySnapshot: QuerySnapshot?,
+            error: Exception?,
+            initialLoading: Boolean
+        )
+
+        fun pastGigsResponse(
+            gigs : List<Gig>?,
+            error: Exception?
+        )
+
+        fun upcomingGigsResponse(
+            gigs : List<Gig>?,
+            error: Exception?
+        )
+
         fun gigsCountResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
         fun docChange(docChangeType: DocumentChange.Type, change: DocumentChange)
 

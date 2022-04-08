@@ -1,6 +1,6 @@
 package com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check
 
-sealed class MarkInactiveReasonsViewContract {
+sealed class MarkActiveViewContract {
 
     sealed class UiState {
 

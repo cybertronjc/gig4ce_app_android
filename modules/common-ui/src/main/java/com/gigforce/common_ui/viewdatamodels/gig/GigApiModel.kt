@@ -42,7 +42,7 @@ data class GigApiModel(
     val isMonthlyGig: Boolean? = null,
 
     @field:SerializedName("gigUserFeedbackAttachments")
-    val gigUserFeedbackAttachments: List<Any?>? = null,
+    val gigUserFeedbackAttachments: List<String>? = null,
 
     @field:SerializedName("assignOn")
     val assignOn: String,
@@ -186,9 +186,9 @@ data class GigApiModel(
             profile = profile?.toJobProfilePresentationModel() ?: JobProfile(),
             legalEntity = legalEntity?.toPresentationLegalEnitityModel(),
             keywords = listOf(),
-            gigRating = 0.0f,
-            gigUserFeedback = null,
-            gigUserFeedbackAttachments = listOf(),
+            gigRating = gigRating ?: 0.0f,
+            gigUserFeedback = gigUserFeedback,
+            gigUserFeedbackAttachments = gigUserFeedbackAttachments ?: emptyList(),
             locationPictures = listOf(),
             ratingUserReceived = 0.0f,
             feedbackUserReceived = null,

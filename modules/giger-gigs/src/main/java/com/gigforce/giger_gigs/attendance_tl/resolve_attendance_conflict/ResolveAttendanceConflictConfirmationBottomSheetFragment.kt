@@ -1,8 +1,12 @@
 package com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -20,6 +24,8 @@ import com.gigforce.giger_gigs.attendance_tl.GigAttendanceConstants
 import com.gigforce.giger_gigs.databinding.FragmentResolveAttendanceConflictConfirmationBinding
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -50,8 +56,6 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
             gigAttendanceData = it.getParcelable(GigAttendanceConstants.INTENT_EXTRA_GIG_ATTENDANCE_DETAILS) ?: return@let
         }
-
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -68,6 +72,10 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
         viewBinding: FragmentResolveAttendanceConflictConfirmationBinding,
         savedInstanceState: Bundle?
     ) {
+        val bottomSheet  = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
 
         if (viewCreatedForTheFirstTime) {
             initView()
@@ -76,9 +84,22 @@ class ResolveAttendanceConflictConfirmationBottomSheetFragment : BaseBottomSheet
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog =  super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return dialog.apply {
+            setOnShowListener { dialog ->
+
+                //Makes the Bottom Open full , without it opens half
+                val d: BottomSheetDialog = dialog as BottomSheetDialog
+                val bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                    }
+                }
+            }
+        }
     }
 
     private fun initView() = viewBinding.apply {

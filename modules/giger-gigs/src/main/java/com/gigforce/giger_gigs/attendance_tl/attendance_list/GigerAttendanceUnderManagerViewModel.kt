@@ -335,7 +335,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             status = StatusFilters.INACTIVE,
             attendanceCount = attendanceShownOnScreen.count {
                 it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
-                        it.status == AttendanceStatus.ABSENT
+                        it.status != AttendanceStatus.PRESENT
             },
             statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
         ),

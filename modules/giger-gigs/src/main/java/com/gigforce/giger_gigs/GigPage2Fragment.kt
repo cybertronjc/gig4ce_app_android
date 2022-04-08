@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -86,6 +87,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
+import kotlinx.coroutines.flow.collect
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
@@ -461,29 +463,37 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun initViewModel() {
-        gigSharedViewModel.gigSharedViewModelState
-            .observe(viewLifecycleOwner, Observer {
-                it ?: return@Observer
 
-                when (it) {
-                    is SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(
-                        null,
-                        it.distanceBetweenGigAndUser
-                    )
-                    else -> {
+        lifecycleScope.launchWhenCreated {
+
+            gigSharedViewModel.gigSharedViewModelState
+                .collect {
+                    it ?: return@collect
+
+                    when (it) {
+                        is SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(
+                            null,
+                            it.distanceBetweenGigAndUser
+                        )
+                        is SharedGigViewState.UserRatedGig -> viewModel.userRatedTheGig(
+                            it.rating,
+                            it.feedback
+                        )
+                        else -> {
+                        }
                     }
                 }
-            })
+        }
 
         viewModel.gigDetails
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner, Observer {
+
                 when (it) {
                     Lce.Loading -> showGigDetailsAsLoading()
                     is Lce.Content -> setGigDetailsOnView(it.content)
                     is Lce.Error -> showErrorWhileLoadingGigData(it.error)
                 }
             })
-
 
         viewModel.markingAttendanceState
             .observe(viewLifecycleOwner, Observer {
@@ -610,7 +620,7 @@ class GigPage2Fragment : Fragment(),
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
             val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
 
-            if (minutes > minTimeBtwCheckInCheckOut) {
+            if (minutes >= minTimeBtwCheckInCheckOut) {
                 checkInCheckOutSliderBtn.visible()
                 checkInCheckOutSliderBtn.text = getString(R.string.check_out_common_ui)
             } else {

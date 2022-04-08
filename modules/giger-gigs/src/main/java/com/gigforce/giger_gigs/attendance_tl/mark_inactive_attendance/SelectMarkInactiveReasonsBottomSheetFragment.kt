@@ -1,18 +1,19 @@
-package com.gigforce.giger_gigs.attendance_tl.select_decline_reasons
+package com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.RadioButton
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
@@ -22,6 +23,8 @@ import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -52,8 +55,6 @@ class SelectMarkInactiveReasonsBottomSheetFragment :
         savedInstanceState?.let {
             gigId = it.getString(GigAttendanceConstants.INTENT_EXTRA_GIG_ID) ?: return@let
         }
-
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -69,6 +70,10 @@ class SelectMarkInactiveReasonsBottomSheetFragment :
         viewBinding: FragmentSelectInactiveReasonBinding,
         savedInstanceState: Bundle?
     ) {
+        val bottomSheet  = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
 
         if (viewCreatedForTheFirstTime) {
             initView()
@@ -129,7 +134,22 @@ class SelectMarkInactiveReasonsBottomSheetFragment :
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return dialog.apply {
+            setOnShowListener { dialog ->
+
+                //Makes the Bottom Open full , without it opens half
+                val d: BottomSheetDialog = dialog as BottomSheetDialog
+                val bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                        skipCollapsed = true
+                    }
+
+                }
+            }
+        }
     }
 
     private fun initView() = viewBinding.declineGigMainLayout.apply {
@@ -210,15 +230,15 @@ class SelectMarkInactiveReasonsBottomSheetFragment :
     }
 
     private fun showLoadingView() = viewBinding.apply {
-        declineGigMainLayout.root.invisible()
-        progressBar.visible()
+        declineGigMainLayout.root.gone()
         errorLayout.gone()
+        progressBar.visible()
     }
 
     private fun showErrorInView(
         error: String
     ) = viewBinding.apply {
-        declineGigMainLayout.root.invisible()
+        declineGigMainLayout.root.gone()
         progressBar.gone()
         errorLayout.visible()
 
@@ -254,5 +274,13 @@ class SelectMarkInactiveReasonsBottomSheetFragment :
                 viewBinding.declineGigMainLayout.reasonRadioGroup.addView(radioButton)
             }
         }
+
+
+        dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            ?.apply {
+                postDelayed({
+                    requestLayout()
+                }, 400)
+            }
     }
 }

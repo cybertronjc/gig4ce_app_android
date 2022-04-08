@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment
@@ -24,6 +25,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,6 +50,7 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
     }
     @Inject lateinit var navigation : INavigation
     private val viewModel: GigViewModel by viewModels()
+    private val sharedViewModel : SharedGigViewModel by activityViewModels()
     private lateinit var gigId: String
 
     private var attachmentsList: MutableList<Uri> = mutableListOf()
@@ -195,7 +198,7 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
 
-            viewModel.submitGigFeedback(gigId, rating, feedback, attachmentsList)
+            viewModel.submitGigFeedback(sharedViewModel,gigId, rating, feedback, attachmentsList)
         }
     }
 
