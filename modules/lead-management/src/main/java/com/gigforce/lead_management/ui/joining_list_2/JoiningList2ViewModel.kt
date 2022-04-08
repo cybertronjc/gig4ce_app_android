@@ -105,52 +105,30 @@ class JoiningList2ViewModel @Inject constructor(
     private fun processJoiningsAndEmit(
         joiningsRaw: List<JoiningNew>
     ) {
+        val joiningsFilteredByDateAndSearchString = filterJoiningsByDate(
+            joiningsRaw
+        ).run {
+            filterJoiningsBySearchString(this)
+        }
 
-        val businessToJoiningGroupedList = joiningsRaw.filter {
-            if (currentSearchString.isNullOrBlank())
-                true
-            else {
-                it.gigerName?.contains(
-                    currentSearchString!!,
-                    true
-                ) ?: false
-                        || it.gigerMobileNo?.contains(
-                    currentSearchString!!,
-                    true
-                ) ?: false
-            }
-        }.filter {
-            if (currentFilterString.isNullOrBlank())
-                true
-            else {
-                if (currentFilterString == "Dropped"){
-                    it.isActive == false
-                }else{
-                    it.status.contains(
-                        currentFilterString!!, true
-                    ) && it.isActive == true
+        prepareStatusTabsDataAndEmit(
+            joiningsFilteredByDateAndSearchString
+        )
 
-                }
+        val businessToJoiningGroupedList  = joiningsFilteredByDateAndSearchString.filter {
+            if (currentFilterString == "Dropped"){
+                it.isActive == false
+            }else{
+                it.status.contains(
+                    currentFilterString!!, true
+                ) && it.isActive == true
 
-            }
-        }.filter {
-            if (filterDaysVM == null || filterDaysVM == -1)
-                true
-            else if (filterDaysVM in 0..1){
-                getDateDifference(it.createdAt.toString()) == filterDaysVM!!
-            }
-            else {
-                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
             }
         }.groupBy {
             it.business?.name
         }.toSortedMap(compareBy { it })
 
 
-        val filterMap = HashMap<String, Int>()
-        var droppedCount = 0
-        var pendingCount = 0
-        var completedCount = 0
         val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
         businessToJoiningGroupedList.forEach { (business, joinings) ->
             gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
@@ -218,73 +196,74 @@ class JoiningList2ViewModel @Inject constructor(
             )
         }
 
-        //for filter count
-        val statusToJoiningGroupedList = joiningsRaw.filter {
-            if (currentSearchString.isNullOrBlank())
-                true
-            else {
-                it.gigerName?.contains(
-                    currentSearchString!!,
-                    true
-                ) ?: false
-                        || it.gigerMobileNo?.contains(
-                    currentSearchString!!,
-                    true
-                ) ?: false
-            }
-        }.filter {
-            if (filterDaysVM == null || filterDaysVM == -1)
-                true
-            else if (filterDaysVM in 0..1){
-                getDateDifference(it.createdAt.toString()) == filterDaysVM!!
-            }
-            else {
-                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
-            }
-        }.groupBy { it.status }.toSortedMap(compareBy { it })
 
 
-        statusToJoiningGroupedList.forEach {
-            //totalCount += it.value.size
-            it.value.forEach {
-                if (it.isActive == false){
-                    droppedCount ++
-                }else {
-                    if (it.status == "Pending"){
-                        pendingCount ++
-                    }else if (it.status == "Completed"){
-                        completedCount ++
-                    }
-                }
-            }
-        }
-//        val activeJoinings = statusToJoiningGroupedList.filter { it.key == true }.values
-//        activeJoinings.forEach {
-//            if (it.all { it.status == "Pending" }){
-//                filterMap.put(LeadManagementConstants.STATUS_PENDING, it.all { it.status == "Pending"})
-//            }
-//        }
 
-//        if (statusToJoiningGroupedList.containsKey("Pending")){
-//            filterMap.put(LeadManagementConstants.STATUS_PENDING, statusToJoiningGroupedList.get("Pending")?.size!!)
-//        } else {
-//            filterMap.put(LeadManagementConstants.STATUS_PENDING, 0)
-//        }
-//        if (statusToJoiningGroupedList.containsKey("Completed")){
-//            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, statusToJoiningGroupedList.get("Completed")?.size!!)
-//        } else  {
-//            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
-//        }
-
-        filterMap.put("Dropped", droppedCount)
-        filterMap.put("Pending", pendingCount)
-        filterMap.put("Completed", completedCount)
-        _filtersMap.postValue(filterMap)
 
         gigforceLogger.d(
             TAG,
             "${joiningListShownOnView.size} items (joinings + status) shown on view"
         )
+    }
+
+    private fun prepareStatusTabsDataAndEmit(joiningsFilteredByDateAndSearchString: List<JoiningNew>) {
+
+        val filterMap = HashMap<String, Int>()
+        val droppedCount = joiningsFilteredByDateAndSearchString.filter {
+            it.isActive == false
+        }.count()
+
+        val pendingCount =  joiningsFilteredByDateAndSearchString.filter {
+            it.isActive == true && it.status == "Pending"
+        }.count()
+
+        val completedCount = joiningsFilteredByDateAndSearchString.filter {
+            it.isActive == true && it.status == "Completed"
+        }.count()
+
+        filterMap.put("Dropped", droppedCount)
+        filterMap.put("Pending", pendingCount)
+        filterMap.put("Completed", completedCount)
+        _filtersMap.postValue(filterMap)
+    }
+
+    private fun filterJoiningsByDate(
+        joiningsRaw: List<JoiningNew>
+    ) : List<JoiningNew> {
+
+        if (filterDaysVM == null || filterDaysVM == -1)
+            return joiningsRaw
+        else {
+
+            return joiningsRaw.filter {
+                if (filterDaysVM in 0..1){
+                    getDateDifference(it.createdAt.toString()) == filterDaysVM!!
+                }
+                else {
+                    getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
+                }
+            }
+        }
+    }
+
+    private fun filterJoiningsBySearchString(
+        joinings: List<JoiningNew>
+    ) : List<JoiningNew> {
+
+        if (currentSearchString.isNullOrBlank())
+            return joinings
+        else {
+          return joinings.filter {
+               it.gigerName?.contains(
+                   currentSearchString!!,
+                   true
+               ) ?: false
+                       || it.gigerMobileNo?.contains(
+                   currentSearchString!!,
+                   true
+               ) ?: false
+           }
+        }
     }
 
     fun prepareFilters(joininData: List<Joining>){
