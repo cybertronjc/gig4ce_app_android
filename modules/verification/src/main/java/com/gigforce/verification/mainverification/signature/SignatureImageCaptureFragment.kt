@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -19,13 +20,17 @@ import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
+import com.gigforce.core.AppConstants
+import com.gigforce.core.StringConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -94,18 +99,12 @@ class SignatureImageCaptureFragment :
             .shouldEnableFreeCrop(true)
             .build()
     }
-
+    var userId : String? = null
+    var allNavigationList = ArrayList<String>()
+    var intentBundle: Bundle? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        var userId : String? = null
-        arguments?.let {
-            userId = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
-        }
-
-        savedInstanceState?.let {
-            userId = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
-        }
+        getDataFromIntent(savedInstanceState)
 
         if(userId != null) {
             viewModel.userId = userId!!
@@ -116,6 +115,27 @@ class SignatureImageCaptureFragment :
         )
         viewModel.checkForExistingSignature()
     }
+
+
+    private fun getDataFromIntent(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
+        } ?: run {
+            arguments?.let {
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+                intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
+            }
+        }
+
+    }
+
 
     override fun viewCreated(
         viewBinding: FragmentSingatureCaptureFullScreenBinding,
@@ -184,7 +204,7 @@ class SignatureImageCaptureFragment :
                             .setPositiveButton("Okay") { _, _ -> }
                             .show()
                     }
-                    SignatureUploadViewState.NavigateBackToPreviousScreen -> navigation.navigateUp()
+                    SignatureUploadViewState.NavigateBackToPreviousScreen -> checkForNextDoc()
                     is SignatureUploadViewState.SignatureUploaded -> handleSignatureUploadCompleteOrOperationCancellation(
                         it.firebaseCompletePath,
                         it.firebaseImageFullUrl
@@ -289,6 +309,28 @@ class SignatureImageCaptureFragment :
                     )
                 }
             }
+        }
+    }
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                ArrayList(navigationsForBundle)
+            )
+            navigation.navigateTo(
+                allNavigationList.get(0), intentBundle
+            )
         }
     }
 
