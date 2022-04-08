@@ -96,11 +96,13 @@ class TravellingDetailInfoFragment : Fragment() {
                     travelling_data_cl.gone()
                     no_travelling_data.visible()
                     context?.let { context1 ->
-                        ToastHandler.getToastInstance(
-                            context1,
-                            it.error.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        if(!it.error.equals("not_found")){
+                            ToastHandler.getToastInstance(
+                                context1,
+                                it.error.toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }

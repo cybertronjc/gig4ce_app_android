@@ -134,6 +134,7 @@
         android:id="@+id/no_travelling_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -149,7 +150,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="No Gigs Assigned !"
+            android:text="No Gigs Assigned !"
             android:layout_marginTop="@dimen/size_24"
             style="@style/black_medium_bold"
             app:layout_constraintTop_toBottomOf="@+id/travelling_image"

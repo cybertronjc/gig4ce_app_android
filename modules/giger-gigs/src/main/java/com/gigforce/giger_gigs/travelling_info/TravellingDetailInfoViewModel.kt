@@ -26,7 +26,7 @@ class TravellingDetailInfoViewModel @Inject constructor(val travellingRepository
             response?.let {
                 _travellingInfoLiveData.value = Lce.content(it)
             }?:run{
-                _travellingInfoLiveData.value = Lce.error("No data found!!")
+                _travellingInfoLiveData.value = Lce.error("not_found")
             }
         } catch (e: Exception) {
             _travellingInfoLiveData.value = Lce.error(e.toString())
