@@ -1261,11 +1261,8 @@
         android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
         android:label="AttendanceImageConfirmBottomSheet" />
 
-
-    =========
-        android:id="@+id/viewLiveLocationFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
-        android:label="ViewLiveLocationFragment" />
->>>>>>>>> Temporary merge branch 2
+    <fragment android:id="@+id/travellingDetailInfoFragment"
+        android:name="com.gigforce.giger_gigs.travelling_info.TravellingDetailInfoFragment"
+        android:label="TravellingDetailInfoFragment"/>
 </navigation>
 

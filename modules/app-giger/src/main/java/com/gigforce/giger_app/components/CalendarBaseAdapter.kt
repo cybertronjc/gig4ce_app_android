@@ -26,7 +26,9 @@ class CalendarBaseAdapter(var context: Context) : BaseAdapter() {
 
         tv.text = list[position].date.toString()
         if (list[position].currentMonth != list[position].month)
-            tv.setTextColor(parent?.context.getColor(R.color.different_month_calendar_color))
+            parent.context?.let {
+                tv.setTextColor(it.getColor(R.color.different_month_calendar_color))
+            }
         if (todayDate.get(Calendar.DATE) == list[position].date && todayDate.get(Calendar.MONTH) == list[position].month && todayDate.get(
                 Calendar.YEAR
             ) == list[position].year

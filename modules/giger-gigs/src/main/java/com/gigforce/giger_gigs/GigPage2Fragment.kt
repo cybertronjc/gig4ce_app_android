@@ -749,7 +749,14 @@ class GigPage2Fragment : Fragment(),
         if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
         }
-
+        val PARK_PLUS = OtherOption(
+            id = ID_PARK_PLUS,
+            name = getString(R.string.offer_letter),
+            icon = R.drawable.ic_offer_letter_pink
+        )
+        if(viewModel.gigOrder?.travellingInfo?.isNotBlank() == true){
+            optionsList.add(PARK_PLUS)
+        }
         optionsList.add(IDENTITY_CARD)
         optionsList.add(ATTENDANCE_HISTORY)
 
@@ -775,6 +782,11 @@ class GigPage2Fragment : Fragment(),
     override fun onOptionClicked(option: OtherOption) {
 
         when (option.id) {
+            ID_PARK_PLUS -> {
+
+                navigation.navigateTo("gig/TravellingDetailInfoFragment")
+
+            }
             ID_IDENTITY_CARD -> {
                 navigation.navigateTo("gig/gigerIdFragment", Bundle().apply {
                     this.putString(
@@ -1285,6 +1297,7 @@ class GigPage2Fragment : Fragment(),
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
         private const val ID_OFFER_LETTER = "ID_OFFER_LETTER"
+        private const val ID_PARK_PLUS = "ID_PARK_PLUS"
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
