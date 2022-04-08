@@ -315,6 +315,7 @@
     <string name="weekly_off_for_giger_gigs">Giger is on weekly off.</string>
     <string name="weekly_off_for_me_gigs">I am on weekly off.</string>
     <string name="add_new_giger_gigs">+ ADD NEW</string>
+    <string name="location_details">Location Details</string>
 
 
 </resources>

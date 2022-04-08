@@ -1269,11 +1269,8 @@
         android:name="com.gigforce.verification.mainverification.character_certificate.CharacterCertificateFragment"
         android:label="CharacterCertificateFragment" />
 
-
-    =========
-        android:id="@+id/viewLiveLocationFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
-        android:label="ViewLiveLocationFragment" />
->>>>>>>>> Temporary merge branch 2
+    <fragment android:id="@+id/travellingDetailInfoFragment"
+        android:name="com.gigforce.giger_gigs.travelling_info.TravellingDetailInfoFragment"
+        android:label="TravellingDetailInfoFragment"/>
 </navigation>
 

@@ -207,7 +207,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
     private fun openChangeTeamLeaderScreen(
-        joiningId : String,
+        joiningId : String?,
         gigerId : String?,
         gigerName : String?,
         teamLeaderId : String?,
