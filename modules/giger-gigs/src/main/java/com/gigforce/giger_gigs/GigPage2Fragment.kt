@@ -752,7 +752,7 @@ class GigPage2Fragment : Fragment(),
         val PARK_PLUS = OtherOption(
             id = ID_PARK_PLUS,
             name = getString(R.string.location_details),
-            icon = R.drawable.ic_offer_letter_pink
+            icon = R.drawable.ic_location_icon
         )
         if(viewModel.gigOrder?.travellingInfo?.isNotBlank() == true){
             optionsList.add(PARK_PLUS)
