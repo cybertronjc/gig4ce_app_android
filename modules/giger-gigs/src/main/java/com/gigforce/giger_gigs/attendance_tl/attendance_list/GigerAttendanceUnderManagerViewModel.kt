@@ -221,15 +221,16 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         showDataUpdatedToast: Boolean,
         updateStatusTabsCount: Boolean
     ) {
-        attendanceShownOnScreen =
-            AttendanceUnderTLListDataProcessor.processAttendanceListAndFilters(
-                attendance = attendanceListRaw,
-                collapsedBusiness = collapsedBusinessList,
-                currentMarkingAttendanceForGigs = currentMarkingAttendanceForGigs,
-                currentlySelectedStatus = currentlySelectedStatus,
-                currentlySearchTerm = currentlySearchTerm,
-                gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
-            ).toMutableList()
+        val attendanceToStatusWithCountPair = AttendanceUnderTLListDataProcessor.processAttendanceListAndFilters(
+            attendance = attendanceListRaw,
+            collapsedBusiness = collapsedBusinessList,
+            currentMarkingAttendanceForGigs = currentMarkingAttendanceForGigs,
+            currentlySelectedStatus = currentlySelectedStatus,
+            currentlySearchTerm = currentlySearchTerm,
+            prepareAttendanceStatusAndCount = updateStatusTabsCount,
+            gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
+        )
+        attendanceShownOnScreen = attendanceToStatusWithCountPair.first.toMutableList()
 
         val listToEmitCopy = attendanceShownOnScreen.map {
 
@@ -248,7 +249,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 enableDeclineSwipeAction = !currentlyFetchingForDate.isBefore(LocalDate.now()),
                 attendanceItemData = listToEmitCopy,
                 showUpdateToast = showDataUpdatedToast,
-                tabsDataCounts = if (updateStatusTabsCount) prepareAttendanceTabsCountList() else null
+                tabsDataCounts = attendanceToStatusWithCountPair.second
             )
         )
     }
@@ -315,29 +316,5 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         )
     }
 
-    private fun prepareAttendanceTabsCountList() = listOf(
-        AttendanceStatusAndCountItemData(
-            status = StatusFilters.ENABLED,
-            attendanceCount = attendanceShownOnScreen.count {
-                it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
-            },
-            statusSelected = currentlySelectedStatus == StatusFilters.ENABLED
-        ),
-        AttendanceStatusAndCountItemData(
-            status = StatusFilters.ACTIVE,
-            attendanceCount = attendanceShownOnScreen.count {
-                it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
-                        it.status == AttendanceStatus.PRESENT
-            },
-            statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
-        ),
-        AttendanceStatusAndCountItemData(
-            status = StatusFilters.INACTIVE,
-            attendanceCount = attendanceShownOnScreen.count {
-                it is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
-                        it.status != AttendanceStatus.PRESENT
-            },
-            statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
-        ),
-    )
+
 }

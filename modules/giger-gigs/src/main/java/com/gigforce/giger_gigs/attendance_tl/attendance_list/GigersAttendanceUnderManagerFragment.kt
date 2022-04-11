@@ -149,10 +149,6 @@ class GigersAttendanceUnderManagerFragment :
 
         lifecycleScope.launch {
 
-//            viewBinding.appBarComp.showSubtitle(
-//                simpleDateFormat.format(LocalDate.now())
-//            )
-
             viewBinding.appBarComp.apply {
 
                 if (title.isNotBlank())
@@ -487,6 +483,7 @@ class GigersAttendanceUnderManagerFragment :
 
                 if (tabStatus == it.status) {
                     tab.text = "$tabText (${it.attendanceCount})"
+                    break
                 }
             }
         }

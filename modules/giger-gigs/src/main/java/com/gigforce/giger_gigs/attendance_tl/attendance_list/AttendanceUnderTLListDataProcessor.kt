@@ -3,8 +3,10 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_list
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
+import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
 
 object AttendanceUnderTLListDataProcessor {
+
 
     fun processAttendanceListAndFilters(
         attendance: List<GigAttendanceApiModel>,
@@ -12,75 +14,88 @@ object AttendanceUnderTLListDataProcessor {
         currentMarkingAttendanceForGigs: MutableSet<String>,
         currentlySelectedStatus: String,
         currentlySearchTerm: String?,
+        prepareAttendanceStatusAndCount: Boolean,
         gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel
-    ): List<AttendanceRecyclerItemData> {
+    ): Pair<List<AttendanceRecyclerItemData>, List<AttendanceStatusAndCountItemData>?> {
 
-        val filteredAttendance = filterAttendanceList(
+
+        val attendanceFilteredBySearchTerm = filterAttendanceBySearchTerm(
             attendance,
-            currentlySelectedStatus,
             currentlySearchTerm
         )
 
-        val businessToAttendanceGroup = filteredAttendance
-            .sortedByDescending { it.getBusinessNameNN() }
-            .groupBy {
-                it.getBusinessNameNN()
-            }
+        val tabStatusWithCount = if (prepareAttendanceStatusAndCount) {
+            prepareAttendanceTabsCountList(
+                attendanceFilteredBySearchTerm,
+                currentlySelectedStatus
+            )
+        } else {
+            null
+        }
 
-        return mutableListOf<AttendanceRecyclerItemData>()
-            .apply {
+        val businessToAttendanceGroup = filterAttendanceByStatus(
+            attendanceFilteredBySearchTerm,
+            currentlySelectedStatus,
+        ).sortedByDescending {
+            it.getBusinessNameNN()
+        }.groupBy {
+            it.getBusinessNameNN()
+        }
 
-                businessToAttendanceGroup.forEach { (businessName, attendance) ->
-                    val attendanceHeader =
-                        AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData(
-                            businessName = businessName,
-                            enabledCount = attendance.count(),
-                            activeCount = attendance.count { it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT },
-                            inActiveCount = attendance.count { it.getFinalAttendanceStatus() != AttendanceStatus.PRESENT },
-                            expanded = false,
-                            viewModel = gigerAttendanceUnderManagerViewModel
-                        )
-
-                    if (collapsedBusiness.contains(businessName)) {
-                        attendanceHeader.expanded = false
-                        add(attendanceHeader)
-                    } else {
-                        attendanceHeader.expanded = true
-                        add(attendanceHeader)
-
-                        addAll(
-                            mapPayoutsToPayoutItemView(
-                                attendance,
-                                currentMarkingAttendanceForGigs,
-                                gigerAttendanceUnderManagerViewModel
-                            )
-                        )
-                    }
-                }
-            }
+        val attendanceListForView = prepareAttendanceListForView(
+            businessToAttendanceGroup,
+            gigerAttendanceUnderManagerViewModel,
+            collapsedBusiness,
+            currentMarkingAttendanceForGigs
+        )
+        return attendanceListForView to tabStatusWithCount
     }
 
-    fun filterAttendanceList(
-        attendance: List<GigAttendanceApiModel>,
-        currentlySelectedStatus: String,
-        currentlySearchTerm: String?
-    ): List<GigAttendanceApiModel> {
-        return attendance.run {
+    private fun prepareAttendanceListForView(
+        businessToAttendanceGroup: Map<String, List<GigAttendanceApiModel>>,
+        gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel,
+        collapsedBusiness: List<String>,
+        currentMarkingAttendanceForGigs: MutableSet<String> //Gigs for which currently attendance mark process is going on
+    ) = mutableListOf<AttendanceRecyclerItemData>()
+        .apply {
 
-            this.filter {
+            businessToAttendanceGroup.forEach { (businessName, attendance) ->
+                val attendanceHeader =
+                    AttendanceRecyclerItemData.AttendanceBusinessHeaderItemData(
+                        businessName = businessName,
+                        enabledCount = attendance.count(),
+                        activeCount = attendance.count { it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT },
+                        inActiveCount = attendance.count { it.getFinalAttendanceStatus() != AttendanceStatus.PRESENT },
+                        expanded = false,
+                        viewModel = gigerAttendanceUnderManagerViewModel
+                    )
 
-                if (!currentlySearchTerm.isNullOrBlank()) {
-
-                    it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
-                            it.jobProfile?.contains(currentlySearchTerm, true) ?: false
+                if (collapsedBusiness.contains(businessName)) {
+                    attendanceHeader.expanded = false
+                    add(attendanceHeader)
                 } else {
-                    true
+                    attendanceHeader.expanded = true
+                    add(attendanceHeader)
+
+                    addAll(
+                        mapAttendanceApiModelToAttendanceViewModel(
+                            attendance,
+                            currentMarkingAttendanceForGigs,
+                            gigerAttendanceUnderManagerViewModel
+                        )
+                    )
                 }
             }
-        }.filter {
-            if (currentlySelectedStatus == StatusFilters.ENABLED) {
-                true
-            } else if (currentlySelectedStatus == StatusFilters.ACTIVE) {
+        }
+
+    private fun filterAttendanceByStatus(
+        attendance: List<GigAttendanceApiModel>,
+        currentlySelectedStatus: String
+    ): List<GigAttendanceApiModel> = if (currentlySelectedStatus == StatusFilters.ENABLED) {
+        attendance
+    } else {
+        attendance.filter {
+            if (currentlySelectedStatus == StatusFilters.ACTIVE) {
                 AttendanceStatus.PRESENT == it.getFinalAttendanceStatus()
             } else {
                 AttendanceStatus.ABSENT == it.getFinalAttendanceStatus() || AttendanceStatus.PENDING == it.getFinalAttendanceStatus()
@@ -88,7 +103,57 @@ object AttendanceUnderTLListDataProcessor {
         }
     }
 
-    private fun mapPayoutsToPayoutItemView(
+    private fun filterAttendanceBySearchTerm(
+        attendance: List<GigAttendanceApiModel>,
+        currentlySearchTerm: String?
+    ): List<GigAttendanceApiModel> = if (currentlySearchTerm.isNullOrBlank()) {
+        attendance
+    } else {
+        attendance.filter {
+            it.gigerName?.contains(currentlySearchTerm, true) ?: false ||
+                    it.jobProfile?.contains(currentlySearchTerm, true) ?: false
+        }
+    }
+
+    private fun prepareAttendanceTabsCountList(
+        attendance: List<GigAttendanceApiModel>,
+        currentlySelectedStatus: String
+    ): List<AttendanceStatusAndCountItemData> {
+        var enabledCount = 0
+        var activeCount = 0
+        var inactiveCount = 0
+
+        attendance.forEach {
+            enabledCount++
+
+            if (it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT) {
+                activeCount++
+            } else {
+                inactiveCount++
+            }
+        }
+
+        return listOf(
+            AttendanceStatusAndCountItemData(
+                status = StatusFilters.ENABLED,
+                attendanceCount = enabledCount,
+                statusSelected = currentlySelectedStatus == StatusFilters.ENABLED
+            ),
+            AttendanceStatusAndCountItemData(
+                status = StatusFilters.ACTIVE,
+                attendanceCount = activeCount,
+                statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
+            ),
+            AttendanceStatusAndCountItemData(
+                status = StatusFilters.INACTIVE,
+                attendanceCount = inactiveCount,
+                statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
+            ),
+        )
+    }
+
+
+    private fun mapAttendanceApiModelToAttendanceViewModel(
         attendances: List<GigAttendanceApiModel>,
         currentMarkingAttendanceForGigs: Set<String>,
         viewModel: GigerAttendanceUnderManagerViewModel

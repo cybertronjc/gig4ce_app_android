@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -34,9 +33,8 @@ import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEv
 import com.gigforce.giger_gigs.databinding.FragmentGigerAttendanceDetailsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -91,7 +89,7 @@ class GigerAttendanceDetailsFragment :
         viewBinding: FragmentGigerAttendanceDetailsBinding,
         savedInstanceState: Bundle?
     ) {
-        val bottomSheet  = viewBinding.root.parent as View
+        val bottomSheet = viewBinding.root.parent as View
         bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
         bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT);
         bottomSheet.setBackgroundColor(Color.TRANSPARENT);
@@ -254,7 +252,7 @@ class GigerAttendanceDetailsFragment :
 
     private fun openDropScreen(
         dropScreenData: DropScreenIntentModel
-    )  = leadManagementNavigation.openDropJoiningOrGigerScreen(dropScreenData)
+    ) = leadManagementNavigation.openDropJoiningOrGigerScreen(dropScreenData)
 
     private fun openChangeTlScreen(
         gigId: String,
@@ -318,12 +316,17 @@ class GigerAttendanceDetailsFragment :
 
         showInfoOnView(attendanceDetails)
 
-        dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            ?.apply {
-                postDelayed({
-                    requestLayout()
-                }, 400)
+        lifecycleScope.launch {
+
+            delay(400)
+            try {
+                dialog
+                    ?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                    ?.requestLayout()
+            } catch (e: Exception) {
+                //Ignore this one
             }
+        }
     }
 
 
