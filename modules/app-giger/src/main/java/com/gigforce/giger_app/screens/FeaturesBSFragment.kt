@@ -42,7 +42,6 @@ class FeaturesBSFragment : Fragment() {
         application_version.text =
             getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
         application_version.pushOnclickListener{
-            navigation.navigateTo("gig/TravellingDetailInfoFragment")
         }
     }
 
