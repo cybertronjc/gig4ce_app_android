@@ -181,7 +181,7 @@ data class Gig(
     @get:PropertyName("legalEntity")
         @set:PropertyName("legalEntity")
         var legalEntity: LegalEntity? = null,
-
+    var businessId : String? = "",
     var keywords: List<String> = emptyList(),
 
     var gigRating: Float = 0.0F,

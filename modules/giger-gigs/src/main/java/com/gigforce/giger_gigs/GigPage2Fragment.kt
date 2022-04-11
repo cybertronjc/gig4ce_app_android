@@ -754,7 +754,7 @@ class GigPage2Fragment : Fragment(),
             name = getString(R.string.location_details),
             icon = R.drawable.ic_location_icon
         )
-        if(viewModel.gigOrder?.travellingInfo?.isNotBlank() == true){
+        if(viewModel.currentGig?.businessId == PARKPLUS_BUSINESSID){
             optionsList.add(PARK_PLUS)
         }
         optionsList.add(IDENTITY_CARD)
@@ -1301,5 +1301,7 @@ class GigPage2Fragment : Fragment(),
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
+
+        const val PARKPLUS_BUSINESSID = "7lX4d0vaOrjArjH1EnsC"
     }
 }
