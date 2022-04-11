@@ -30,10 +30,6 @@ data class GigOrder(
         @set:PropertyName("olr")
         var offerLetter: String? = null,
 
-        @get:PropertyName("travellingInfo")
-        @set:PropertyName("travellingInfo")
-        var travellingInfo: String? = null,
-
         @get:PropertyName("office")
         @set:PropertyName("office")
         var workOrderOffice: WorkOrderOffice? = null
