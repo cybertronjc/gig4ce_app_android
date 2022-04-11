@@ -37,15 +37,13 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
-import com.gigforce.lead_management.models.DropScreenIntentModel
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment
 import com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
 import kotlinx.coroutines.flow.collect
 import java.text.ParseException
 import java.text.SimpleDateFormat

@@ -22,6 +22,7 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigation
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -173,6 +174,9 @@ class GigerAttendanceDetailsFragment :
 
             this.dropGigerLayout.floatingActionButton.setImageResource(R.drawable.ic_block_pink)
             this.dropGigerLayout.textView.text = "Drop Giger"
+            this.dropGigerLayout.floatingActionButton.setOnClickListener {
+                viewModel.handleEvent(GigerAttendanceDetailsViewContract.UiEvent.DropGigerClicked)
+            }
             this.dropGigerLayout.root.setOnClickListener {
                 viewModel.handleEvent(GigerAttendanceDetailsViewContract.UiEvent.DropGigerClicked)
             }
@@ -233,7 +237,9 @@ class GigerAttendanceDetailsFragment :
                         it.gigerName,
                         it.teamLeaderUid
                     )
-                    is GigerAttendanceDetailsViewContract.UiEffect.OpenDropGigerScreen -> TODO()
+                    is GigerAttendanceDetailsViewContract.UiEffect.OpenDropGigerScreen -> openDropScreen(
+                        it.dropScreenData
+                    )
                     is GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen -> gigNavigation.openGigAttendanceHistoryScreen(
                         gigDate = it.date,
                         gigTitle = it.jobProfile ?: "",
@@ -245,6 +251,10 @@ class GigerAttendanceDetailsFragment :
             }
         }
     }
+
+    private fun openDropScreen(
+        dropScreenData: DropScreenIntentModel
+    )  = leadManagementNavigation.openDropJoiningOrGigerScreen(dropScreenData)
 
     private fun openChangeTlScreen(
         gigId: String,

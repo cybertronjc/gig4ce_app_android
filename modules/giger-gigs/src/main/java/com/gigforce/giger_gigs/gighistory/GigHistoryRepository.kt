@@ -9,7 +9,9 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import java.time.LocalDate
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,47 +22,58 @@ class GigHistoryRepository @Inject constructor(
     private val gigsService: GigService
 ) : BaseFirestoreDBRepository(), DataCallbacks {
 
-    var listener: ListenerRegistration? = null
-    var onGoingListener: ListenerRegistration? = null
-    override fun getOnGoingGigs(
+    override suspend fun getOnGoingGigs(
         responseCallbacks: DataCallbacks.ResponseCallbacks,
         initialLoading: Boolean
     ) {
+        val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
 
-        onGoingListener = getCollectionReference()
-            .whereEqualTo("gigerId", getUID())
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                responseCallbacks.onGoingGigsResponse(
-                    querySnapshot,
-                    firebaseFirestoreException,
-                    initialLoading
-                )
+        try {
+            val gigs = gigsService.getGigsForDate(
+                dateInYYYMMDD = dateFormatter.format(LocalDate.now())
+            ).bodyOrThrow().map {
+                it.toGig()
             }
+
+            responseCallbacks.onGoingGigsResponse(
+                gigs,
+                null,
+                initialLoading
+            )
+        } catch (e: Exception) {
+            responseCallbacks.onGoingGigsResponse(
+                null,
+                e,
+                initialLoading
+            )
+        }
     }
 
 
-    override fun getPastGigs(
+    override suspend fun getPastGigs(
         responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
+        offset: Long,
         limit: Long
     ) {
 
-        val gigQuery =
-            if (lastVisible != null) getCollectionReference()
-                .whereEqualTo("gigerId", getUID())
-                .whereLessThan("endDateTime", Date())
-                .orderBy("endDateTime", Query.Direction.DESCENDING)
-                .startAfter(lastVisible)
-                .limit(limit)
-            else
-                getCollectionReference().whereEqualTo("gigerId", getUID())
-                    .whereLessThan("endDateTime", Date())
-                    .orderBy("endDateTime", Query.Direction.DESCENDING)
-                    .limit(limit)
-        listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        Log.d("TAG", "Get Past called ,offset =  $offset")
+        try {
+            val gigs = gigsService.getPastGigs(
+                offset = offset,
+                limit = limit
+            ).bodyOrThrow().map {
+                it.toGig()
+            }
 
-            responseCallbacks.pastGigsResponse(querySnapshot, firebaseFirestoreException);
-
+            responseCallbacks.pastGigsResponse(
+                gigs,
+                null
+            )
+        } catch (e: Exception) {
+            responseCallbacks.pastGigsResponse(
+                null,
+                e
+            )
         }
 
     }
@@ -92,14 +105,6 @@ class GigHistoryRepository @Inject constructor(
         }
     }
 
-    override fun removeListener() {
-        listener?.remove()
-
-    }
-
-    override fun removeOnGoingGigsListener() {
-        onGoingListener?.remove()
-    }
 
     override fun observeDocumentChanges(responseCallbacks: DataCallbacks.ResponseCallbacks) {
         getCollectionReference().whereEqualTo("gigerId", getUID())

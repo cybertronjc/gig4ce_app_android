@@ -2,18 +2,11 @@ package com.gigforce.lead_management.ui.drop_selection_2
 
 import android.app.DatePickerDialog
 import android.graphics.Color
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import androidx.transition.AutoTransition
 import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -25,13 +18,9 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.BottomSheetDialogFragmentDropSelectionBinding
-import com.gigforce.lead_management.databinding.DropSelection2BottomSheetMainBinding
 import com.gigforce.lead_management.databinding.DropSelectionFragment2FragmentBinding
-import com.gigforce.lead_management.models.DropScreenIntentModel
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
-import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
-import com.gigforce.lead_management.ui.drop_selection.DropSelectionViewModel
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import dagger.hilt.android.AndroidEntryPoint

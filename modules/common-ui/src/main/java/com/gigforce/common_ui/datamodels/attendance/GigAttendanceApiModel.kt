@@ -80,6 +80,15 @@ data class GigAttendanceApiModel(
 
     @field:SerializedName("lastActiveString")
     val lastActiveString: String? = null,
+
+    @field:SerializedName("currentDate")
+    val currentDate: String? = null, //Current Date on server format - "2022-04-07T09:27:08.686Z",
+
+    @field:SerializedName("gigEndDate")
+    val gigEndDate: String? = null, //Last Gig start Date format - "2022-04-07T09:27:08.686Z",
+
+    @field:SerializedName("gigStartDate")
+    val gigStartDate: String? = null, //First gig Start date format - "2022-04-07T09:27:08.686Z"
 ) {
 
     fun getProfilePicture() : String{

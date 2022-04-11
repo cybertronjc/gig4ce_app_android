@@ -58,70 +58,64 @@ class GigHistoryViewModel  @Inject constructor(
     }
     val observableDocChange: SingleLiveEvent<DocChange> get() = _observableDocChange
 
-    fun getData() {
+    fun getData() = viewModelScope.launch {
         repositoryCallbacks.getOnGoingGigs(
-            this,
+            this@GigHistoryViewModel,
             observableOnGoingGigs.value == null || observableOnGoingGigs.value!!.data == null || observableOnGoingGigs.value?.data?.isEmpty()!!
         )
         if (!isInitialDataLoaded) {
             showProgress(true)
-            repositoryCallbacks.checkGigsCount(this)
-            repositoryCallbacks.getPastGigs(this, null, limit)
+            repositoryCallbacks.checkGigsCount(this@GigHistoryViewModel)
+            repositoryCallbacks.getPastGigs(this@GigHistoryViewModel,
+                0,
+                limit
+            )
             isInitialDataLoaded = true
         }
 
     }
 
     override fun onGoingGigsResponse(
-        querySnapshot: QuerySnapshot?,
+        gigs: List<Gig>?,
         error: Exception?,
         initialLoading: Boolean
     ) {
-        if (querySnapshot != null) observableOnGoingGigs.value = GigsResponse(
+        if (gigs != null) observableOnGoingGigs.value = GigsResponse(
             true,
             "On Going Gigs Loaded Successfully",
-            ArrayList(getGigsWithId(
-                querySnapshot,
-                checkForCompletedGigs = false,
-                fetchOnGoing = initialLoading,
-                getUpcomingGig = false
-            ).filter {
-                val gigStatus = GigStatus.fromGig(it)
-                gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
-            })
+            ArrayList(gigs)
         ) else {
             error?.message?.let {
                 observableError.value = it
             }
             error?.printStackTrace()
         }
-        repositoryCallbacks.removeOnGoingGigsListener()
     }
 
     override fun pastGigsResponse(
-        querySnapshot: QuerySnapshot?,
-        error: FirebaseFirestoreException?
+        gigs: List<Gig>?,
+        error: Exception?
     ) {
-        if (querySnapshot != null) {
-            if (querySnapshot.documents.isNotEmpty())
-                lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
-            isLastPage = querySnapshot.documents.size < limit
+
+        if (gigs != null) {
+            if (gigs.isNotEmpty()) {
+                lastVisibleItemIndex += gigs.size
+            }
+            isLastPage = gigs.size < limit
 
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Past Gigs Loaded Successfully",
-                getGigsWithId(querySnapshot, true, fetchOnGoing = false, getUpcomingGig = false)
+                ArrayList( gigs)
             )
-            repositoryCallbacks.removeListener()
         } else {
             error?.printStackTrace()
             error?.message?.let {
                 observableError.value = it
             }
         }
-
-
     }
+
 
 
     override fun upcomingGigsResponse(
@@ -140,7 +134,6 @@ class GigHistoryViewModel  @Inject constructor(
                 "Upcoming Gigs Loaded Successfully",
                 ArrayList(gigs)
             )
-            repositoryCallbacks.removeListener()
         } else {
             error?.message?.let {
                 observableError.value = it
@@ -186,7 +179,7 @@ class GigHistoryViewModel  @Inject constructor(
         if (pastGigs) {
             repositoryCallbacks.getPastGigs(
                 this@GigHistoryViewModel,
-                lastVisibleItem,
+                lastVisibleItemIndex /limit,
                 limit
             )
         } else {

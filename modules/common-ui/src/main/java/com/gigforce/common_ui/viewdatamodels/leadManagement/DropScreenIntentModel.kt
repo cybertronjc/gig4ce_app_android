@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.models
+package com.gigforce.common_ui.viewdatamodels.leadManagement
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

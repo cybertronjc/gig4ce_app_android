@@ -76,6 +76,48 @@ suspend fun DocumentReference.getOrThrow() = suspendCoroutine<DocumentSnapshot> 
     }
 }
 
+suspend inline fun <reified T> DocumentReference.getAndSerializeOrThrow() = suspendCoroutine<T> { cont ->
+
+    get().addOnSuccessListener {
+
+        if(!it.exists()){
+            cont.resumeWithException(Exception("no document exist for ${it.id}"))
+            return@addOnSuccessListener
+        }
+
+       try {
+           val serializedData = it.toObject(T::class.java) ?: throw Exception("unable to serialize data to required object")
+           cont.resume(serializedData)
+       } catch (e: Exception) {
+           cont.resumeWithException(e)
+       }
+
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend inline fun <reified T> DocumentReference.getOrNull() = suspendCoroutine<T?> { cont ->
+
+    get().addOnSuccessListener {
+
+        if(!it.exists()){
+            cont.resume(null)
+            return@addOnSuccessListener
+        }
+
+        try {
+            val serializedData = it.toObject(T::class.java) ?: throw Exception("unable to serialize data to required object")
+            cont.resume(serializedData)
+        } catch (e: Exception) {
+            cont.resume(null)
+        }
+
+    }.addOnFailureListener {
+        cont.resume(null)
+    }
+}
+
 suspend fun WriteBatch.commitOrThrow() = suspendCoroutine<Void?> { cont ->
     commit().addOnSuccessListener {
         cont.resume(null)

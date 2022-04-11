@@ -442,8 +442,6 @@ class GigersAttendanceUnderManagerFragment :
         swipeTouchHandler.markPresentSwipeActionEnabled = enablePresentSwipeAction
         swipeTouchHandler.declineSwipeActionEnabled = enableDeclineSwipeAction
 
-
-
         stopShimmer(
             shimmerContainer,
             R.id.shimmer_controller

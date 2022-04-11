@@ -3,10 +3,14 @@ package com.gigforce.giger_gigs.attendance_tl.attendance_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.gigforce.common_ui.repository.GigerVerificationRepository
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.extensions.getAndSerializeOrThrow
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +26,8 @@ import javax.inject.Inject
 class GigerAttendanceDetailsViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val attendanceRepository: GigAttendanceRepository,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val verificationRepository: GigerVerificationRepository
 ) : ViewModel() {
 
     companion object {
@@ -80,7 +85,7 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
         _viewEffects.emit(
             GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen(
                 gigOrderId = gigDetails.gigOrderId!!,
-                date =gigDetails.gigDate,
+                date = gigDetails.gigDate,
                 jobProfile = gigDetails.jobProfile,
                 companyName = gigDetails.businessName,
                 companyLogo = gigDetails.businessLogo
@@ -89,7 +94,33 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     }
 
     private fun dropGigerClicked() = viewModelScope.launch {
+        val gigDetails = attendanceDetails ?: return@launch
+        val gigerId = attendanceDetails?.gigerId ?: return@launch
 
+        val bankVerified = try {
+            val verificationModel = verificationRepository.verificationDocumentReference(
+                userId = gigerId
+            ).getAndSerializeOrThrow<VerificationBaseModel>()
+            "verified" == verificationModel.bank_details?.status
+        } catch (e: Exception) {
+            false
+        }
+
+        val dropScreenIntentModel = DropScreenIntentModel(
+            joiningId = null,
+            gigId = gigId,
+            isBankVerified = bankVerified,
+            hasStartEndDate = !gigDetails.gigStartDateInIsoFormat.isNullOrBlank() && !gigDetails.gigEndDateInIsoFormat.isNullOrBlank(),
+            gigStartDate = gigDetails.gigStartDateInIsoFormat ?: "",
+            gigEndDate = gigDetails.gigEndDateInIsoFormat ?: "",
+            currentDate = gigDetails.currentDateInISOFormat ?: ""
+        )
+
+        _viewEffects.emit(
+            GigerAttendanceDetailsViewContract.UiEffect.OpenDropGigerScreen(
+                dropScreenIntentModel
+            )
+        )
     }
 
     private fun callGigerClicked() = viewModelScope.launch {
@@ -198,12 +229,11 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
     }
 
 
-
     fun gigUpdateReceived(
         attendance: GigAttendanceApiModel
     ) = viewModelScope.launch {
         val updatedGigId = attendance.id ?: return@launch
-        if(updatedGigId == gigId){
+        if (updatedGigId == gigId) {
 
             attendanceDetails = GigAttendanceData.fromGigAttendanceApiModel(
                 attendance

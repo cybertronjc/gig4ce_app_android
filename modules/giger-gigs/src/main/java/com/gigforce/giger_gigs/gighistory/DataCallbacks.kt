@@ -8,14 +8,14 @@ import com.google.firebase.firestore.QuerySnapshot
 import java.lang.Exception
 
 interface DataCallbacks {
-    fun getOnGoingGigs(
+    suspend fun getOnGoingGigs(
         responseCallbacks: ResponseCallbacks,
         initialLoading: Boolean
     )
 
-    fun getPastGigs(
+    suspend fun getPastGigs(
         responseCallbacks: ResponseCallbacks,
-        query: DocumentSnapshot?,
+        offset: Long,
         limit: Long
     )
 
@@ -25,15 +25,13 @@ interface DataCallbacks {
         limit: Long
     )
 
-    fun removeListener()
-    fun removeOnGoingGigsListener()
     fun observeDocumentChanges(responseCallbacks: ResponseCallbacks)
     fun checkGigsCount(responseCallbacks: ResponseCallbacks)
 
 
     interface ResponseCallbacks {
         fun onGoingGigsResponse(
-            querySnapshot: QuerySnapshot?,
+            gigs: List<Gig>?,
             error: Exception?,
             initialLoading: Boolean
         )

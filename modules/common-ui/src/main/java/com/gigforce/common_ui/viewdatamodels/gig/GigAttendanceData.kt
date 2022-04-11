@@ -2,6 +2,7 @@ package com.gigforce.common_ui.viewdatamodels.gig
 
 import android.os.Parcelable
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 
@@ -42,7 +43,11 @@ data class GigAttendanceData(
     val gigerAttendanceMarkingTime : String?,
 
     var resolveId : String?,
-    var currentlyMarkingAttendanceForThisGig : Boolean
+    var currentlyMarkingAttendanceForThisGig : Boolean,
+
+    val currentDateInISOFormat: String? = null, //Current Date on server format - "2022-04-07T09:27:08.686Z",
+    val gigEndDateInIsoFormat: String? = null, //Last Gig start Date format - "2022-04-07T09:27:08.686Z",
+    val gigStartDateInIsoFormat: String? = null,
 ) : Parcelable {
 
     companion object {
@@ -84,6 +89,9 @@ data class GigAttendanceData(
                 gigOrderId = gigApiModel.gigOrderId,
                 gigDate = gigApiModel.getGigDate(),
                 jobProfile = gigApiModel.jobProfile,
+                currentDateInISOFormat = gigApiModel.currentDate,
+                gigEndDateInIsoFormat = gigApiModel.gigEndDate,
+                gigStartDateInIsoFormat = gigApiModel.gigStartDate,
             )
         }
     }

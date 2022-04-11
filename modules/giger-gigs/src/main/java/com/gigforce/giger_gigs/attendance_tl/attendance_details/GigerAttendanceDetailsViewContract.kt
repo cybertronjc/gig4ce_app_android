@@ -1,6 +1,7 @@
 package com.gigforce.giger_gigs.attendance_tl.attendance_details
 
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
 import com.gigforce.giger_gigs.GigMonthlyAttendanceFragment
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import java.time.LocalDate
@@ -70,7 +71,7 @@ class GigerAttendanceDetailsViewContract {
         ) : UiEffect()
 
         data class OpenDropGigerScreen(
-            val gigId : String
+            val dropScreenData : DropScreenIntentModel
         ) : UiEffect()
 
         data class OpenChangeTLScreen(
