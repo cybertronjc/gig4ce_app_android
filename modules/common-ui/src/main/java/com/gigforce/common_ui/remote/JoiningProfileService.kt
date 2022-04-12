@@ -65,6 +65,7 @@ interface JoiningProfileService {
 
     @GET("business/listing/tlBusinessJobProfile")
     suspend fun getTeamLeadersForSelection(
+        @Query("businessId") businessId: String,
         @Query("allTL") shouldFetchAllTeamLeaders : Boolean
     ): Response<GetTeamLeadersResponse>
 

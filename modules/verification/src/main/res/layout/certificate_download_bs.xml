@@ -28,19 +28,20 @@
 
         <TextView
             android:id="@+id/textView14"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/certificate_downloaded_veri"
             style="@style/primary_color_heading2_bs"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/successfully_veri"
-            style="@style/primary_color_heading2_bs"
-            android:layout_gravity="center"/>
+<!--        <TextView-->
+<!--            android:id="@+id/textView15"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/successfully_veri"-->
+<!--            style="@style/primary_color_heading2_bs"-->
+<!--            android:layout_gravity="center"/>-->
     </LinearLayout>
 
     <TextView

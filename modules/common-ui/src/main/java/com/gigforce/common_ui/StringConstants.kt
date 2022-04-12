@@ -104,7 +104,9 @@ enum class StringConstants(val value: String) {
     PAYOUT_DEEP_LINK("PAYOUT_DEEP_LINK"),
     PAYOUT_SP("payout"),
     HELP_SECTION_DEEP_LINK("HELP_SECTION_DEEP_LINK"),
-    HELP_SECTION_SP("help_section")
+    HELP_SECTION_SP("help_section"),
+    COMPLIANCE_DEEP_LINK("COMPLIANCE_DEEP_LINK"),
+    COMPLIANCE_SP("compliance")
 
 
 

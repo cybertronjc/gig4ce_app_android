@@ -16,6 +16,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CertificateDownloadBS : BottomSheetDialogFragment() {
 
+    var title: String? = null
+
     @Inject
     lateinit var navigation : INavigation
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +33,30 @@ class CertificateDownloadBS : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.certificate_download_bs, container, false)
     }
 
+
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData(savedInstanceState)
         GlideApp.with(this).load(R.drawable.ok_downloaded).into(imageView2)
         okay_bn_bs.setOnClickListener{
             dismiss()
+        }
+        initViews()
+    }
+
+    private fun initViews() {
+        if (title?.isNotEmpty() == true){
+            textView14.text = title
         }
     }
 

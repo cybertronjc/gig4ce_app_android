@@ -36,7 +36,8 @@ class SelectTeamLeaderViewModel @Inject constructor(
     }
 
     fun fetchTeamLeaders(
-        shouldFetchAllTeamLeaders: Boolean
+        shouldFetchAllTeamLeaders: Boolean,
+        businessId: String
     ) = viewModelScope.launch {
 
         logger.d(
@@ -48,9 +49,9 @@ class SelectTeamLeaderViewModel @Inject constructor(
         try {
 
             val teamLeaders = if (shouldFetchAllTeamLeaders) {
-                fetchAllTeamLeadersFromCacheElseRefresh()
+                fetchAllTeamLeadersFromCacheElseRefresh(businessId)
             } else {
-                fetchCityTeamLeadersFromCacheElseRefresh()
+                fetchCityTeamLeadersFromCacheElseRefresh(businessId)
             }
 
             checkAndSelectPreviousSelectedUserAndEmit(teamLeaders)
@@ -65,7 +66,7 @@ class SelectTeamLeaderViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchAllTeamLeadersFromCacheElseRefresh() : List<TeamLeader> {
+    private suspend fun fetchAllTeamLeadersFromCacheElseRefresh(businessId: String) : List<TeamLeader> {
 
         return if (TeamLeadersDataCache.isAllTeamLeadersCached()) {
             val tls = TeamLeadersDataCache.getCachedAllTeamLeadersIfExistElseThrow()
@@ -74,7 +75,8 @@ class SelectTeamLeaderViewModel @Inject constructor(
         } else {
 
             val tls = leadManagementRepository.getTeamLeadersForSelection(
-                true
+                true,
+                businessId
             )
             TeamLeadersDataCache.updateAllCachedTeamLeader(tls)
             logger.d(TAG, "[Success] fetched ${tls.size} team leaders from network,cache refreshed")
@@ -82,7 +84,7 @@ class SelectTeamLeaderViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchCityTeamLeadersFromCacheElseRefresh() : List<TeamLeader> {
+    private suspend fun fetchCityTeamLeadersFromCacheElseRefresh(businessId: String) : List<TeamLeader> {
 
         return if (TeamLeadersDataCache.isCityTeamLeadersCached()) {
 
@@ -92,7 +94,8 @@ class SelectTeamLeaderViewModel @Inject constructor(
         } else {
 
             val tls = leadManagementRepository.getTeamLeadersForSelection(
-                false
+                false,
+                businessId
             )
             TeamLeadersDataCache.updateCityTeamLeader(tls)
             logger.d(TAG, "[Success] fetched ${tls.size} team leaders from network,cache refreshed")

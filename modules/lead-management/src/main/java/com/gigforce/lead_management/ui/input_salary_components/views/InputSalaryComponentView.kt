@@ -55,8 +55,8 @@ class InputSalaryComponentView(
         viewData = salaryComponentData
 
         if (viewData.name?.isNotEmpty() == true){
-            titleTextview.text = viewData.name
-            viewBinding.titleTextview.addMandatorySymbolToTextEnd()
+            titleTextview.text = viewData.business?.name
+            //viewBinding.titleTextview.addMandatorySymbolToTextEnd()
         }
 
         if (viewData.amount != -1){
