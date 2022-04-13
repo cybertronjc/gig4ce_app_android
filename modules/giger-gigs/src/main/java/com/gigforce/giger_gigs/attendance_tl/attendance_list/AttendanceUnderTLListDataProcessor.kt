@@ -36,7 +36,7 @@ object AttendanceUnderTLListDataProcessor {
         val businessToAttendanceGroup = filterAttendanceByStatus(
             attendanceFilteredBySearchTerm,
             currentlySelectedStatus,
-        ).sortedByDescending {
+        ).sortedBy {
             it.getBusinessNameNN()
         }.groupBy {
             it.getBusinessNameNN()
