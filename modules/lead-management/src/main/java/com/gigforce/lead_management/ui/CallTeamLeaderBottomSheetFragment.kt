@@ -118,12 +118,19 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
             recruitingTlCard.tlOption.text = "Recruiting TL"
 
             context?.let { it1 ->
-                var profilePicRef: StorageReference =
-                    FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
-                GlideApp.with(it1)
-                    .load(profilePicRef)
-                    .placeholder(resources.getDrawable(R.drawable.ic_user_2))
-                    .into(recruitingTlCard.tlProfileImage)
+                if (it.profilePicture.isNullOrBlank()){
+                    GlideApp.with(it1)
+                        .load("")
+                        .placeholder(resources.getDrawable(R.drawable.ic_user_2))
+                        .into(recruitingTlCard.tlProfileImage)
+                } else {
+                    var profilePicRef: StorageReference =
+                        FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
+                    GlideApp.with(it1)
+                        .load(profilePicRef)
+                        .placeholder(resources.getDrawable(R.drawable.ic_user_2))
+                        .into(recruitingTlCard.tlProfileImage)
+                }
             }
         }
 
@@ -132,13 +139,18 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
             reportingTlCard.txtSubtitle.text = it.mobileNumber
             reportingTlCard.tlOption.text = "Reporting TL"
             context?.let { it1 ->
-                var profilePicRef: StorageReference =
-                    FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
+                if (it.profilePicture.isNullOrBlank()){
+                    GlideApp.with(it1)
+                        .load("")
+                        .placeholder(resources.getDrawable(R.drawable.ic_user_2))
+                        .into(reportingTlCard.tlProfileImage)
+                } else {
+                    var profilePicRef: StorageReference = FirebaseStorage.getInstance().reference.child("profile_pics").child(it.profilePicture.toString())
                     GlideApp.with(it1)
                         .load(profilePicRef)
                         .placeholder(resources.getDrawable(R.drawable.ic_user_2))
                         .into(reportingTlCard.tlProfileImage)
-
+                }
             }
         }
     }
