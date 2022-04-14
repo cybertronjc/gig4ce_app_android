@@ -362,7 +362,8 @@ class GigerAttendanceDetailsFragment :
             attendanceDetails
         )
 
-        if (attendanceDetails.canTLMarkPresent || attendanceDetails.canTLMarkAbsent) {
+        if (attendanceDetails.hasAttendanceConflict.not() &&
+            (attendanceDetails.canTLMarkPresent || attendanceDetails.canTLMarkAbsent)) {
 
             this.attendanceTextview.isVisible = true
             this.attendanceActionButtonsLayout.isVisible = true
