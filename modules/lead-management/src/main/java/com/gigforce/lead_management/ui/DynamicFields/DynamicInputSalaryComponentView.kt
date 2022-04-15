@@ -69,7 +69,7 @@ class DynamicInputSalaryComponentView(
         settingFieldAsOptionalOrMandatory(fieldDetails)
     }
 
-    override fun setData(data: Any) {
+    override fun setData(data: Any?) {
         data?.let {
             salaryAmountEntered = data as List<InputSalaryDataItem>?
             removeError()

@@ -36,7 +36,7 @@ interface  DynamicScreenFieldView: BaseDynamicFieldView {
     )
 
     fun setData(
-        data: Any
+        data: Any?
     )
 
     fun isEnteredOrSelectedDataValid(): Boolean
