@@ -135,7 +135,11 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
 
         init {
             itemView.setOnClickListener {
-                onItemClick?.invoke(filteredJobList[adapterPosition])
+                try {
+                    onItemClick?.invoke(filteredJobList[adapterPosition])
+                }catch (e:Exception){
+
+                }
             }
         }
 
