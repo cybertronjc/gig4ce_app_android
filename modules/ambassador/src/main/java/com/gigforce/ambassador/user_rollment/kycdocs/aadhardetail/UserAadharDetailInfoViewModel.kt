@@ -39,6 +39,10 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val verification
 //    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     val _profileNominee: MutableLiveData<ProfileNominee> = MutableLiveData<ProfileNominee>()
     val profileNominee: LiveData<ProfileNominee> = _profileNominee
+
+    private val _dobEditConfirmation : MutableLiveData<UserDOBChangedDM?> = MutableLiveData<UserDOBChangedDM?>()
+    val dobEditConfirmation : LiveData<UserDOBChangedDM?> = _dobEditConfirmation
+
     fun getStates() = viewModelScope.launch {
         try {
             val states = aadharDetailsRepo.getStatesFromDb()
@@ -121,7 +125,7 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val verification
                                     draft.isDone = true
                                 }
                             }
-                            var map = mapOf(
+                            val map = mapOf(
                                 "application" to jpApplication.application,
                                 "updatedAt" to Timestamp.now(),
                                 "updatedBy" to FirebaseAuthStateListener.getInstance()
@@ -144,4 +148,10 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val verification
             updatedResult.postValue(false)
         }
     }
+
+    fun confirmDOBEdit() = viewModelScope.launch {
+        _dobEditConfirmation.value = UserDOBChangedDM(true)
+        _dobEditConfirmation.value = UserDOBChangedDM(false)
+    }
+
 }
