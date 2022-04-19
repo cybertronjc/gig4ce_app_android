@@ -13,7 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
+import com.gigforce.app.android_common_utils.extensions.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants

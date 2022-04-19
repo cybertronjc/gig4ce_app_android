@@ -21,14 +21,19 @@ object Libs {
     val mockitoInline = "org.mockito:mockito-inline:3.0.0"
 
     val mpChart = "com.github.PhilJay:MPAndroidChart:v3.1.0"
-    val circularImageView = "de.hdodenhof:circleimageview:3.1.0"
     val appIntro = "com.github.AppIntro:AppIntro:5.1.0"
     val zoomableImageView = "com.jsibbold:zoomage:1.3.1"
     val leakCanary2 = "com.squareup.leakcanary:leakcanary-android:2.3"
     val coil = "io.coil-kt:coil:0.11.0"
+    val localization = "com.akexorcist:localization:1.2.10"
 
     object Vinners {
         val logger = "com.github.vinnersafterwork:core:1.0"
+    }
+
+    object Facebook {
+        val stetho = "com.facebook.stetho:stetho:1.5.1"
+        val shimmer = "com.facebook.shimmer:shimmer:0.5.0@aar"
     }
 
     object Firebase {
@@ -36,7 +41,7 @@ object Libs {
 
         val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
 
-        val coreKtx = "com.google.firebase:firebase-core-ktx:20.1.2"
+        val coreKtx = "com.google.firebase:firebase-core:20.1.2"
         val analyticsKtx = "com.google.firebase:firebase-analytics-ktx:20.1.2"
         val messagingKtx = "com.google.firebase:firebase-messaging-ktx:23.0.3"
         val messagingDirectBootKtx = "com.google.firebase:firebase-messaging-directboot:20.2.4"
@@ -47,25 +52,33 @@ object Libs {
         val firestoreKtx = "com.google.firebase:firebase-firestore-ktx:24.1.1"
         val storageKtx = "com.google.firebase:firebase-storage-ktx:20.0.1"
         val realTimeDatabaseKtx = "com.google.firebase:firebase-database-ktx:20.0.4"
+        val remoteConfigKtx = "com.google.firebase:firebase-config-ktx:20.0.3"
 
         val authUi = "com.firebaseui:firebase-ui-auth:4.3.1"
         val storageUi = "com.firebaseui:firebase-ui-storage:4.3.2"
+
+        val mlKitFaceDetection = "com.google.android.gms:play-services-mlkit-face-detection:16.2.0"
+
+
     }
 
     object Google {
 
-        val material = "com.google.android.material:material:1.5.0"
+        val material = "com.google.android.material:material:1.3.0"
         val gmsGoogleServicesGradlePlugin = "com.google.gms:google-services:4.3.3"
         val placesLibrary = "com.google.android.libraries.places:places:1.0.0"
-        val maps = "com.google.android.gms:play-services-maps:16.1.0"
+        val maps = "com.google.android.gms:play-services-maps:17.0.0"
 
         val playCore = "com.google.android.play:core:1.7.2"
-        val playLocation = "com.google.android.gms:play-services-location:16.0.0"
+        val playLocation = "com.google.android.gms:play-services-location:17.0.0"
         val playRefer = "com.android.installreferrer:installreferrer:1.1.2"
         val playServicesBase = "com.google.android.gms:play-services-base:17.0.0"
         val authApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.0.0"
         val auth = "com.google.android.gms:play-services-auth:18.0.0"
         val smsRetriver = "com.google.android.gms:play-services-gcm:17.0.0"
+
+        val exoplayerCore  = "com.google.android.exoplayer:exoplayer-core:2.17.1"
+        val exoplayerUi  = "com.google.android.exoplayer:exoplayer-ui:2.17.1"
     }
 
     object Kotlin {
@@ -73,22 +86,22 @@ object Libs {
         val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$version"
+
+        /**
+         * Adds extensiosn for converting Task to Deferred,
+         * can be used with firebase to skip onSuccessListener etc callback)
+         */
+        val playServicesCoroutinesKtx = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1"
+
     }
 
-    object Coroutines {
-        private const val version = "1.6.0"
-        val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
-        val rx2 = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$version"
-        val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
-        val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
-    }
 
     object Android {
         val desugarJdk = "com.android.tools:desugar_jdk_libs:1.1.5"
     }
 
     object AndroidX {
-        val appcompat = "androidx.appcompat:appcompat:1.4.1"
+        val appcompat = "androidx.appcompat:appcompat:1.3.0"
         val browser = "androidx.browser:browser:1.0.0"
         val palette = "androidx.palette:palette:1.0.0"
         val recyclerview = "androidx.recyclerview:recyclerview:1.0.0"
@@ -99,9 +112,10 @@ object Libs {
         val vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
         val preference = "androidx.preference:preference:1.1.0-alpha02"
         val constraintlayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-        val coreKtx = "androidx.core:core-ktx:1.2.0"
+        val coreKtx = "androidx.core:core-ktx:1.3.2"
         val archCoreTesting = "androidx.arch.core:core-testing:2.1.0"
         val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
+        val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
         object Test {
             val core = "androidx.test:core:1.1.0"
@@ -111,7 +125,7 @@ object Libs {
         }
 
         object Navigation {
-            private const val version = "2.2.0"
+            private const val version = "2.3.0"
             val navigationFragment = "androidx.navigation:navigation-fragment:$version"
             val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$version"
             val navigationUi = "androidx.navigation:navigation-ui:$version"
@@ -127,10 +141,10 @@ object Libs {
 
         object Lifecycle {
             private const val version = "2.4.0"
-            val extensions = "androidx.lifecycle:lfifecycle-extensions:$version"
+            val extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
             val compiler = "androidx.lifecycle:lifecycle-compiler:$version"
-            val lifeCyleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
-            val lifeCyleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
+            val lifeCyleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
+            val lifeCyleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
         }
 
@@ -158,14 +172,19 @@ object Libs {
         val lottie = "com.airbnb.android:lottie:3.4.0"
     }
 
-    object Facebook {
-        val stetho = "com.facebook.stetho:stetho:1.5.1"
-    }
 
     object RxJava {
         val rxJava = "io.reactivex.rxjava2:rxjava:2.2.12"
         val rxKotlin = "io.reactivex.rxjava2:rxkotlin:2.3.0"
         val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
+    }
+
+    object Coroutines {
+        private const val version = "1.6.0"
+        val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
+        val rx2 = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$version"
+        val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+        val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
     object Dagger {
@@ -186,9 +205,11 @@ object Libs {
     }
 
     object Glide {
-        private const val version = "4.9.0"
+        private const val version = "4.10.0"
         val glide = "com.github.bumptech.glide:glide:$version"
         val compiler = "com.github.bumptech.glide:compiler:$version"
+
+
     }
 
 

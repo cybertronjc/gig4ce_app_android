@@ -42,6 +42,10 @@ dependencies {
     implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:user-tracking')
+    implementation project(path: ':domain')
+    implementation project(path: ':android-common-ui')
+    implementation project(path: ':data:data')
+    implementation project(path: ':android-common-utils')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     def moshiVersion = "1.8.0"

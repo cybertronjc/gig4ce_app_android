@@ -8,9 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
+import com.gigforce.app.android_common_utils.extensions.textChanged
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.selectChipWithText
 import com.gigforce.core.extensions.visible

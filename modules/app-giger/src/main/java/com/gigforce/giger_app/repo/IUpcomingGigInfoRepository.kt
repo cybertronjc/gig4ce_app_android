@@ -27,7 +27,7 @@ class UpcomingGigInfoRepository @Inject constructor() : IUpcomingGigInfoReposito
             val subscription = getCurrentUserGigs()
                 .addSnapshotListener { querySnapshot, _ ->
                     if (querySnapshot != null) {
-                        offer(extractUpcomingGigs(querySnapshot))
+                        trySend(extractUpcomingGigs(querySnapshot))
 
                     }
                 }

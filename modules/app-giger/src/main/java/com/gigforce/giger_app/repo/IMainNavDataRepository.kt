@@ -132,7 +132,7 @@ class MainNavDataRepository @Inject constructor(
                                                     arrangedData = arrangeDataAndSetObserver(iconList)
                                                 }
                                             foundVersionMapping = true
-                                            offer(arrangedData)
+                                            trySend(arrangedData)
                                             return@let
                                         }
                                     }
@@ -141,13 +141,13 @@ class MainNavDataRepository @Inject constructor(
                                         docMapData.get("data")?.let { iconList ->
                                             arrangedData = arrangeDataAndSetObserver(iconList)
                                         }
-                                        offer(arrangedData)
+                                        trySend(arrangedData)
                                     }
                                 }
 
                             } else if(it.isEmpty()) {
                                 reloadCount = 1
-                                offer(ArrayList<FeatureItemCard2DVM>())
+                                trySend(ArrayList<FeatureItemCard2DVM>())
                             }else{
                             }
                         }

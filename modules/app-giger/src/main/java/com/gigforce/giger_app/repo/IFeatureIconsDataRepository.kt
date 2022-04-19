@@ -125,7 +125,7 @@ class FeatureIconsDataRepository @Inject constructor(
                                             arrangedData = arrangeDataAndSetObserverBS(iconList)
                                         }
                                         foundVersionMapping = true
-                                        offer(arrangedData)
+                                        trySend(arrangedData)
                                         return@let
                                     }
                                 }
@@ -134,12 +134,12 @@ class FeatureIconsDataRepository @Inject constructor(
                                     docMapData.get("data")?.let { iconList ->
                                         arrangedData = arrangeDataAndSetObserverBS(iconList)
                                     }
-                                    offer(arrangedData)
+                                    trySend(arrangedData)
                                 }
                             }
                         } else if(it.isEmpty()){
                             reloadCount = 1
-                            offer(ArrayList<FeatureItemCard2DVM>())
+                            trySend(ArrayList<FeatureItemCard2DVM>())
                         }
                     }
                 }
