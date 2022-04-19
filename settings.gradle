@@ -20,3 +20,10 @@ include ':modules:feature-chat'
 include ':app'
 //rootProject.name = "Gigforce1"
 
+include ':domain'
+include ':data:data'
+include ':data:remote'
+include ':data:local'
+include ':android-common-ui'
+include ':android-common-utils'
+include ':navigation'

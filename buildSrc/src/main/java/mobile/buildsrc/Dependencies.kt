@@ -32,15 +32,24 @@ object Libs {
     }
 
     object Firebase {
+        //Latest version at https://firebase.google.com/docs/android/setup#kotlin+ktx_2
 
-        val firebaseCore = "com.google.firebase:firebase-core:17.4.1"
-        val firebaseAnalytics = "com.google.firebase:firebase-analytics:17.5.0"
-        val firebaseMessaging = "com.google.firebase:firebase-messaging:20.1.7"
-        val dynamicLinks = "com.google.firebase:firebase-dynamic-links:19.1.0"
-        val inAppMessaging = "com.google.firebase:firebase-inappmessaging-display:19.0.6"
-        val crashlytics = "com.google.firebase:firebase-crashlytics:17.2.1"
         val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
-        val auth = "com.google.firebase:firebase-auth:19.3.1"
+
+        val coreKtx = "com.google.firebase:firebase-core-ktx:20.1.2"
+        val analyticsKtx = "com.google.firebase:firebase-analytics-ktx:20.1.2"
+        val messagingKtx = "com.google.firebase:firebase-messaging-ktx:23.0.3"
+        val messagingDirectBootKtx = "com.google.firebase:firebase-messaging-directboot:20.2.4"
+        val dynamicLinksKtx = "com.google.firebase:firebase-dynamic-links-ktx:21.0.1"
+        val inAppMessagingKtx = "com.google.firebase:firebase-inappmessaging-ktx:20.1.2"
+        val crashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx:18.2.9"
+        val authKtx = "com.google.firebase:firebase-auth-ktx:21.0.3"
+        val firestoreKtx = "com.google.firebase:firebase-firestore-ktx:24.1.1"
+        val storageKtx = "com.google.firebase:firebase-storage-ktx:20.0.1"
+        val realTimeDatabaseKtx = "com.google.firebase:firebase-database-ktx:20.0.4"
+
+        val authUi = "com.firebaseui:firebase-ui-auth:4.3.1"
+        val storageUi = "com.firebaseui:firebase-ui-storage:4.3.2"
     }
 
     object Google {
@@ -75,7 +84,7 @@ object Libs {
     }
 
     object Android {
-       val desugarJdk =  "com.android.tools:desugar_jdk_libs:1.1.5"
+        val desugarJdk = "com.android.tools:desugar_jdk_libs:1.1.5"
     }
 
     object AndroidX {
@@ -140,8 +149,8 @@ object Libs {
             val workManageRxJavaSupport = "androidx.work:work-rxjava2:$version"
         }
 
-        object Security{
-            val securityCrypto =  "androidx.security:security-crypto:1.0.0-rc02"
+        object Security {
+            val securityCrypto = "androidx.security:security-crypto:1.0.0-rc02"
         }
     }
 
@@ -172,8 +181,8 @@ object Libs {
         val hiltCompiler = "com.google.dagger:hilt-compiler:$hiltVersion"
     }
 
-    object Dropbox{
-        val store =  "com.dropbox.mobile.store:store4:4.0.4-KT15"
+    object Dropbox {
+        val store = "com.dropbox.mobile.store:store4:4.0.4-KT15"
     }
 
     object Glide {

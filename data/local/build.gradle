@@ -1,0 +1,57 @@
+import mobile.buildsrc.Libs
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+
+    /**
+     * Common dependencies
+     */
+    coreLibraryDesugaring Libs.Android.desugarJdk
+
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.junit
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+
+    kapt Libs.Dagger.hiltCompiler
+    implementation Libs.Dagger.hilt
+
+    implementation Libs.Firebase.coreKtx
+
+    /**
+     * Module specific dependencies
+     */
+    implementation Libs.AndroidX.dataStore
+}
