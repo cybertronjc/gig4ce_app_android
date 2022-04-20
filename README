@@ -15,3 +15,50 @@ git push origin --delete <b1> <b2> ..
 Update branch list:
 git fetch -p origin
 
+------------------------------------
+
+Gigforce app Project structure 
+** If you are in doubt where to place your files kindly contact old Android dev **
+
+1. android-common-ui
+   This Module contains common ui components between two or more modules
+   ex : Basic Ui Components : Buttons, TextViews etc , BaseFragment etc
+
+2. android-common-utils
+   This Module contains common utility files
+   ex : Date utilities, Global kotlin extensions, Location Helpers etc
+
+3. domain
+   This contains the domain logic of app
+   ex : 1. UseCases , a usecase is class that contains
+        2. Repository definations (Interface only not their definations) (implementation is in data module)
+        3. module specific kotlin extensions
+        4. Models or entities domain specific
+
+4. data 
+   This module communicates with local and remote module and abstracts data storing procedure info from domain layer 
+   1. Repository Implementions 
+   2. Local Datastore definations (Interface only not their definations) (implementation is in local)
+   3. Remote Datastores  definations (Interface only not their definations) (implementation is in remote module)
+   4. caching logic
+
+5. local
+   This module contains code for storing and fetching data from local sources (ex Room , SharedPreferences, Datstore etc)
+   1. LocalDatastore Implementions 
+   2. Local Entities (ex Room entities or models)
+   3. Entitiy mappers (maps entities from domain layer to local layer or vice-versa)
+   4. Local DB Library specfic files
+   5. local module kotlin extensions
+
+6. remote
+   This module contains code for requesting and fetching data from remote sources (ex Rest API ,Firebase etc)
+   1. RemoteDatastore Implementions 
+   2. RemoteEntities (ex Retrofit models)
+   3. Entitiy mappers (maps entities from domain layer to remote layer or vice-versa)
+   4. remote module kotlin extensions
+
+7. navigation
+   Contains Nav Destinations and intent extras and navigation logic
+   Note : ** Do not store NavDestinations in ui modules **
+       
+
