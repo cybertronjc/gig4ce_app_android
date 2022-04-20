@@ -44,6 +44,7 @@ object Libs {
         val coreKtx = "com.google.firebase:firebase-core:20.1.2"
         val analyticsKtx = "com.google.firebase:firebase-analytics-ktx:20.1.2"
         val messagingKtx = "com.google.firebase:firebase-messaging-ktx:23.0.3"
+        val messaging = "com.google.firebase:firebase-messaging:20.2.4"
         val messagingDirectBootKtx = "com.google.firebase:firebase-messaging-directboot:20.2.4"
         val dynamicLinksKtx = "com.google.firebase:firebase-dynamic-links-ktx:21.0.1"
         val inAppMessagingKtx = "com.google.firebase:firebase-inappmessaging-ktx:20.1.2"
@@ -146,6 +147,14 @@ object Libs {
             val lifeCyleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
             val lifeCyleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
+        }
+
+        object Camera {
+            private const val version = "1.1.0-alpha11"
+            val cameraCore =  "androidx.camera:camera-core:$version"
+            val camera =  "androidx.camera:camera-camera2:$version"
+            val cameraLifecycle = "androidx.camera:camera-lifecycle:$version"
+            val cameraView =  "androidx.camera:camera-view:1.0.0-alpha31"
         }
 
         object Room {
