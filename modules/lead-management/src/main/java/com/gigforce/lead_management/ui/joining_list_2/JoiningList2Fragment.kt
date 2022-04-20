@@ -208,6 +208,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             viewModel.resetViewModel()
             viewModel.clearCachedRawJoinings()
             viewModel.getJoinings()
+            viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+            if (title.isNotBlank())
+                viewBinding.appBarComp.setAppBarTitle(title)
+            else
+                viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+            viewBinding.appBarComp.setBackButtonDrawable(R.drawable.ic_chevron)
         }
     }
 
