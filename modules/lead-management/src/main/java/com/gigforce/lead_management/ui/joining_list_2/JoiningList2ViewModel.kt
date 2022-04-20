@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -394,8 +395,8 @@ class JoiningList2ViewModel @Inject constructor(
         if (dropSelected){
             dropJoining?.put(joiningInfo, true)
         } else {
-            if (dropJoining?.containsKey(joiningInfo) == true){
-                dropJoining?.remove(joiningInfo)
+            if (dropJoining?.keys?.find { it._id == joiningInfo._id } != null){
+                dropJoining?.remove(dropJoining?.keys?.find { it._id == joiningInfo._id })
             }
         }
         isSelectEnableGlobal = true

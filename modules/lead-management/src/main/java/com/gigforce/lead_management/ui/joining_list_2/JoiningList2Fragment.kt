@@ -381,6 +381,18 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                         Handler().postDelayed(r, 1000)
 
                     }
+
+                    LeadManagementSharedViewModelState.ChangedTeamLeader -> {
+                        viewModel.resetViewModel()
+                        viewModel.clearCachedRawJoinings()
+                        viewModel.getJoinings()
+                        viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                        if (title.isNotBlank())
+                            viewBinding.appBarComp.setAppBarTitle(title)
+                        else
+                            viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+                        viewBinding.appBarComp.setBackButtonDrawable(R.drawable.ic_chevron)
+                    }
                 }
             })
     }
@@ -388,7 +400,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private fun setDropSelection(hashMap: HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>?) = viewBinding.apply{
             val count = hashMap?.size
             appBarComp.setAppBarTitle("$count Selected")
-
+            appBarComp.setBackButtonDrawable(R.drawable.ic_baseline_close_24)
 //            changeTeamLeaderButton.isVisible = count != 0
 
             joinNowButton.text = "Change Teamleader"
@@ -529,6 +541,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 viewBinding.appBarComp.setAppBarTitle(title)
             else
                 viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+            viewBinding.appBarComp.setBackButtonDrawable(R.drawable.ic_chevron)
             return true
         }
         return false

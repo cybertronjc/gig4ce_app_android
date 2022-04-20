@@ -141,6 +141,7 @@ class ChangeTeamLeaderBottomSheetFragment :
     private fun initListeners() {
         viewBinding.changeTeamLeaderSuccessLayout.okayButton.setOnClickListener {
             dismiss()
+            sharedViewModel.changedTeamLeader()
         }
 
         viewBinding.changeTeamLeaderMainLayout.apply{
