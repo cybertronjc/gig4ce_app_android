@@ -50,7 +50,7 @@
                 android:lineHeight="12sp"
                 android:textFontWeight="700"
                 android:lineSpacingExtra="0sp"
-                android:text="@string/your_joining_is_pending"
+                android:text="@string/your_application_checklist_is_pending"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="@string/complete_joining"
+                android:text="@string/complete_checklist"
                 android:textAllCaps="true"
                 android:minHeight="0dp"
                 android:lineHeight="12sp"
@@ -154,7 +154,7 @@
     <com.gigforce.common_ui.views.GigforceImageView
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/ic_joining_warning_background"
         app:layout_constraintEnd_toEndOf="@id/main_card_view"
         app:layout_constraintTop_toTopOf="parent"
@@ -165,7 +165,7 @@
     <com.gigforce.common_ui.views.GigforceImageView
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="16dp"
         android:scaleX="0.5"
         android:scaleY="0.5"
         android:elevation="9dp"
