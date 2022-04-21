@@ -46,8 +46,7 @@ import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
-import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.mainverification.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
@@ -625,7 +624,7 @@ class PanCardFragment : Fragment(),
         photoCropIntent.putExtra("file", "pan_card.jpg")
         navigation.navigateToPhotoCrop(
             photoCropIntent,
-            AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
+            REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
         )
     }
 

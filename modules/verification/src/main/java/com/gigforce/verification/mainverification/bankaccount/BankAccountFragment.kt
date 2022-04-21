@@ -44,7 +44,7 @@ import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
-import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.verification.mainverification.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants

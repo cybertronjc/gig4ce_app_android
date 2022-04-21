@@ -1,4 +1,4 @@
-package com.gigforce.verification.gigerVerfication
+package com.gigforce.verification.mainverification
 
 import android.os.Bundle
 import android.view.LayoutInflater

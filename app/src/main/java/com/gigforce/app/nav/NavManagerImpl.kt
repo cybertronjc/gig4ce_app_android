@@ -17,7 +17,7 @@ import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
 import com.gigforce.giger_gigs.photocrop.PhotoCrop
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.verification.mainverification.WhyWeNeedThisBottomSheet
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
