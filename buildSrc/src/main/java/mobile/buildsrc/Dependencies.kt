@@ -117,7 +117,7 @@ object Libs {
         val archCoreTesting = "androidx.arch.core:core-testing:2.1.0"
         val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
         val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-
+        val exitInterface = "androidx.appcompat:appcompat:1.3.1"
         object Test {
             val core = "androidx.test:core:1.1.0"
             val runner = "androidx.test:runner:1.1.1"

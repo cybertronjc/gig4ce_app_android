@@ -1,3 +1,5 @@
+import mobile.buildsrc.Libs
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -23,73 +25,40 @@ android {
         dataBinding true
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
 dependencies {
+    /**
+     * Common ui libraries
+     */
+    implementation Libs.localization
+    coreLibraryDesugaring Libs.Android.desugarJdk
 
-    // Gradle's
-    def androidGradleVersion = '4.1.2'
-    def ktlintGradleVersion = '10.0.0'
-    def mavenGradleVersion = '2.1'
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.junit
 
-    // JetBrains
-    def kotlinVersion = '1.4.30'
-    def coroutinesVersion = '1.4.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // Android
-    def materialVersion = '1.4.0-alpha01'
+    implementation Libs.Kotlin.stdlib
 
-    // AndroidX
-    def androidXActivity = '1.3.1'
-    def androidXAppCompatVersionSample = '1.3.0-rc01'
-    def androidXAppCompatVersionCropper = '1.3.1'  // Used to avoid not release stable versions on the lib
-    def androidXExifVersion = '1.3.2'
-    def androidXCoreKtxVersion = '1.3.2'
-    def androidXLifeCycleVersion = '2.3.1'
-    def androidXJunitVersion = '1.0.0'
-    def androidXFragmentVersion = '1.3.5'
-    def androidXTestVersion = '1.3.0'
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
 
-    // JUnit
-    def junitVersion = '4.13.2'
+    implementation Libs.AndroidX.Lifecycle.lifeCycleKtx
+    implementation Libs.AndroidX.exitInterface
 
-    // Robolectric
-    def robolectricVersion = '4.5.1'
-
-    implementation "androidx.appcompat:appcompat:$androidXAppCompatVersionCropper"
-
-    implementation "androidx.activity:activity-ktx:$androidXActivity"
-
-    implementation("androidx.activity:activity:$androidXActivity")
-
-    implementation "androidx.exifinterface:exifinterface:$androidXExifVersion"
-    implementation "androidx.core:core-ktx:$androidXCoreKtxVersion"
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidXLifeCycleVersion"
-
-
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "androidx.test.ext:junit:$androidXJunitVersion"
-    testImplementation "androidx.test:core:$androidXTestVersion"
-    testImplementation "androidx.test:runner:$androidXTestVersion"
-    debugImplementation "androidx.fragment:fragment-testing:$androidXFragmentVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    implementation 'com.akexorcist:localization:1.2.10'
+//    implementation "androidx.appcompat:appcompat:$androidXAppCompatVersionCropper"
+//
+//    implementation "androidx.exifinterface:exifinterface:$androidXExifVersion"
 }
