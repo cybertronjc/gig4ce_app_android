@@ -112,4 +112,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.akexorcist:localization:1.2.10'
 
+    //adding as i m getting crash
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 }
