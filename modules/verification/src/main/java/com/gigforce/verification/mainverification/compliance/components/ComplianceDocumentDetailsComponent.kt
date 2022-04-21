@@ -46,18 +46,18 @@ class ComplianceDocumentDetailsComponent (context: Context, attrs: AttributeSet?
         if (data is ComplianceDocumentDetailDM) {
             currentData = data
             data.name.let {
-                if (it?.isNotBlank() == true){
-                    viewBinding.docTitle.setText(data.name)
+                if (it.isNotBlank() == true){
+                    viewBinding.docTitle.text = data.name
                 }
             }
             data.jobProfile.let {
-                if (it?.isNotBlank() == true){
-                    viewBinding.docSubvalue.setText(Html.fromHtml("Job Profile: <b>${data.jobProfile}</b>"))
+                if (it.isNotBlank() == true){
+                    viewBinding.docSubvalue.text = Html.fromHtml("Job Profile: <b>${data.jobProfile}</b>")
                 }
             }
             data.dateOfGeneration.let {
                 if (it.isNotBlank()){
-                    viewBinding.docDateofgeneration.setText(Html.fromHtml("Date of Generation: <b>${data.dateOfGeneration}</b>"))
+                    viewBinding.docDateofgeneration.text = Html.fromHtml("Date of Generation: <b>${data.dateOfGeneration}</b>")
                 }
             }
         }

@@ -381,7 +381,7 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
                 }
                 val panCardNo =
-                    viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                    viewBinding.panTil.editText?.text.toString().uppercase(Locale.getDefault())
                 if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))

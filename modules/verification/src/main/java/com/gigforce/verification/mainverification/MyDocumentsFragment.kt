@@ -44,11 +44,11 @@ class MyDocumentsFragment : BaseFragment2<FragmentMyDocumentsBinding>(
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
-            deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB) ?: 0
+            deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB)
         } ?: run {
             arguments?.let {
                 title = it.getString(CommonIntentExtras.INTENT_EXTRA_TOOLBAR_TITLE) ?: ""
-                deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB) ?: 0
+                deepLinkTab = it.getInt(CommonIntentExtras.INTENT_EXTRA_SELECTED_TAB)
             }
         }
     }

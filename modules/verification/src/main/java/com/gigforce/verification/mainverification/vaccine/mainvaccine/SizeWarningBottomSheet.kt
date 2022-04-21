@@ -43,7 +43,7 @@ class SizeWarningBottomSheet  : BottomSheetDialogFragment() {
         try_again_bn_bs.setOnClickListener{
             setFragmentResult("vaccine_doc", bundleOf("vaccine_doc" to "try_again"))
 
-            (activity as NavFragmentsData)?.setData(
+            (activity as NavFragmentsData).setData(
                 bundleOf(
                     "vaccine_doc" to "try_again",
                     "vaccineId" to vaccineId,

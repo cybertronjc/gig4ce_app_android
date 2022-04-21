@@ -55,7 +55,7 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) :
             data.vaccineLabel?.let {
                 setTitle(it)
             }
-            data?.vaccineId?.let {
+            data.vaccineId?.let {
                 if (it.equals("vaccine1")){
                     setSubtitle(resources.getString(R.string.vaccine_1_subtitle_veri))
                     cv_top.setBackgroundColor(resources.getColor(R.color.light_pink_veri))

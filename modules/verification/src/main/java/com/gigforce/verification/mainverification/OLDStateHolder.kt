@@ -1,4 +1,3 @@
 package com.gigforce.verification.mainverification
 
-data class OLDStateHolder(var submitButtonCta: String) {
-}
+data class OLDStateHolder(var submitButtonCta: String)

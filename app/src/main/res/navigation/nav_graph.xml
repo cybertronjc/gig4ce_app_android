@@ -266,9 +266,6 @@
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_homeScreenIcons_to_verification"
-            app:destination="@id/verification" />
-        <action
             android:id="@+id/action_homeScreenIcons_to_homeScreenNew"
             app:destination="@id/homeScreenNew" />
     </fragment>
@@ -276,17 +273,7 @@
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
         android:label="AddExperienceBottomSheet" />
-    <fragment
-        android:id="@+id/verification"
-        android:name="com.gigforce.verification.oldverification.Verification"
-        android:label="Verification">
-        <action
-            android:id="@+id/action_verification_to_aadhaarUpload"
-            app:destination="@id/aadhaarUpload" />
-        <action
-            android:id="@+id/action_verification_to_uploadDropDown"
-            app:destination="@id/uploadDropDown" />
-    </fragment>
+
     <fragment
         android:id="@+id/Login"
         android:name="com.gigforce.app.modules.auth.ui.main.Login"
@@ -296,22 +283,6 @@
             app:destination="@id/verifyOTP" />
     </fragment>
 
-    <fragment
-        android:id="@+id/panUpload"
-        android:name="com.gigforce.verification.oldverification.PanUpload"
-        android:label="PanUpload">
-        <action
-            android:id="@+id/action_panUpload_to_verificationDone"
-            app:destination="@id/verificationDone" />
-    </fragment>
-    <fragment
-        android:id="@+id/aadhaarUpload"
-        android:name="com.gigforce.verification.oldverification.AadhaarUpload"
-        android:label="AadhaarUpload">
-        <action
-            android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
-            app:destination="@id/uploadDropDown" />
-    </fragment>
 
     <fragment
         android:id="@+id/chooseYourVaccineFragment"
@@ -353,26 +324,7 @@
             android:name="array_location"
             app:argType="string" />
     </dialog>
-    <fragment
-        android:id="@+id/verificationDone"
-        android:name="com.gigforce.verification.oldverification.VerificationDone"
-        android:label="VerificationDone" />
-    <fragment
-        android:id="@+id/bankUpload2"
-        android:name="com.gigforce.verification.oldverification.BankUpload"
-        android:label="BankUpload">
-        <action
-            android:id="@+id/action_bankUpload2_to_panUpload"
-            app:destination="@id/panUpload" />
-    </fragment>
-    <fragment
-        android:id="@+id/uploadDropDown"
-        android:name="com.gigforce.verification.oldverification.AlternateAddressUpload"
-        android:label="UploadDropDown">
-        <action
-            android:id="@+id/action_uploadDropDown_to_bankUpload2"
-            app:destination="@id/bankUpload2" />
-    </fragment>
+
     <dialog
         android:id="@+id/editCoverBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditCoverBottomSheet"
@@ -492,50 +444,6 @@
         android:name="com.gigforce.verification.mainverification.VerificationMainFragment"
         android:label="fragment_giger_verification"
         tools:layout="@layout/fragment_giger_verification" />
-    <fragment
-        android:id="@+id/addDrivingLicenseInfoFragment"
-        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
-        android:label="fragment_add_driving_license_info" />
-    <fragment
-        android:id="@+id/addPanCardInfoFragment"
-        android:name="com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment"
-        android:label="fragment_add_pan_card_info"
-        tools:layout="@layout/fragment_add_pan_card_info_2" />
-    <fragment
-        android:id="@+id/addAadharCardInfoFragment"
-        android:name="com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment"
-        android:label="AddAadharCardInfoFragment" />
-    <fragment
-        android:id="@+id/addBankDetailsInfoFragment"
-        android:name="com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment"
-        android:label="fragment_add_bank_details_info"
-        tools:layout="@layout/fragment_add_bank_details_info_2" />
-    <dialog
-        android:id="@+id/editAadharInfoBottomSheet"
-        android:name="com.gigforce.verification.gigerVerfication.aadharCard.EditAadharInfoBottomSheet"
-        android:label="fragment_edit_aadhar_info"
-        tools:layout="@layout/fragment_edit_aadhar_info" />
-    <dialog
-        android:id="@+id/editBankDetailsInfoBottomSheet"
-        android:name="com.gigforce.verification.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
-        android:label="fragment_edit_bank_info"
-        tools:layout="@layout/fragment_edit_bank_info" />
-
-    <dialog
-        android:id="@+id/editDrivingLicenseInfoBottomSheet"
-        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet"
-        android:label="fragment_edit_driving_license"
-        tools:layout="@layout/fragment_edit_driving_license" />
-    <dialog
-        android:id="@+id/editPanInfoBottomSheet"
-        android:name="com.gigforce.verification.gigerVerfication.panCard.EditPanInfoBottomSheet"
-        android:label="fragment_edit_pan_info"
-        tools:layout="@layout/fragment_edit_pan_info" />
-    <fragment
-        android:id="@+id/addSelfieVideoFragment"
-        android:name="com.gigforce.verification.gigerVerfication.selfieVideo.AddSelfieVideoFragment"
-        android:label="AddSelfieVideoFragment" />
-
 
     <fragment
         android:id="@+id/paymentDisputePage"
@@ -777,12 +685,6 @@
         android:label="fragment_application_submitted"
         tools:layout="@layout/fragment_application_submitted" />
 
-    <fragment
-        android:id="@+id/fragment_upload_cert"
-        android:name="com.gigforce.verification.gigerVerfication.UploadDrivingCertificate"
-        android:label="fragment_upload_cert"
-        tools:layout="@layout/layout_fragment_upload_driving_certificate" />
-
 
     <fragment
         android:id="@+id/fragment_doc_sub"
@@ -933,15 +835,7 @@
         android:id="@+id/onboardingPreferredJobLocationFragment"
         android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
         android:label="OnboardingPreferredJobLocationFragment" />
-    <fragment
-        android:id="@+id/uploadAadharCard"
-        android:name="com.gigforce.verification.gigerVerfication.UploadAadharCard"
-        android:label="UploadAadharCard" />
-    <fragment
-        android:id="@+id/uploadPanCard"
-        android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
-        android:label="UploadPanCard" />
-    <fragment
+      <fragment
         android:id="@+id/gigerAttendanceUnderManagerFragment"
         android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
@@ -1126,11 +1020,7 @@
         android:id="@+id/signatureImageCaptureDialogFragment"
         android:name="com.gigforce.verification.mainverification.signature.SignatureImageCaptureFragment"
         android:label="FullScreenSignatureImageCaptureDialogFragment"/>
-    <fragment
-        android:id="@+id/signatureDrawerDialogFragment"
-        android:name="com.gigforce.verification.mainverification.signature.FullScreenSignatureDrawerDialogFragment"
-        android:label="FullScreenSignatureDrawerDialogFragment"/>
-    <fragment
+      <fragment
         android:id="@+id/chatSettingsFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatSettingsFragment"
         android:label="ChatSettingsFragment" />
@@ -1203,10 +1093,6 @@
         android:id="@+id/viewLiveLocationFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
         android:label="ViewLiveLocationFragment" />
-    <fragment
-        android:id="@+id/gigerAttendanceDetailFragment"
-        android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
-        android:label="GigerAttendanceDetailFragment" />
 
     <fragment
         android:id="@+id/VaccineMainFragment"

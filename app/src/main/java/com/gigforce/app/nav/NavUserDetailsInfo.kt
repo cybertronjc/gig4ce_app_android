@@ -17,7 +17,6 @@ class NavUserDetailsInfo(
         baseImplementation.registerRoute("${moduleName}/addUserInterestFragment", R.id.addUserInterestFragment)
         baseImplementation.registerRoute("${moduleName}/confirmOtpFragment", R.id.confirmOtpFragment)
         baseImplementation.registerRoute("${moduleName}/addUserDetailsFragment", R.id.addUserDetailsFragment)
-        baseImplementation.registerRoute("${moduleName}/addBankDetailsInfoFragment", R.id.addBankDetailsInfoFragment)
         baseImplementation.registerRoute("${moduleName}/checkMobileFragment", R.id.checkMobileFragment)
 
         // old doc structure data

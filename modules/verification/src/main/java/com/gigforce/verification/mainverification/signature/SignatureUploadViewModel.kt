@@ -100,9 +100,6 @@ class SignatureUploadViewModel @Inject constructor(
     }
 
     var userId: String = ""
-        set(value) {
-            field = value
-        }
         get() = if (field.isEmpty()) {
             firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
         } else {

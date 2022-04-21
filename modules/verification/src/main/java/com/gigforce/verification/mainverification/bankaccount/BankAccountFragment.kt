@@ -430,7 +430,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.visible()
                     viewBinding.bankAccNumberItl.editText?.clearFocus()
                     viewBinding.ifscCode.editText?.clearFocus()
-                    viewBinding.bankAccNumberItl.editText?.setFocusable(false)
+                    viewBinding.bankAccNumberItl.editText?.isFocusable = false
                     viewBinding.ifscCode.editText?.setFocusable(false)
 
                 }
@@ -482,9 +482,9 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
-                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
-                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.isFocusableInTouchMode = true
+                    viewBinding.bankAccNumberItl.editText?.isFocusable = true
+                    viewBinding.ifscCode.editText?.isFocusableInTouchMode = true
                     viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
@@ -495,9 +495,9 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
-                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
-                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.isFocusableInTouchMode = true
+                    viewBinding.bankAccNumberItl.editText?.isFocusable = true
+                    viewBinding.ifscCode.editText?.isFocusableInTouchMode = true
                     viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
@@ -771,10 +771,10 @@ class BankAccountFragment : Fragment(),
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
             viewBinding.submitButton.text = getString(R.string.skip_veri)
-            viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
-            viewBinding.bankAccNumberItl.editText?.setFocusable(true)
-            viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
-            viewBinding.ifscCode.editText?.setFocusable(true)
+            viewBinding.bankAccNumberItl.editText?.isFocusableInTouchMode = true
+            viewBinding.bankAccNumberItl.editText?.isFocusable = true
+            viewBinding.ifscCode.editText?.isFocusableInTouchMode = true
+            viewBinding.ifscCode.editText?.isFocusable = true
         })
 
         viewBinding.okayButton.setOnClickListener{

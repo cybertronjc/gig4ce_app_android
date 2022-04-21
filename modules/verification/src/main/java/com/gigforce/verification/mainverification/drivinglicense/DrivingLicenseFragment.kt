@@ -190,9 +190,11 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun checkForCroppedImage() {
         var navFragmentsData = activity as NavFragmentsData
-        if (navFragmentsData?.getData() != null) {
-            if (navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROP_URI.value)?.isNotEmpty() == true) {
-                val imageUriResultCrop = Uri.parse(navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROPPED_URI.value, ""))
+        if (navFragmentsData.getData() != null) {
+            if (navFragmentsData.getData().getString(StringConstants.IMAGE_CROP_URI.value)?.isNotEmpty() == true) {
+                val imageUriResultCrop = Uri.parse(
+                    navFragmentsData.getData()
+                    .getString(StringConstants.IMAGE_CROPPED_URI.value, ""))
                 if (imageUriResultCrop != null) {
                     Log.d("Result crop", "cropped uri : $imageUriResultCrop")
                     if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
@@ -206,7 +208,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     }
             else {
-                navFragmentsData?.setData(bundleOf())
+                navFragmentsData.setData(bundleOf())
             }
         }
     }

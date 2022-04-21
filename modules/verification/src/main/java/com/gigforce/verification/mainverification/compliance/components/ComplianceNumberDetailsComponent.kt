@@ -42,13 +42,13 @@ class ComplianceNumberDetailsComponent (context: Context, attrs: AttributeSet?) 
         if (data is ComplianceDocDetailsDM) {
             currentData = data
             data.name.let {
-                if (it?.isNotBlank() == true){
-                    viewBinding.docTitle.setText(data.name)
+                if (it.isNotBlank() == true){
+                    viewBinding.docTitle.text = data.name
                 }
             }
             data.value.let {
-                if (it?.isNotBlank() == true){
-                    viewBinding.docValue.setText(data.value)
+                if (it.isNotBlank() == true){
+                    viewBinding.docValue.text = data.value
                 }
             }
         }

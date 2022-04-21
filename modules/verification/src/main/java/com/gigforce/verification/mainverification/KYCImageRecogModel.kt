@@ -7,5 +7,4 @@ class KYCImageRecogModel(
     val type: String = "",
 
     @field:SerializedName("uid")
-    val uid : String = "") {
-}
+    val uid : String = "")

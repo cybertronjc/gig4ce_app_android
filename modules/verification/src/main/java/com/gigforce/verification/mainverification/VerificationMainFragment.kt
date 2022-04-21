@@ -72,17 +72,17 @@ class VerificationMainFragment : Fragment() {
 
         next.setOnClickListener {
 
-            allDocsRV.collection?.let {
+            allDocsRV.collection.let {
                 (it as ArrayList<SimpleCardDVM>).filter { doc -> doc.isSelected }.let {
 
                     if(it.isNullOrEmpty()){
-                     if(viewModel.isAllDocVerified()){
-                        activity?.onBackPressed()
-                     }else{
-                         viewModel.allDocumentsData.value?.let {
-                            navigateToNotverifiedDocs(it)
-                         }
-                     }
+                        if(viewModel.isAllDocVerified()){
+                            activity?.onBackPressed()
+                        }else{
+                            viewModel.allDocumentsData.value?.let {
+                                navigateToNotverifiedDocs(it)
+                            }
+                        }
                     }else {
                         navigateForDocsSubmission(it)
                     }

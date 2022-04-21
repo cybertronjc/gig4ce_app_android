@@ -139,8 +139,8 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             return characterCertificateResponse.body()!!
         } else {
             FirebaseCrashlytics.getInstance()
-                .log("Exception : submitCharacterCertificate Method ${characterCertificateResponse?.message()}")
-            throw Exception("Issue in character certification submission ${characterCertificateResponse?.errorBody()}")
+                .log("Exception : submitCharacterCertificate Method ${characterCertificateResponse.message()}")
+            throw Exception("Issue in character certification submission ${characterCertificateResponse.errorBody()}")
         }
     }
 
@@ -155,8 +155,8 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
             return vaccinationCertificate.body()!!
         } else {
             FirebaseCrashlytics.getInstance()
-                .log("Exception : submitVaccinationCertificate Method ${vaccinationCertificate?.message()}")
-            throw Exception("Issue in vaccination certification submission ${vaccinationCertificate?.errorBody()}")
+                .log("Exception : submitVaccinationCertificate Method ${vaccinationCertificate.message()}")
+            throw Exception("Issue in vaccination certification submission ${vaccinationCertificate.errorBody()}")
         }
     }
 
