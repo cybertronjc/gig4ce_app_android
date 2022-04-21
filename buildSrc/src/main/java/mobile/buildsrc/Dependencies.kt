@@ -26,6 +26,9 @@ object Libs {
     val leakCanary2 = "com.squareup.leakcanary:leakcanary-android:2.3"
     val coil = "io.coil-kt:coil:0.11.0"
     val localization = "com.akexorcist:localization:1.2.10"
+    val statusbarUtil = "com.jaeger.statusbarutil:library:1.5.1"
+    val uCrop = "com.github.yalantis:ucrop:2.2.4"
+
 
     object Vinners {
         val logger = "com.github.vinnersafterwork:core:1.0"
@@ -116,12 +119,15 @@ object Libs {
         val archCoreTesting = "androidx.arch.core:core-testing:2.1.0"
         val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
         val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+        val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+        val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 
         object Test {
             val core = "androidx.test:core:1.1.0"
             val runner = "androidx.test:runner:1.1.1"
             val rules = "androidx.test:rules:1.1.1"
-            val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
+            val junitTest = "androidx.test.ext:junit:1.1.2"
+            val espressoCore = "androidx.test.espresso:espresso-core:3.3.0"
         }
 
         object Navigation {
@@ -146,6 +152,7 @@ object Libs {
             val lifeCyleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
             val lifeCyleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
+            val viewModelSavedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
         }
 
         object Room {
@@ -169,7 +176,7 @@ object Libs {
     }
 
     object AirBnb {
-        val lottie = "com.airbnb.android:lottie:3.4.0"
+        val lottie = "com.airbnb.android:lottie:4.2.2"
     }
 
 
