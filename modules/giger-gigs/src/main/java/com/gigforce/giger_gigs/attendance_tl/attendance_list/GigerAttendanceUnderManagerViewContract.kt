@@ -97,7 +97,8 @@ class GigerAttendanceUnderManagerViewContract {
         ): UiEffect()
 
         data class OpenMarkInactiveSelectReasonDialog(
-            val gigId: String
+            val gigId: String,
+            val popConfirmationDialog : Boolean = false
         ): UiEffect()
     }
 }

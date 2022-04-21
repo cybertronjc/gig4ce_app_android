@@ -5,19 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
-import com.gigforce.common_ui.viewdatamodels.gig.AttendanceType
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.giger_gigs.attendance_tl.AttendanceTLSharedViewModel
+import com.gigforce.giger_gigs.attendance_tl.SharedAttendanceTLSharedViewModelEvents
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
-import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
 import com.gigforce.giger_gigs.repositories.GigersAttendanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.time.LocalDate
@@ -48,6 +47,11 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private var collapsedBusinessList: MutableList<String> = mutableListOf()
     private var currentMarkingAttendanceForGigs: MutableSet<String> = mutableSetOf()
 
+    //SharedViewModels
+    private lateinit var gigsJoiningSharedViewModel: SharedGigViewModel
+    private lateinit var gigsSharedViewModel: AttendanceTLSharedViewModel
+
+
     //To view Observables
     private val _viewState = MutableStateFlow<GigerAttendanceUnderManagerViewContract.State>(
         GigerAttendanceUnderManagerViewContract.State.ScreenLoaded
@@ -60,6 +64,48 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     init {
         fetchUsersAttendanceDate(LocalDate.now())
     }
+
+    fun setGigsJoiningSharedViewModel(
+        sharedViewModel: SharedGigViewModel
+    ) = viewModelScope.launch {
+        this@GigerAttendanceUnderManagerViewModel.gigsJoiningSharedViewModel = sharedViewModel
+        this@GigerAttendanceUnderManagerViewModel.gigsJoiningSharedViewModel
+            .gigSharedViewModelState.collect {
+
+                when (it) {
+                    is SharedGigViewState.TeamLeaderOfGigerChangedWithGigId -> removeGigFromCurrentlyShownGigs(
+                        it.gigId
+                    )
+                    is SharedGigViewState.UserDroppedWithGig -> fetchUsersAttendanceDate(
+                        currentlyFetchingForDate
+                    )
+                    else -> {}
+                }
+            }
+    }
+
+    fun setGigsSharedViewModel(
+        sharedViewModel: AttendanceTLSharedViewModel
+    ) = viewModelScope.launch {
+        this@GigerAttendanceUnderManagerViewModel.gigsSharedViewModel = sharedViewModel
+        this@GigerAttendanceUnderManagerViewModel.gigsSharedViewModel
+            .sharedEvents
+            .collect {
+
+                when (it) {
+                    is SharedAttendanceTLSharedViewModelEvents.AttendanceUpdated -> updateAttendanceStatusInRawListAndEmit(
+                        it.attendance
+                    )
+                    is SharedAttendanceTLSharedViewModelEvents.OpenMarkInactiveReasonsDialog -> _viewEffects.emit(
+                        GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog(
+                            gigId = it.gigId,
+                            popConfirmationDialog = true
+                        )
+                    )
+                }
+            }
+    }
+
 
     fun handleEvent(
         event: GigerAttendanceUnderManagerViewContract.UiEvent
@@ -221,15 +267,16 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         showDataUpdatedToast: Boolean,
         updateStatusTabsCount: Boolean
     ) {
-        val attendanceToStatusWithCountPair = AttendanceUnderTLListDataProcessor.processAttendanceListAndFilters(
-            attendance = attendanceListRaw,
-            collapsedBusiness = collapsedBusinessList,
-            currentMarkingAttendanceForGigs = currentMarkingAttendanceForGigs,
-            currentlySelectedStatus = currentlySelectedStatus,
-            currentlySearchTerm = currentlySearchTerm,
-            prepareAttendanceStatusAndCount = updateStatusTabsCount,
-            gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
-        )
+        val attendanceToStatusWithCountPair =
+            AttendanceUnderTLListDataProcessor.processAttendanceListAndFilters(
+                attendance = attendanceListRaw,
+                collapsedBusiness = collapsedBusinessList,
+                currentMarkingAttendanceForGigs = currentMarkingAttendanceForGigs,
+                currentlySelectedStatus = currentlySelectedStatus,
+                currentlySearchTerm = currentlySearchTerm,
+                prepareAttendanceStatusAndCount = updateStatusTabsCount,
+                gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
+            )
         attendanceShownOnScreen = attendanceToStatusWithCountPair.first.toMutableList()
 
         val listToEmitCopy = attendanceShownOnScreen.map {
@@ -291,7 +338,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
      * 3. resolve conflict
      */
 
-    fun updateAttendanceStatusInRawListAndEmit(
+    private fun updateAttendanceStatusInRawListAndEmit(
         updatedGigData: GigAttendanceApiModel
     ) = viewModelScope.launch {
         val gigId = updatedGigData.id ?: return@launch
@@ -308,6 +355,30 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         }
 
         mutableAttendanceList[itemToReplaceIndex] = updatedGigData
+        attendanceListRaw = mutableAttendanceList
+
+        processAttendanceListAndEmitToView(
+            showDataUpdatedToast = false,
+            updateStatusTabsCount = true
+        )
+    }
+
+    private fun removeGigFromCurrentlyShownGigs(
+        gigId: String
+    ) = viewModelScope.launch {
+
+        if (currentMarkingAttendanceForGigs.contains(gigId))
+            currentMarkingAttendanceForGigs.remove(gigId)
+
+        val mutableAttendanceList = attendanceListRaw.toMutableList()
+        val itemToReplaceIndex = mutableAttendanceList.indexOfFirst {
+            it.id == gigId
+        }
+        if (itemToReplaceIndex == -1) {
+            return@launch
+        }
+
+        mutableAttendanceList.removeAt(itemToReplaceIndex)
         attendanceListRaw = mutableAttendanceList
 
         processAttendanceListAndEmitToView(

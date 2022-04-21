@@ -16,6 +16,21 @@ sealed class SharedGigViewState {
         val rating: Float,
         val feedback: String?
     ) : SharedGigViewState()
+
+    data class UserDeclinedGig(
+        val gigIds : List<String>,
+        val reason : String
+    ) : SharedGigViewState()
+
+    data class TeamLeaderOfGigerChangedWithGigId(
+        val gigId : String
+    ) : SharedGigViewState()
+
+    data class UserDroppedWithGig(
+        val gigId: String
+    ) : SharedGigViewState()
+
+
 }
 
 class SharedGigViewModel : ViewModel() {
@@ -44,6 +59,39 @@ class SharedGigViewModel : ViewModel() {
                 feedback = feedback
             )
         )
+    }
 
+    fun gigerDroppedWithGig(
+        gigId : String
+    ) = viewModelScope.launch{
+
+        _gigSharedViewModelState.emit(
+            SharedGigViewState.UserDroppedWithGig(
+                gigId
+            )
+        )
+    }
+
+    fun teamLeaderOfGigerChangedWithGigId(
+        gigId : String
+    ) = viewModelScope.launch {
+
+        _gigSharedViewModelState.emit(
+            SharedGigViewState.TeamLeaderOfGigerChangedWithGigId(
+                gigId
+            )
+        )
+    }
+
+    fun gigsDeclined(
+        gigIds: List<String>,
+        reason: String
+    ) = viewModelScope.launch{
+        _gigSharedViewModelState.emit(
+            SharedGigViewState.UserDeclinedGig(
+                gigIds,
+                reason
+            )
+        )
     }
 }

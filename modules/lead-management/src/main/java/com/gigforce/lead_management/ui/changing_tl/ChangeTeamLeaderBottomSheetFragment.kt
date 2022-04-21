@@ -35,6 +35,7 @@ import android.widget.FrameLayout
 
 import android.content.DialogInterface
 import android.content.DialogInterface.OnShowListener
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -61,6 +62,7 @@ class ChangeTeamLeaderBottomSheetFragment :
         }
     }
 
+    private val gigJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val viewModel: ChangeTeamLeaderBottomSheetViewModel by viewModels()
     private var gigerForChangeTL: ArrayList<ChangeTeamLeaderRequestItem>? = null
@@ -91,6 +93,7 @@ class ChangeTeamLeaderBottomSheetFragment :
 
         viewModel.gigerForChangeTL = gigerForChangeTL?.toList() ?: emptyList()
         viewModel.sharedViewModel = sharedViewModel
+        viewModel.setGigJoiningSharedViewModel(gigJoiningSharedViewModel)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

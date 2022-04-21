@@ -83,7 +83,7 @@ class GigAttendanceRepository @Inject constructor(
                     locationAccuracy = locationAccuracy,
                     locationFake = locationFake
                 )
-            ).bodyOrThrow()
+            ).bodyOrErrorBodyElseThrow()
 
             if (!response.status) {
                 throw Exception(response.message)
@@ -189,7 +189,7 @@ class GigAttendanceRepository @Inject constructor(
                     absentReason = reasonId,
                     absentReasonLocalizedText = reason
                 )
-            ).bodyOrThrow()
+            ).bodyOrErrorBodyElseThrow()
 
             if (!response.status) {
                 throw Exception(response.message)

@@ -20,6 +20,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.DropSelectionFragment2FragmentBinding
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
@@ -68,6 +69,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
     private var selectedLastWorkingDate: String? = null
     private val viewModel: DropSelectionFragment2ViewModel by viewModels()
     private val sharedLeadMgmtViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val gigsJoiningSharedViewModel : SharedGigViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -345,56 +347,16 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         datePickerDialog
     }
 
-    private fun initViewModel() = viewModel
-        .submitDropSelectionState
-        .observe(viewLifecycleOwner, {
+    private fun initViewModel() {
+        viewModel.setGigJoiningSharedViewModel(
+            gigsJoiningSharedViewModel
+        )
+        viewModel
+            .submitDropSelectionState
+            .observe(viewLifecycleOwner) {
 
-            when (it) {
-                is Lce.Error -> {
-                    viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
-                    viewBinding.mainLayout.dropSelectionButton.isEnabled = false
-                    viewBinding.successLayout.root.gone()
-                    viewBinding.mainLayout.root.gone()
-                    viewBinding.lastWorkingLayout.root.gone()
-                    viewBinding.joinedNotJoinedLayout.root.gone()
-                    viewBinding.bankVerifyLayout.root.gone()
-                    viewBinding.directDropLayout.root.gone()
-                    viewBinding.errorLayout.root.visible()
-                    viewBinding.errorLayout.infoMessageTv.text = it.error
-                    viewBinding.errorLayout.retryBtn.visible()
-                }
-                Lce.Loading -> {
-                    viewBinding.mainLayout.dropSelectionButton.showProgress {
-                        buttonText = "Dropping..."
-                        progressColor = Color.WHITE
-                    }
-                    viewBinding.mainLayout.dropSelectionButton.isEnabled = false
-
-                    viewBinding.lastWorkingLayout.confirmButton.showProgress {
-                        buttonText = "Dropping..."
-                        progressColor = Color.WHITE
-                    }
-                    viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
-
-                    viewBinding.directDropLayout.dropSelectionDirect.showProgress {
-                        buttonText = "Dropping..."
-                        progressColor = Color.WHITE
-                    }
-                    viewBinding.directDropLayout.dropSelectionDirect.isEnabled = false
-
-                }
-                is Lce.Content -> {
-                    //check if the api call was successful and drop api status is true
-                    if (it.content.status){
-                        viewBinding.successLayout.root.visible()
-                        viewBinding.mainLayout.root.gone()
-                        viewBinding.errorLayout.root.gone()
-                        viewBinding.lastWorkingLayout.root.gone()
-                        viewBinding.joinedNotJoinedLayout.root.gone()
-                        viewBinding.bankVerifyLayout.root.gone()
-                        viewBinding.directDropLayout.root.gone()
-                    }else{
-                        //drop selection failed
+                when (it) {
+                    is Lce.Error -> {
                         viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
                         viewBinding.mainLayout.dropSelectionButton.isEnabled = false
                         viewBinding.successLayout.root.gone()
@@ -404,12 +366,58 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                         viewBinding.bankVerifyLayout.root.gone()
                         viewBinding.directDropLayout.root.gone()
                         viewBinding.errorLayout.root.visible()
-                        viewBinding.errorLayout.infoMessageTv.text = it.content.misingFields?.get(0)?.errorMessage
+                        viewBinding.errorLayout.infoMessageTv.text = it.error
                         viewBinding.errorLayout.retryBtn.visible()
+                    }
+                    Lce.Loading -> {
+                        viewBinding.mainLayout.dropSelectionButton.showProgress {
+                            buttonText = "Dropping..."
+                            progressColor = Color.WHITE
+                        }
+                        viewBinding.mainLayout.dropSelectionButton.isEnabled = false
+
+                        viewBinding.lastWorkingLayout.confirmButton.showProgress {
+                            buttonText = "Dropping..."
+                            progressColor = Color.WHITE
+                        }
+                        viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
+
+                        viewBinding.directDropLayout.dropSelectionDirect.showProgress {
+                            buttonText = "Dropping..."
+                            progressColor = Color.WHITE
+                        }
+                        viewBinding.directDropLayout.dropSelectionDirect.isEnabled = false
+
+                    }
+                    is Lce.Content -> {
+                        //check if the api call was successful and drop api status is true
+                        if (it.content.status) {
+                            viewBinding.successLayout.root.visible()
+                            viewBinding.mainLayout.root.gone()
+                            viewBinding.errorLayout.root.gone()
+                            viewBinding.lastWorkingLayout.root.gone()
+                            viewBinding.joinedNotJoinedLayout.root.gone()
+                            viewBinding.bankVerifyLayout.root.gone()
+                            viewBinding.directDropLayout.root.gone()
+                        } else {
+                            //drop selection failed
+                            viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
+                            viewBinding.mainLayout.dropSelectionButton.isEnabled = false
+                            viewBinding.successLayout.root.gone()
+                            viewBinding.mainLayout.root.gone()
+                            viewBinding.lastWorkingLayout.root.gone()
+                            viewBinding.joinedNotJoinedLayout.root.gone()
+                            viewBinding.bankVerifyLayout.root.gone()
+                            viewBinding.directDropLayout.root.gone()
+                            viewBinding.errorLayout.root.visible()
+                            viewBinding.errorLayout.infoMessageTv.text =
+                                it.content.misingFields?.get(0)?.errorMessage
+                            viewBinding.errorLayout.retryBtn.visible()
+                        }
                     }
                 }
             }
-        })
+    }
 
     fun getFormattedDateInYYYYMMDD(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

@@ -22,6 +22,8 @@ import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigatio
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -59,6 +61,7 @@ class GigerAttendanceDetailsFragment :
 
     private val viewModel: GigerAttendanceDetailsViewModel by viewModels()
     private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
+    private val gigsJoiningSharedViewModel : SharedGigViewModel by activityViewModels()
     private lateinit var gigId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +115,18 @@ class GigerAttendanceDetailsFragment :
                         is SharedAttendanceTLSharedViewModelEvents.AttendanceUpdated -> viewModel.gigUpdateReceived(
                             it.attendance
                         )
+                    }
+                }
+        }
+
+        lifecycleScope.launchWhenCreated {
+
+            gigsJoiningSharedViewModel.gigSharedViewModelState
+                .collect {
+
+                    when (it) {
+                        is SharedGigViewState.TeamLeaderOfGigerChangedWithGigId -> dismiss()
+                        is SharedGigViewState.UserDroppedWithGig -> dismiss()
                     }
                 }
         }

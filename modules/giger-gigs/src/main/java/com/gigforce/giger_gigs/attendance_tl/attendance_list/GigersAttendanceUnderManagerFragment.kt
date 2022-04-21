@@ -27,6 +27,7 @@ import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.gig.GigAttendanceData
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -76,6 +77,7 @@ class GigersAttendanceUnderManagerFragment :
 
     private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
     private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
+    private val gigJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
     private val simpleDateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
 
     private val swipeTouchHandler = AttendanceSwipeHandler(this)
@@ -121,7 +123,6 @@ class GigersAttendanceUnderManagerFragment :
         if (viewCreatedForTheFirstTime) {
             initView()
             initViewModel()
-            initSharedViewModel()
         }
     }
 
@@ -244,6 +245,8 @@ class GigersAttendanceUnderManagerFragment :
     }
 
     private fun initViewModel() {
+        viewModel.setGigsSharedViewModel(sharedGigViewModel)
+        viewModel.setGigsJoiningSharedViewModel(gigJoiningSharedViewModel)
 
         lifecycleScope.launchWhenCreated {
 
@@ -327,7 +330,7 @@ class GigersAttendanceUnderManagerFragment :
                         )
                         is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog -> openMarkInactiveSelectReasonDialog(
                             gigId = it.gigId,
-                            popConfirmationDialog = false
+                            popConfirmationDialog = it.popConfirmationDialog
                         )
                     }
                 }
@@ -348,8 +351,9 @@ class GigersAttendanceUnderManagerFragment :
         popConfirmationDialog: Boolean,
         gigId: String
     ) {
-        if (popConfirmationDialog)
+        if (popConfirmationDialog) {
             navigation.navigateUp()
+        }
 
         gigNavigation.openMarkInactiveReasonDialog(
             gigId = gigId
@@ -384,25 +388,6 @@ class GigersAttendanceUnderManagerFragment :
             gigId = gigId,
             attendanceDetails = gigAttendanceData
         )
-    }
-
-    private fun initSharedViewModel() {
-        lifecycleScope.launchWhenCreated {
-
-            sharedGigViewModel.sharedEvents
-                .collect {
-
-                    when (it) {
-                        is SharedAttendanceTLSharedViewModelEvents.AttendanceUpdated -> viewModel.updateAttendanceStatusInRawListAndEmit(
-                            it.attendance
-                        )
-                        is SharedAttendanceTLSharedViewModelEvents.OpenMarkInactiveReasonsDialog -> openMarkInactiveSelectReasonDialog(
-                            true,
-                            it.gigId
-                        )
-                    }
-                }
-        }
     }
 
     private fun showErrorInMarkingAttendance(

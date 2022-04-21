@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropDetail
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropSelectionResponse
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,18 +16,36 @@ import javax.inject.Inject
 @HiltViewModel
 class DropSelectionFragment2ViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository
-): ViewModel() {
+) : ViewModel() {
 
-    private val _submitDropSelectionState : MutableLiveData<Lce<DropSelectionResponse>> = MutableLiveData()
-    val submitDropSelectionState : LiveData<Lce<DropSelectionResponse>> = _submitDropSelectionState
+    private lateinit var gigJoiningSharedViewModel: SharedGigViewModel
+
+    private val _submitDropSelectionState: MutableLiveData<Lce<DropSelectionResponse>> =
+        MutableLiveData()
+    val submitDropSelectionState: LiveData<Lce<DropSelectionResponse>> = _submitDropSelectionState
+
+    fun setGigJoiningSharedViewModel(
+        gigJoiningSharedViewModel: SharedGigViewModel
+    ) {
+        this.gigJoiningSharedViewModel = gigJoiningSharedViewModel
+    }
 
     fun dropSelections(
-        selectionsToDrop : List<DropDetail>
-    ) = viewModelScope.launch{
+        selectionsToDrop: List<DropDetail>
+    ) = viewModelScope.launch {
 
         try {
             _submitDropSelectionState.value = Lce.loading()
             val response = leadManagementRepository.dropSelections(selectionsToDrop)
+
+            if (response.status) {
+                val selectionDroppedWithGig = selectionsToDrop.filter {
+                    it.gigId != null
+                }
+                if(selectionDroppedWithGig.isNotEmpty()) {
+                    gigJoiningSharedViewModel.gigerDroppedWithGig(selectionsToDrop.first().gigId!!)
+                }
+            }
 
             _submitDropSelectionState.value = Lce.content(response)
         } catch (e: Exception) {

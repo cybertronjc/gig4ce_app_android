@@ -463,6 +463,7 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun initViewModel() {
+        viewModel.setSharedGigViewModel(gigSharedViewModel)
 
         lifecycleScope.launchWhenCreated {
 

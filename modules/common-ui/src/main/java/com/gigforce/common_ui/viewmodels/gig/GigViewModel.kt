@@ -2,8 +2,6 @@ package com.gigforce.common_ui.viewmodels.gig
 
 import android.location.Location
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -56,7 +55,8 @@ class GigViewModel @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
     private val attendanceRepository: GigAttendanceRepository,
     private val logger: GigforceLogger,
-    private val firebaseRemoteConfig: FirebaseRemoteConfig
+    private val firebaseRemoteConfig: FirebaseRemoteConfig,
+    private val profileFirebaseRepository : GigerProfileFirebaseRepository
 ) : ViewModel() {
 
     companion object {
@@ -64,18 +64,15 @@ class GigViewModel @Inject constructor(
         const val REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT = "min_time_btw_check_in_check_out"
     }
 
-    private val profileFirebaseRepository =
-        GigerProfileFirebaseRepository()
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
+    //SharedViewModels
+
     var currentGig: Gig? = null
+    private lateinit var gigSharedViewModel: SharedGigViewModel
 
-
-    private val currentUser: FirebaseUser by lazy {
-        FirebaseAuth.getInstance().currentUser!!
-    }
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
@@ -83,6 +80,22 @@ class GigViewModel @Inject constructor(
     private val declineButtonVisibilityChangeCheckRunnable = CheckInButtonEnableCheckingRunnable()
     private val scheduledThreadPoolExecutor: ScheduledThreadPoolExecutor by lazy {
         ScheduledThreadPoolExecutor(1)
+    }
+
+    fun setSharedGigViewModel(
+        gigSharedViewModel: SharedGigViewModel
+    ) = viewModelScope.launch{
+        this@GigViewModel.gigSharedViewModel = gigSharedViewModel
+        this@GigViewModel.gigSharedViewModel.gigSharedViewModelState.collect {
+
+            when(it){
+                is SharedGigViewState.UserDeclinedGig -> gigsDeclined(
+                    gigIds = it.gigIds,
+                    reason = it.reason
+                )
+                else -> {}
+            }
+        }
     }
 
     fun watchUpcomingGigs() {
@@ -99,8 +112,8 @@ class GigViewModel @Inject constructor(
             }
     }
 
-    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>>()
-    val markingAttendanceState: LiveData<Lce<AttendanceType>> get() = _markingAttendanceState
+    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>?>()
+    val markingAttendanceState: LiveData<Lce<AttendanceType>?> get() = _markingAttendanceState
 
     fun markAttendance(
         location: Location?,
@@ -686,6 +699,10 @@ class GigViewModel @Inject constructor(
             )
 
             _declineGig.value = Lse.success()
+            gigsDeclined(
+                listOf(gigId),
+                reason
+            )
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
             FirebaseCrashlytics.getInstance().apply {
@@ -720,8 +737,8 @@ class GigViewModel @Inject constructor(
     }
 
 
-    private val _todaysGigs = MutableLiveData<Lce<List<Gig>>>()
-    val todaysGigs: LiveData<Lce<List<Gig>>> get() = _todaysGigs
+    private val _todaysGigs = MutableLiveData<Lce<List<Gig>>?>()
+    val todaysGigs: LiveData<Lce<List<Gig>>?> get() = _todaysGigs
 
     fun startWatchingTodaysOngoingAndUpcomingGig(date: LocalDate) {
         Log.d("GigViewModel", "Started Watching gigs for $date")
@@ -782,39 +799,6 @@ class GigViewModel @Inject constructor(
 
     }
 
-    private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
-    val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
-
-    fun getGigsForMonth(
-        gigOrderId: String,
-        month: Int,
-        year: Int
-    ) = viewModelScope.launch {
-
-        val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
-        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1)
-
-        try {
-            _monthlyGigs.value = Lce.loading()
-            val querySnap = gigsRepository
-                .getCurrentUserGigs
-                .whereEqualTo("gigerId", currentUser.uid)
-                .whereEqualTo("gigOrderId", gigOrderId)
-                .whereGreaterThan("startDateTime", monthStart.toDate)
-                .whereLessThan("startDateTime", monthEnd.toDate)
-                .getOrThrow()
-
-            val gigs = extractGigs(querySnap)
-            _monthlyGigs.value = Lce.content(gigs)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().apply {
-                recordException(e)
-            }
-            e.printStackTrace()
-            _monthlyGigs.value = Lce.error(e.message!!)
-        }
-    }
-
     private val _requestAttendanceRegularisation = MutableLiveData<Lse>()
     val requestAttendanceRegularisation: LiveData<Lse> get() = _requestAttendanceRegularisation
 
@@ -842,30 +826,6 @@ class GigViewModel @Inject constructor(
                 e.message
                     ?: "Unable to submit regularisation attendance"
             )
-        }
-    }
-
-    private val _observableProfile: MutableLiveData<ProfileData> = MutableLiveData()
-    val observableProfile: MutableLiveData<ProfileData> = _observableProfile
-
-    fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
-        checkForChatProfile(loginMobile)
-    }
-
-    suspend fun checkForChatProfile(loginMobile: String) {
-        try {
-
-            val profiles =
-                gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile)
-                    .get().await()
-            if (!profiles.documents.isNullOrEmpty()) {
-                val toObject = profiles.documents[0].toObject(ProfileData::class.java)
-                toObject?.id = profiles.documents[0].id
-                _observableProfile.value = toObject
-            }
-
-        } catch (e: Exception) {
-
         }
     }
 
@@ -948,5 +908,22 @@ class GigViewModel @Inject constructor(
         gig.gigUserFeedback = feedback
         gig.gigRating = rating
         _gigDetails.postValue(Lce.content(gig))
+    }
+
+    private fun gigsDeclined(
+        gigIds :List<String>,
+        reason: String
+    ){
+
+        if (currentGig?.gigId != null && gigIds.contains(currentGig!!.gigId)) {
+
+            val gig = currentGig ?: return
+            val updatedGig = gig.copy(
+                gigStatus = GigStatus.DECLINED.getStatusString(),
+                declineReason = reason
+            )
+            currentGig= updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
+        }
     }
 }
