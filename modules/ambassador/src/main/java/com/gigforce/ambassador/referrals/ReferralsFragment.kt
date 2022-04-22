@@ -147,7 +147,7 @@ class ReferralsFragment : Fragment(),
                                 // Short link created
                                 if (context == null) return@addOnSuccessListener
                                 val shortLink = result.shortLink
-                                pb_referrals_frag.gone()
+                                pb_referrals_frag?.gone()
 
                                 EnterPhoneNumberForReferralDialogFragment.launch(
                                     shortLink.toString(),

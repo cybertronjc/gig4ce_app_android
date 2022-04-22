@@ -115,13 +115,18 @@ class ExperienceFragment() :
     }
 
     override fun nextButtonActionFound(): Boolean {
-        val radioButton = total_experience_rg.findViewById( total_experience_rg.checkedRadioButtonId) as RadioButton
-        var totalExperience = radioButton.tag.toString()
-        var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
-        eventTracker.setUserProperty(map)
-        eventTracker.setProfileProperty(ProfilePropArgs("Working Status", workStatus))
-        eventTracker.setProfileProperty(ProfilePropArgs("Total Experience", totalExperience))
+        try {
+            val radioButton = total_experience_rg.findViewById( total_experience_rg.checkedRadioButtonId) as RadioButton
+            val totalExperience = radioButton.tag.toString()
+            val map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
+            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
+            eventTracker.setUserProperty(map)
+            eventTracker.setProfileProperty(ProfilePropArgs("Working Status", workStatus))
+            eventTracker.setProfileProperty(ProfilePropArgs("Total Experience", totalExperience))
+        }catch (e:Exception){
+
+        }
+
         return false
     }
 

@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -709,7 +710,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private fun showSalaryAmountEntered(salaryData: InputSalaryResponse) {
         //get other cities layout from container
-        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(2)
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.findViewById<View>(2)
         if (view != null){
             val dynamicView = view as DynamicScreenFieldView
             salaryData.data?.let { dynamicView.setData(it) }
@@ -726,7 +727,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private fun showSelectedCluster(cluster: OtherCityClusterItem) {
         //get other cities layout from container
-        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(1)
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.findViewById<View>(1)
         if (view != null){
             val dynamicView = view as DynamicScreenFieldView
             dynamicView.setData(cluster)
@@ -753,7 +754,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         }
         //get other cities layout from container
-        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.getChildAt(0)
+        val view = viewBinding.mainForm.jobProfileScreenDynamicFieldsContainer.findViewById<View>(0)
         if (view != null){
             val dynamicView = view as DynamicScreenFieldView
             dynamicView.setData(otherCity)
@@ -891,6 +892,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         it: DynamicField
     ) {
         val view = DynamicSelectClusterView(context, null)
+        view.id = 1
         containerLayout.addView(view)
         view.setOnClickListener {
             viewModel.handleEvent(
@@ -909,6 +911,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             context,
             null
         )
+        view.id = 2
         containerLayout.addView(view)
         view.setOnClickListener {
             viewModel.handleEvent(
@@ -927,6 +930,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             context,
             null
         )
+        view.id = 0
         containerLayout.addView(view)
         view.setOnClickListener {
             viewModel.handleEvent(
