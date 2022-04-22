@@ -60,10 +60,11 @@ class TravellingDetailInfoFragment : Fragment() {
             activity?.onBackPressed()
         }
         textView4.setOnClickListener {
-            it.transformIntoDatePicker(context = requireContext(), format = "dd MMM, yyyy", valueChangeListener =
+            it.transformIntoDatePicker(context = requireContext(), format = "yyyy-MM-dd", valueChangeListener =
                 object : IValueChangeListener {
-                    override fun valueChangeListener(date: String) {
-                        textView2.text = date
+                    override fun valueChangeListener(date: String,dateObj: Date) {
+                        //"dd MMM, yyyy"
+                        textView2.text = DateHelper.getDateInddMMMYYYY(dateObj)
                         travellingDetailInfoList.clear()
                         recyclerGenericAdapter?.notifyDataSetChanged()
                         travellingDetailInfoViewModel.getAllTravellingInfo(date, date)
@@ -77,6 +78,8 @@ class TravellingDetailInfoFragment : Fragment() {
         changeBackButtonDrawable()
         val fromDate = DateHelper.getDateInYYYYMMDD(Date())
         val toDate = DateHelper.getDateInYYYYMMDD(Date())
+        textView2.text = DateHelper.getDateInddMMMYYYY(Date())
+
         travellingDetailInfoViewModel.getAllTravellingInfo(fromDate, toDate)
     }
     fun changeBackButtonDrawable() {
@@ -151,7 +154,7 @@ class TravellingDetailInfoFragment : Fragment() {
         recyclerGenericAdapter =
             RecyclerGenericAdapter<TravellingDetailInfoModel>(
                 activity?.applicationContext,
-                { view, position, item -> showToast("") },
+                { view, position, item -> },
                 { obj, viewHolder, position ->
 
                     val heading = viewHolder.getView(R.id.textView7) as TextView
