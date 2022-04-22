@@ -166,6 +166,14 @@ object Libs {
             val viewModelSavedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
         }
 
+        object Camera {
+            private const val version = "1.1.0-alpha11"
+            val cameraCore =  "androidx.camera:camera-core:$version"
+            val camera =  "androidx.camera:camera-camera2:$version"
+            val cameraLifecycle = "androidx.camera:camera-lifecycle:$version"
+            val cameraView =  "androidx.camera:camera-view:1.0.0-alpha31"
+        }
+
         object Room {
             private const val version = "2.2.5"
             val roomKtx = "androidx.room:room-ktx:$version"

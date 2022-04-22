@@ -109,4 +109,7 @@ dependencies {
     implementation 'com.akexorcist:localization:1.2.10'
     implementation Libs.Square.Retrofit.gsonConverter
 
+    //adding as i m getting crash
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 }
