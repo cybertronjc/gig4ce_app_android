@@ -51,7 +51,7 @@ object Libs {
         val coreKtx = "com.google.firebase:firebase-core:20.1.2"
         val analyticsKtx = "com.google.firebase:firebase-analytics-ktx:20.1.2"
         val messagingKtx = "com.google.firebase:firebase-messaging-ktx:23.0.3"
-        val messagingDirectBootKtx = "com.google.firebase:firebase-messaging-directboot:20.2.4"
+        val messagingDirectBootKtx = "com.google.firebase:firebase-messaging-directboot:23.0.3"
         val dynamicLinksKtx = "com.google.firebase:firebase-dynamic-links-ktx:21.0.1"
         val inAppMessagingKtx = "com.google.firebase:firebase-inappmessaging-ktx:20.1.2"
         val crashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx:18.2.9"

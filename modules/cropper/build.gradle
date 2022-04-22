@@ -56,6 +56,6 @@ dependencies {
     implementation Libs.Coroutines.android
 
     implementation Libs.AndroidX.Lifecycle.lifeCycleKtx
-    implementation Libs.AndroidX.exitInterface
+    implementation Libs.AndroidX.exifInterface
 
 }

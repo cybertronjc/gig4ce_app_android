@@ -89,7 +89,7 @@ dependencies {
 
     implementation Libs.Firebase.inAppMessagingKtx
     implementation Libs.Firebase.messagingDirectBootKtx
-    implementation Libs.Firebase.messaging
+    implementation Libs.Firebase.messagingKtx
     implementation Libs.Firebase.crashlyticsKtx
     implementation Libs.Firebase.analyticsKtx
     implementation Libs.Firebase.authKtx
