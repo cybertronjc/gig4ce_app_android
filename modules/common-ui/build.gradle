@@ -81,15 +81,19 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
-    implementation 'com.google.firebase:firebase-firestore:22.0.1'
-    implementation 'com.google.firebase:firebase-storage:19.2.1'
-    implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+    implementation Libs.Firebase.coreKtx
+    implementation Libs.Firebase.messagingDirectBootKtx
+    implementation Libs.Firebase.messagingKtx
+    implementation Libs.Firebase.inAppMessagingKtx
+    implementation Libs.Firebase.dynamicLinksKtx
+    implementation Libs.Firebase.remoteConfigKtx
+    implementation Libs.Firebase.crashlyticsKtx
+    implementation Libs.Firebase.authKtx
+    implementation Libs.Firebase.authUi
+    implementation Libs.Firebase.firestoreKtx
+    implementation Libs.Firebase.storageKtx
+    implementation Libs.Firebase.storageUi
+
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
