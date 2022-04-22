@@ -60,7 +60,7 @@ class TravellingDetailInfoFragment : Fragment() {
             activity?.onBackPressed()
         }
         textView4.setOnClickListener {
-            it.transformIntoDatePicker(context = requireContext(), format = "yyyy-MM-dd", valueChangeListener =
+            it.transformIntoDatePicker(context = requireContext(), format = "dd MMM, yyyy", valueChangeListener =
                 object : IValueChangeListener {
                     override fun valueChangeListener(date: String) {
                         textView2.text = date
