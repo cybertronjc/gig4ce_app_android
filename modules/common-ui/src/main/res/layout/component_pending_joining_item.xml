@@ -141,8 +141,10 @@
                 android:translationY="-1.8sp"
                 android:textSize="12sp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="@dimen/size_8"
                 android:fontFamily="@font/lato_bold"
                 android:textColor="@color/lipstick_2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/joining_date_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
