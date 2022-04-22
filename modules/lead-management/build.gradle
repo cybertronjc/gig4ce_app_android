@@ -46,8 +46,8 @@ dependencies {
     testImplementation Libs.Coroutines.test
     testImplementation Libs.junit
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation Libs.AndroidX.Test.junitTest
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
 
     implementation Libs.Kotlin.stdlib
     implementation Libs.Kotlin.playServicesCoroutinesKtx

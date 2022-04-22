@@ -45,8 +45,8 @@ dependencies {
     testImplementation Libs.Coroutines.test
     testImplementation Libs.junit
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation Libs.AndroidX.Test.junitTest
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
 
     implementation Libs.Kotlin.stdlib
     implementation Libs.Kotlin.playServicesCoroutinesKtx
@@ -101,10 +101,7 @@ dependencies {
     implementation Libs.Square.Retrofit.gsonConverter
     implementation Libs.Kotlin.playServicesCoroutinesKtx
 
-    //extra
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
     //Exo Player
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
-    implementation "androidx.preference:preference:1.0.0"
+    implementation Libs.Google.exoplayerCore
+    implementation Libs.Google.exoplayerUi
 }
