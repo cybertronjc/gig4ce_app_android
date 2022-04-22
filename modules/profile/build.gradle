@@ -1,3 +1,5 @@
+import mobile.buildsrc.Libs
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -85,4 +87,6 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.android.installreferrer:installreferrer:2.2'
     implementation 'com.akexorcist:localization:1.2.10'
+
+    implementation Libs.Square.Retrofit.gsonConverter
 }

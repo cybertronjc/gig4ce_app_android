@@ -9,7 +9,6 @@ import com.example.learning.R
 //import com.gigforce.app.R
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.common_ui.utils.VectorDrawableUtils
-import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 
 class ModulesContentAdapter(
@@ -23,9 +22,6 @@ class ModulesContentAdapter(
         this.learningVideoActionListener = listener
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return TimelineView.getTimeLineViewType(position, itemCount)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {
 
@@ -45,8 +41,6 @@ class ModulesContentAdapter(
     override fun onBindViewHolder(holder: TimeLineViewHolder, position: Int) {
 
         val videoModel = mCourseContent[position]
-        setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-
         holder.videoTitle.text = videoModel.title
 //        holder.videoTimeTV.text = videoModel.videoLength
 //        holder.lessonNameTV.text = videoModel.lessonName
@@ -55,13 +49,6 @@ class ModulesContentAdapter(
 //            .into(holder.videoThumbnailIV)
     }
 
-    private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
-        holder.timeline.marker = VectorDrawableUtils.getDrawable(
-            holder.itemView.context,
-            drawableResId,
-            ContextCompat.getColor(holder.itemView.context, colorFilter)
-        )
-    }
 
 
     override fun getItemCount() = mCourseContent.size
@@ -73,10 +60,8 @@ class ModulesContentAdapter(
         val videoTitle = itemView.video_title
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
-        val timeline = itemView.timeline
 
         init {
-            timeline.initLine(viewType)
             lessonsSeeMoreButton.setOnClickListener(this)
         }
 

@@ -14,7 +14,6 @@ import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.utils.DocViewerActivity
-import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
 import com.gigforce.giger_gigs.photocrop.PhotoCrop
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.verification.mainverification.WhyWeNeedThisBottomSheet
@@ -162,16 +161,6 @@ class NavManagerImpl @Inject constructor(
         if (intent.hasExtra("file"))
             photoCropIntent.putExtra("file", intent.getStringExtra("file"))
 
-        fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
-    }
-
-    override fun navigateToAttendanceImageCaptureActivity(
-        intent: Intent,
-        requestCodeUploadPanImage: Int,
-        requireContext: Context,
-        fragment: Fragment
-    ) {
-        val photoCropIntent = Intent(requireContext, AttendanceImageCaptureActivity::class.java)
         fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
     }
 

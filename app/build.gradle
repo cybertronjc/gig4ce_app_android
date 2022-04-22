@@ -372,11 +372,6 @@ dependencies {
     // semi circle progressbar
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
-    // timeline view
-    implementation 'com.github.vipulasri:timelineview:1.1.5'
-
-    //Camera View
-    implementation 'com.otaliastudios:cameraview:2.6.2'
 
     // Sticky header
     implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'

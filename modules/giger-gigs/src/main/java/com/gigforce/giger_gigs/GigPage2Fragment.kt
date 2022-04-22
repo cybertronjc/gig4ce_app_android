@@ -279,8 +279,13 @@ class GigPage2Fragment : Fragment(),
 
             FirebaseAuth.getInstance().currentUser?.uid?.let {
                 gig.getFullCompanyName()?.let { it1 ->
-                    val map = mapOf("Giger ID" to gig.gigerId, "TL ID" to it, "Business Name" to it1, "gigId" to gigId)
-                    eventTracker.pushEvent(TrackingEventArgs("giger_attempted_checkin",map))
+                    val map = mapOf(
+                        "Giger ID" to gig.gigerId,
+                        "TL ID" to it,
+                        "Business Name" to it1,
+                        "gigId" to gigId
+                    )
+                    eventTracker.pushEvent(TrackingEventArgs("giger_attempted_checkin", map))
                 }
             }
             if (isNecessaryPermissionGranted()) {
@@ -290,7 +295,7 @@ class GigPage2Fragment : Fragment(),
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
                             val map = mapOf("TL ID" to it, "gigId" to gigId)
-                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin", map))
                         }
 
                         checkForLateOrEarlyCheckIn()
@@ -754,7 +759,7 @@ class GigPage2Fragment : Fragment(),
             name = getString(R.string.location_details),
             icon = R.drawable.ic_location_icon
         )
-        if(viewModel.currentGig?.businessId == PARKPLUS_BUSINESSID){
+        if (viewModel.currentGig?.businessId == PARKPLUS_BUSINESSID) {
             optionsList.add(PARK_PLUS)
         }
         optionsList.add(IDENTITY_CARD)
@@ -910,7 +915,7 @@ class GigPage2Fragment : Fragment(),
 
         FirebaseAuth.getInstance().currentUser?.uid?.let {
             val map = mapOf("Giger ID" to it)
-            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline", map))
         }
         DeclineGigDialogFragment.launch(gigId, childFragmentManager, this@GigPage2Fragment)
     }
@@ -921,26 +926,14 @@ class GigPage2Fragment : Fragment(),
 
 
     private fun startCameraForCapturingSelfie() {
-        val shouldUserOldCamString =
-            firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
-        val shouldUserOldCam =
-            if (shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
-        if (shouldUserOldCam) {
+        CameraActivity.launch(
+            this,
+            destImage = null,
+            shouldUploadToServerToo = true,
+            serverParentPath = "attendance"
+        )
 
-            val intent = Intent()
-            navigation.navigateToAttendanceImageCaptureActivity(
-                intent,
-                REQUEST_CODE_UPLOAD_SELFIE_IMAGE, requireContext(), this
-            )
-        } else {
-            CameraActivity.launch(
-                this,
-                destImage = null,
-                shouldUploadToServerToo = true,
-                serverParentPath = "attendance"
-            )
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -964,7 +957,7 @@ class GigPage2Fragment : Fragment(),
                     //event
                     FirebaseAuth.getInstance().currentUser?.uid?.let {
                         val map = mapOf("TL ID" to it, "gigId" to gigId)
-                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin", map))
                     }
                     checkForLateOrEarlyCheckIn()
                 }
@@ -977,7 +970,7 @@ class GigPage2Fragment : Fragment(),
                     //event
                     FirebaseAuth.getInstance().currentUser?.uid?.let {
                         val map = mapOf("TL ID" to it, "gigId" to gigId)
-                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+                        eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin", map))
                     }
                     checkForLateOrEarlyCheckIn()
                 }

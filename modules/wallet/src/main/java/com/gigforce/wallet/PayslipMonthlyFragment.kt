@@ -64,17 +64,6 @@ class PayslipMonthlyFragment : Fragment() {
     }
 
     private fun initView() {
-        if (title.isNotBlank())
-            top_bar.setAppBarTitle(title)
-        top_bar.search_icon.gone()
-        //top_bar.wallet_heading.text = "My Payslips"
-
-        balance_card.renew_icon.gone()
-        balance_card.last_updated_text.gone()
-
-        top_bar.back_button.setOnClickListener {
-            activity?.onBackPressed()
-        }
 
         payslip_recycler_view.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -123,12 +112,6 @@ class PayslipMonthlyFragment : Fragment() {
                             .show()
                     }
                 }
-            })
-
-        viewModel
-            .userProfileData
-            .observe(viewLifecycleOwner, Observer {
-                top_bar.imageName = it.profileAvatarName
             })
 
         viewModel.getPaySlips()

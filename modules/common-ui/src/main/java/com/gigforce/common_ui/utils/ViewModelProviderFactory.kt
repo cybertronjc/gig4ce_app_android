@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 
 class ViewModelProviderFactory(private val viewModel: ViewModel?) : ViewModelProvider.Factory {
 
-    @NonNull
-    override fun <T : ViewModel?> create(@NonNull modelClass: Class<T>): T {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(viewModel!!.javaClass)) {
             return viewModel as T
         }

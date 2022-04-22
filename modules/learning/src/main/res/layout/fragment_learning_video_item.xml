@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.github.vipulasri.timelineview.TimelineView
-        android:id="@+id/timeline"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:endLineColor="@color/colorPrimary"
-        app:lineStyle="dash"
-        app:lineWidth="1dp"
-        app:markerSize="16dp"
-        android:visibility="gone"
-        app:startLineColor="@color/colorPrimary" />
 
 
     <FrameLayout

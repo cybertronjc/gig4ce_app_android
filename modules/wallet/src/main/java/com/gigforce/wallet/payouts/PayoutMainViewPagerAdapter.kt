@@ -2,11 +2,8 @@ package com.gigforce.wallet.payouts
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.gigforce.wallet.InvoicesListFragment
-import com.gigforce.wallet.MonthlyEarningPage
 import com.gigforce.wallet.PayslipMonthlyFragment
 import com.gigforce.wallet.payouts.payout_list.PayoutListFragment
-import com.gigforce.wallet.payouts.payout_slips.PayoutSlipsListFragment
 
 data class TabInfo(
     val fragmentTabName: String

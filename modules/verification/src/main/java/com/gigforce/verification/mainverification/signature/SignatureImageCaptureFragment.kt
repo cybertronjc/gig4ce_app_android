@@ -172,7 +172,7 @@ class SignatureImageCaptureFragment :
         viewModel.shouldRemoveBackgroundFromSignature = SHOULD_REMOVE_BACKGROUND_FROM_SIGNATURE
 
         viewModel.viewState
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
 
                 when (it) {
                     SignatureUploadViewState.CheckingExistingSignature -> showCheckingPreviousImageLayoutRemovingLayout()
@@ -212,7 +212,7 @@ class SignatureImageCaptureFragment :
                     SignatureUploadViewState.UploadingSignature -> showSignatureUploading()
 
                 }
-            })
+            }
     }
 
     private fun showSignatureUploading() {

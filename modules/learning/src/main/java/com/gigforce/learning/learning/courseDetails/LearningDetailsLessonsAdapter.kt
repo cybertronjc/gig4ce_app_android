@@ -18,7 +18,6 @@ import com.gigforce.core.datamodels.learning.CourseContent
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import com.gigforce.core.utils.GlideApp
-import com.github.vipulasri.timelineview.TimelineView
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 
@@ -40,9 +39,6 @@ class LearningDetailsLessonsAdapter constructor(
         notifyDataSetChanged()
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return TimelineView.getTimeLineViewType(position, itemCount)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {
 

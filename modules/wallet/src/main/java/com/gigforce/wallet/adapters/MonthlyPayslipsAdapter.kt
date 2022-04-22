@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.wallet.R
 import com.gigforce.wallet.models.Payslip
-import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.recycler_item_monthly_payslip.view.*
 
 
@@ -27,10 +26,6 @@ class MonthlyPayslipsAdapter constructor(
     fun updateCourseContent(payslips: List<Payslip>) {
         this.mPayslips = payslips
         notifyDataSetChanged()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return TimelineView.getTimeLineViewType(position, itemCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {

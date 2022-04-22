@@ -28,6 +28,7 @@ object Libs {
     val localization = "com.akexorcist:localization:1.2.10"
     val statusbarUtil = "com.jaeger.statusbarutil:library:1.5.1"
     val uCrop = "com.github.yalantis:ucrop:2.2.4"
+    val easyPermissions = "pub.devrel:easypermissions:3.0.0"
 
 
     object Vinners {
@@ -73,6 +74,7 @@ object Libs {
         val maps = "com.google.android.gms:play-services-maps:17.0.0"
 
         val playCore = "com.google.android.play:core:1.7.2"
+        val playCoreKtx = "com.google.android.play:core-ktx:1.8.1"
         val playLocation = "com.google.android.gms:play-services-location:17.0.0"
         val playRefer = "com.android.installreferrer:installreferrer:1.1.2"
         val playServicesBase = "com.google.android.gms:play-services-base:17.0.0"
@@ -80,8 +82,10 @@ object Libs {
         val auth = "com.google.android.gms:play-services-auth:18.0.0"
         val smsRetriver = "com.google.android.gms:play-services-gcm:17.0.0"
 
-        val exoplayerCore  = "com.google.android.exoplayer:exoplayer-core:2.17.1"
-        val exoplayerUi  = "com.google.android.exoplayer:exoplayer-ui:2.17.1"
+        val exoplayerCore  = "com.google.android.exoplayer:exoplayer-core:2.11.5"
+        val exoplayerUi  = "com.google.android.exoplayer:exoplayer-ui:2.11.5"
+
+        val zxing = "com.google.zxing:core:3.4.0"
     }
 
     object Kotlin {
@@ -165,7 +169,7 @@ object Libs {
         }
 
         object Work {
-            private const val version = "2.2.0"
+            private const val version = "2.7.1"
             val workManager = "androidx.work:work-runtime-ktx:$version"
             val workManageRxJavaSupport = "androidx.work:work-rxjava2:$version"
         }

@@ -35,9 +35,9 @@ import com.gigforce.giger_gigs.R
 import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import com.itextpdf.text.Document
-import com.itextpdf.text.Image
-import com.itextpdf.text.pdf.PdfWriter
+//import com.itextpdf.text.Document
+//import com.itextpdf.text.Image
+//import com.itextpdf.text.pdf.PdfWriter
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
@@ -89,15 +89,15 @@ class GigerIdFragment : Fragment() {
 
     fun iniFileSharing(it: String?) = runBlocking<Unit> {
         val bm = getScreenShot(cl_parent_giger_id)
-        shareFile(
-                imageToPDF(
-                        storeImage(
-                                bm,
-                                StringConstants.GIGER_ID.value,
-                                context?.filesDir?.absolutePath!!
-                        ), it
-                ), requireContext(), "*/*"
-        )
+//        shareFile(
+//                imageToPDF(
+//                        storeImage(
+//                                bm,
+//                                StringConstants.GIGER_ID.value,
+//                                context?.filesDir?.absolutePath!!
+//                        ), it
+//                ), requireContext(), "*/*"
+//        )
     }
 
     private fun initObservers() {
@@ -246,31 +246,31 @@ class GigerIdFragment : Fragment() {
     }
 
 
-    @Throws(FileNotFoundException::class)
-    suspend fun imageToPDF(imagePath: String, fileName: String?): File? {
-        try {
-            val document = Document()
-            val dirPath = context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                .toString() + "/${fileName ?: ""}.pdf"
-            PdfWriter.getInstance(document, FileOutputStream(dirPath)) //  Change pdf's name.
-            document.open()
-            val documentWidth: Float =
-                document.pageSize.width - document.leftMargin() - document.rightMargin()
-            val documentHeight: Float =
-                document.pageSize.height - document.topMargin() - document.bottomMargin()
-            val img: Image = Image.getInstance(imagePath)
-            img.scaleToFit(documentWidth, documentHeight)
-            img.alignment = Image.ALIGN_CENTER or Image.ALIGN_TOP
-            document.add(img)
-            document.close()
-            viewModelGigerID.showProgress(false)
-            Toast.makeText(requireContext(), getString(R.string.file_downloaded_path_giger_gigs) + dirPath, Toast.LENGTH_LONG)
-                .show()
-            return File(dirPath)
-        } catch (ignored: Exception) {
-            return null
-        }
-    }
+//    @Throws(FileNotFoundException::class)
+//    suspend fun imageToPDF(imagePath: String, fileName: String?): File? {
+//        try {
+//            val document = Document()
+//            val dirPath = context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+//                .toString() + "/${fileName ?: ""}.pdf"
+//            PdfWriter.getInstance(document, FileOutputStream(dirPath)) //  Change pdf's name.
+//            document.open()
+//            val documentWidth: Float =
+//                document.pageSize.width - document.leftMargin() - document.rightMargin()
+//            val documentHeight: Float =
+//                document.pageSize.height - document.topMargin() - document.bottomMargin()
+//            val img: Image = Image.getInstance(imagePath)
+//            img.scaleToFit(documentWidth, documentHeight)
+//            img.alignment = Image.ALIGN_CENTER or Image.ALIGN_TOP
+//            document.add(img)
+//            document.close()
+//            viewModelGigerID.showProgress(false)
+//            Toast.makeText(requireContext(), getString(R.string.file_downloaded_path_giger_gigs) + dirPath, Toast.LENGTH_LONG)
+//                .show()
+//            return File(dirPath)
+//        } catch (ignored: Exception) {
+//            return null
+//        }
+//    }
 
     private fun checkForRequiredPermissions(): Boolean {
         return PermissionUtils.checkForPermissionFragment(
