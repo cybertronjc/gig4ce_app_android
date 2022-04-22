@@ -63,6 +63,7 @@ class TravellingDetailInfoFragment : Fragment() {
             it.transformIntoDatePicker(context = requireContext(), format = "yyyy-MM-dd", valueChangeListener =
                 object : IValueChangeListener {
                     override fun valueChangeListener(date: String) {
+                        textView2.text = date
                         travellingDetailInfoList.clear()
                         recyclerGenericAdapter?.notifyDataSetChanged()
                         travellingDetailInfoViewModel.getAllTravellingInfo(date, date)
@@ -116,7 +117,7 @@ class TravellingDetailInfoFragment : Fragment() {
                 travelling_data_cl.visible()
                 no_travelling_data.gone()
                 textView5.text = "${content.totalDistance} km"
-                textView2.text = content.date
+//                textView2.text = content.date
                 travellingDetailInfoList.clear()
                 travellingDetailInfoList.addAll(it)
 //                travellingDetailInfoList.add(TravellingDetailInfoModel())
