@@ -36,7 +36,7 @@ fun View.transformIntoDatePicker(context: Context, format: String, minDate: Date
 
          val sdf = SimpleDateFormat(format)
 
-         valueChangeListener.valueChangeListener(sdf.format(myCalendar.time))
+         valueChangeListener.valueChangeListener(sdf.format(myCalendar.time),myCalendar.time)
 
       }
 

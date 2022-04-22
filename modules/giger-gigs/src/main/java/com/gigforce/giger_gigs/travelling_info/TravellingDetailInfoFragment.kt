@@ -62,7 +62,9 @@ class TravellingDetailInfoFragment : Fragment() {
         textView4.setOnClickListener {
             it.transformIntoDatePicker(context = requireContext(), format = "yyyy-MM-dd", valueChangeListener =
                 object : IValueChangeListener {
-                    override fun valueChangeListener(date: String) {
+                    override fun valueChangeListener(date: String,dateObj: Date) {
+                        //"dd MMM, yyyy"
+                        textView2.text = DateHelper.getDateInddMMMYYYY(dateObj)
                         travellingDetailInfoList.clear()
                         recyclerGenericAdapter?.notifyDataSetChanged()
                         travellingDetailInfoViewModel.getAllTravellingInfo(date, date)
@@ -76,6 +78,8 @@ class TravellingDetailInfoFragment : Fragment() {
         changeBackButtonDrawable()
         val fromDate = DateHelper.getDateInYYYYMMDD(Date())
         val toDate = DateHelper.getDateInYYYYMMDD(Date())
+        textView2.text = DateHelper.getDateInddMMMYYYY(Date())
+
         travellingDetailInfoViewModel.getAllTravellingInfo(fromDate, toDate)
     }
     fun changeBackButtonDrawable() {
@@ -89,7 +93,21 @@ class TravellingDetailInfoFragment : Fragment() {
                 }
                 is Lce.Content -> {
                     progress_bar.gone()
-                    setData(it.content)
+                    if(it.content.status == true) {
+                        it.content.data?.let { travellingRes->
+                            setData(travellingRes)
+                        }?:run{
+                            progress_bar.gone()
+                            travelling_data_cl.gone()
+                            no_travelling_data.visible()
+                            error_text.text = "No Gigs Assigned !"
+                        }
+                    }else{
+                        progress_bar.gone()
+                        travelling_data_cl.gone()
+                        no_travelling_data.visible()
+                        error_text.text = "No Gigs Assigned !"
+                    }
                 }
                 is Lce.Error -> {
                     progress_bar.gone()
@@ -110,13 +128,12 @@ class TravellingDetailInfoFragment : Fragment() {
     }
 
     private fun setData(content: TravellingResponseDM) {
-
         content.details.let {
             if (it.isNotEmpty()) {
                 travelling_data_cl.visible()
                 no_travelling_data.gone()
                 textView5.text = "${content.totalDistance} km"
-                textView2.text = content.date
+//                textView2.text = content.date
                 travellingDetailInfoList.clear()
                 travellingDetailInfoList.addAll(it)
 //                travellingDetailInfoList.add(TravellingDetailInfoModel())
@@ -125,6 +142,7 @@ class TravellingDetailInfoFragment : Fragment() {
             }else{
                 travelling_data_cl.gone()
                 no_travelling_data.visible()
+                error_text.text = "Not check-in done yet!"
             }
         }
     }
@@ -136,7 +154,7 @@ class TravellingDetailInfoFragment : Fragment() {
         recyclerGenericAdapter =
             RecyclerGenericAdapter<TravellingDetailInfoModel>(
                 activity?.applicationContext,
-                { view, position, item -> showToast("") },
+                { view, position, item -> },
                 { obj, viewHolder, position ->
 
                     val heading = viewHolder.getView(R.id.textView7) as TextView
