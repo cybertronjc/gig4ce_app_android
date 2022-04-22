@@ -58,7 +58,4 @@ dependencies {
     implementation Libs.AndroidX.Lifecycle.lifeCycleKtx
     implementation Libs.AndroidX.exitInterface
 
-//    implementation "androidx.appcompat:appcompat:$androidXAppCompatVersionCropper"
-//
-//    implementation "androidx.exifinterface:exifinterface:$androidXExifVersion"
 }
