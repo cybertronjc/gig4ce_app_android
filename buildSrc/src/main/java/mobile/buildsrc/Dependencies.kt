@@ -30,6 +30,9 @@ object Libs {
     val uCrop = "com.github.yalantis:ucrop:2.2.4"
     val easyPermissions = "pub.devrel:easypermissions:3.0.0"
 
+    //Fixes a Crash occurs while showing toast in Android 7
+    val toastFix = "com.toastfix:toastcompatwrapper:1.2.0"
+
 
     object Vinners {
         val logger = "com.github.vinnersafterwork:core:1.0"
@@ -115,6 +118,8 @@ object Libs {
         val emoji = "androidx.emoji:emoji:1.0.0"
         val fragment = "androidx.fragment:fragment:1.0.0"
         val fragmentKtx = "androidx.fragment:fragment-ktx:1.3.5"
+        val activityKtx = "androidx.activity:activity-ktx:1.3.1"
+
         val multiDex = "androidx.multidex:multidex:2.0.1"
         val vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
         val preference = "androidx.preference:preference:1.1.0-alpha02"
@@ -125,6 +130,8 @@ object Libs {
         val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
         val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
         val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.3"
+        val exifInterface = "androidx.exifinterface:exifinterface:1.3.2"
+
 
         object Test {
             val core = "androidx.test:core:1.1.0"
@@ -227,7 +234,7 @@ object Libs {
     object Square {
 
         object OkHttp {
-            val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.7.2"
+            val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.11.0"
         }
 
         object Okio {

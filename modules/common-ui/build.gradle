@@ -1,3 +1,5 @@
+import mobile.buildsrc.Libs
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -114,7 +116,6 @@ dependencies {
     implementation 'com.otaliastudios:transcoder:0.9.1'
 
     // timeline view
-    implementation 'com.github.vipulasri:timelineview:1.1.5'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
 
@@ -129,5 +130,7 @@ dependencies {
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+
+    implementation Libs.AndroidX.exifInterface
 
 }

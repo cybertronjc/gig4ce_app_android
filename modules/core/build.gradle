@@ -1,3 +1,5 @@
+import mobile.buildsrc.Libs
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -34,89 +36,88 @@ android {
 }
 
 dependencies {
-    def moshiVersion = "1.8.0"
-    def retrofit2_version = "2.5.0"
-    def okhttp3_version = "3.12.0"
-    def kotlinCoroutineVersion = "1.0.1"
+    /**
+     * Common dependencies
+     */
+    coreLibraryDesugaring Libs.Android.desugarJdk
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.navigation:navigation-runtime:2.3.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.5"
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.junit
 
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
-    implementation 'com.google.firebase:firebase-firestore:22.0.1'
-    implementation 'com.google.firebase:firebase-storage:19.2.1'
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+    androidTestImplementation Libs.AndroidX.Test.junitTest
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
 
+    kapt Libs.Dagger.hiltCompiler
+    implementation Libs.Dagger.hilt
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation Libs.Firebase.coreKtx
 
-    implementation 'com.jsibbold:zoomage:1.3.1'
+    /**
+     * Common ui libraries
+     */
 
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+    implementation Libs.localization
+    implementation Libs.statusbarUtil
 
-    // dagger setup
-//    implementation 'com.google.dagger:dagger:2.31'
-//    kapt 'com.google.dagger:dagger-compiler:2.31'
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation Libs.AirBnb.lottie
 
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coordinatorLayout
+    implementation Libs.AndroidX.constraintLayout
+    implementation Libs.AndroidX.swipeRefreshLayout
+    implementation Libs.AndroidX.Lifecycle.lifeCyleViewModelKtx
+    implementation Libs.AndroidX.Lifecycle.lifeCyleLiveDataKtx
+    implementation Libs.AndroidX.Lifecycle.extensions
+    implementation Libs.AndroidX.Lifecycle.viewModelSavedState
 
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    // firebase SDKs
-    implementation 'com.google.firebase:firebase-core:17.4.4'
-    implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
-    // implementation 'com.google.firebase:firebase-auth:19.0.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-firestore:21.5.0'
-    implementation 'com.google.firebase:firebase-storage:19.1.1'
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
-    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
-    implementation 'com.google.firebase:firebase-functions:19.1.0'
-    implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
-    implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
-    //vision api for face detect
-    implementation 'com.github.yalantis:ucrop:2.2.4'
+    implementation Libs.Google.material
+    implementation Libs.Facebook.shimmer
+
+    kapt Libs.Glide.compiler
+    implementation Libs.Glide.glide
+
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+    implementation Libs.AndroidX.Navigation.navigationUiKtx
+    implementation Libs.AndroidX.fragmentKtx
+    implementation Libs.AndroidX.coreKtx
+
+    implementation Libs.Firebase.mlKitFaceDetection
+    implementation Libs.Firebase.dynamicLinksKtx
+    implementation Libs.Firebase.remoteConfigKtx
+    implementation Libs.Firebase.crashlyticsKtx
+    implementation Libs.Firebase.authKtx
+    implementation Libs.Firebase.firestoreKtx
+    implementation Libs.Firebase.storageKtx
+    implementation Libs.Firebase.storageUi
+
+    implementation Libs.Kotlin.playServicesCoroutinesKtx
 
 
-    //Retrofit2
-    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    /**
+     * Module specific dependencies
+     */
 
+    implementation Libs.Square.Retrofit.retrofit
+    implementation Libs.Square.Retrofit.gsonConverter
+    implementation Libs.Square.OkHttp.loggingInterceptor
 
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation Libs.uCrop
+    implementation Libs.easyPermissions
 
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    implementation Libs.Google.playLocation
+    implementation Libs.Google.exoplayerCore
+    implementation Libs.Google.exoplayerUi
 
-    def nav_version = "2.3.0"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation Libs.zoomableImageView
 
-    implementation 'com.akexorcist:localization:1.2.10'
+    implementation Libs.timber
 
-    api "com.toastfix:toastcompatwrapper:1.2.0"
+    //With api this dependency becomes available in each module
+    //dependent this module
+    api Libs.toastFix
 }
