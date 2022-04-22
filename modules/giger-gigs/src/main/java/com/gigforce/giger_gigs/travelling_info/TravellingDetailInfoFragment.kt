@@ -90,7 +90,21 @@ class TravellingDetailInfoFragment : Fragment() {
                 }
                 is Lce.Content -> {
                     progress_bar.gone()
-                    setData(it.content)
+                    if(it.content.status == true) {
+                        it.content.data?.let { travellingRes->
+                            setData(travellingRes)
+                        }?:run{
+                            progress_bar.gone()
+                            travelling_data_cl.gone()
+                            no_travelling_data.visible()
+                            error_text.text = "No Gigs Assigned !"
+                        }
+                    }else{
+                        progress_bar.gone()
+                        travelling_data_cl.gone()
+                        no_travelling_data.visible()
+                        error_text.text = "No Gigs Assigned !"
+                    }
                 }
                 is Lce.Error -> {
                     progress_bar.gone()
@@ -111,7 +125,6 @@ class TravellingDetailInfoFragment : Fragment() {
     }
 
     private fun setData(content: TravellingResponseDM) {
-
         content.details.let {
             if (it.isNotEmpty()) {
                 travelling_data_cl.visible()
@@ -126,6 +139,7 @@ class TravellingDetailInfoFragment : Fragment() {
             }else{
                 travelling_data_cl.gone()
                 no_travelling_data.visible()
+                error_text.text = "Not check-in done yet!"
             }
         }
     }

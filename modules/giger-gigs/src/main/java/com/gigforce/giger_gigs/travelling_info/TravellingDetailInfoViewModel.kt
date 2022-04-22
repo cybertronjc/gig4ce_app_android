@@ -12,8 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TravellingDetailInfoViewModel @Inject constructor(val travellingRepository : TravellingRepository) :
     ViewModel() {
-    private val _travellingInfoLiveData = MutableLiveData<Lce<TravellingResponseDM>>()
-    val travellingInfoLiveData: LiveData<Lce<TravellingResponseDM>> = _travellingInfoLiveData
+    private val _travellingInfoLiveData = MutableLiveData<Lce<ResponseObjectModel<TravellingResponseDM>>>()
+    val travellingInfoLiveData: LiveData<Lce<ResponseObjectModel<TravellingResponseDM>>> = _travellingInfoLiveData
 
 //    init {
 //        getAllTravellingInfo()
