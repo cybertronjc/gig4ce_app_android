@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/call_team_leader_layout"
+        android:layout_width="match_parent"
+        android:elevation="@dimen/size_4"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_20"
+        android:foreground="@android:drawable/list_selector_background"
+        android:layout_marginBottom="@dimen/size_10"
+        android:layout_marginTop="@dimen/size_10"
+        android:background="@drawable/business_compo_background">
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/tl_profile_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:layout_marginStart="@dimen/size_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/size_10"
+            android:textColor="#202325"
+            android:textSize="14sp"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:fontFamily="@font/lato"
+            android:textFontWeight="700"
+            app:layout_constraintEnd_toStartOf="@id/call_icon"
+            app:layout_constraintStart_toEndOf="@id/tl_profile_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Rahulxededdeded d Yeadav" />
+
+        <TextView
+            android:id="@+id/txt_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/lato"
+            android:textFontWeight="400"
+            android:layout_marginTop="@dimen/size_6"
+            android:layout_marginStart="@dimen/size_10"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:layout_weight="1"
+            tools:text="Last messsage that I sent"
+            app:layout_constraintStart_toEndOf="@id/tl_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/txt_title"/>
+
+        <TextView
+            android:id="@+id/tl_option"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/size_10"
+            android:layout_marginTop="@dimen/size_4"
+            android:textColor="#979C9E"
+            android:fontFamily="@font/lato"
+            android:textFontWeight="400"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:layout_weight="1"
+            tools:text="Last messsage that I sent"
+            app:layout_constraintTop_toBottomOf="@id/txt_subtitle"
+            app:layout_constraintStart_toEndOf="@id/tl_profile_image"/>
+
+        <ImageView
+            android:id="@+id/call_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_20"
+            android:src="@drawable/ic_call_icon_team_leader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

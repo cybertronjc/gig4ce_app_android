@@ -80,7 +80,7 @@ class DynamicSelectOtherCitiesView(
         settingFieldAsOptionalOrMandatory(fieldDetails)
     }
 
-    override fun setData(data: Any) {
+    override fun setData(data: Any?) {
         data?.let {
             selectedOtherCities = data as List<OtherCityClusterItem>
             removeError()

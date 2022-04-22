@@ -51,7 +51,48 @@ data class AadhaarDetailsDataModel(
 
         @SerializedName("verified")
         var verified : Boolean?=false
-) : VerificationUserSubmittedData, Parcelable
+) : VerificationUserSubmittedData, Parcelable{
+
+        fun getDOBDate():Int?{
+                if(dateOfBirth.isNotBlank()){
+                        try {
+                                val arr = dateOfBirth.split("-")
+                                val date = arr[0].toInt()
+                                return date
+                        }catch (e:Exception){
+                                return null
+                        }
+
+                }else return null
+        }
+
+        fun getDOBMonth():Int?{
+                if(dateOfBirth.isNotBlank()){
+                        try {
+                                val arr = dateOfBirth.split("-")
+                                val month = arr[1].toInt()
+                                return month
+                        }catch (e:Exception){
+                                return null
+                        }
+
+                }else return null
+        }
+
+
+        fun getDOBYear():Int?{
+                if(dateOfBirth.isNotBlank()){
+                        try {
+                                val arr = dateOfBirth.split("-")
+                                val year = arr[2].toInt()
+                                return year
+                        }catch (e:Exception){
+                                return null
+                        }
+
+                }else return null
+        }
+}
 
 @Parcelize
 data class CurrentAddressDetailDataModel(
