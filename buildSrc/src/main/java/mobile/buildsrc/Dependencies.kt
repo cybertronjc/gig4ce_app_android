@@ -123,7 +123,7 @@ object Libs {
 
         val multiDex = "androidx.multidex:multidex:2.0.1"
         val vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
-        val preference = "androidx.preference:preference:1.1.0-alpha02"
+        val preference = "androidx.preference:preference:1.0.0"
         val constraintlayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         val coreKtx = "androidx.core:core-ktx:1.3.2"
         val archCoreTesting = "androidx.arch.core:core-testing:2.1.0"

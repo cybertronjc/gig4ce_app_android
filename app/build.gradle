@@ -259,9 +259,6 @@ dependencies {
     def moengageVersion = "11.2.00"
     def work = "2.7.1"
 
-    //Moshi
-    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
     implementation "androidx.work:work-runtime-ktx:$work"
 

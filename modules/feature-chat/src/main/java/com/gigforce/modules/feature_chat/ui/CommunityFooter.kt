@@ -43,7 +43,6 @@ import com.linkedin.android.spyglass.tokenization.interfaces.QueryTokenReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 import android.graphics.drawable.Drawable
 
 //import com.aghajari.emojiview.listener.SimplePopupAdapter
