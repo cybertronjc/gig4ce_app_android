@@ -179,6 +179,7 @@
                     android:textColor="#979C9E"
                     android:textFontWeight="400"
                     android:textSize="10sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
                     app:layout_constraintStart_toStartOf="@id/giger_name_textview"
                     app:layout_constraintTop_toBottomOf="@id/giger_designation_textview" />
