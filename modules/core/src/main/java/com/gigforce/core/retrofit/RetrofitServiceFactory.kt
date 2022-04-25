@@ -5,7 +5,9 @@ import android.util.Log
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.exceptions.InternalServerErrorException
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.retrofit.custom_serialization.FirebaseTimestampFromMongoTimeStringSerializer
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -105,6 +107,10 @@ class RetrofitServiceFactory @Inject constructor(
 
     private fun makeMoshi(): Gson {
         return GsonBuilder()
+            .registerTypeAdapter(
+                Timestamp::class.java,
+                FirebaseTimestampFromMongoTimeStringSerializer
+            )
             .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()
             .serializeNulls()

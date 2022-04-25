@@ -199,7 +199,7 @@ class GigerIdFragment : Fragment() {
         gig.assignedOn.let {
 
             tv_issued_date_giger_id.text =
-                "${getString(R.string.issued_on_giger_gigs)} ${parseTime("dd MMM yyyy", it.toDate())}"
+                "${getString(R.string.issued_on_giger_gigs)} ${parseTime("dd MMM yyyy", it!!.toDate())}"
         }
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)

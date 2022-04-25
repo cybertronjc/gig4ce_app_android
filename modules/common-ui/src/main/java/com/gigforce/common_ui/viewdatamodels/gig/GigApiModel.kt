@@ -15,13 +15,13 @@ import kotlin.math.log
 data class GigApiModel(
 
     @field:SerializedName("checkInAfterSlot")
-    val checkInAfterSlot: String,
+    val checkInAfterSlot: Timestamp,
 
     @field:SerializedName("gigRating")
     val gigRating: Float? = null,
 
     @field:SerializedName("checkInAfterBuffer")
-    val checkInAfterBuffer: String,
+    val checkInAfterBuffer: Timestamp,
 
     @field:SerializedName("gigerId")
     val gigerId: String? = null,
@@ -45,7 +45,7 @@ data class GigApiModel(
     val gigUserFeedbackAttachments: List<String>? = null,
 
     @field:SerializedName("assignOn")
-    val assignOn: String,
+    val assignOn: Timestamp?,
 
     @field:SerializedName("requirementId")
     val requirementId: String? = null,
@@ -57,7 +57,7 @@ data class GigApiModel(
     val address: String? = null,
 
     @field:SerializedName("checkOutBeforeSlot")
-    val checkOutBeforeSlot: String? = null,
+    val checkOutBeforeSlot: Timestamp,
 
     @field:SerializedName("updatedBy")
     val updatedBy: String? = null,
@@ -66,7 +66,7 @@ data class GigApiModel(
     val agencyContact: AgencyContact? = null,
 
     @field:SerializedName("checkOutAfterBuffer")
-    val checkOutAfterBuffer: String,
+    val checkOutAfterBuffer: Timestamp,
 
     @field:SerializedName("businessContact")
     val businessContact: BusinessContact? = null,
@@ -78,19 +78,19 @@ data class GigApiModel(
     val profile: Profile? = null,
 
     @field:SerializedName("checkOutAfterSlot")
-    val checkOutAfterSlot: String,
+    val checkOutAfterSlot: Timestamp,
 
     @field:SerializedName("autoCheckout")
     val autoCheckout: String? = null,
 
     @field:SerializedName("checkInBeforeBuffer")
-    val checkInBeforeBuffer: String,
+    val checkInBeforeBuffer: Timestamp,
 
     @field:SerializedName("endDateTime")
-    val endDateTime: String,
+    val endDateTime: Timestamp,
 
     @field:SerializedName("checkOutBeforeBuffer")
-    val checkOutBeforeBuffer: String,
+    val checkOutBeforeBuffer: Timestamp,
 
     @field:SerializedName("giger")
     val giger: Giger? = null,
@@ -99,7 +99,7 @@ data class GigApiModel(
     val gigStatus: String,
 
     @field:SerializedName("startDateTime")
-    val startDateTime: String,
+    val startDateTime: Timestamp,
 
     @field:SerializedName("isFullDay")
     val isFullDay: Boolean? = null,
@@ -108,7 +108,7 @@ data class GigApiModel(
     val gigOrderId: String? = null,
 
     @field:SerializedName("checkInBeforeSlot")
-    val checkInBeforeSlot: String,
+    val checkInBeforeSlot: Timestamp,
 
     @field:SerializedName("_id")
     val id: String? = null,
@@ -158,19 +158,19 @@ data class GigApiModel(
             cancellationReason = "",
             companyName = null,
             companyLogo = null,
-            startDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(startDateTime),
-            checkInBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeBuffer),
-            checkInBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeBuffer),
-            checkInAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterBuffer),
-            checkInAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterSlot),
-            endDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(endDateTime),
-            checkOutBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeSlot!!),
-            checkOutBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeBuffer),
-            checkOutAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterBuffer),
-            checkOutAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterSlot),
+            startDateTime = startDateTime,
+            checkInBeforeTime = checkInBeforeBuffer,
+            checkInBeforeBufferTime = checkInBeforeBuffer,
+            checkInAfterBufferTime = checkInAfterBuffer,
+            checkInAfterTime = checkInAfterSlot,
+            endDateTime = endDateTime,
+            checkOutBeforeTime = checkOutBeforeSlot,
+            checkOutBeforeBufferTime = checkOutBeforeBuffer,
+            checkOutAfterBufferTime = checkOutAfterBuffer,
+            checkOutAfterTime = checkOutAfterSlot,
             agencyContact = agencyContact?.toContactPerson(),
             businessContact = businessContact?.toContactPerson(),
-            assignedOn = DateUtil.getFirebaseTimestampFromUTCDateTimeString(assignOn),
+            assignedOn = assignOn,
             checkInBeforeTimeBufferInMins = 0,
             checkInAfterTimeBufferInMins = 0,
             checkOutBeforeTimeBufferInMins = 0,

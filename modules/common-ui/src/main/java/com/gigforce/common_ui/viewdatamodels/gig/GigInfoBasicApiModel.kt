@@ -11,49 +11,49 @@ import com.google.gson.annotations.SerializedName
 data class GigInfoBasicApiModel(
 
 	@field:SerializedName("checkInAfterSlot")
-	val checkInAfterSlot: String? = null,
+	val checkInAfterSlot: Timestamp? = null,
 
 	@field:SerializedName("address")
 	val address: String? = null,
 
 	@field:SerializedName("checkInAfterBuffer")
-	val checkInAfterBuffer: String? = null,
+	val checkInAfterBuffer: Timestamp? = null,
 
 	@field:SerializedName("checkOutBeforeSlot")
-	val checkOutBeforeSlot: String? = null,
+	val checkOutBeforeSlot: Timestamp? = null,
 
 	@field:SerializedName("gigerId")
 	val gigerId: String? = null,
 
 	@field:SerializedName("checkOutAfterBuffer")
-	val checkOutAfterBuffer: String? = null,
+	val checkOutAfterBuffer: Timestamp? = null,
 
 	@field:SerializedName("checkOutAfterSlot")
-	val checkOutAfterSlot: String? = null,
+	val checkOutAfterSlot: Timestamp? = null,
 
 	@field:SerializedName("gigDate")
-	val gigDate: String? = null,
+	val gigDate: Timestamp? = null,
 
 	@field:SerializedName("checkInBeforeBuffer")
-	val checkInBeforeBuffer: String? = null,
+	val checkInBeforeBuffer: Timestamp? = null,
 
 	@field:SerializedName("endDateTime")
-	val endDateTime: String? = null,
+	val endDateTime: Timestamp? = null,
 
 	@field:SerializedName("checkOutBeforeBuffer")
-	val checkOutBeforeBuffer: String? = null,
+	val checkOutBeforeBuffer: Timestamp? = null,
 
 	@field:SerializedName("gigStatus")
 	val gigStatus: String? = null,
 
 	@field:SerializedName("startDateTime")
-	val startDateTime: String? = null,
+	val startDateTime: Timestamp? = null,
 
 	@field:SerializedName("gigOrderId")
 	val gigOrderId: String? = null,
 
 	@field:SerializedName("checkInBeforeSlot")
-	val checkInBeforeSlot: String? = null,
+	val checkInBeforeSlot: Timestamp? = null,
 
 	@field:SerializedName("_id")
 	val id: String? = null,
@@ -93,16 +93,16 @@ data class GigInfoBasicApiModel(
 			cancellationReason = "",
 			companyName = null,
 			companyLogo = null,
-			startDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(startDateTime!!),
-			checkInBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeSlot!!),
-			checkInBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInBeforeBuffer!!),
-			checkInAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterBuffer!!),
-			checkInAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkInAfterSlot!!),
-			endDateTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(endDateTime!!),
-			checkOutBeforeTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeSlot!!),
-			checkOutBeforeBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutBeforeBuffer!!),
-			checkOutAfterBufferTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterBuffer!!),
-			checkOutAfterTime = DateUtil.getFirebaseTimestampFromUTCDateTimeString(checkOutAfterSlot!!),
+			startDateTime = startDateTime!!,
+			checkInBeforeTime = checkInBeforeSlot!!,
+			checkInBeforeBufferTime = checkInBeforeBuffer!!,
+			checkInAfterBufferTime = checkInAfterBuffer!!,
+			checkInAfterTime = checkInAfterSlot!!,
+			endDateTime = endDateTime!!,
+			checkOutBeforeTime = checkOutBeforeSlot!!,
+			checkOutBeforeBufferTime = checkOutBeforeBuffer!!,
+			checkOutAfterBufferTime = checkOutAfterBuffer!!,
+			checkOutAfterTime = checkOutAfterSlot!!,
 			agencyContact = agencyContact?.toContactPerson(),
 			businessContact = null,
 			assignedOn = Timestamp.now(),
@@ -157,6 +157,5 @@ data class GigInfoBasicApiModel(
 			chatInfo = mapOf()
 		)
 	}
-
 }
 

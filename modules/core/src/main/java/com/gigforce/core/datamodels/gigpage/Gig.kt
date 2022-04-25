@@ -134,7 +134,7 @@ data class Gig(
 
     @get:PropertyName("assignedOn")
     @set:PropertyName("assignedOn")
-    var assignedOn: Timestamp = Timestamp.now(),
+    var assignedOn: Timestamp? = Timestamp.now(),
 
     var checkInBeforeTimeBufferInMins: Long = 60,
     var checkInAfterTimeBufferInMins: Long = 60,
