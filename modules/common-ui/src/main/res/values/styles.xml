@@ -499,6 +499,34 @@
 
     </style>
 
+    <style name="header_inkdefault_bold_regular1" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/inkDefault</item>
+
+        <item name="android:textColor">@color/inkDefault</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+        <item name="android:textSize">14sp</item>
+
+    </style>
+
+    <style name="header_black_regular1" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/blackDark</item>
+
+        <item name="android:textColor">@color/inkDefault</item>
+
+        <item name="fontFamily">@font/lato</item>
+
+        <item name="android:fontFamily">@font/lato</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
     <style name="header_colorGray5" parent="Widget.MaterialComponents.TextView">
 
         <item name="textcolor">@color/colorGray5</item>

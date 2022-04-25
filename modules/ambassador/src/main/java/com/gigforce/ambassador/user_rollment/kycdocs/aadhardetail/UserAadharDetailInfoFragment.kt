@@ -22,6 +22,7 @@ import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
@@ -75,7 +76,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         private const val FATHER = "father"
     }
 
-    private val viewModel: UserAadharDetailInfoViewModel by viewModels()
+    private val viewModel: UserAadharDetailInfoViewModel by activityViewModels()
     private var clickedImagePath: Uri? = null
     private var aadharFrontImagePath: String? = null
     private var aadharBackImagePath: String? = null
@@ -220,7 +221,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         }
 
     }
-
+    var inEditMode = false
     var oldStateHolder = OLDStateHolder("")
     private fun listener() = viewBinding.apply {
 
@@ -230,6 +231,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         })
 
         toplayoutblock.setChangeTextListener {
+            inEditMode = true
             allFieldsEnable(true)
             viewBinding.toplayoutblock.toggleChangeTextView(false)
             verificationScreenStatus = VerificationStatus.STARTED
@@ -357,194 +359,13 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         caCitySpinner.threshold = 1
 
         submitButton.setOnClickListener {
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationStatus.DEFAULT || verificationScreenStatus == VerificationStatus.COMPLETED) {
-                checkForNextDoc()
-            } else {
-                if (anyDataEntered) {
-                    if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.upload_aadhar_card_front_side_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.upload_aadhar_card_back_side_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (name.editText?.text.toString().isBlank() || name.editText?.text.toString().length < 3) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_name_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (aadharNo.editText?.text.toString()
-                                    .isBlank() || aadharNo.editText?.text.toString().length != 12
-                    ) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_valid_aadhar_no_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (dateOfBirth.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.select_dob_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-                    if (fatherNameTil.editText?.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert_amb))
-                            .setMessage(getString(R.string.enter_father_name_amb))
-                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                            .show()
-                        return@setOnClickListener
-                    }
-                    if (addLine1Input.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_add1_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (addLine2Input.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_add2_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (stateSpinner.text.toString()
-                                    .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
-                    ) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.select_state_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (citySpinner.text.toString()
-                                    .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
-                    ) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.select_city_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (pincodeInput.text.toString()
-                                    .isBlank() || pincodeInput.text.toString().length != 6
-                    ) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_valid_pin_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-//                    if (landmarkInput.text.toString().isBlank()) {
-//                        MaterialAlertDialogBuilder(requireContext())
-//                                .setTitle(getString(R.string.alert_amb))
-//                                .setMessage(getString(R.string.enter_landmark_amb))
-//                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-//                                .show()
-//                        return@setOnClickListener
-//                    }
-
-                    //current address validation
-                    if (!currentAddCheckbox.isChecked) {
-
-                        if (caAddLine1Input.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.curr_add1_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
-
-                        if (caAddLine2Input.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.curr_add2_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
-
-                        if (caStateSpinner.text.toString()
-                                        .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
-                        ) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.select_state_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
-
-                        if (caCitySpinner.text.toString()
-                                        .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
-                        ) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.select_city_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
-
-                        if (caPincodeInput.text.toString()
-                                        .isBlank() || caPincodeInput.text.toString().length != 6
-                        ) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.enter_valid_pin_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
-
-//                        if (caLandmarkInput.text.toString().isBlank()) {
-//                            MaterialAlertDialogBuilder(requireContext())
-//                                    .setTitle(getString(R.string.alert_amb))
-//                                    .setMessage(getString(R.string.enter_landmark_amb))
-//                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-//                                    .show()
-//                            return@setOnClickListener
-//                        }
-                    }
-
-                    submitData()
-
-                } else {
-                    checkForNextDoc()
-                }
+            val dobNewValue = viewBinding.dateOfBirth.text
+            if(inEditMode && dobNewValue.toString() != beforeEditDOB){
+                navigation.navigateTo("ambassador/UserAadharConfirmationBS")
+            }else {
+                checkForNextOrSubmit()
             }
+
         }
 
 
@@ -586,6 +407,197 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             }
         }
 
+    }
+
+    private fun checkForNextOrSubmit()= viewBinding.apply {
+        if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationStatus.DEFAULT || verificationScreenStatus == VerificationStatus.COMPLETED) {
+            checkForNextDoc()
+        } else {
+            if (anyDataEntered) {
+                if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_aadhar_card_front_side_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_aadhar_card_back_side_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (name.editText?.text.toString().isBlank() || name.editText?.text.toString().length < 3) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_name_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (aadharNo.editText?.text.toString()
+                        .isBlank() || aadharNo.editText?.text.toString().length != 12
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_aadhar_no_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (dateOfBirth.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.select_dob_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+                if (fatherNameTil.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_father_name_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+                if (addLine1Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_add1_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (addLine2Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_add2_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (stateSpinner.text.toString()
+                        .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.select_state_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (citySpinner.text.toString()
+                        .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.select_city_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+                if (pincodeInput.text.toString()
+                        .isBlank() || pincodeInput.text.toString().length != 6
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_pin_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@apply
+                }
+
+//                    if (landmarkInput.text.toString().isBlank()) {
+//                        MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert_amb))
+//                                .setMessage(getString(R.string.enter_landmark_amb))
+//                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                .show()
+//                        return@setOnClickListener
+//                    }
+
+                //current address validation
+                if (!currentAddCheckbox.isChecked) {
+
+                    if (caAddLine1Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.curr_add1_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@apply
+                    }
+
+                    if (caAddLine2Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.curr_add2_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@apply
+                    }
+
+                    if (caStateSpinner.text.toString()
+                            .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.select_state_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@apply
+                    }
+
+                    if (caCitySpinner.text.toString()
+                            .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.select_city_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@apply
+                    }
+
+                    if (caPincodeInput.text.toString()
+                            .isBlank() || caPincodeInput.text.toString().length != 6
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.enter_valid_pin_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@apply
+                    }
+
+//                        if (caLandmarkInput.text.toString().isBlank()) {
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                    .setTitle(getString(R.string.alert_amb))
+//                                    .setMessage(getString(R.string.enter_landmark_amb))
+//                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                    .show()
+//                            return@setOnClickListener
+//                        }
+                }
+
+                submitData()
+
+            } else {
+                checkForNextDoc()
+            }
+        }
     }
 
     private fun submitData() = viewBinding.apply {
@@ -659,6 +671,12 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
     private var dobYear = 1990
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
+        aadharLiveData?.aadhaar_card_questionnaire?.getDOBMonth()?.let {
+            cal.set( Calendar.MONTH,it-1)
+        }
+        aadharLiveData?.aadhaar_card_questionnaire?.getDOBDate()?.let {
+            cal.set(Calendar.DAY_OF_MONTH,it)
+        }
         val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
@@ -669,7 +687,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                     viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
                     viewBinding.dobLabel.visible()
                 },
-                dobYear,
+            aadharLiveData?.aadhaar_card_questionnaire?.getDOBYear()?:dobYear,
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH)
         )
@@ -677,9 +695,15 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
         datePickerDialog
     }
+    var aadharLiveData : VerificationBaseModel?=null
     var ocrCity = ""
     var ocrCityDetected = false
     private fun observer() {
+        viewModel.dobEditConfirmation.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if(it?.dobCahnged == true)
+                checkForNextOrSubmit()
+        })
+
         viewModel.kycOcrResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             activeLoader(false)
             it?.let {
@@ -820,9 +844,11 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         })
 
         viewModel.verificationResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            val kycData = it ?: return@Observer
-            Log.d("kycData", "data : $kycData")
-            processKycData(kycData)
+            aadharLiveData = it ?: return@Observer
+            Log.d("kycData", "data : $aadharLiveData")
+            aadharLiveData?.let {
+                processKycData(it)
+            }
             it.aadhaar_card_questionnaire?.apply {
                 if (verified == true){
                     allFieldsEnable(false)
@@ -930,7 +956,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         if (enable) toplayoutblock.enableImageClick() else toplayoutblock.disableImageClick()
 
     }
-
+    var beforeEditDOB = ""
     var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
     private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply {
         aadhaarDetailsDataModel = kycData.aadhaar_card_questionnaire
@@ -974,6 +1000,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             it.dateOfBirth.let {
                 if (it.isNotEmpty()) {
                     dateOfBirth.text = it
+                    beforeEditDOB = it
                     dobLabel.visible()
                 }
             }

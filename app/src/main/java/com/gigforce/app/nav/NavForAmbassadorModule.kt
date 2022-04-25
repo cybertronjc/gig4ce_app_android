@@ -12,6 +12,8 @@ class NavForAmbassadorModule(
         baseImplementation.registerRoute("${moduleName}/users_enrolled", R.id.ambassadorEnrolledUsersListFragment)
         baseImplementation.registerRoute("${moduleName}/ambassadorEnrollmentRequirementFragment", R.id.ambassadorEnrollmentRequirementFragment)
         baseImplementation.registerRoute("${moduleName}/learningCourseDetails", R.id.learningCourseDetails)
+        baseImplementation.registerRoute("${moduleName}/UserAadharConfirmationBS", R.id.UserAadharConfirmationBS)
+
 
 
     }
