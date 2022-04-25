@@ -1,11 +1,10 @@
 package com.gigforce.core.retrofit
 
 
-import android.util.Log
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.exceptions.InternalServerErrorException
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.core.retrofit.custom_serialization.FirebaseTimestampFromMongoTimeStringSerializer
+import com.gigforce.core.retrofit.custom_serialization.FirebaseTimestampFromMongoTimeStringDeserializer
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.gson.Gson
@@ -109,7 +108,7 @@ class RetrofitServiceFactory @Inject constructor(
         return GsonBuilder()
             .registerTypeAdapter(
                 Timestamp::class.java,
-                FirebaseTimestampFromMongoTimeStringSerializer
+                FirebaseTimestampFromMongoTimeStringDeserializer
             )
             .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()

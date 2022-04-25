@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp
 import com.google.gson.*
 import java.lang.reflect.Type
 
-object FirebaseTimestampFromMongoTimeStringSerializer  : JsonDeserializer<Timestamp?> {
+object FirebaseTimestampFromMongoTimeStringDeserializer  : JsonDeserializer<Timestamp?> {
 
     override fun deserialize(
         json: JsonElement?,
