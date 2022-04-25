@@ -110,9 +110,9 @@ dependencies {
     implementation Libs.Kotlin.playServicesCoroutinesKtx
 
     //below other libraries
-    implementation 'com.otaliastudios:transcoder:0.9.1'
+    implementation Libs.transcoderVideoCompressor
+    implementation Libs.progressButton
     implementation 'com.linkedin.android.spyglass:spyglass:3.0.1'
-    implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
 
     //Exo Player

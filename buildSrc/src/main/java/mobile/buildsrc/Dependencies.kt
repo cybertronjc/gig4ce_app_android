@@ -29,6 +29,8 @@ object Libs {
     val statusbarUtil = "com.jaeger.statusbarutil:library:1.5.1"
     val uCrop = "com.github.yalantis:ucrop:2.2.4"
     val easyPermissions = "pub.devrel:easypermissions:3.0.0"
+    val transcoderVideoCompressor = "com.otaliastudios:transcoder:0.9.1"
+
 
     /**
      * Analytics and User engagement Libs
