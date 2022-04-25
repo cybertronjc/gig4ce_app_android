@@ -245,104 +245,105 @@ dependencies {
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:user-tracking')
     implementation project(path: ':modules:cropper')
-
-
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
-
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    //implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
-    def moshiVersion = "1.8.0"
-    def retrofit2_version = "2.8.1"
-    def okhttp3_version = "3.12.0"
-
-    def moengageVersion = "11.2.00"
-    def work = "2.7.1"
-
-
-    implementation "androidx.work:work-runtime-ktx:$work"
-
-    //Retrofit2
-    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-
-    //Okhttp3
-    implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
-
-    //Kotlin Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.cardview:cardview:1.0.0"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha02"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-rc01'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.concurrent:concurrent-listenablefuture-callback:1.0.0-beta01'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0'
-    implementation "androidx.fragment:fragment-ktx:1.2.5"
-    implementation 'com.android.support:appcompat-v7:'
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
-    implementation 'com.jaeger.statusbarutil:library:1.5.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    // Navigation library
-    def nav_version = "2.3.2"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    /**
+     * Common dependencies
+     */
+    coreLibraryDesugaring Libs.Android.desugarJdk
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.junit
+
     androidTestImplementation Libs.AndroidX.Test.junitTest
     androidTestImplementation Libs.AndroidX.Test.espressoCore
 
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
 
-    // glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt Libs.Dagger.hiltCompiler
+    implementation Libs.Dagger.hilt
 
-    // firebase SDKs
+
+    implementation Libs.localization
+    implementation Libs.statusbarUtil
+    implementation Libs.timber
+
+    implementation Libs.AirBnb.lottie
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coordinatorLayout
+    implementation Libs.AndroidX.constraintLayout
+    implementation Libs.AndroidX.swipeRefreshLayout
+    implementation Libs.AndroidX.Lifecycle.lifeCyleViewModelKtx
+    implementation Libs.AndroidX.Lifecycle.lifeCyleLiveDataKtx
+    implementation Libs.AndroidX.Lifecycle.extensions
+    implementation Libs.AndroidX.Lifecycle.viewModelSavedState
+
+    implementation Libs.Google.material
+    implementation Libs.Facebook.shimmer
+
+    kapt Libs.Glide.compiler
+    implementation Libs.Glide.glide
+
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+    implementation Libs.AndroidX.Navigation.navigationUiKtx
+    implementation Libs.AndroidX.fragmentKtx
+    implementation Libs.AndroidX.coreKtx
+
     implementation Libs.Firebase.coreKtx
-    implementation Libs.Firebase.messagingDirectBootKtx
-    implementation Libs.Firebase.messagingKtx
-    implementation Libs.Firebase.inAppMessagingKtx
     implementation Libs.Firebase.mlKitFaceDetection
     implementation Libs.Firebase.dynamicLinksKtx
     implementation Libs.Firebase.remoteConfigKtx
     implementation Libs.Firebase.crashlyticsKtx
     implementation Libs.Firebase.authKtx
-    implementation Libs.Firebase.authUi
     implementation Libs.Firebase.firestoreKtx
     implementation Libs.Firebase.storageKtx
     implementation Libs.Firebase.storageUi
+    implementation Libs.Firebase.messagingKtx
     implementation Libs.Firebase.realTimeDatabaseKtx
-    implementation Libs.Firebase.appIndexing
+
+    implementation Libs.Firebase.mlKitFaceDetection
+
+    implementation Libs.Kotlin.playServicesCoroutinesKtx
 
 
+    /**
+     * Module specific dependencies
+     */
+    def work = "2.7.1"
+
+
+
+    implementation "androidx.work:work-runtime-ktx:$work"
+
+    implementation Libs.Square.Retrofit.retrofit
+    implementation Libs.Square.Retrofit.gsonConverter
+    implementation Libs.Square.OkHttp.loggingInterceptor
+
+    implementation Libs.RxJava.rxJava
+    implementation Libs.RxJava.rxAndroid
+
+    //Kotlin Coroutines
+     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-rc01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.concurrent:concurrent-listenablefuture-callback:1.0.0-beta01'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'com.android.support:appcompat-v7:'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
     //sms retriver
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
-    // LocaleChanger - language
-    implementation 'com.google.android.material:material:1.2.1'
 
-    //noinspection GradleCompatible
-    implementation 'com.android.support:cardview-v7:26.1.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    //for paralax
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:26.1.0'
     //vision api for face detect
     implementation 'com.github.yalantis:ucrop:2.2.4'
 
@@ -354,14 +355,8 @@ dependencies {
     implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
 
     implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
-    // material dialogs
-    implementation 'com.afollestad.material-dialogs:core:3.3.0'
-
     //Google Play Core
     implementation 'com.google.android.play:core:1.10.0'
-
-    // swipe button
-    implementation "com.ncorti:slidetoact:0.8.0"
 
     // round seekbar
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
@@ -378,24 +373,11 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-
-    implementation 'com.jsibbold:zoomage:1.3.1'
-
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
 
     implementation 'com.google.android.gms:play-services-base:17.3.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-
-
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-//    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha03'
 
 
 
@@ -404,8 +386,6 @@ dependencies {
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
     implementation "com.github.skydoves:powermenu:2.1.9"
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-//    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
     // Facebook Integration
     implementation 'com.facebook.android:facebook-android-sdk:8.2.0'
@@ -425,15 +405,10 @@ dependencies {
     implementation "androidx.core:core:1.3.1"
     //implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.lifecycle:lifecycle-process:2.2.0"
+    def moengageVersion = "11.2.00"
     implementation "com.moengage:moe-android-sdk:$moengageVersion"
 
     implementation "androidx.work:work-runtime-ktx:2.5.0"
-    implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation 'com.akexorcist:localization:1.2.10'
-
-    implementation 'com.google.android.gms:play-services-mlkit-face-detection:16.2.0'
-    implementation Libs.RxJava.rxJava
-    implementation Libs.RxJava.rxAndroid
 
 }
