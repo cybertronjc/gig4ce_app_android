@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.ext
 
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GsonExclusionStrategy
 import com.google.gson.GsonBuilder
 import retrofit2.HttpException
@@ -31,10 +32,29 @@ inline fun <reified T> Response<T>.tryConvertingErrorBodyToJson(): T {
         .setDateFormat("yyyy-MM-dd HH:mm:ss")
         .create()
 
-    return gson.fromJson(
-        errorBodyString,
-        T::class.java
-    )
+    return try {
+        gson.fromJson(
+            errorBodyString,
+            T::class.java
+        )
+    } catch (e: Exception) {
+        val logger = GigforceLogger()
+        logger.e(
+            tag = "tryConvertingErrorBodyToJson()",
+            occurredWhen = buildString {
+                append("Unable to convert error body to pojo")
+                append("\n")
+                append("Error body : ")
+                append(errorBodyString)
+                append("\n")
+                append("Converting to Class name :")
+                append(T::class.simpleName)
+            },
+            e  = e
+        )
+
+        throw Exception("Unable to process server response, please check again later")
+    }
 }
 
 

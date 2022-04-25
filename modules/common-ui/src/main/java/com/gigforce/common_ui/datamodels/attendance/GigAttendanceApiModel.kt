@@ -128,6 +128,10 @@ data class GigAttendanceApiModel(
         }
     }
 
+    fun getGigerMarkedAttendanceIgnoreMarkedBy(): String{
+        return gigerAttedance?.status ?: AttendanceStatus.PENDING
+    }
+
     fun hasTLMarkedAttendance(): Boolean {
         return getTLMarkedAttendance() != AttendanceStatus.PENDING
     }
@@ -155,8 +159,8 @@ data class GigAttendanceApiModel(
 
     fun getFinalAttendanceStatus(): String {
 
-        if (attendanceType == null || attendanceType == AttendanceType.OVERWRITE_BOTH) {
-            return getGigerMarkedAttendance()
+        if (attendanceType.isNullOrBlank() || attendanceType == AttendanceType.OVERWRITE_BOTH) {
+            return getGigerMarkedAttendanceIgnoreMarkedBy()
         } else {
 
             return if (getTLMarkedAttendance() != AttendanceStatus.PENDING) {

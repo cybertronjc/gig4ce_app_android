@@ -304,11 +304,11 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     fun filterAttendanceByStatus(
         status: String
     ) = viewModelScope.launch(Dispatchers.IO) {
+        currentlySelectedStatus = status
+
         if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
             return@launch
         }
-
-        currentlySelectedStatus = status
         processAttendanceListAndEmitToView(
             showDataUpdatedToast = false,
             updateStatusTabsCount = false
