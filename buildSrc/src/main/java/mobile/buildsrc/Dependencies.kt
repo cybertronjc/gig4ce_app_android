@@ -30,6 +30,14 @@ object Libs {
     val uCrop = "com.github.yalantis:ucrop:2.2.4"
     val easyPermissions = "pub.devrel:easypermissions:3.0.0"
 
+    /**
+     * Analytics and User engagement Libs
+     */
+    val mixpanel = "com.mixpanel.android:mixpanel-android:5.8.8"
+    val appsFlyer = "com.appsflyer:af-android-sdk:5.4.0"
+    val branchSdk = "io.branch.sdk.android:library:5.1.3"
+    val moengage = "com.moengage:moe-android-sdk:11.2.00"
+
     //Fixes a Crash occurs while showing toast in Android 7
     val toastFix = "com.toastfix:toastcompatwrapper:1.2.0"
 
@@ -41,6 +49,8 @@ object Libs {
     object Facebook {
         val stetho = "com.facebook.stetho:stetho:1.5.1"
         val shimmer = "com.facebook.shimmer:shimmer:0.5.0@aar"
+        val sdk = "com.facebook.android:facebook-android-sdk:8.2.0"
+
     }
 
     object Firebase {
@@ -77,11 +87,19 @@ object Libs {
         val placesLibrary = "com.google.android.libraries.places:places:1.0.0"
         val maps = "com.google.android.gms:play-services-maps:17.0.0"
 
-        val playCore = "com.google.android.play:core:1.7.2"
+        val playServicesAdsIdentifier = "com.google.android.gms:play-services-ads-identifier:17.0.0"
+        val playCore = "com.google.android.play:core:1.10.0"
         val playCoreKtx = "com.google.android.play:core-ktx:1.8.1"
         val playLocation = "com.google.android.gms:play-services-location:17.0.0"
         val playRefer = "com.android.installreferrer:installreferrer:1.1.2"
-        val playServicesBase = "com.google.android.gms:play-services-base:17.0.0"
+
+
+        val playServicesBase = "com.google.android.gms:play-services-base:17.3.0"
+
+        /**
+         * Sms retriver
+         */
+        val playServicesAuth = "com.google.android.gms:play-services-auth:17.0.0"
         val authApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.0.0"
         val auth = "com.google.android.gms:play-services-auth:18.0.0"
         val smsRetriver = "com.google.android.gms:play-services-gcm:17.0.0"
@@ -132,6 +150,7 @@ object Libs {
         val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
         val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.3"
         val exifInterface = "androidx.exifinterface:exifinterface:1.3.2"
+        val viewPager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
 
         object Test {
@@ -165,6 +184,8 @@ object Libs {
             val lifeCyleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
             val viewModelSavedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
+            val lifeCycleProcess = "androidx.lifecycle:lifecycle-process:$version"
+
         }
 
         object Camera {
