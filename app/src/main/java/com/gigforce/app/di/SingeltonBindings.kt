@@ -14,6 +14,7 @@ import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_app.help.HelpSectionService
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
+import com.gigforce.giger_gigs.travelling_info.TravellingService
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.firestore.FirebaseFirestore
@@ -153,7 +154,12 @@ abstract class SingeltonBindings {
             return retrofitServiceFactory.prepareService(HelpSectionService::class.java)
         }
 
-
+        @Provides
+        fun provideTravellingService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): TravellingService {
+            return retrofitServiceFactory.prepareService(TravellingService::class.java)
+        }
 
         @Singleton
         @Provides

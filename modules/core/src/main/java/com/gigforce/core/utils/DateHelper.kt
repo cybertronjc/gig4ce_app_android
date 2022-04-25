@@ -62,5 +62,28 @@ object DateHelper {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
     }
 
+    fun getTimeFromString(input: String): String?{
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+        dateFormat.setTimeZone(TimeZone.getTimeZone("IST"));
+
+        var d: Date? = null
+
+        try {
+
+            d = dateFormat.parse(input)
+
+            return SimpleDateFormat("HH:mm").format(d)
+
+        } catch (e: ParseException) {
+
+            e.printStackTrace()
+
+        }
+
+        return null
+
+    }
 
 }

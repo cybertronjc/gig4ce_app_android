@@ -13,5 +13,6 @@ data class VerificationBaseModel(
         var contract: Contract? = null,
         var aadhaar_card_questionnaire: AadhaarDetailsDataModel? = null,
         var vaccination : CovidVaccineDetailsDataModel?=null,
-        var signature: SignatureDataModel? = null
+        var signature: SignatureDataModel? = null,
+        var character_certificate: CharacterCertificateDataModel? = null
 )

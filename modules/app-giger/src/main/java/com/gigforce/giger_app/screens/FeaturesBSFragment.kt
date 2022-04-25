@@ -41,9 +41,8 @@ class FeaturesBSFragment : Fragment() {
     private fun initViews() {
         application_version.text =
             getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
-//        application_version.pushOnclickListener{
-//            navigation.navigateTo("HelpSectionFragment")
-//        }
+        application_version.pushOnclickListener{
+        }
     }
 
     override fun onResume() {

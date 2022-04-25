@@ -645,7 +645,9 @@
             app:destination="@id/fragment_role_details" />
 
     </fragment>
-
+    <dialog android:id="@+id/UserAadharConfirmationBS"
+        android:name="com.gigforce.ambassador.user_rollment.kycdocs.aadhardetail.UserAadharConfirmationBS"
+        android:label="UserAadharConfirmationBS"/>
     <fragment
         android:id="@+id/fragment_role_details"
         android:name="com.gigforce.app.modules.explore_by_role.RoleDetailsFragment"
@@ -1287,6 +1289,25 @@
         android:id="@+id/inputSalaryComponentsFragment"
         android:name="com.gigforce.lead_management.ui.input_salary_components.InputSalaryComponentsFragment"
         android:label="InputSalaryComponentsFragment" />
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
+    <fragment
+        android:id="@+id/complianceDocsFragment"
+        android:name="com.gigforce.verification.mainverification.compliance.ComplianceDocsFragment"
+        android:label="ComplianceDocsFragment" />
+    <fragment
+        android:id="@+id/characterCertificateFragment"
+        android:name="com.gigforce.verification.mainverification.character_certificate.CharacterCertificateFragment"
+        android:label="CharacterCertificateFragment" />
 
+    <dialog android:id="@+id/AadharConfirmationBS"
+        android:name="com.gigforce.verification.mainverification.aadhardetail.AadharConfirmationBS"
+        android:label="AadharConfirmationBS"/>
+
+    <fragment android:id="@+id/travellingDetailInfoFragment"
+        android:name="com.gigforce.giger_gigs.travelling_info.TravellingDetailInfoFragment"
+        android:label="TravellingDetailInfoFragment"/>
 </navigation>
 

@@ -129,6 +129,7 @@
     <string name="select_cluster_lead">Select Cluster</string>
     <string name="click_to_select_job_profile_lead">Click to select Job Profile</string>
     <string name="giger_client_id_lead">Giger Client ID</string>
+    <string name="click_to_select">Click to select</string>
     <string name="optional_lead">(Optional)</string>
     <string name="type_client_id_here_lead">Type Client Id here</string>
     <string name="click_to_select_city_lead">Click to select city</string>
@@ -229,5 +230,7 @@
     <string name="selection_failed_lm">Selection Failed !</string>
     <string name="giger_already_enable_lm">Giger is already enabled in another job profile.</string>
     <string name="cluster_lead_lead">Cluster Lead</string>
+    <string name="call_team_leader_lead">Call Team Leader</string>
+    <string name="select_team_leader_to_call_lead">Please select which team leader you want to call....</string>
 
 </resources>

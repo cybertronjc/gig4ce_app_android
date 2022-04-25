@@ -119,6 +119,14 @@
     <color name="pink_text">#E42C64</color>
     <color name="text_grey">#6F7070</color>
     <color name="inkDefault">#202325</color>
-
     <color name="green_medium">#5CC568</color>
+
+    <color name="gray_AFAFAF">#AFAFAF</color>
+
+    <color name="colorGray5">#757575</color>
+
+    <color name="color_33B642">#33B642</color>
+
+    <color name="color_276EF1">#276EF1</color>
+    <color name="color_303437">#303437</color>
 </resources>

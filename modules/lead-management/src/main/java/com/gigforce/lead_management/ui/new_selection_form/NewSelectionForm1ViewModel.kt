@@ -192,7 +192,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private fun openSelectTLScreen() {
         _viewState.value = NewSelectionForm1ViewState.OpenSelectTLScreen(
             selectedTLId = selectedReportingTL?.id,
-            shouldShowAllTls = showingAllTLsInSelectionPage
+            shouldShowAllTls = showingAllTLsInSelectionPage,
+            selectedBusinessId = selectedBusiness?.id.toString()
         )
         _viewState.value = null
     }
@@ -410,7 +411,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 TAG,
                 " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
-            checkForCurrentUserInTLListAndPreSelectTeamLeader()
+            //checkForCurrentUserInTLListAndPreSelectTeamLeader()
             selectedReportingTL = null
             _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
                 selectedTeamLeader = null
@@ -432,7 +433,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
     private suspend fun checkForCurrentUserInTLListAndPreSelectTeamLeader() {
         try {
-            val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(false)
+            val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(false, selectedBusiness?.id.toString())
             teamLeaders.forEach {
 
                 if (firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid == it.id) {

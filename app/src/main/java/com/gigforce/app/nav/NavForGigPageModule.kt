@@ -21,6 +21,7 @@ class NavForGigPageModule(
         baseImplementation.registerRoute("${moduleName}/tlLoginDetails",R.id.teamLeaderLoginDetailsFragment)
         baseImplementation.registerRoute("${moduleName}/addNewLoginSummary",R.id.addNewLoginSummaryFragment)
         baseImplementation.registerRoute("${moduleName}/filterTeamLeaderListing",R.id.teamLeaderLoginFilterFragment)
+        baseImplementation.registerRoute("${moduleName}/TravellingDetailInfoFragment",R.id.travellingDetailInfoFragment)
 
         baseImplementation.registerRoute(
             GigNavigation.NAV_DESTINATION_ATTENDANCE_DETAILS,

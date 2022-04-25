@@ -19,6 +19,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.remote.verification.ComplianceDocumentDetailDM
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -52,6 +53,9 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -72,6 +76,10 @@ class ComplianceDocsFragment : Fragment(), IOnBackPressedOverride {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //getIntentData(savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.COMPLIANCE_SP.value,
+            false
+        )
         initViews()
         initListeners()
         initViewModel()

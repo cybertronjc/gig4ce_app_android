@@ -36,8 +36,8 @@ data class InputSalaryDataItem(
 //    @field:SerializedName("category")
 //    val category: String? = null,
 
-//    @field:SerializedName("business")
-//    val business: InputSalaryBusinessItem? = null,
+    @field:SerializedName("business")
+    val business: InputSalaryBusinessItem? = null,
 
     @field:SerializedName("amount")
     var amount : Int = -1,

@@ -459,6 +459,168 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="header_gray" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/gray_AFAFAF</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="header_gray_regular" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/gray_AFAFAF</item>
+
+        <item name="android:textColor">@color/gray_AFAFAF</item>
+
+        <item name="fontFamily">@font/lato</item>
+
+        <item name="android:fontFamily">@font/lato</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="header_inkdefault_regular" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/inkDefault</item>
+
+        <item name="android:textColor">@color/inkDefault</item>
+
+        <item name="fontFamily">@font/lato</item>
+
+        <item name="android:fontFamily">@font/lato</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="header_inkdefault_bold_regular1" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/inkDefault</item>
+
+        <item name="android:textColor">@color/inkDefault</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+        <item name="android:textSize">14sp</item>
+
+    </style>
+
+    <style name="header_black_regular1" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/blackDark</item>
+
+        <item name="android:textColor">@color/inkDefault</item>
+
+        <item name="fontFamily">@font/lato</item>
+
+        <item name="android:fontFamily">@font/lato</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="header_colorGray5" parent="Widget.MaterialComponents.TextView">
+
+        <item name="textcolor">@color/colorGray5</item>
+
+        <item name="android:textColor">@color/colorGray5</item>
+
+        <item name="fontFamily">@font/lato</item>
+
+        <item name="android:fontFamily">@font/lato</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="primary_color_small_title_bold36" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textColor">@color/colorPrimary</item>
+
+        <item name="android:textSize">36sp</item>
+
+        <item name="android:gravity">center</item>
+
+        <item name="android:letterSpacing">0</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+    </style>
+    <style name="black_small_bold_left" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textColor">@color/blackDark</item>
+
+        <item name="android:textSize">12sp</item>
+
+        <item name="android:gravity">left</item>
+
+        <item name="android:letterSpacing">0</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+    </style>
+
+    <style name="green_small_bold" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textColor">@color/color_33B642</item>
+
+        <item name="android:textSize">12sp</item>
+
+        <item name="android:gravity">left</item>
+
+        <item name="android:letterSpacing">0</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+    </style>
+
+    <style name="blue_small_bold" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textColor">@color/color_276EF1</item>
+
+        <item name="android:textSize">12sp</item>
+
+        <item name="android:gravity">left</item>
+
+        <item name="android:letterSpacing">0</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+    </style>
+
+    <style name="black_medium_bold" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textColor">@color/color_303437</item>
+
+        <item name="android:textSize">18sp</item>
+
+        <item name="android:gravity">left</item>
+
+        <item name="android:letterSpacing">0</item>
+
+        <item name="fontFamily">@font/lato_bold</item>
+
+        <item name="android:fontFamily">@font/lato_bold</item>
+
+    </style>
+
+
     <style name="DatePickerTheme.ButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@android:color/black</item>
     </style>
@@ -468,5 +630,6 @@
         <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerTheme.ButtonStyle</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerTheme.ButtonStyle</item>
     </style>
+
 
 </resources>
