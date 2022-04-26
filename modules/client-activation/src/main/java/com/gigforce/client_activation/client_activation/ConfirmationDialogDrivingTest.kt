@@ -14,7 +14,6 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.models.PartnerSchoolDetails
 import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ncorti.slidetoact.SlideToActView
 
 class ConfirmationDialogDrivingTest //: BottomSheetDialogFragment(), TimeSlotsDialog.TimeSlotDialogCallbacks
 {

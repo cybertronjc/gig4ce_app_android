@@ -92,14 +92,10 @@ dependencies {
 
     implementation Libs.Square.Retrofit.retrofit
 
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    implementation Libs.Google.exoplayerCore
+    implementation Libs.Google.exoplayerUi
+
+    implementation Libs.uCrop
+
     implementation "com.github.skydoves:powermenu:2.1.9"
-
-    //Exo Player
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
-
-    // swipe button
-    implementation "com.ncorti:slidetoact:0.8.0"
-
 }

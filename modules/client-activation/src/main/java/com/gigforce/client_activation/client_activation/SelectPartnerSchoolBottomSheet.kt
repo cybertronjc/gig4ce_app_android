@@ -13,7 +13,6 @@ import com.gigforce.client_activation.client_activation.models.PartnerSchoolDeta
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ncorti.slidetoact.SlideToActView
 //import kotlinx.android.synthetic.main.layout_select_partner_bottom_sheet.*
 
 class SelectPartnerSchoolBottomSheet // : BottomSheetDialogFragment(),AdapterPartnerSchool.AdapterPartnerSchoolCallbacks

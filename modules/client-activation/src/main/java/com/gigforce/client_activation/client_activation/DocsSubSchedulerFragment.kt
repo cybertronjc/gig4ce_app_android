@@ -21,7 +21,6 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 import javax.inject.Inject
