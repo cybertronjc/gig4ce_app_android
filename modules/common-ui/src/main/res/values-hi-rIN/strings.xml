@@ -85,8 +85,10 @@
     <string name="cancel_common_ui">रद्द करें</string>
     <string name="back_to_gigforce_ui">वापस गिगफोर्स पर</string>
     <string name="your_joining_is_pending">Your joining is pending</string>
+    <string name="your_application_checklist_is_pending">आपका आवेदन चेकलिस्ट लंबित है</string>
     <string name="expected_joining_date">Expected joining date -</string>
     <string name="complete_joining">Complete joining</string>
+    <string name="complete_checklist">पूरी चेकलिस्ट</string>
     <string name="common_type">Type</string>
     <string name="common_here">here</string>
     <string name="common_note_with_colon">ध्यान दें : </string>

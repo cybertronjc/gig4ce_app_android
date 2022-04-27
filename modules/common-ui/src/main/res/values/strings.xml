@@ -82,8 +82,10 @@
     <string name="cancel_common_ui">Cancel</string>
     <string name="back_to_gigforce_ui">Back to Gigforce</string>
     <string name="your_joining_is_pending">Your joining is pending</string>
+    <string name="your_application_checklist_is_pending">Your application checklist is pending</string>
     <string name="expected_joining_date">Expected joining date -</string>
     <string name="complete_joining">Complete joining</string>
+    <string name="complete_checklist">Complete checklist</string>
     <string name="common_type">Type</string>
     <string name="common_here">here</string>
     <string name="common_note_with_colon">Note : </string>
