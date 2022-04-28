@@ -22,7 +22,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -289,6 +288,12 @@ class GigPage2Fragment : Fragment(),
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
                     if (imageClickedPath != null) {
+
+                        if(isLocationMandatory(gig) && location == null){
+                            checkForGpsStatus()
+                            return@setOnClickListener
+                        }
+                        Log.e("location",location?.toString()?:"")
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
                             val map = mapOf("TL ID" to it, "gigId" to gigId)
@@ -308,6 +313,23 @@ class GigPage2Fragment : Fragment(),
             }
         }
 
+    }
+
+    fun isLocationMandatory( gig: Gig):Boolean{
+        val isLocationMandatory = gig.attendance?.checkOutMarked?.let {
+            if(it){
+                gig.attendanceConfig?.locationConfig?.checkOutLocationMandatory
+            }else false
+        }?:run{
+            gig.attendance?.checkInMarked?.let {
+                if(it) {
+                    gig.attendanceConfig?.locationConfig?.checkInLocationMandatory
+                }else false
+            }?:run{
+                false
+            }
+        }
+        return isLocationMandatory
     }
 
     override fun onResume() {
@@ -1192,6 +1214,11 @@ class GigPage2Fragment : Fragment(),
 
     private fun checkForLateOrEarlyCheckIn() {
         val gig = viewModel.currentGig ?: return
+        if(isLocationMandatory(gig)&& location == null){
+            checkForGpsStatus()
+            return
+        }
+        Log.e("location",location?.toString()?:"")
 
         val currentTime = LocalDateTime.now()
         if (!gig.isCheckInMarked() && currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime())
