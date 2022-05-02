@@ -49,6 +49,7 @@ dependencies {
     implementation Libs.Dagger.hilt
 
     implementation Libs.Firebase.coreKtx
+    implementation Libs.Google.material
 
     /**
      * Module specific dependencies

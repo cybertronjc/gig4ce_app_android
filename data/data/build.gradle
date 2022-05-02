@@ -50,6 +50,7 @@ dependencies {
     implementation Libs.Dagger.hilt
 
     implementation Libs.Firebase.coreKtx
+    implementation Libs.Dropbox.store
 
     /**
      * Module specific dependencies

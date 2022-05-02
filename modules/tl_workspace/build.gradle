@@ -1,0 +1,104 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation project(path: ':modules:core')
+    implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':domain')
+    implementation project(path: ':android-common-ui')
+    implementation project(path: ':data:data')
+    implementation project(path: ':android-common-utils')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+
+    /**
+     * Common dependencies
+     */
+    coreLibraryDesugaring Libs.Android.desugarJdk
+
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.junit
+
+    androidTestImplementation Libs.AndroidX.Test.junitTest
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+
+    kapt Libs.Dagger.hiltCompiler
+    implementation Libs.Dagger.hilt
+
+    implementation Libs.Firebase.coreKtx
+
+    /**
+     * Common ui libraries
+     */
+
+    implementation Libs.localization
+    implementation Libs.statusbarUtil
+
+    implementation Libs.AirBnb.lottie
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coordinatorLayout
+    implementation Libs.AndroidX.constraintLayout
+    implementation Libs.AndroidX.swipeRefreshLayout
+    implementation Libs.AndroidX.Lifecycle.lifeCyleViewModelKtx
+    implementation Libs.AndroidX.Lifecycle.lifeCyleLiveDataKtx
+    implementation Libs.AndroidX.Lifecycle.extensions
+    implementation Libs.AndroidX.Lifecycle.viewModelSavedState
+
+    implementation Libs.Google.material
+    implementation Libs.Facebook.shimmer
+
+    kapt Libs.Glide.compiler
+    implementation Libs.Glide.glide
+
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+    implementation Libs.AndroidX.Navigation.navigationUiKtx
+    implementation Libs.AndroidX.fragmentKtx
+    implementation Libs.AndroidX.coreKtx
+
+    implementation Libs.Kotlin.playServicesCoroutinesKtx
+
+
+    /**
+     * Module specific dependencies
+     */
+
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_view_rise_dip_drawable_size">8dp</dimen>
+    <dimen name="layout_rise_dip_corner_size">6dp</dimen>
+
+    <dimen name="card_elevation_low">4dp</dimen>
+    <dimen name="card_elevation_mid">6dp</dimen>
+    <dimen name="card_elevation_deep">8dp</dimen>
+</resources>
