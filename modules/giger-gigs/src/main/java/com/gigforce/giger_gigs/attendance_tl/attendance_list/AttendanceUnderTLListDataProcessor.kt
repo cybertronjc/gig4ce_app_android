@@ -46,7 +46,8 @@ object AttendanceUnderTLListDataProcessor {
             businessToAttendanceGroup,
             gigerAttendanceUnderManagerViewModel,
             collapsedBusiness,
-            currentMarkingAttendanceForGigs
+            currentlySelectedStatus,
+            currentMarkingAttendanceForGigs,
         )
         return attendanceListForView to tabStatusWithCount
     }
@@ -55,6 +56,7 @@ object AttendanceUnderTLListDataProcessor {
         businessToAttendanceGroup: Map<String, List<GigAttendanceApiModel>>,
         gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel,
         collapsedBusiness: List<String>,
+        currentlySelectedStatus : String,
         currentMarkingAttendanceForGigs: MutableSet<String> //Gigs for which currently attendance mark process is going on
     ) = mutableListOf<AttendanceRecyclerItemData>()
         .apply {
@@ -67,7 +69,8 @@ object AttendanceUnderTLListDataProcessor {
                         activeCount = attendance.count { it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT },
                         inActiveCount = attendance.count { it.getFinalAttendanceStatus() != AttendanceStatus.PRESENT },
                         expanded = false,
-                        viewModel = gigerAttendanceUnderManagerViewModel
+                        viewModel = gigerAttendanceUnderManagerViewModel,
+                        currentlySelectedStatus = currentlySelectedStatus
                     )
 
                 if (collapsedBusiness.contains(businessName)) {

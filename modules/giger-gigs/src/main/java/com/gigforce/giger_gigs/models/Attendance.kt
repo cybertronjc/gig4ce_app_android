@@ -19,6 +19,7 @@ open class AttendanceRecyclerItemData(
         val activeCount: Int,
         val inActiveCount: Int,
         var expanded: Boolean,
+        var currentlySelectedStatus : String,
         val viewModel : GigerAttendanceUnderManagerViewModel
     ) : AttendanceRecyclerItemData(
         type = GigCoreRecyclerViewBindings.VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER

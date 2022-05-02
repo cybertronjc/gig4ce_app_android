@@ -46,7 +46,8 @@ class TLAttendanceAdapterDiffUtil : CoreDiffUtilCallback<AttendanceRecyclerItemD
                         oldItem.expanded == newItem.expanded &&
                         oldItem.inActiveCount == newItem.inActiveCount &&
                         oldItem.enabledCount == newItem.enabledCount &&
-                        oldItem.activeCount == newItem.activeCount
+                        oldItem.activeCount == newItem.activeCount &&
+                        oldItem.currentlySelectedStatus == newItem.currentlySelectedStatus
 
             } else if (oldItem is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData &&
                 newItem is AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData

@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.gigforce.core.IViewHolder
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.attendance_tl.attendance_list.GigerAttendanceUnderManagerViewContract
+import com.gigforce.giger_gigs.attendance_tl.attendance_list.StatusFilters
 import com.gigforce.giger_gigs.databinding.RecyclerRowBusinessNameShiftTimeBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
@@ -55,6 +56,9 @@ class BusinessHeaderRecyclerItemView(
             viewBinding.enabledCountTextview.text = it.enabledCount.toString()
             viewBinding.inactiveCountTextview.text = it.inActiveCount.toString()
             viewBinding.companyNameTv.text = it.businessName
+            selectSelectedStatus(
+                it.currentlySelectedStatus
+            )
 
             if (it.expanded) {
 
@@ -68,6 +72,80 @@ class BusinessHeaderRecyclerItemView(
                     ResourcesCompat.getColor(resources, R.color.text_grey, null)
                 )
                 animateImageRotationFromExpandedToCollapsed()
+            }
+        }
+    }
+
+    private fun selectSelectedStatus(currentlySelectedStatus: String) {
+        when (currentlySelectedStatus) {
+            StatusFilters.ENABLED -> {
+
+                viewBinding.enabledCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
+                viewBinding.enabledLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
+
+                viewBinding.activeCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.activeLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+
+                viewBinding.inactiveCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.inactiveLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+            }
+            StatusFilters.ACTIVE -> {
+
+                viewBinding.enabledCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.enabledLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+
+                viewBinding.activeCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
+                viewBinding.activeLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
+
+                viewBinding.inactiveCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.inactiveLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+            }
+            StatusFilters.INACTIVE -> {
+
+                viewBinding.enabledCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.enabledLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+
+                viewBinding.activeCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+                viewBinding.activeLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.grey_medium,null)
+                )
+
+                viewBinding.inactiveCountTextview.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
+                viewBinding.inactiveLabel.setTextColor(
+                    ResourcesCompat.getColor(resources,R.color.lipstick_2,null)
+                )
             }
         }
     }
