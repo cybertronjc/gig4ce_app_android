@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
-import com.gigforce.core.extensions.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -226,7 +225,7 @@ data class Gig(
     @set:PropertyName("olr")
     var offerLetter: String? = null,
 
-    var attendanceConfig : AttendanceConfig?=null
+    var activityConfig : ActivityConfig?=null
     ) : SimpleDVM(CommonViewTypes.VIEW_GIG_ITEM_CARD) {
 
     @get:Exclude
@@ -497,7 +496,7 @@ data class ContactPerson(
 
 
 @Parcelize
-data class AttendanceConfig(var imageConfig : AttendanceImageConfig?=null,var locationConfig : AttendanceLocationConfig?=null): Parcelable
+data class ActivityConfig(var imageConfig : AttendanceImageConfig?=null, var locationConfig : AttendanceLocationConfig?=null): Parcelable
 
 @Parcelize
 data class AttendanceImageConfig(var checkInImageLevel : String?=null, var checkOutImageLevel : String?=null): Parcelable

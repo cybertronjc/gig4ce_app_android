@@ -318,12 +318,12 @@ class GigPage2Fragment : Fragment(),
     fun isLocationMandatory( gig: Gig):Boolean{
         val isLocationMandatory = gig.attendance?.checkOutMarked?.let {
             if(it){
-                gig.attendanceConfig?.locationConfig?.checkOutLocationMandatory
+                gig.activityConfig?.locationConfig?.checkOutLocationMandatory
             }else false
         }?:run{
             gig.attendance?.checkInMarked?.let {
                 if(it) {
-                    gig.attendanceConfig?.locationConfig?.checkInLocationMandatory
+                    gig.activityConfig?.locationConfig?.checkInLocationMandatory
                 }else false
             }?:run{
                 false
