@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.RelativeLayout
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.core.IViewHolder
@@ -59,26 +61,86 @@ class BusinessHeaderRecyclerItemView(
                 viewBinding.companyNameTv.setTextColor(
                     ResourcesCompat.getColor(resources, R.color.pink_text, null)
                 )
-                viewBinding.collapseButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_up, null)
-                )
+                animateImageRotationFromCollapsedToExpanded()
             } else {
 
                 viewBinding.companyNameTv.setTextColor(
                     ResourcesCompat.getColor(resources, R.color.text_grey, null)
                 )
-                viewBinding.collapseButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_drop, null)
-                )
+                animateImageRotationFromExpandedToCollapsed()
             }
         }
+    }
+
+    private fun animateImageRotationFromCollapsedToExpanded() {
+
+//        getRotationAnimation().apply {
+//            setAnimationListener(object : Animation.AnimationListener {
+//
+//                override fun onAnimationStart(animation: Animation?) {}
+//                override fun onAnimationRepeat(animation: Animation?) {}
+//
+//                override fun onAnimationEnd(animation: Animation?) {
+//
+//                    viewBinding.collapseButton.setImageDrawable(
+//                        ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_up, null)
+//                    )
+//                }
+//            })
+//            viewBinding.collapseButton.startAnimation(this)
+//        }
+
+        viewBinding.collapseButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_up, null)
+        )
+    }
+
+    private fun getRotationAnimation(): RotateAnimation {
+        return RotateAnimation(
+            0.0f,
+            180.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        ).apply {
+            duration = 500 //2 Sec
+            fillAfter = true
+        }
+    }
+
+    private fun animateImageRotationFromExpandedToCollapsed() {
+//        getRotationAnimation().apply {
+//
+//            setAnimationListener(object : Animation.AnimationListener {
+//
+//                override fun onAnimationStart(animation: Animation?) {}
+//                override fun onAnimationRepeat(animation: Animation?) {}
+//
+//                override fun onAnimationEnd(animation: Animation?) {
+//
+//                    viewBinding.collapseButton.setImageDrawable(
+//                        ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_drop, null)
+//                    )
+//                }
+//            })
+//            viewBinding.collapseButton.startAnimation(this)
+//        }
+
+        viewBinding.collapseButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_drop, null)
+        )
     }
 
     override fun onClick(
         p0: View?
     ) {
         viewData?.let {
-            it.viewModel.handleEvent(GigerAttendanceUnderManagerViewContract.UiEvent.BusinessHeaderClicked(it))
+            it.viewModel.handleEvent(
+                GigerAttendanceUnderManagerViewContract.UiEvent.BusinessHeaderClicked(
+                    it
+                )
+            )
         }
     }
 }

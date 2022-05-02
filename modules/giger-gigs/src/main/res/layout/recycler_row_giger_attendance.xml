@@ -149,6 +149,7 @@
                     android:lineHeight="12sp"
                     android:textColor="@color/inkDefault"
                     android:textFontWeight="700"
+                    tools:text="User Name that ssss"
                     app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
                     app:layout_constraintStart_toEndOf="@id/user_image_iv"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -164,6 +165,7 @@
                     android:textColor="@color/inkDefault"
                     android:textFontWeight="400"
                     android:textSize="10sp"
+                    tools:text="User Desingation"
                     app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
                     app:layout_constraintStart_toStartOf="@id/giger_name_textview"
                     app:layout_constraintTop_toBottomOf="@id/giger_name_textview" />
@@ -192,7 +194,7 @@
                     android:layout_marginTop="10dp"
                     android:minHeight="40dp"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/giger_last_active_date_textview"/>
+                    app:layout_constraintTop_toBottomOf="@id/marked_by_textview"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

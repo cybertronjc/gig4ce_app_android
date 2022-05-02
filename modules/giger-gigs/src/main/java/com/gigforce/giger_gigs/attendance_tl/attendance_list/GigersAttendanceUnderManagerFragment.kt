@@ -401,16 +401,6 @@ class GigersAttendanceUnderManagerFragment :
             .show()
     }
 
-    private fun showSnackBar(
-        text: String
-    ) {
-        Snackbar.make(
-            viewBinding.rootFrameLayout,
-            text,
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
     private fun showStatusAndAttendanceOnView(
         attendanceSwipeControlsEnabled: Boolean,
         enablePresentSwipeAction: Boolean,
@@ -447,7 +437,7 @@ class GigersAttendanceUnderManagerFragment :
 
         if (payoutsCount == 0) {
             infoLayout.root.visible()
-            infoLayout.infoMessageTv.text = "No Attendance to show"
+            infoLayout.infoMessageTv.text = "No giger to show"
         } else {
             infoLayout.root.gone()
             infoLayout.infoMessageTv.text = null

@@ -121,7 +121,7 @@ class GigerAttendanceItemRecyclerItemView(
 
                 viewBinding.gigerAttendanceStatusView.isVisible = it.showGigerAttendanceLayout
                 viewBinding.gigerAttendanceStatusView.bind(
-                    status = it.gigerAttendanceStatus ?: "Pending",
+                    status = it.gigerAttendanceStatus,
                     markingTime = null,
                     showResolveButton = it.hasAttendanceConflict,
                     false
