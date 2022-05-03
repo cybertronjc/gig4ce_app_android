@@ -225,7 +225,7 @@ data class Gig(
     @get:PropertyName("olr")
     @set:PropertyName("olr")
     var offerLetter: String? = null,
-
+    @get:PropertyName("activityConfig")
     var activityConfig : ActivityConfig?=null
     ) : SimpleDVM(CommonViewTypes.VIEW_GIG_ITEM_CARD) {
 
