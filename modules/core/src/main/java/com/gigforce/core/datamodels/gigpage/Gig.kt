@@ -225,7 +225,8 @@ data class Gig(
     @get:PropertyName("olr")
     @set:PropertyName("olr")
     var offerLetter: String? = null,
-
+    @get:PropertyName("activityConfig")
+    var activityConfig : ActivityConfig?=null
     ) : SimpleDVM(CommonViewTypes.VIEW_GIG_ITEM_CARD) {
 
     @get:Exclude
@@ -493,3 +494,13 @@ data class ContactPerson(
     @set:PropertyName("company_name")
     var companyName: String? = null
 ) : Parcelable
+
+
+@Parcelize
+data class ActivityConfig(var imageConfig : AttendanceImageConfig?=null, var locationConfig : AttendanceLocationConfig?=null): Parcelable
+
+@Parcelize
+data class AttendanceImageConfig(var checkInImageLevel : String?=null, var checkOutImageLevel : String?=null): Parcelable
+
+@Parcelize
+data class AttendanceLocationConfig(var checkInLocationMandatory : Boolean?=null, var checkOutLocationMandatory : Boolean?=null): Parcelable

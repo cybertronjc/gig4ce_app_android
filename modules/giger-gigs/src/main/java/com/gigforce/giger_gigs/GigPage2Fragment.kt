@@ -22,7 +22,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -288,7 +287,12 @@ class GigPage2Fragment : Fragment(),
             if (isNecessaryPermissionGranted()) {
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
+                    if(isLocationMandatory(gig) && location == null){
+                        checkForGpsStatus()
+                        return@setOnClickListener
+                    }
                     if (imageClickedPath != null) {
+                        Log.e("location",location?.toString()?:"")
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
                             val map = mapOf("TL ID" to it, "gigId" to gigId)
@@ -310,8 +314,19 @@ class GigPage2Fragment : Fragment(),
 
     }
 
+    fun isLocationMandatory( gig: Gig):Boolean{
+        if(gig.isCheckInMarked())
+        {
+            return gig.activityConfig?.locationConfig?.checkOutLocationMandatory?:false
+        }else{
+            return gig.activityConfig?.locationConfig?.checkInLocationMandatory?:false
+        }
+
+    }
+
     override fun onResume() {
         super.onResume()
+
 
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(), ResourcesCompat.getColor(
@@ -1192,6 +1207,11 @@ class GigPage2Fragment : Fragment(),
 
     private fun checkForLateOrEarlyCheckIn() {
         val gig = viewModel.currentGig ?: return
+        if(isLocationMandatory(gig)&& location == null){
+            checkForGpsStatus()
+            return
+        }
+        Log.e("location",location?.toString()?:"")
 
         val currentTime = LocalDateTime.now()
         if (!gig.isCheckInMarked() && currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime())

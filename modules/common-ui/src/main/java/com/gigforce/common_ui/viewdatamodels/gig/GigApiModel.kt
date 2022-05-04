@@ -135,7 +135,8 @@ data class GigApiModel(
     val attendance: Attendance? = null,
 
     @field:SerializedName("olr")
-    var olr: String? = null
+    var olr: String? = null,
+    var activityConfig : ActivityConfig?=null
 
     ) {
 
@@ -221,7 +222,8 @@ data class GigApiModel(
             isNewGig = isNewGig,
             regularisationRequest = null,
             chatInfo = mapOf(),
-            offerLetter = olr
+            offerLetter = olr,
+            activityConfig = activityConfig
         )
     }
 
