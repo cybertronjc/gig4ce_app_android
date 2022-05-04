@@ -287,12 +287,11 @@ class GigPage2Fragment : Fragment(),
             if (isNecessaryPermissionGranted()) {
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
+                    if(isLocationMandatory(gig) && location == null){
+                        checkForGpsStatus()
+                        return@setOnClickListener
+                    }
                     if (imageClickedPath != null) {
-
-                        if(isLocationMandatory(gig) && location == null){
-                            checkForGpsStatus()
-                            return@setOnClickListener
-                        }
                         Log.e("location",location?.toString()?:"")
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
@@ -316,18 +315,18 @@ class GigPage2Fragment : Fragment(),
     }
 
     fun isLocationMandatory( gig: Gig):Boolean{
-        val isLocationMandatory = gig.attendance?.checkInMarked?.let {
-            if(it){
-                gig.activityConfig?.locationConfig?.checkOutLocationMandatory
-            }else false
-        }?:run{
-                    gig.activityConfig?.locationConfig?.checkInLocationMandatory?:false
+        if(gig.isCheckInMarked())
+        {
+            return gig.activityConfig?.locationConfig?.checkOutLocationMandatory?:false
+        }else{
+            return gig.activityConfig?.locationConfig?.checkInLocationMandatory?:false
         }
-        return isLocationMandatory
+
     }
 
     override fun onResume() {
         super.onResume()
+
 
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(), ResourcesCompat.getColor(
