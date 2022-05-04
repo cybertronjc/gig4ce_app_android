@@ -128,7 +128,7 @@
     <string name="image_not_captured_giger_gigs">Image has not been captured</string>
     <string name="checkout_marked_giger_gigs">Checkout Marked.</string>
     <string name="checkin_marked_giger_gigs">Check-in marked</string>
-    <string name="error_marking_attendance_giger_gigs">\"Error while marking attendance, \"</string>
+    <string name="error_marking_attendance_giger_gigs">Error while marking attendance, </string>
     <string name="full_time_giger_gigs">: Full time</string>
     <string name="part_time_giger_gigs">: Part time</string>
     <string name="user_feedback_giger_gigs">\"User feedback : \"</string>

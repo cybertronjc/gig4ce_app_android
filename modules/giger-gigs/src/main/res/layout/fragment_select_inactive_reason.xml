@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="450dp"
+        android:background="@drawable/filter_bottom_background"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:context=".payouts.payout_details.PayoutDetailsFragment">
+
+
+        <include
+            android:id="@+id/declineGigMainLayout"
+            layout="@layout/fragment_select_inactive_reason_main"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/errorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/banner_error" />
+
+            <TextView
+                android:id="@+id/errorTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

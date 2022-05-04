@@ -35,6 +35,7 @@ import android.widget.FrameLayout
 
 import android.content.DialogInterface
 import android.content.DialogInterface.OnShowListener
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -61,6 +62,7 @@ class ChangeTeamLeaderBottomSheetFragment :
         }
     }
 
+    private val gigJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val viewModel: ChangeTeamLeaderBottomSheetViewModel by viewModels()
     private var gigerForChangeTL: ArrayList<ChangeTeamLeaderRequestItem>? = null
@@ -91,20 +93,27 @@ class ChangeTeamLeaderBottomSheetFragment :
 
         viewModel.gigerForChangeTL = gigerForChangeTL?.toList() ?: emptyList()
         viewModel.sharedViewModel = sharedViewModel
+        viewModel.setGigJoiningSharedViewModel(gigJoiningSharedViewModel)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState).apply {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog.apply {
             setOnShowListener { dialog -> // In a previous life I used this method to get handles to the positive and negative buttons
                 // of a dialog in order to change their Typeface. Good ol' days.
                 val d: BottomSheetDialog = dialog as BottomSheetDialog
 
                 // This is gotten directly from the source of BottomSheetDialog
                 // in the wrapInBottomSheet() method
-                val bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+                val bottomSheet =
+                    d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
 
                 bottomSheet?.let {
-                    BottomSheetBehavior.from(it).setState(BottomSheetBehavior.STATE_EXPANDED)
+                    BottomSheetBehavior.from(it).apply {
+                        setState(BottomSheetBehavior.STATE_EXPANDED);
+                        setPeekHeight(0);
+                    }
                 }
             }
         }
@@ -174,7 +183,7 @@ class ChangeTeamLeaderBottomSheetFragment :
 
         viewModel
             .viewState
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
 
                 when (it) {
                     ChangeTeamLeaderBottomSheetState.LoadingTeamLeaders -> showTeamLeadersLoading()
@@ -195,7 +204,7 @@ class ChangeTeamLeaderBottomSheetFragment :
                         teamLeaderChangedForAllGigers()
                     }
                 }
-            })
+            }
     }
 
     private fun showErrorLoadingTeamLeaders(
@@ -239,6 +248,13 @@ class ChangeTeamLeaderBottomSheetFragment :
             this.changeTeamLeaderMainLayout.root.visible()
             adapter.setData(teamLeaders)
         }
+
+        dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            ?.apply {
+                postDelayed({
+                    requestLayout()
+                }, 400)
+            }
 
     }
 

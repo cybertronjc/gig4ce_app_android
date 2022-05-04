@@ -84,17 +84,10 @@ class GigPeopleToExpectAdapter(
         fun bind(peopleToExpect: ContactPerson) = peopleToExpect.apply {
 
             if (this.profilePicture != null) {
-
-//               val storageRef =  FirebaseStorage
-//                    .getInstance()
-//                    .reference
-//                    .child("profile_pics/${this.profilePicture}")
-
-                Glide.with(context.applicationContext)
-                    .load(Uri.parse(profilePicture))
-                    .placeholder(R.drawable.ic_avatar_male)
-                    .circleCrop()
-                    .into(userImageTV)
+                userImageTV.loadProfilePicture(
+                    this.profilePicture,
+                    this.profilePicture
+                )
             } else {
 
                 Glide.with(context.applicationContext)

@@ -31,7 +31,8 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_SELECT_OTHER_CITY = "$moduleName/selectOtherCity"
     const val FRAGMENT_SELECT_CLUSTER = "$moduleName/selectCluster"
     const val FRAGMENT_INPUT_SALARY = "$moduleName/inputSalaryComponents"
-
+    const val FRAGMENT_CHANGE_TL = "$moduleName/changeTeamLeaderBottomSheetFragment"
+    const val FRAGMENT_JOINING_DROP_SELECTION_2 = "$moduleName/dropSelection2"
 
 
 }

@@ -3,7 +3,6 @@ package com.gigforce.lead_management.models
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.lead_management.views.LeadActivationViewTypes
-import com.google.gson.annotations.SerializedName
 
 open class ApplicationChecklistRecyclerItemData(
     val type: Int

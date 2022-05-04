@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.repository
 
+import android.view.View
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentReference
 import javax.inject.Inject

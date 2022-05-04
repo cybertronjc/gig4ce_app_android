@@ -1,15 +1,17 @@
 package com.gigforce.common_ui.repository.gig
 
 import android.location.Location
+import com.gigforce.common_ui.ext.bodyOrThrow
+import com.gigforce.common_ui.remote.GigService
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
-import com.gigforce.core.StringConstants
-import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.common_ui.viewdatamodels.gig.GigInfoBasicApiModel
 import com.gigforce.core.datamodels.gigpage.BussinessLocation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.JobProfileFull
 import com.gigforce.core.extensions.*
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.user_tracking.models.UserGigLocationTrack
 import com.gigforce.user_tracking.models.UserLocation
@@ -20,20 +22,33 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-open class GigsRepository : BaseFirestoreDBRepository() {
+@Singleton
+class GigsRepository @Inject constructor(
+    private val gigService: GigService
+) : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String =
         COLLECTION_NAME
 
-    val getCurrentUserGigs : Query by lazy { getCollectionReference().whereEqualTo("gigerId", getUID())}
+    val getCurrentUserGigs: Query by lazy {
+        getCollectionReference().whereEqualTo(
+            "gigerId",
+            getUID()
+        )
+    }
 
     private val userLocationCollectionRef: CollectionReference by lazy {
         db.collection("UserLocations")
@@ -355,6 +370,34 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    fun getUpcomingGigs(): Flow<List<Gig>> = flow {
+        val upcomingGigs = gigService.getNext7DaysUpcomingGigs().bodyOrThrow()
+        val mappedGigs = upcomingGigs.map {
+            it.toGig()
+        }.filter {
+            !it.isCheckInAndCheckOutMarked()
+        }
+        emit(mappedGigs)
+    }
+
+    fun getGigsForADay(
+        localDate: LocalDate
+    ): Flow<List<GigInfoBasicApiModel>> = flow {
+        val finalDateInYYMMDD = DateTimeFormatter.ISO_DATE.format(localDate)
+        emit(gigService.getGigsForDate(finalDateInYYMMDD).bodyOrThrow())
+    }
+
+    suspend fun getGigDetails(
+        gigId: String
+    ): Gig {
+       val gigDataFromApi =  gigService.getGigDetails(
+            gigId
+        ).bodyOrThrow()
+            .first()
+
+        val gig = gigDataFromApi.toGigModel()
+        return gig
+    }
 
     companion object {
         const val COLLECTION_NAME = "Gigs"

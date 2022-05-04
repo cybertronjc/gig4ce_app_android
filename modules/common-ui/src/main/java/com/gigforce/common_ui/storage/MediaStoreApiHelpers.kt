@@ -10,7 +10,7 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.RequiresApi
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.ScopedStorageConstants
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -25,9 +25,9 @@ object MediaStoreApiHelpers {
         val mimeType = ImageMetaDataHelpers.getImageMimeType(context, uri)
         val newFileName = if(mimeType != null){
             val extension = getExtensionFromMimeType(mimeType)
-            "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
+            "IMG-${DateUtil.getFullDateTimeStamp()}.$extension"
         } else{
-            "IMG-${DateHelper.getFullDateTimeStamp()}"
+            "IMG-${DateUtil.getFullDateTimeStamp()}"
         }
 
         saveImageToGallery(
@@ -73,9 +73,9 @@ object MediaStoreApiHelpers {
         val mimeType = ImageMetaDataHelpers.getImageMimeType(context, uri)
         val newFileName = if(mimeType != null){
             val extension = getExtensionFromMimeType(mimeType)
-            "VID-${DateHelper.getFullDateTimeStamp()}.$extension"
+            "VID-${DateUtil.getFullDateTimeStamp()}.$extension"
         } else{
-            "VID-${DateHelper.getFullDateTimeStamp()}"
+            "VID-${DateUtil.getFullDateTimeStamp()}"
         }
 
         saveVideoToGallery(
@@ -120,9 +120,9 @@ object MediaStoreApiHelpers {
         val mimeType = ImageMetaDataHelpers.getImageMimeType(context, uri)
         val newFileName = if(mimeType != null){
             val extension = getExtensionFromMimeType(mimeType)
-            "DOC-${DateHelper.getFullDateTimeStamp()}.$extension"
+            "DOC-${DateUtil.getFullDateTimeStamp()}.$extension"
         } else{
-            "DOC-${DateHelper.getFullDateTimeStamp()}"
+            "DOC-${DateUtil.getFullDateTimeStamp()}"
         }
 
         saveDocumentToDownloads(

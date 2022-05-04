@@ -161,4 +161,6 @@ dependencies {
     implementation 'com.akexorcist:localization:1.2.10'
 
     api "com.toastfix:toastcompatwrapper:1.2.0"
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

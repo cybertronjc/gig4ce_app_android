@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.core.extensions.px
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 
 
+@AndroidEntryPoint
 abstract class RosterBaseFragment: Fragment() {
 
-    val rosterViewModel: RosterDayViewModel by activityViewModels<RosterDayViewModel>()
+    val rosterViewModel: RosterDayViewModel by activityViewModels()
 
 
     val marginCardStart = 95.px

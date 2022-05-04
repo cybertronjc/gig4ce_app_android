@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.giger_app.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.gig_page_expanded.*
 
+@AndroidEntryPoint
 class GigPageExpanded: RosterBaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,

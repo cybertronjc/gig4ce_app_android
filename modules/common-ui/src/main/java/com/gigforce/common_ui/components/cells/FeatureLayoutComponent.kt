@@ -87,6 +87,10 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
         see_more_btn.visible()
     }
 
+    fun setOnClickListenerOnRootLayout(listener : () -> Unit){
+        top_cl.setOnClickListener { listener.invoke() }
+    }
+
     override fun bind(data: Any?) {
         if (data is FeatureLayoutDVM) {
             if (data.title.isNotEmpty() && data.title.isNotBlank()) {

@@ -7,15 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.google.firebase.Timestamp
@@ -26,7 +29,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -35,33 +41,62 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-class GigViewModel constructor(
-    private val gigsRepository: GigsRepository = GigsRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-
+@HiltViewModel
+class GigViewModel @Inject constructor(
+    private val gigsRepository: GigsRepository,
+    private val firebaseStorage: FirebaseStorage,
+    private val attendanceRepository: GigAttendanceRepository,
+    private val logger: GigforceLogger,
+    private val firebaseRemoteConfig: FirebaseRemoteConfig,
+    private val profileFirebaseRepository : GigerProfileFirebaseRepository
 ) : ViewModel() {
-    private val profileFirebaseRepository =
-        GigerProfileFirebaseRepository()
+
+    companion object {
+        const val TAG = "GigViewModel"
+        const val REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT = "min_time_btw_check_in_check_out"
+    }
+
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
+    //SharedViewModels
+
     var currentGig: Gig? = null
+    private lateinit var gigSharedViewModel: SharedGigViewModel
 
-    var gigOrder: GigOrder? = null
-
-
-    private val currentUser: FirebaseUser by lazy {
-        FirebaseAuth.getInstance().currentUser!!
-    }
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
+
+    private val declineButtonVisibilityChangeCheckRunnable = CheckInButtonEnableCheckingRunnable()
+    private val scheduledThreadPoolExecutor: ScheduledThreadPoolExecutor by lazy {
+        ScheduledThreadPoolExecutor(1)
+    }
+
+    fun setSharedGigViewModel(
+        gigSharedViewModel: SharedGigViewModel
+    ) = viewModelScope.launch{
+        this@GigViewModel.gigSharedViewModel = gigSharedViewModel
+        this@GigViewModel.gigSharedViewModel.gigSharedViewModelState.collect {
+
+            when(it){
+                is SharedGigViewState.UserDeclinedGig -> gigsDeclined(
+                    gigIds = it.gigIds,
+                    reason = it.reason
+                )
+                else -> {}
+            }
+        }
+    }
 
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
@@ -77,8 +112,8 @@ class GigViewModel constructor(
             }
     }
 
-    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>>()
-    val markingAttendanceState: LiveData<Lce<AttendanceType>> get() = _markingAttendanceState
+    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>?>()
+    val markingAttendanceState: LiveData<Lce<AttendanceType>?> get() = _markingAttendanceState
 
     fun markAttendance(
         location: Location?,
@@ -93,6 +128,7 @@ class GigViewModel constructor(
         if (!gig.isCheckInMarked()) {
 
             markCheckIn(
+                gig = gig,
                 gigId = gig.gigId,
                 location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
@@ -101,13 +137,15 @@ class GigViewModel constructor(
                 remarks = remarks,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
+
         } else if (!gig.isCheckOutMarked()) {
 
             val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
             val currentTime = LocalDateTime.now()
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
 
-            if (minutes < 2L) {
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
+            if (minutes < minTimeBtwCheckInCheckOut) {
                 Log.d(
                     "GigViewModel",
                     "Ignoring checkout call as difference between checkin-time and current time is less than 15 mins"
@@ -116,6 +154,7 @@ class GigViewModel constructor(
             }
 
             markCheckOut(
+                gig = gig,
                 gigId = gig.gigId,
                 location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
@@ -132,7 +171,23 @@ class GigViewModel constructor(
         }
     }
 
+    private fun getMinAllowedTimeBetweenCheckInAndCheckOut(): Long {
+        val minTimeBtwCheckInCheckOutString = try {
+            firebaseRemoteConfig.getLong(
+                REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT
+            )
+        } catch (e: Exception) {
+            0L
+        }
+        return if (minTimeBtwCheckInCheckOutString < 1L) {
+            2L
+        } else {
+            minTimeBtwCheckInCheckOutString
+        }
+    }
+
     private suspend fun markCheckIn(
+        gig: Gig,
         gigId: String,
         location: Location?,
         distanceBetweenGigAndUser: Float,
@@ -144,25 +199,41 @@ class GigViewModel constructor(
         _markingAttendanceState.value = Lce.loading()
 
         try {
-            gigsRepository.markCheckIn(
+            attendanceRepository.markCheckIn(
                 gigId = gigId,
-                location = location,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkInTime = Timestamp.now(),
-                checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = remarks,
+                imagePathInFirebase = image,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                markingAddress = locationPhysicalAddress,
+                locationFake = location?.isFromMockProvider,
+                locationAccuracy = location?.accuracy,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_IN)
             _markingAttendanceState.value = null
+
+
+            val updatedGig = gig.copy(
+                attendance = GigAttendance(
+                    checkInMarked = true,
+                    checkInTime = Date(),
+                    checkInLat = location?.latitude ?: 0.0,
+                    checkInLong = location?.longitude ?: 0.0,
+                    checkInImage = image,
+                    checkInAddress = locationPhysicalAddress
+                )
+            )
+            currentGig = updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
+            attachCheckInButtonVisibilityCheckRunnable()
         } catch (e: Exception) {
-            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = Lce.error(e.message ?: "Unable to mark check-in")
             _markingAttendanceState.value = null
         }
     }
 
     private suspend fun markCheckOut(
+        gig: Gig,
         gigId: String,
         location: Location?,
         distanceBetweenGigAndUser: Float,
@@ -174,20 +245,44 @@ class GigViewModel constructor(
         _markingAttendanceState.value = Lce.loading()
 
         try {
-            gigsRepository.markCheckOut(
+            attendanceRepository.markCheckOut(
                 gigId = gigId,
-                location = location,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkOutTime = Timestamp.now(),
-                checkOutTimeAccToUser = checkOutTimeAccToUser,
-                remarks = remarks,
+                imagePathInFirebase = image,
+                latitude = location?.latitude,
+                longitude = location?.longitude,
+                markingAddress = locationPhysicalAddress,
+                locationFake = location?.isFromMockProvider,
+                locationAccuracy = location?.accuracy,
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
             _markingAttendanceState.value = null
+
+            val updatedAttendanceItem = gig.attendance ?: GigAttendance(
+                checkInMarked = true,
+                checkInTime = Date(),
+                checkInLat = location?.latitude ?: 0.0,
+                checkInLong = location?.longitude ?: 0.0,
+                checkInImage = image,
+                checkInAddress = locationPhysicalAddress
+            )
+            updatedAttendanceItem.apply {
+                setCheckout(
+                    checkOutMarked = true,
+                    checkOutTime = Date(),
+                    checkOutLat = location?.latitude ?: 0.0,
+                    checkOutLong = location?.longitude ?: 0.0,
+                    checkOutImage = image,
+                    checkOutAddress = locationPhysicalAddress
+                )
+            }
+            val updatedGig = gig.copy(
+                attendance = updatedAttendanceItem
+            )
+            currentGig = updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
         } catch (e: Exception) {
-            _markingAttendanceState.value = Lce.error(e.toString())
+            _markingAttendanceState.value = Lce.error(e.message ?: "Unable to mark check-out")
             _markingAttendanceState.value = null
         }
     }
@@ -214,7 +309,11 @@ class GigViewModel constructor(
                     gigs.add(it)
                 }
             } catch (e: Exception) {
-                CrashlyticsLogger.e("GigViewModel - extractGigs","while desearializing gig data",e)
+                CrashlyticsLogger.e(
+                    "GigViewModel - extractGigs",
+                    "while desearializing gig data",
+                    e
+                )
             }
         }
 
@@ -229,19 +328,27 @@ class GigViewModel constructor(
     private val _gigDetails = MutableLiveData<Lce<Gig>>()
     val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
 
-    fun watchGig(gigId: String, shouldGetContactdetails: Boolean = false) {
+    fun fetchGigDetails(
+        gigId: String,
+        shouldGetContactdetails: Boolean = false
+    ) = viewModelScope.launch {
         _gigDetails.value = Lce.loading()
-        mWatchUpcomingRepoRegistration = gigsRepository
-            .getCollectionReference()
-            .document(gigId)
-            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+        logger.d(TAG, "Fetching gig details $gigId...")
 
-                if (documentSnapshot != null) {
-                    extractGigData(documentSnapshot, shouldGetContactdetails)
-                } else {
-                    _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
-                }
-            }
+        try {
+
+            val gig = gigsRepository.getGigDetails(gigId)
+            currentGig = gig
+
+            _gigDetails.value = Lce.content(gig)
+            logger.d(TAG, "[Success] gig details fetched")
+        } catch (e: Exception) {
+
+            _gigDetails.value = Lce.error(
+                e.message ?: "Unable to load Gig Details"
+            )
+            logger.e(TAG, "[Failure] gig details fetched error", e)
+        }
     }
 
     fun getGigWithDetails(gigId: String) = viewModelScope.launch {
@@ -308,7 +415,7 @@ class GigViewModel constructor(
 
             if (shouldGetContactdetails
                 && gig.businessContact != null
-                && (gig.businessContact?.uid != null || gig.businessContact?.uuid != null )
+                && (gig.businessContact?.uid != null || gig.businessContact?.uuid != null)
             ) {
 
                 val businessContactUid = gig.businessContact?.uid ?: gig.businessContact?.uuid
@@ -383,12 +490,6 @@ class GigViewModel constructor(
 
             gig
         }.onSuccess {
-
-            gigOrder = try {
-                getGigOrder(it.gigOrderId)
-            }catch (e: Exception){
-                null
-            }
             //gigOrder = getGigOrder(it.gigOrderId)
             _gigDetails.value = Lce.content(it)
         }.onFailure {
@@ -430,7 +531,7 @@ class GigViewModel constructor(
 
     }
 
-    suspend fun getGigOrder(gigorderId: String) : GigOrder?{
+    suspend fun getGigOrder(gigorderId: String): GigOrder? {
         try {
             var myGIgOrder: GigOrder? = GigOrder()
             val await = gigsRepository.db.collection("Gig_Order")
@@ -441,7 +542,7 @@ class GigViewModel constructor(
             }
 
             return myGIgOrder
-        }catch (e: Exception){
+        } catch (e: Exception) {
             return GigOrder()
         }
     }
@@ -487,6 +588,7 @@ class GigViewModel constructor(
         mWatchUpcomingRepoRegistration?.remove()
         mWatchSingleGigRegistration?.remove()
         mWatchTodaysGigRegistration?.remove()
+        detachCheckInButtonVisibilityCheckRunnable()
     }
 
 
@@ -494,6 +596,7 @@ class GigViewModel constructor(
     val submitGigRatingState: LiveData<Lse> get() = _submitGigRatingState
 
     fun submitGigFeedback(
+        sharedGigViewModel: SharedGigViewModel,
         gigId: String,
         rating: Float,
         feedback: String,
@@ -512,6 +615,10 @@ class GigViewModel constructor(
                     )
                 )
 
+            sharedGigViewModel.userRatedGig(
+                rating,
+                feedback
+            )
             _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {
             _submitGigRatingState.value = Lse.error(e.message!!)
@@ -580,28 +687,22 @@ class GigViewModel constructor(
     fun declineGig(
         gigId: String,
         reason: String,
-        isDeclinedByTL : Boolean
+        isDeclinedByTL: Boolean
     ) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 
         try {
-            val gig = getGigNow(gigId)
-
-            gigsRepository
-                .getCollectionReference()
-                .document(gig.gigId)
-                .updateOrThrow(
-                    mapOf(
-                        "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                        "declinedBy" to gig.gigerId,
-                        "declineReason" to reason,
-                        "declinedOn" to Timestamp.now(),
-                        "attendance" to null,
-                        "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
-                    )
-                )
+            attendanceRepository.markDecline(
+                gigId = gigId,
+                reasonId = reason,
+                reason = reason
+            )
 
             _declineGig.value = Lse.success()
+            gigsDeclined(
+                listOf(gigId),
+                reason
+            )
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
             FirebaseCrashlytics.getInstance().apply {
@@ -618,17 +719,11 @@ class GigViewModel constructor(
             gigIds.forEach {
 
                 val gig = getGigNow(it)
-                gigsRepository
-                    .getCollectionReference()
-                    .document(gig.gigId)
-                    .updateOrThrow(
-                        mapOf(
-                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                            "declinedBy" to gig.gigerId,
-                            "declineReason" to reason,
-                            "declinedOn" to Timestamp.now()
-                        )
-                    )
+                attendanceRepository.markDecline(
+                    gigId = gig.gigId,
+                    reasonId = reason,
+                    reason = reason
+                )
             }
 
             _declineGig.value = Lse.success()
@@ -642,8 +737,8 @@ class GigViewModel constructor(
     }
 
 
-    private val _todaysGigs = MutableLiveData<Lce<List<Gig>>>()
-    val todaysGigs: LiveData<Lce<List<Gig>>> get() = _todaysGigs
+    private val _todaysGigs = MutableLiveData<Lce<List<Gig>>?>()
+    val todaysGigs: LiveData<Lce<List<Gig>>?> get() = _todaysGigs
 
     fun startWatchingTodaysOngoingAndUpcomingGig(date: LocalDate) {
         Log.d("GigViewModel", "Started Watching gigs for $date")
@@ -704,39 +799,6 @@ class GigViewModel constructor(
 
     }
 
-    private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
-    val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
-
-    fun getGigsForMonth(
-        gigOrderId: String,
-        month: Int,
-        year: Int
-    ) = viewModelScope.launch {
-
-        val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
-        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1)
-
-        try {
-            _monthlyGigs.value = Lce.loading()
-            val querySnap = gigsRepository
-                .getCurrentUserGigs
-                .whereEqualTo("gigerId", currentUser.uid)
-                .whereEqualTo("gigOrderId", gigOrderId)
-                .whereGreaterThan("startDateTime", monthStart.toDate)
-                .whereLessThan("startDateTime", monthEnd.toDate)
-                .getOrThrow()
-
-            val gigs = extractGigs(querySnap)
-            _monthlyGigs.value = Lce.content(gigs)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().apply {
-                recordException(e)
-            }
-            e.printStackTrace()
-            _monthlyGigs.value = Lce.error(e.message!!)
-        }
-    }
-
     private val _requestAttendanceRegularisation = MutableLiveData<Lse>()
     val requestAttendanceRegularisation: LiveData<Lse> get() = _requestAttendanceRegularisation
 
@@ -767,31 +829,101 @@ class GigViewModel constructor(
         }
     }
 
-    private val _observableProfile: MutableLiveData<ProfileData> = MutableLiveData()
-    val observableProfile: MutableLiveData<ProfileData> = _observableProfile
-
-    fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
-        checkForChatProfile(loginMobile)
+    fun getUid(): String {
+        return gigsRepository.getUID()
     }
 
-    suspend fun checkForChatProfile(loginMobile: String) {
-        try {
 
-            val profiles =
-                gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile)
-                    .get().await()
-            if (!profiles.documents.isNullOrEmpty()) {
-                val toObject = profiles.documents[0].toObject(ProfileData::class.java)
-                toObject?.id = profiles.documents[0].id
-                _observableProfile.value = toObject
+    private inner class CheckInButtonEnableCheckingRunnable : Runnable {
+
+        override fun run() {
+            val gig = currentGig ?: return
+
+            val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
+            val currentTime = LocalDateTime.now()
+            val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
+            if (minutes < minTimeBtwCheckInCheckOut) {
+                logger.d(
+                    TAG,
+                    "CheckInButtonEnableCheckingRunnable() - Diff between checkin and earliest checkout time - $minutes , min minutes btw checkin and checkout $minTimeBtwCheckInCheckOut mins"
+                )
+            } else {
+                logger.d(
+                    TAG,
+                    "CheckInButtonEnableCheckingRunnable() - Enabling checkout button..."
+                )
+
+                _gigDetails.postValue(Lce.content(gig))
+                detachCheckInButtonVisibilityCheckRunnable()
             }
-
-        } catch (e: Exception) {
-
         }
     }
 
-    fun getUid(): String {
-        return gigsRepository.getUID()
+    private fun attachCheckInButtonVisibilityCheckRunnable() {
+        logger.d(
+            TAG,
+            "attaching declineButtonVisibilityChangeCheckRunnable..."
+        )
+
+        try {
+            scheduledThreadPoolExecutor.scheduleWithFixedDelay(
+                declineButtonVisibilityChangeCheckRunnable,
+                1L,
+                1L,
+                TimeUnit.MINUTES
+            )
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "Unable to detach checkRu runnable",
+                e
+            )
+        }
+
+    }
+
+    private fun detachCheckInButtonVisibilityCheckRunnable() {
+
+        try {
+            logger.d(
+                TAG,
+                "detaching declineButtonVisibilityChangeCheckRunnable..."
+            )
+
+            scheduledThreadPoolExecutor.remove(declineButtonVisibilityChangeCheckRunnable)
+            scheduledThreadPoolExecutor.purge()
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "Unable to detach detachCheckInButtonVisibilityCheckRunnable runnable",
+                e
+            )
+        }
+    }
+
+    fun userRatedTheGig(rating: Float, feedback: String?) {
+        val gig = currentGig ?: return
+        gig.gigUserFeedback = feedback
+        gig.gigRating = rating
+        _gigDetails.postValue(Lce.content(gig))
+    }
+
+    private fun gigsDeclined(
+        gigIds :List<String>,
+        reason: String
+    ){
+
+        if (currentGig?.gigId != null && gigIds.contains(currentGig!!.gigId)) {
+
+            val gig = currentGig ?: return
+            val updatedGig = gig.copy(
+                gigStatus = GigStatus.DECLINED.getStatusString(),
+                declineReason = reason
+            )
+            currentGig= updatedGig
+            _gigDetails.postValue(Lce.content(updatedGig))
+        }
     }
 }

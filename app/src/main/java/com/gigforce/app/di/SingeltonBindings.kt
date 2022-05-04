@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.*
 import com.gigforce.common_ui.remote.verification.VerificationKycService
+import com.gigforce.core.CoreConstants
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
@@ -17,6 +18,7 @@ import com.gigforce.giger_gigs.travelling_info.TravellingService
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Binds
 import dagger.Module
@@ -36,6 +38,16 @@ abstract class SingeltonBindings {
 
     companion object {
 
+        @Provides
+        fun provideGlobalSharedPreferences(
+            @ApplicationContext appContext: Context
+        ): SharedPreferences {
+            return appContext.getSharedPreferences(
+                CoreConstants.SHARED_PREFERENCE_DB,
+                Context.MODE_PRIVATE
+            )!!
+        }
+
         //Base
         @Provides
         fun provideFirebaseFirestore(): FirebaseFirestore {
@@ -45,6 +57,12 @@ abstract class SingeltonBindings {
         @Provides
         fun provideFirebaseStorage(): FirebaseStorage {
             return FirebaseStorage.getInstance()
+        }
+
+        @Singleton
+        @Provides
+        fun provideFirebaseRemoteConfig() : FirebaseRemoteConfig{
+            return FirebaseRemoteConfig.getInstance()
         }
 
         @Provides

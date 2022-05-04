@@ -88,7 +88,6 @@ fun View.invisible() {
 
 
 val LocalDateTime.toDate: Date
-    @RequiresApi(Build.VERSION_CODES.O)
     get() {
         return Date.from(this.atZone(ZoneId.systemDefault()).toInstant())
     }

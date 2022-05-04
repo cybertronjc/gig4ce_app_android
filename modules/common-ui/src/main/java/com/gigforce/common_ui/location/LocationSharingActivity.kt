@@ -27,14 +27,13 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.databinding.ActivityLocationSharingBinding
 import com.gigforce.common_ui.ext.onTabSelected
-import com.gigforce.common_ui.viewdatamodels.chat.LiveLocationInfo
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_HEADER_ID
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_TYPE
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.image.ImageUtils
@@ -449,7 +448,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         if (googleMap != null) {
             googleMap!!.snapshot {
 
-                val file = File(filesDir, "map-${DateHelper.getFullDateTimeStamp()}.png")
+                val file = File(filesDir, "map-${DateUtil.getFullDateTimeStamp()}.png")
                 ImageUtils.writeBitmapToDisk(it, file)
 
                 val resultIntent = Intent()

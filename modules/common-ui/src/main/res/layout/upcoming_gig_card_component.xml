@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageView
+        <com.gigforce.common_ui.views.GigforceImageView
             android:id="@+id/companyLogoIV"
             android:layout_width="24dp"
             android:layout_height="24dp"

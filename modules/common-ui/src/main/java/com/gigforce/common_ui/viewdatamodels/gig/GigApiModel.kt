@@ -1,25 +1,27 @@
 package com.gigforce.common_ui.viewdatamodels.gig
 
-import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.GigAttendance
-import com.gigforce.core.datamodels.gigpage.JobProfile
+import android.os.Looper
+import com.gigforce.common_ui.datamodels.attendance.GigerAttedance
+import com.gigforce.core.datamodels.gigpage.*
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.toDate
 import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.log
 
 data class GigApiModel(
 
     @field:SerializedName("checkInAfterSlot")
-    val checkInAfterSlot: String,
+    val checkInAfterSlot: Timestamp,
 
     @field:SerializedName("gigRating")
-    val gigRating: Int? = null,
+    val gigRating: Float? = null,
 
     @field:SerializedName("checkInAfterBuffer")
-    val checkInAfterBuffer: String,
+    val checkInAfterBuffer: Timestamp,
 
     @field:SerializedName("gigerId")
     val gigerId: String? = null,
@@ -34,16 +36,16 @@ data class GigApiModel(
     val gigDate: String? = null,
 
     @field:SerializedName("legalEntity")
-    val legalEntity: LegalEntity? = null,
+    val legalEntity: LegalEntityApiModel? = null,
 
     @field:SerializedName("isMonthlyGig")
     val isMonthlyGig: Boolean? = null,
 
     @field:SerializedName("gigUserFeedbackAttachments")
-    val gigUserFeedbackAttachments: List<Any?>? = null,
+    val gigUserFeedbackAttachments: List<String>? = null,
 
     @field:SerializedName("assignOn")
-    val assignOn: String,
+    val assignOn: Timestamp?,
 
     @field:SerializedName("requirementId")
     val requirementId: String? = null,
@@ -55,7 +57,7 @@ data class GigApiModel(
     val address: String? = null,
 
     @field:SerializedName("checkOutBeforeSlot")
-    val checkOutBeforeSlot: String? = null,
+    val checkOutBeforeSlot: Timestamp,
 
     @field:SerializedName("updatedBy")
     val updatedBy: String? = null,
@@ -64,7 +66,7 @@ data class GigApiModel(
     val agencyContact: AgencyContact? = null,
 
     @field:SerializedName("checkOutAfterBuffer")
-    val checkOutAfterBuffer: String,
+    val checkOutAfterBuffer: Timestamp,
 
     @field:SerializedName("businessContact")
     val businessContact: BusinessContact? = null,
@@ -76,19 +78,19 @@ data class GigApiModel(
     val profile: Profile? = null,
 
     @field:SerializedName("checkOutAfterSlot")
-    val checkOutAfterSlot: String,
+    val checkOutAfterSlot: Timestamp,
 
     @field:SerializedName("autoCheckout")
     val autoCheckout: String? = null,
 
     @field:SerializedName("checkInBeforeBuffer")
-    val checkInBeforeBuffer: String,
+    val checkInBeforeBuffer: Timestamp,
 
     @field:SerializedName("endDateTime")
-    val endDateTime: String,
+    val endDateTime: Timestamp,
 
     @field:SerializedName("checkOutBeforeBuffer")
-    val checkOutBeforeBuffer: String,
+    val checkOutBeforeBuffer: Timestamp,
 
     @field:SerializedName("giger")
     val giger: Giger? = null,
@@ -97,7 +99,7 @@ data class GigApiModel(
     val gigStatus: String,
 
     @field:SerializedName("startDateTime")
-    val startDateTime: String,
+    val startDateTime: Timestamp,
 
     @field:SerializedName("isFullDay")
     val isFullDay: Boolean? = null,
@@ -106,7 +108,7 @@ data class GigApiModel(
     val gigOrderId: String? = null,
 
     @field:SerializedName("checkInBeforeSlot")
-    val checkInBeforeSlot: String,
+    val checkInBeforeSlot: Timestamp,
 
     @field:SerializedName("_id")
     val id: String? = null,
@@ -114,8 +116,8 @@ data class GigApiModel(
     @field:SerializedName("workOrderId")
     val workOrderId: String? = null,
 
-    @field:SerializedName("attendance")
-    val attendance: Attendance? = null,
+    @field:SerializedName("gigerAttedance")
+    var gigerAttedance: GigerAttedance? = null,
 
     @field:SerializedName("title")
     val title: String? = null,
@@ -129,10 +131,17 @@ data class GigApiModel(
     @field:SerializedName("longitude")
     var longitude: Double? = null,
 
+    @field:SerializedName("attendance")
+    val attendance: Attendance? = null,
+
+    @field:SerializedName("olr")
+    var olr: String? = null,
+    var activityConfig : ActivityConfig?=null
 
     ) {
 
     fun toGigModel(): Gig {
+
         return Gig(
             tag = "",
             gigId = id ?: "",
@@ -150,19 +159,19 @@ data class GigApiModel(
             cancellationReason = "",
             companyName = null,
             companyLogo = null,
-            startDateTime = startDateTime.toTimestamp(),
-            checkInBeforeTime = checkInBeforeBuffer.toTimestamp(),
-            checkInBeforeBufferTime = checkInBeforeBuffer.toTimestamp(),
-            checkInAfterBufferTime = checkInAfterBuffer.toTimestamp(),
-            checkInAfterTime = checkInAfterSlot.toTimestamp(),
-            endDateTime = endDateTime.toTimestamp(),
-            checkOutBeforeTime = checkOutAfterSlot.toTimestamp(),
-            checkOutBeforeBufferTime = checkOutBeforeBuffer.toTimestamp(),
-            checkOutAfterBufferTime = checkOutAfterBuffer.toTimestamp(),
-            checkOutAfterTime = checkOutAfterSlot.toTimestamp(),
-            agencyContact = null,
-            businessContact = null,
-            assignedOn = assignOn.toTimestamp(),
+            startDateTime = startDateTime,
+            checkInBeforeTime = checkInBeforeBuffer,
+            checkInBeforeBufferTime = checkInBeforeBuffer,
+            checkInAfterBufferTime = checkInAfterBuffer,
+            checkInAfterTime = checkInAfterSlot,
+            endDateTime = endDateTime,
+            checkOutBeforeTime = checkOutBeforeSlot,
+            checkOutBeforeBufferTime = checkOutBeforeBuffer,
+            checkOutAfterBufferTime = checkOutAfterBuffer,
+            checkOutAfterTime = checkOutAfterSlot,
+            agencyContact = agencyContact?.toContactPerson(),
+            businessContact = businessContact?.toContactPerson(),
+            assignedOn = assignOn,
             checkInBeforeTimeBufferInMins = 0,
             checkInAfterTimeBufferInMins = 0,
             checkOutBeforeTimeBufferInMins = 0,
@@ -172,19 +181,15 @@ data class GigApiModel(
             isFavourite = false,
             isGigCompleted = false,
             isPaymentDone = false,
-            isMonthlyGig = false,
-            isFullDay = false,
-            gigOrderId = "",
-            profile = JobProfile(
-                id = null,
-                activationCode = null,
-                title = null
-            ),
-            legalEntity = null,
+            isMonthlyGig = isMonthlyGig ?: false,
+            isFullDay = isFullDay ?: false,
+            gigOrderId = gigOrderId ?: "",
+            profile = profile?.toJobProfilePresentationModel() ?: JobProfile(),
+            legalEntity = legalEntity?.toPresentationLegalEnitityModel(),
             keywords = listOf(),
-            gigRating = 0.0f,
-            gigUserFeedback = null,
-            gigUserFeedbackAttachments = listOf(),
+            gigRating = gigRating ?: 0.0f,
+            gigUserFeedback = gigUserFeedback,
+            gigUserFeedbackAttachments = gigUserFeedbackAttachments ?: emptyList(),
             locationPictures = listOf(),
             ratingUserReceived = 0.0f,
             feedbackUserReceived = null,
@@ -198,14 +203,14 @@ data class GigApiModel(
             } else {
                 GigAttendance().apply {
                     this.checkInMarked = attendance.checkInMarked ?: false
-                    this.checkInTime = attendance.checkInTime.toDate()
+                    this.checkInTime = DateUtil.getDateFromUTCDateTimeStringOrNull(attendance.checkInTime)
                     this.checkInLat = attendance.checkInLat ?: 0.0
                     this.checkInLong = attendance.checkInLong ?: 0.0
                     this.checkInImage = attendance.checkInImage ?: ""
 
                     this.checkOutMarked = attendance.checkOutMarked ?: false
                     this.checkOutAddress = attendance.checkOutAddress ?: ""
-                    this.checkOutTime = attendance.checkOutTime.toDate()
+                    this.checkOutTime = DateUtil.getDateFromUTCDateTimeStringOrNull(attendance.checkOutTime)
                     this.checkOutLat = attendance.checkOutLat ?: 0.0
                     this.checkOutLong = attendance.checkOutLong ?: 0.0
                 }
@@ -216,41 +221,15 @@ data class GigApiModel(
             payoutDetails = null,
             isNewGig = isNewGig,
             regularisationRequest = null,
-            chatInfo = mapOf()
+            chatInfo = mapOf(),
+            offerLetter = olr,
+            activityConfig = activityConfig
         )
     }
 
-    private fun String.toTimestamp(): Timestamp {
-
-        val localDateTime = LocalDateTime.parse(
-            this,
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        )
-        val dateFromServer =  localDateTime.toDate
-
-        val newTime : Long = dateFromServer.time + 19800000L //5.5 Hour
-        return Timestamp(Date(newTime))
-    }
-
-    private fun String?.toDate(): Date? {
-        if (this == null) {
-            return null
-        } else {
-            val localDateTime = LocalDateTime.parse(
-                this,
-                DateTimeFormatter.ISO_OFFSET_DATE_TIME
-            )
-            localDateTime.plusHours(5L)
-            localDateTime.plusMinutes(30L)
-            val dateFromServer =  localDateTime.toDate
-
-            val newTime : Long = dateFromServer.time + 19800000L //5.5 Hour
-            return Date(newTime)
-        }
-    }
 }
 
-data class LegalEntity(
+data class LegalEntityApiModel(
 
     @field:SerializedName("tradingName")
     val tradingName: String? = null,
@@ -263,7 +242,17 @@ data class LegalEntity(
 
     @field:SerializedName("id")
     val id: String? = null
-)
+){
+
+    fun toPresentationLegalEnitityModel() : LegalEntity {
+        return LegalEntity(
+            id = id,
+            logo = logo,
+            name = name,
+            tradingName = tradingName
+        )
+    }
+}
 
 data class Profile(
 
@@ -272,7 +261,16 @@ data class Profile(
 
     @field:SerializedName("title")
     val title: String? = null
-)
+){
+
+    fun toJobProfilePresentationModel() : JobProfile{
+        return JobProfile(
+            id = id,
+            activationCode = null,
+            title = title
+        )
+    }
+}
 
 data class BusinessContact(
 
@@ -284,6 +282,9 @@ data class BusinessContact(
 
     @field:SerializedName("designation")
     val designation: String? = null,
+
+    @field:SerializedName("uuid")
+    val uid: String? = null,
 
     @field:SerializedName("id")
     val id: String? = null,
@@ -304,8 +305,25 @@ data class BusinessContact(
     val email: String? = null,
 
     @field:SerializedName("status")
-    val status: String? = null
-)
+    val status: String? = null,
+
+    @field:SerializedName("profilePicture")
+    val profilePicture: String? = null
+){
+
+    fun toContactPerson() : ContactPerson{
+        return ContactPerson(
+            uid = uid,
+            uuid = uid,
+            name = name,
+            designation = designation,
+            profilePicture = profilePicture,
+            contactNumber = primaryNo,
+            secondaryContactNo =null,
+            companyName = companyName
+        )
+    }
+}
 
 data class Office(
 
@@ -437,5 +455,25 @@ data class AgencyContact(
     val email: String? = null,
 
     @field:SerializedName("status")
-    val status: String? = null
-)
+    val status: String? = null,
+
+    @field:SerializedName("uuid")
+    val uid: String? = null,
+
+    @field:SerializedName("profilePicture")
+    val profilePicture: String? = null
+){
+
+    fun toContactPerson() : ContactPerson{
+        return ContactPerson(
+            uid = uid,
+            uuid = uid,
+            name = name,
+            designation = designation,
+            profilePicture = profilePicture,
+            contactNumber = primaryNo,
+            secondaryContactNo =null,
+            companyName = companyName
+        )
+    }
+}
