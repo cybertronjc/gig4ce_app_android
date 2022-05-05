@@ -75,7 +75,11 @@ enum class GigStatus constructor(
 
         fun fromGig(gig: Gig): GigStatus {
 
-            return getGigStatus(gig)
+            return if (gig.openNewGig()) {
+                getGigStatus(gig)
+            } else {
+                getGigStatusLegacy(gig)
+            }
         }
 
         private fun getGigStatusLegacy(gig: Gig): GigStatus {
@@ -147,7 +151,7 @@ enum class GigStatus constructor(
                 return NO_SHOW
             }
 
-            throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any")
+            throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any for gigId - ${gig.gigId}")
         }
     }
 }
