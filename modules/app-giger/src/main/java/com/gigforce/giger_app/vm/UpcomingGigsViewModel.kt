@@ -1,12 +1,14 @@
 package com.gigforce.giger_app.vm
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.giger_app.repo.IUpcomingGigInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UpcomingGigsViewModel @Inject constructor(
     private val repository: IUpcomingGigInfoRepository,
-    private val gigsRepository: GigsRepository
+    private val gigsRepository: GigsRepository,
+    private val logger : GigforceLogger
     ) :
     ViewModel() {
 
@@ -33,12 +36,15 @@ class UpcomingGigsViewModel @Inject constructor(
     private fun loadData() = viewModelScope.launch{
         try {
             gigsRepository.getUpcomingGigs()
-                .catch {  }
                 .collect {
                     _data.value = it
                 }
         }catch (e:Exception){
-                e.printStackTrace()
+            logger.e(
+                "UpcomingGigsViewModel",
+                "while getting upcomin gigs",
+                e
+            )
         }
     }
 

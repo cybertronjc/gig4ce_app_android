@@ -298,9 +298,6 @@ data class BusinessContact(
     @field:SerializedName("business_id")
     val businessId: String? = null,
 
-    @field:SerializedName("createdOn")
-    val createdOn: String? = null,
-
     @field:SerializedName("email")
     val email: String? = null,
 
@@ -447,9 +444,6 @@ data class AgencyContact(
 
     @field:SerializedName("business_id")
     val businessId: String? = null,
-
-    @field:SerializedName("createdOn")
-    val createdOn: String? = null,
 
     @field:SerializedName("email")
     val email: String? = null,
