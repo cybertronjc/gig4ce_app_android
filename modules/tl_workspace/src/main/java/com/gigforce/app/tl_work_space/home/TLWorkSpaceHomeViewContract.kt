@@ -10,6 +10,10 @@ import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 sealed class TLWorkSpaceHomeViewContract {
     sealed class TLWorkSpaceHomeUiState : UiState {
         object LoadingHomeScreenContent : TLWorkSpaceHomeUiState()
+
+        data class ErrorWhileLoadingScreenContent(
+            val error : String
+        ) : TLWorkSpaceHomeUiState()
     }
 
     sealed class TLWorkSpaceHomeUiEvents : UiEvent {
@@ -18,6 +22,11 @@ sealed class TLWorkSpaceHomeViewContract {
             val sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
             val anchorView: View
         ) : TLWorkSpaceHomeUiEvents()
+
+        data class FilterApplied(
+            val section: TLWorkspaceHomeSection,
+            val filterApplied : TLWorkSpaceFilterOption
+        ) :  TLWorkSpaceHomeUiEvents()
     }
 
     sealed class TLWorkSpaceHomeViewUiEffects : UiEffect{

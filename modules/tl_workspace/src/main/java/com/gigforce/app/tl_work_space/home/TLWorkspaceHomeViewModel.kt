@@ -3,12 +3,12 @@ package com.gigforce.app.tl_work_space.home
 import android.view.View
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceSectionApiModel
-import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
+import com.gigforce.app.domain.models.tl_workspace.*
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,16 +33,16 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     /**
      * Processed Data
      */
-    private var sectionToSelectedFilterMap: Map<
+    private var sectionToSelectedFilterMap: MutableMap<
             TLWorkspaceHomeSection, //Section
-            String? //Currently Selected filter's id
+            TLWorkSpaceFilterOption? //Currently Selected filter
             > = mutableMapOf()
 
     init {
-        getTLWorkSpaceData()
+        startObservingDefaultWorkSpaceData()
     }
 
-    private fun getTLWorkSpaceData() = viewModelScope.launch {
+    private fun startObservingDefaultWorkSpaceData() = viewModelScope.launch {
 
         tlWorkSpaceHomeScreenRepository
             .getWorkspaceSectionAsFlow()
@@ -52,15 +52,118 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             }
     }
 
+    fun refreshWorkSpaceData() = viewModelScope.launch {
+
+        if (currentState is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent) {
+            logger.d(TAG, "ignoring refreshWorkSpaceData call, already loading data , no-op")
+            return@launch
+        }
+
+        var anyFilterOtherThanDefaultAppliedToAnySection = false
+        sectionToSelectedFilterMap.forEach { (_, filterCurrentlyApplied) ->
+
+            // Checking If there any filter (other than default one) is applied to any section
+            if (filterCurrentlyApplied != null && !filterCurrentlyApplied.default) {
+                anyFilterOtherThanDefaultAppliedToAnySection = true
+            }
+        }
+
+        if (anyFilterOtherThanDefaultAppliedToAnySection) {
+            //At least one not default filter has been applied to
+            //one of the section, so we have to fetch latest data once, without updating the cache
+            refreshWorkSpaceDataWithFiltersApplied()
+        } else {
+            // No Filter (excluding default filter) has beeen applied
+            // refreshing data with updating cache
+            tlWorkSpaceHomeScreenRepository.refreshCachedWorkspaceSectionData()
+        }
+    }
+
+    private fun refreshWorkSpaceDataWithFiltersApplied() = viewModelScope.launch {
+        val sectionToRefreshWithFiltersInfo = sectionToSelectedFilterMap.map {
+            RequestedDataItem(
+                filter = it.value?.mapToApiModel(),
+                sectionId = it.key.getSectionId()
+            )
+        }
+
+        setState {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent
+        }
+
+        try {
+            val rawSectionDataFromServer = tlWorkSpaceHomeScreenRepository.getWorkspaceSectionsData(
+                GetTLWorkspaceRequest(
+                    defaultRequest = false,
+                    requestedData = sectionToRefreshWithFiltersInfo
+                )
+            )
+            processDataReceivedFromServerAndUpdateOnView(
+                false,
+                rawSectionDataFromServer
+            )
+        } catch (e: Exception) {
+
+            if (e is IOException) {
+                setState {
+                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                        e.message ?: "Unable to fetch load data"
+                    )
+                }
+            } else {
+
+                setState {
+                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                        "Unable to fetch load data"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun processDataReceivedFromServerAndUpdateOnView(
+        fetchedDataIsOfOneSectionOnly: Boolean,
+        rawSectionDataFromServer: List<TLWorkSpaceSectionApiModel>
+    ) {
+        if (fetchedDataIsOfOneSectionOnly) {
+            //we need to update one section only
+
+
+        } else {
+
+            this.tlWorkSpaceDataRaw = rawSectionDataFromServer
+            if (sectionToSelectedFilterMap.isEmpty()) {
+                /**
+                 * Preparing a map of section id to default selected filter
+                 */
+                this.tlWorkSpaceDataRaw.forEach {
+                    sectionToSelectedFilterMap.put(
+                        TLWorkspaceHomeSection.fromId(it.type!!),
+                        it.filters?.find {
+                            it.default!!
+                        }?.mapToPresentationFilter()
+                    )
+                }
+            } else {
+
+            }
+        }
+
+    }
+
     override fun handleEvent(event: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents) {
         when (event) {
             is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.OpenFilter -> handleOpenFilterClicked(
                 event.sectionOpenFilterClickedFrom,
                 event.anchorView
             )
-            else -> {}
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterApplied -> handleFilterApplied(
+                event.section,
+                event.filterApplied
+            )
         }
     }
+
 
     private fun handleOpenFilterClicked(
         sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
@@ -106,7 +209,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         filters.onEach {
             it.selected = it.filterId == sectionToSelectedFilterMap.get(
                 TLWorkspaceHomeSection.fromId(it.filterId)
-            )
+            )?.filterId
         }
 
         setEffect {
@@ -116,5 +219,18 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 filters
             )
         }
+    }
+
+    private fun handleFilterApplied(
+        section: TLWorkspaceHomeSection,
+        filterApplied: TLWorkSpaceFilterOption
+    ) = viewModelScope.launch {
+
+        tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
+            RequestedDataItem(
+                filter = filterApplied.mapToApiModel(),
+                sectionId = section.getSectionId()
+            )
+        )
     }
 }

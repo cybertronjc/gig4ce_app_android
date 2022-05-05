@@ -8,5 +8,18 @@ data class TLWorkSpaceFilterOption(
     val text : String,
     val startDate : LocalDateTime?,
     val endDate : LocalDateTime?,
-    var selected : Boolean
-)
+    var selected : Boolean,
+    var default : Boolean
+) {
+
+        fun mapToApiModel() : FiltersItemApiModel{
+            return FiltersItemApiModel(
+                endDate = endDate,
+                text = text,
+                filterId = filterId,
+                startDate = startDate,
+                default = default
+            )
+        }
+
+}

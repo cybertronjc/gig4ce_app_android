@@ -1,5 +1,7 @@
 package com.gigforce.app.domain.repositories.tl_workspace
 
+import com.gigforce.app.domain.models.tl_workspace.GetTLWorkspaceRequest
+import com.gigforce.app.domain.models.tl_workspace.RequestedDataItem
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceSectionApiModel
 import com.gigforce.core.utils.Lce
 import kotlinx.coroutines.flow.Flow
@@ -11,28 +13,11 @@ interface TLWorkSpaceHomeScreenRepository {
 
     suspend fun refreshCachedWorkspaceSectionData()
 
-    suspend fun getWorkspaceSectionsData(): List<TLWorkSpaceSectionApiModel>
+    suspend fun getWorkspaceSectionsData(
+        requiredSectionIdsAndFilters :  GetTLWorkspaceRequest
+    ): List<TLWorkSpaceSectionApiModel>
 
     suspend fun getSingleWorkSpaceSectionData(
-        filters: GetWorkSpaceSectionFilterParams
+        requiredSectionIdAndFilters: RequestedDataItem
     ): TLWorkSpaceSectionApiModel
-
-
-    data class GetWorkSpaceSectionFilterParams(
-        val type: String,
-        val startDate: LocalDateTime,
-        val endDate: LocalDateTime,
-    ) {
-
-        companion object {
-
-            fun defaultFilters(): GetWorkSpaceSectionFilterParams {
-                return GetWorkSpaceSectionFilterParams(
-                    type = "",
-                    startDate = LocalDateTime.now(),
-                    endDate = LocalDateTime.now()
-                )
-            }
-        }
-    }
 }

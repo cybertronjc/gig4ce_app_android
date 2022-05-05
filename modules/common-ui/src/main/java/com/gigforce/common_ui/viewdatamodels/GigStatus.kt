@@ -116,7 +116,6 @@ enum class GigStatus constructor(
             }
 
             val currentTime = LocalDateTime.now()
-
             if (currentTime.isBefore(gig.checkInBeforeTime.toLocalDateTime())) {
                 return UPCOMING
             }

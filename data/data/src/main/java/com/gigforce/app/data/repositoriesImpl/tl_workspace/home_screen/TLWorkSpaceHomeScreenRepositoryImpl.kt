@@ -1,7 +1,8 @@
 package com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen
 
 import com.dropbox.android.external.store4.*
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceSection
+import com.gigforce.app.domain.models.tl_workspace.GetTLWorkspaceRequest
+import com.gigforce.app.domain.models.tl_workspace.RequestedDataItem
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceSectionApiModel
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
 import com.gigforce.core.utils.Lce
@@ -15,12 +16,14 @@ import javax.inject.Singleton
 @Singleton
 class TLWorkSpaceHomeScreenRepositoryImpl @Inject constructor(
     private val localDataStore: TlWorkSpaceLocalDataStore,
-    private val remoteDataStore: TlWorkSpaceRemoteDataStore,
+    private val remoteDataStore: TlWorkSpaceRemoteDataStore
 ) : TLWorkSpaceHomeScreenRepository {
 
     private val store: Store<String, List<TLWorkSpaceSectionApiModel>> = StoreBuilder.from(
         fetcher = Fetcher.of { _: String ->
-            getWorkspaceSectionsData()
+            getWorkspaceSectionsData(
+                GetTLWorkspaceRequest.defaultRequest()
+            )
         },
         sourceOfTruth = SourceOfTruth.Companion.of(
             reader = { key -> localDataStore.getCachedWorkspaceSectionAsFlow() },
@@ -62,17 +65,23 @@ class TLWorkSpaceHomeScreenRepositoryImpl @Inject constructor(
         store.fresh("tl_workspace_home_without_any_filter")
     }
 
-    override suspend fun getWorkspaceSectionsData(): List<TLWorkSpaceSectionApiModel> {
+
+    override suspend fun getWorkspaceSectionsData(
+        requiredSectionIdsAndFilters: GetTLWorkspaceRequest
+    ): List<TLWorkSpaceSectionApiModel> {
         return remoteDataStore.getTLWorkSpaceSection(
-            TLWorkSpaceHomeScreenRepository.GetWorkSpaceSectionFilterParams.defaultFilters()
+            requiredSectionIdsAndFilters
         )
     }
 
     override suspend fun getSingleWorkSpaceSectionData(
-        filters: TLWorkSpaceHomeScreenRepository.GetWorkSpaceSectionFilterParams
+        requiredSectionIdAndFilters: RequestedDataItem
     ): TLWorkSpaceSectionApiModel {
-        return remoteDataStore.getTLWorkSpaceSection(
-            filters
+        return getWorkspaceSectionsData(
+            GetTLWorkspaceRequest(
+                defaultRequest = false,
+                requestedData = listOf(requiredSectionIdAndFilters)
+            )
         ).first()
     }
 }
