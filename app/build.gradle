@@ -246,6 +246,11 @@ dependencies {
     implementation project(path: ':modules:user-tracking')
     implementation project(path: ':modules:cropper')
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(path: ':modules:tl_workspace')
+    implementation project(path: ':data:data')
+    implementation project(path: ':domain')
+    implementation project(path: ':data:remote')
+    implementation project(path: ':data:local')
 
     /**
      * Common dependencies

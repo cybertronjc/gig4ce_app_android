@@ -1,9 +1,8 @@
-package com.gigforce.app.tl_work_space.home.views
+package com.gigforce.app.tl_work_space.home.views.base
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.TextSwitcher
 import android.widget.TextView
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.android_common_utils.extensions.setTextSkipAnimationIfTextIsTheSame
@@ -18,7 +17,7 @@ import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TitleAndCountWithRiseOrDipCardView(
+open class TitleAndCountWithRiseOrDipCardView(
     context: Context,
     attrs: AttributeSet?
 ) : MaterialCardView(

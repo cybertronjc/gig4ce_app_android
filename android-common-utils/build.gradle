@@ -53,6 +53,6 @@ dependencies {
     /**
      * Module specific dependencies
      */
-
+    implementation Libs.AndroidX.fragmentKtx
 
 }
