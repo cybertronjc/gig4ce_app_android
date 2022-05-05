@@ -223,7 +223,8 @@ data class GigApiModel(
             regularisationRequest = null,
             chatInfo = mapOf(),
             offerLetter = olr,
-            activityConfig = activityConfig
+            activityConfig = activityConfig,
+            businessId = businessId
         )
     }
 
