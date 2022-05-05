@@ -193,14 +193,14 @@ class ReferralsFragment : Fragment(),
                                 val shortLink = result.shortLink
 
                                 shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hour_amb)} ${shortLink.toString()}")
-                                pb_referrals_frag.gone()
+                                pb_referrals_frag?.gone()
 
                             }.addOnFailureListener {
                                 if (context == null) return@addOnFailureListener
                                 // Error
                                 // ...
                                 showToast(it.message!!)
-                                pb_referrals_frag.gone()
+                                pb_referrals_frag?.gone()
                             }
                         }
 

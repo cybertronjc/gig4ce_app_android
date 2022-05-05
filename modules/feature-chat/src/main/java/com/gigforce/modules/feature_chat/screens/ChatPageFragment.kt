@@ -489,7 +489,7 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-                messages.let {
+                messages?.let {
                     if (it.isEmpty()) {
                         chatRecyclerView.gone()
                         shimmerContainer.gone()
