@@ -226,7 +226,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         filterApplied: TLWorkSpaceFilterOption
     ) = viewModelScope.launch {
 
-        tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
+       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
             RequestedDataItem(
                 filter = filterApplied.mapToApiModel(),
                 sectionId = section.getSectionId()
