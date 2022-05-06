@@ -8,7 +8,7 @@ import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.android_common_utils.extensions.setTextSkipAnimationIfTextIsTheSame
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.CardviewTitleCountRiseDipBinding
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceCardItem
+import com.gigforce.app.tl_work_space.home.models.TLWorkspaceCardItemData
 import com.gigforce.app.tl_work_space.home.models.ValueChangeType
 import com.gigforce.core.extensions.capitalizeWords
 import com.gigforce.core.extensions.gone
@@ -51,7 +51,7 @@ open class TitleAndCountWithRiseOrDipCardView(
     }
 
     fun bind(
-        data: TLWorkspaceCardItem
+        data: TLWorkspaceCardItemData
     ) = viewBinding.apply {
 
         data.title.capitalizeWords()

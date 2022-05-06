@@ -6,6 +6,7 @@ import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
+import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 
 sealed class TLWorkSpaceHomeViewContract {
     sealed class TLWorkSpaceHomeUiState : UiState {
@@ -13,6 +14,10 @@ sealed class TLWorkSpaceHomeViewContract {
 
         data class ErrorWhileLoadingScreenContent(
             val error : String
+        ) : TLWorkSpaceHomeUiState()
+
+        data class ShowOrUpdateSectionListOnView(
+            val sectionData: List<TLWorkspaceRecyclerItemData>,
         ) : TLWorkSpaceHomeUiState()
     }
 

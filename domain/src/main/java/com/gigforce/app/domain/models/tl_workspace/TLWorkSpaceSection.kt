@@ -18,7 +18,10 @@ data class TLWorkSpaceSectionApiModel(
     val type: String? = null,
 
     @field:SerializedName("items")
-    val items: List<SectionItemApiModel>? = null
+    val items: List<SectionItemApiModel>? = null,
+
+    @field:SerializedName("upcomingGigers")
+    val upcomingGigers : List<UpcomingGigersApiModel>? = null
 )
 
 data class FiltersItemApiModel(
@@ -66,4 +69,24 @@ data class SectionItemApiModel(
 
     @field:SerializedName("title")
     val title: String? = null
+)
+
+data class UpcomingGigersApiModel(
+    @field:SerializedName("gigerId")
+    val gigerId: String? = null,
+
+    @field:SerializedName("gigerName")
+    val gigerName: String? = null,
+
+    @field:SerializedName("business")
+    val business: String? = null,
+
+    @field:SerializedName("jobProfile")
+    val jobProfile: String? = null,
+
+    @field:SerializedName("profilePicture")
+    val profilePicture: String? = null,
+
+    @field:SerializedName("profilePictureThumbnail")
+    val profilePictureThumbnail: String? = null,
 )
