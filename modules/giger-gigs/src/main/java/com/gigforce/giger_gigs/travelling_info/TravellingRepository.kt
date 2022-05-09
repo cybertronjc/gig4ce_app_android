@@ -5,10 +5,10 @@ import javax.inject.Inject
 
 class TravellingRepository @Inject constructor(val travellingService: TravellingService) {
 
-    suspend fun getAllTravellingInfo(fromDate: String,toDate: String): TravellingResponseDM? {
+    suspend fun getAllTravellingInfo(fromDate: String,toDate: String): ResponseObjectModel<TravellingResponseDM>? {
         val travellingDetailData = travellingService.getAllTravellingInfo(fromDate,toDate)
         if(travellingDetailData.isSuccessful) {
-            return travellingDetailData.body()?.data
+            return travellingDetailData.body()
         }else
         return null
     }
