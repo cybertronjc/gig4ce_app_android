@@ -9,6 +9,7 @@ import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -157,11 +158,26 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 event.sectionOpenFilterClickedFrom,
                 event.anchorView
             )
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterApplied -> handleFilterApplied(
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterSelected -> handleFilterApplied(
                 event.section,
-                event.filterApplied
+                event.filterId
+            )
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter -> handleCustomDateFilter(
+                event.sectionId,
+                event.filterId,
+                event.date1,
+                event.date2
             )
         }
+    }
+
+    private fun handleCustomDateFilter(
+        sectionId: String,
+        filterId: String,
+        date1: LocalDate,
+        date2: LocalDate?
+    ) {
+
     }
 
 
@@ -223,14 +239,14 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun handleFilterApplied(
         section: TLWorkspaceHomeSection,
-        filterApplied: TLWorkSpaceFilterOption
+        filterId: String
     ) = viewModelScope.launch {
 
-       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
-            RequestedDataItem(
-                filter = filterApplied.mapToApiModel(),
-                sectionId = section.getSectionId()
-            )
-        )
+//       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
+//            RequestedDataItem(
+//                filter = filterApplied.mapToApiModel(),
+//                sectionId = section.getSectionId()
+//            )
+//        )
     }
 }

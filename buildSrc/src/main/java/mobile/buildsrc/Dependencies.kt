@@ -39,6 +39,7 @@ object Libs {
     val appsFlyer = "com.appsflyer:af-android-sdk:5.4.0"
     val branchSdk = "io.branch.sdk.android:library:5.1.3"
     val moengage = "com.moengage:moe-android-sdk:11.2.00"
+    val powerMenu = "com.github.skydoves:powermenu:2.1.9"
 
     //Fixes a Crash occurs while showing toast in Android 7
     val toastFix = "com.toastfix:toastcompatwrapper:1.2.0"
