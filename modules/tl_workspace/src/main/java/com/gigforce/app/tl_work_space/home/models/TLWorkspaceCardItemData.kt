@@ -5,4 +5,15 @@ data class TLWorkspaceCardItemData(
     val value: Int,
     val valueChangedBy: Int,
     val changeType: ValueChangeType
-)
+) {
+
+
+    fun hasSameContentAs(
+        data: TLWorkspaceCardItemData
+    ): Boolean {
+        return this.title == data.title &&
+                this.value == data.value &&
+                this.valueChangedBy == data.valueChangedBy &&
+                this.changeType == data.changeType
+    }
+}

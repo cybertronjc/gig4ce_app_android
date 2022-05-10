@@ -90,4 +90,16 @@ data class UpcomingGigersApiModel(
 
     @field:SerializedName("profilePictureThumbnail")
     val profilePictureThumbnail: String? = null,
-)
+){
+
+    fun hasSameContentAs(
+        data: UpcomingGigersApiModel
+    ): Boolean {
+        return this.gigerId == data.gigerId &&
+                this.gigerName == data.gigerName &&
+                this.jobProfile == data.jobProfile &&
+                this.business == data.business &&
+                this.profilePicture == data.profilePicture &&
+                this.profilePictureThumbnail == data.profilePictureThumbnail
+    }
+}
