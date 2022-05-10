@@ -90,7 +90,14 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         maxDate: LocalDate
     ) {
         if (showRange) {
-            //todo implement
+
+            openSelectDateRangeSelectionDialog(
+                sectionId,
+                filterId,
+                selectedDate,
+                minDate,
+                maxDate
+            )
         } else {
             openSingleDateSelectionDialog(
                 sectionId,
@@ -143,6 +150,48 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         }
     }
 
+    private fun openSelectDateRangeSelectionDialog(
+        sectionId: String,
+        filterId: String,
+        defaultDate: LocalDate,
+        minDate: LocalDate,
+        maxDate: LocalDate
+    ) {
+        DatePickerDialog(
+            requireContext(),
+            R.style.DatePickerTheme,
+            { datePickerView: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val filterTag = datePickerView?.tag?.toString() ?: return@DatePickerDialog
+
+                val currentViewSectionId = filterTag.substringBefore("<>")
+                val currentViewFilterId = filterTag.substringAfter("<>")
+
+                val date = LocalDate.of(
+                    year,
+                    month + 1,
+                    dayOfMonth
+                )
+                viewModel.setEvent(
+                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
+                        currentViewSectionId,
+                        currentViewFilterId,
+                        date,
+                        null
+                    )
+                )
+            },
+            defaultDate.year,
+            defaultDate.monthValue - 1,
+            defaultDate.dayOfMonth
+        ).apply {
+            val menuTag = "$sectionId<>$filterId"
+            this.datePicker.tag = menuTag
+
+            this.show()
+        }
+    }
+
+
     private fun showFilterMenu(
         anchorView: View,
         filters: List<TLWorkSpaceFilterOption>,
@@ -170,7 +219,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     addItem(
                         PowerMenuItem(
                             it.text,
-                            it.selected,
+                            it.default,
                             menuTag
                         )
                     )
@@ -221,7 +270,16 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         sectionData: List<TLWorkspaceRecyclerItemData>
     ) = viewBinding.apply {
 
+        swipeRefreshLayout.isRefreshing = false
+        stopShimmer(
+            shimmerContainer,
+            R.id.shimmer_controller
+        )
+        shimmerContainer.gone()
 
+        infoLayout.gone()
+        recyclerView.collection = sectionData
+        showOrHideNoAttendanceLayout(attendanceItemData.size)
     }
 
     private fun handleLoadingState(

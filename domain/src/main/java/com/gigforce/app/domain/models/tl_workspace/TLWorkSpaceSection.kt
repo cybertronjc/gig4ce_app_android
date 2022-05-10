@@ -51,7 +51,8 @@ data class FiltersItemApiModel(
             startDate = startDate,
             endDate = endDate,
             selected = false,
-            default = default ?: false
+            default = default ?: false,
+
         )
     }
 }

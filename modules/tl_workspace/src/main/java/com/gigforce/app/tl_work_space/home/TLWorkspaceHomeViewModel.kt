@@ -20,7 +20,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents,
         TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState,
         TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects>
-    (initialState = TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent) {
+    (
+    initialState = TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+        anyPreviousDataShownOnScreen = false
+    )
+) {
 
     companion object {
         private const val TAG = "TLWorkspaceHomeViewModel"
@@ -89,7 +93,9 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         setState {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+                tlWorkSpaceDataRaw.isNotEmpty()
+            )
         }
 
         try {
