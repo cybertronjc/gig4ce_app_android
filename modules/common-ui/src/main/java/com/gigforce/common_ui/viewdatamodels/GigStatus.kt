@@ -150,7 +150,7 @@ enum class GigStatus constructor(
                 return NO_SHOW
             }
 
-            throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any")
+            throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any for gigId - ${gig.gigId}")
         }
     }
 }

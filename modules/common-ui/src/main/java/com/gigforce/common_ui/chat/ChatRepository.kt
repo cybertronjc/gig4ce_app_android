@@ -9,13 +9,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gigforce.common_ui.chat.models.*
-import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
-import com.gigforce.core.StringConstants
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
@@ -26,7 +23,6 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.contracts.contract
 
 
 @Singleton
@@ -287,7 +283,7 @@ class ChatRepository @Inject constructor(
         val attachmentPathOnServer = if (bitmap != null) {
             val imageInBytes = ImageUtils.convertToByteArray(bitmap)
             uploadChatAttachment(
-                fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
+                fileNameWithExtension = "map-${DateUtil.getFullDateTimeStamp()}.png",
                 file = imageInBytes,
                 headerId = chatHeaderId,
                 isGroupChatMessage = false,
@@ -347,13 +343,13 @@ class ChatRepository @Inject constructor(
     ) {
 
         val newFileName = if (videoInfo.name.isBlank()) {
-            "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp4"
+            "${getUID()}-${DateUtil.getFullDateTimeStamp()}.mp4"
         } else {
 
             if (videoInfo.name.endsWith(".mp4", true)) {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}"
+                "${getUID()}-${DateUtil.getFullDateTimeStamp()}-${videoInfo.name}"
             } else {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}.mp4"
+                "${getUID()}-${DateUtil.getFullDateTimeStamp()}-${videoInfo.name}.mp4"
             }
         }
 
@@ -418,13 +414,13 @@ class ChatRepository @Inject constructor(
         audioInfo: AudioInfo
     ) {
         val newFileName = if (audioInfo.name.isBlank()) {
-            "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
+            "${getUID()}-${DateUtil.getFullDateTimeStamp()}.mp3"
         } else {
 
             if (audioInfo.name.endsWith(".mp3", true)) {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
+                "${getUID()}-${DateUtil.getFullDateTimeStamp()}-${audioInfo.name}"
             } else {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}.mp3"
+                "${getUID()}-${DateUtil.getFullDateTimeStamp()}-${audioInfo.name}.mp3"
             }
         }
 
@@ -458,7 +454,7 @@ class ChatRepository @Inject constructor(
         uri: Uri
     ) {
 
-        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${
+        val newFileName = "Doc-${getUID()}-${DateUtil.getFullDateTimeStamp()}.${
             getExtensionFromUri(
                 context,
                 uri

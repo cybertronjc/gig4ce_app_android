@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -86,6 +86,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
+import kotlinx.coroutines.flow.collect
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
@@ -291,7 +292,12 @@ class GigPage2Fragment : Fragment(),
             if (isNecessaryPermissionGranted()) {
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
+                    if(isLocationMandatory(gig) && location == null){
+                        checkForGpsStatus()
+                        return@setOnClickListener
+                    }
                     if (imageClickedPath != null) {
+                        Log.e("location",location?.toString()?:"")
                         //event
                         FirebaseAuth.getInstance().currentUser?.uid?.let {
                             val map = mapOf("TL ID" to it, "gigId" to gigId)
@@ -313,8 +319,19 @@ class GigPage2Fragment : Fragment(),
 
     }
 
+    fun isLocationMandatory( gig: Gig):Boolean{
+        if(gig.isCheckInMarked())
+        {
+            return gig.activityConfig?.locationConfig?.checkOutLocationMandatory?:false
+        }else{
+            return gig.activityConfig?.locationConfig?.checkInLocationMandatory?:false
+        }
+
+    }
+
     override fun onResume() {
         super.onResume()
+
 
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(), ResourcesCompat.getColor(
@@ -466,29 +483,38 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun initViewModel() {
-        gigSharedViewModel.gigSharedViewModelState
-            .observe(viewLifecycleOwner, Observer {
-                it ?: return@Observer
+        viewModel.setSharedGigViewModel(gigSharedViewModel)
 
-                when (it) {
-                    is SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(
-                        null,
-                        it.distanceBetweenGigAndUser
-                    )
-                    else -> {
+        lifecycleScope.launchWhenCreated {
+
+            gigSharedViewModel.gigSharedViewModelState
+                .collect {
+                    it ?: return@collect
+
+                    when (it) {
+                        is SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(
+                            null,
+                            it.distanceBetweenGigAndUser
+                        )
+                        is SharedGigViewState.UserRatedGig -> viewModel.userRatedTheGig(
+                            it.rating,
+                            it.feedback
+                        )
+                        else -> {
+                        }
                     }
                 }
-            })
+        }
 
         viewModel.gigDetails
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner, Observer {
+
                 when (it) {
                     Lce.Loading -> showGigDetailsAsLoading()
                     is Lce.Content -> setGigDetailsOnView(it.content)
                     is Lce.Error -> showErrorWhileLoadingGigData(it.error)
                 }
             })
-
 
         viewModel.markingAttendanceState
             .observe(viewLifecycleOwner, Observer {
@@ -521,14 +547,14 @@ class GigPage2Fragment : Fragment(),
                     }
                     is Lce.Error -> {
                         checkInCheckOutSliderBtn.isEnabled = true
-                        showAlertDialog(getString(R.string.error_marking_attendance_giger_gigs) + it)
+                        showAlertDialog(getString(R.string.error_marking_attendance_giger_gigs) + it.error)
                     }
                     else -> {
                     }
                 }
             })
 
-        viewModel.watchGig(gigId, true)
+        viewModel.fetchGigDetails(gigId, true)
     }
 
     private fun plantLocationTrackers() {
@@ -613,13 +639,30 @@ class GigPage2Fragment : Fragment(),
             val currentTime = LocalDateTime.now()
 
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+            val minTimeBtwCheckInCheckOut = getMinAllowedTimeBetweenCheckInAndCheckOut()
 
-            if (minutes > 2L) {
+            if (minutes >= minTimeBtwCheckInCheckOut) {
                 checkInCheckOutSliderBtn.visible()
                 checkInCheckOutSliderBtn.text = getString(R.string.check_out_common_ui)
             } else {
                 checkInCheckOutSliderBtn.gone()
             }
+        }
+    }
+
+    private fun getMinAllowedTimeBetweenCheckInAndCheckOut(): Long {
+        val minTimeBtwCheckInCheckOutString = try {
+            firebaseRemoteConfig.getLong(
+                REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT
+            )
+        } catch (e: Exception) {
+            0L
+        }
+
+        return if (minTimeBtwCheckInCheckOutString < 1L) {
+            2L
+        } else {
+            minTimeBtwCheckInCheckOutString
         }
     }
 
@@ -751,7 +794,7 @@ class GigPage2Fragment : Fragment(),
 
 
         val optionsList = mutableListOf<OtherOption>()
-        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
+        if (viewModel.currentGig?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
         }
         val PARK_PLUS = OtherOption(
@@ -825,7 +868,7 @@ class GigPage2Fragment : Fragment(),
                 //navigate to show offer letter
                 navigation.navigateToDocViewerActivity(
                     requireActivity(),
-                    viewModel.gigOrder?.offerLetter.toString() ?: "",
+                    viewModel.currentGig?.offerLetter.toString() ?: "",
                     "OFFER_LETTER"
                 )
             }
@@ -1157,6 +1200,11 @@ class GigPage2Fragment : Fragment(),
 
     private fun checkForLateOrEarlyCheckIn() {
         val gig = viewModel.currentGig ?: return
+        if(isLocationMandatory(gig)&& location == null){
+            checkForGpsStatus()
+            return
+        }
+        Log.e("location",location?.toString()?:"")
 
         val currentTime = LocalDateTime.now()
         if (!gig.isCheckInMarked() && currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime())
@@ -1294,6 +1342,7 @@ class GigPage2Fragment : Fragment(),
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
+        const val REMOTE_CONFIG_MIN_TIME_BTW_CHECK_IN_CHECK_OUT = "min_time_btw_check_in_check_out"
 
         const val PARKPLUS_BUSINESSID = "7lX4d0vaOrjArjH1EnsC"
     }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
@@ -40,7 +41,7 @@ class OnboardingLoaderFragment : BaseFragment() {
     @Inject
     lateinit var eventTracker: IEventTracker
 
-    private lateinit var viewModel: LoginSuccessfulViewModel
+    private val viewModel: LoginSuccessfulViewModel by viewModels()
 
     @Inject
     lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
@@ -60,7 +61,6 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
         getDataFrom(
             arguments,
             savedInstanceState

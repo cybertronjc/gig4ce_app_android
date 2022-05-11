@@ -126,7 +126,7 @@
     <string name="image_not_captured_giger_gigs">छवि पर कब्जा नहीं किया गया है</string>
     <string name="checkout_marked_giger_gigs">चेकआउट चिह्नित।</string>
     <string name="checkin_marked_giger_gigs">चेक-इन चिह्नित</string>
-    <string name="error_marking_attendance_giger_gigs">\"उपस्थिति चिह्नित करते समय त्रुटि\"</string>
+    <string name="error_marking_attendance_giger_gigs">उपस्थिति चिह्नित करते समय त्रुटि </string>
     <string name="full_time_giger_gigs">: पूरा समय</string>
     <string name="part_time_giger_gigs">: पार्ट टाईम</string>
     <string name="user_feedback_giger_gigs">\"उपयोगकर्ता प्रतिसाद : \"</string>

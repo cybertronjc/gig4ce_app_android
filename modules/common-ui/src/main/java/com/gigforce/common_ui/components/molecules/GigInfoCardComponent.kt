@@ -20,7 +20,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.firebase.storage.FirebaseStorage
@@ -61,13 +61,13 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
     private fun setGigDate(data: Gig) {
         if (data.isGigOfToday()) {
             val gigTiming = if (data.endDateTime != null)
-                "${DateHelper.getHourMinutes(data.startDateTime!!.toDate())} - ${
-                DateHelper.getHourMinutes(
+                "${DateUtil.getHourMinutes(data.startDateTime!!.toDate())} - ${
+                DateUtil.getHourMinutes(
                     data.endDateTime!!.toDate()
                 )
                 }"
             else
-                "${DateHelper.getHourMinutes(data.startDateTime!!.toDate())}"
+                "${DateUtil.getHourMinutes(data.startDateTime!!.toDate())}"
             this.findViewById<TextView>(R.id.textView67).text = gigTiming
             this.findViewById<View>(R.id.checkInTV).setOnClickListener {
             }
@@ -87,7 +87,7 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
         } else {
             findViewById<View>(R.id.checkInTV).isEnabled = false
             findViewById<TextView>(R.id.textView67).text =
-                DateHelper.getDateInDDMMYYYY(data.startDateTime!!.toDate())
+                DateUtil.getDateInDDMMYYYY(data.startDateTime!!.toDate())
         }
     }
 

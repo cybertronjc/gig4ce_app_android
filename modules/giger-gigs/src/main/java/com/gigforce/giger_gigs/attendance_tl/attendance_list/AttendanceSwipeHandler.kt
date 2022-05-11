@@ -1,10 +1,12 @@
-package com.gigforce.giger_gigs
+package com.gigforce.giger_gigs.attendance_tl.attendance_list
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.viewdatamodels.gig.AttendanceStatus
 import com.gigforce.core.CoreViewHolder
-import com.gigforce.giger_gigs.listItems.AttendanceGigerAttendanceRecyclerItemView
+import com.gigforce.giger_gigs.attendance_tl.GigAttendanceStatus
+import com.gigforce.giger_gigs.attendance_tl.attendance_list.views.GigerAttendanceItemRecyclerItemView
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
 class AttendanceSwipeHandler(
@@ -23,19 +25,21 @@ class AttendanceSwipeHandler(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
     ): Int {
-        if (viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView) {
+        if (viewHolder is CoreViewHolder &&  viewHolder.itemView is GigerAttendanceItemRecyclerItemView) {
 
             try {
-                val gigData =
-                        (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).getGigDataOrThrow()
+                val gigData = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).getGigDataOrThrow()
 
                 return when {
-                    "Present".equals(gigData.attendanceStatus, true) && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
-                    "Declined".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-                    "Absent".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-                    "Absent".equals(gigData.attendanceStatus, true) && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
-                    "Absent".equals(gigData.attendanceStatus, true) && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
-                    else -> 0 //Disabling swipe
+                    gigData.currentlyMarkingAttendanceForThisGig -> ItemTouchHelper.ACTION_STATE_IDLE // Disabling swipe
+                    gigData.canTLMarkAbsent && declineSwipeActionEnabled && gigData.canTLMarkPresent && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+                    gigData.hasTLMarkedAttendance.not() && markPresentSwipeActionEnabled && declineSwipeActionEnabled -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+
+                    gigData.canTLMarkAbsent && declineSwipeActionEnabled-> ItemTouchHelper.LEFT
+                    gigData.canTLMarkPresent && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    gigData.hasTLMarkedAttendance.not() && markPresentSwipeActionEnabled -> ItemTouchHelper.RIGHT
+                    gigData.hasTLMarkedAttendance.not() && declineSwipeActionEnabled -> ItemTouchHelper.LEFT
+                    else -> ItemTouchHelper.ACTION_STATE_IDLE // Disabling swipe
                 }
 
             } catch (e: Exception) {
@@ -43,7 +47,7 @@ class AttendanceSwipeHandler(
                 return super.getSwipeDirs(recyclerView, viewHolder)
             }
         } else {
-            return 0 //Disabling swipe for view type that are not attendance items
+            return ItemTouchHelper.ACTION_STATE_IDLE //Disabling swipe for view type that are not attendance items
         }
     }
 
@@ -58,15 +62,20 @@ class AttendanceSwipeHandler(
     override fun isItemViewSwipeEnabled(): Boolean = attendanceSwipeControlsEnabled
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        if (viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView) {
+        if (viewHolder is CoreViewHolder &&  viewHolder.itemView is GigerAttendanceItemRecyclerItemView) {
 
             try {
-                val gigData =
-                        (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).getGigDataOrThrow()
+                val gigData = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).getGigDataOrThrow()
 
                 when (direction) {
-                    ItemTouchHelper.LEFT -> attendanceSwipeHandlerListener.onLeftSwipedForDecliningAttendance(viewHolder,gigData)
-                    ItemTouchHelper.RIGHT -> attendanceSwipeHandlerListener.onRightSwipedForMarkingPresent(viewHolder,gigData)
+                    ItemTouchHelper.LEFT -> attendanceSwipeHandlerListener.onLeftSwipedForDecliningAttendance(
+                        viewHolder,
+                        gigData
+                    )
+                    ItemTouchHelper.RIGHT -> attendanceSwipeHandlerListener.onRightSwipedForMarkingPresent(
+                        viewHolder,
+                        gigData
+                    )
                     else -> { /*Do Nothing*/
                     }
                 }
@@ -87,8 +96,8 @@ class AttendanceSwipeHandler(
             actionState: Int,
             isCurrentlyActive: Boolean
     ) {
-        if(viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView){
-            val foregroundView = (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).foregroundView
+        if(viewHolder is CoreViewHolder && viewHolder.itemView is GigerAttendanceItemRecyclerItemView){
+            val foregroundView = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).viewForeground
             getDefaultUIUtil().onDraw(c,
                     recyclerView,
                     foregroundView,
@@ -112,8 +121,8 @@ class AttendanceSwipeHandler(
     }
 
     override fun onChildDrawOver(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder?, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-        if(viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView){
-            val foregroundView = (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).foregroundView
+        if(viewHolder is CoreViewHolder){
+            val foregroundView = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).viewForeground
             getDefaultUIUtil().onDrawOver(c,
                     recyclerView,
                     foregroundView,
@@ -129,8 +138,8 @@ class AttendanceSwipeHandler(
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
 
-        if(viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView){
-            val foregroundView = (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).foregroundView
+        if(viewHolder is CoreViewHolder){
+            val foregroundView = (viewHolder.itemView as GigerAttendanceItemRecyclerItemView).viewForeground
             getDefaultUIUtil().clearView(foregroundView)
         } else {
             super.clearView(recyclerView, viewHolder)

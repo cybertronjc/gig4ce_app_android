@@ -32,5 +32,8 @@
 
     <color name="filter_text_color">#202325</color>
     <color name="stateBarColor">#e82e66</color>
+    <color name="grey_medium">#707070</color>
+
+
 
 </resources>

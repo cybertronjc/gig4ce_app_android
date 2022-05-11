@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
@@ -19,9 +20,9 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lse
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.viewModels.SharedGigerAttendanceUnderManagerViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*
@@ -68,7 +69,7 @@ class DeclineGigDialogFragment : DialogFragment() {
         }
     }
 
-    private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
+    private val sharedGigViewModel: SharedGigViewModel by activityViewModels()
     private val viewModel: GigViewModel by viewModels()
 
     private var gigId: String? = null
@@ -120,7 +121,7 @@ class DeclineGigDialogFragment : DialogFragment() {
 
 
     private fun initViewModel() {
-        viewModel.declineGig.observe(viewLifecycleOwner, {
+        viewModel.declineGig.observe(viewLifecycleOwner) {
 
             when (it) {
                 Lse.Loading -> {
@@ -128,14 +129,24 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(
+                    ToastHandler.showToast(
                         requireContext(),
                         getString(R.string.gig_declined_giger_gigs),
                         Toast.LENGTH_LONG
                     )
-                        .show()
+
                     mDeclineGigDialogFragmentResultListener?.gigDeclined()
-                    if (gigId != null) sharedGigViewModel.gigDeclined(gigId!!)
+                    if (gigId != null) {
+                        sharedGigViewModel.gigsDeclined(
+                            listOf(gigId!!),
+                            ""
+                        )
+                    } else if(!gigIds.isNullOrEmpty()){
+                        sharedGigViewModel.gigsDeclined(
+                            gigIds!!,
+                            ""
+                        )
+                    }
                     dismiss()
                 }
                 is Lse.Error -> {
@@ -148,7 +159,7 @@ class DeclineGigDialogFragment : DialogFragment() {
                         .show()
                 }
             }
-        })
+        }
     }
 
 //    override fun onStart() {

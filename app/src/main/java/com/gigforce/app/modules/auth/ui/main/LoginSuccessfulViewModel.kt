@@ -14,8 +14,10 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 data class ProfileAnGigInfo(
     val profile: ProfileData,
@@ -33,8 +35,9 @@ data class UserVersionInfo(
     var createdAt: Timestamp? = Timestamp.now()
 )
 
-class LoginSuccessfulViewModel constructor(
-    private val gigsRepository: GigsRepository = GigsRepository(),
+@HiltViewModel
+class LoginSuccessfulViewModel @Inject constructor(
+    private val gigsRepository: GigsRepository,
 ) : ViewModel() {
     var profileFirebaseRepository =
         ProfileFirebaseRepository()

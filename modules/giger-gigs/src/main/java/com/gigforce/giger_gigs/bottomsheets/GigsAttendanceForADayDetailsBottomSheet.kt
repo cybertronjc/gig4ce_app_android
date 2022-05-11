@@ -99,7 +99,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                 }
             })
 
-        viewModel.watchGig(gigId)
+        viewModel.fetchGigDetails(gigId)
     }
 
     private fun showGigdetailsLoading() {

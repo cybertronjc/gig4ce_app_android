@@ -36,6 +36,8 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_PENDING_JOINING_DETAILS, R.id.pendingJoiningDetailsFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_3, R.id.newSelectionVerificationDocumentsForm3Fragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.BOTTOM_SHEET_JOINING_ERROR, R.id.UserAlreadyExistsBottomSheet)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_CHANGE_TL, R.id.changeTeamLeaderBottomSheetFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING_DROP_SELECTION_2, R.id.dropSelectionFragment2)
 
     }
 }

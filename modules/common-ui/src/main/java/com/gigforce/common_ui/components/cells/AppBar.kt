@@ -301,6 +301,10 @@ class AppBar(context: Context, attributeSet: AttributeSet) : FrameLayout(context
             viewBinding.subTitleTV.text = subTitle
     }
 
+    fun getSubTitleText() : String?{
+        return viewBinding.subTitleTV.text?.toString()
+    }
+
     fun hideSubTitle() {
         viewBinding.subTitleTV.visibility = View.GONE
     }

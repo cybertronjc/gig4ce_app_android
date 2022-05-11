@@ -16,10 +16,11 @@
         android:padding="16dp">
 
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <com.gigforce.common_ui.views.GigforceImageView
             android:id="@+id/user_image_iv"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            app:shapeAppearanceOverlay="@style/circleImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars"/>

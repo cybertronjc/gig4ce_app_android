@@ -1,16 +1,19 @@
 package com.gigforce.core.extensions
 
 import android.net.Uri
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StreamDownloadTask
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ClosedSendChannelException
-import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -70,6 +73,48 @@ suspend fun DocumentReference.getOrThrow() = suspendCoroutine<DocumentSnapshot> 
         cont.resume(it)
     }.addOnFailureListener {
         cont.resumeWithException(it)
+    }
+}
+
+suspend inline fun <reified T> DocumentReference.getAndSerializeOrThrow() = suspendCoroutine<T> { cont ->
+
+    get().addOnSuccessListener {
+
+        if(!it.exists()){
+            cont.resumeWithException(Exception("no document exist for ${it.id}"))
+            return@addOnSuccessListener
+        }
+
+       try {
+           val serializedData = it.toObject(T::class.java) ?: throw Exception("unable to serialize data to required object")
+           cont.resume(serializedData)
+       } catch (e: Exception) {
+           cont.resumeWithException(e)
+       }
+
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend inline fun <reified T> DocumentReference.getOrNull() = suspendCoroutine<T?> { cont ->
+
+    get().addOnSuccessListener {
+
+        if(!it.exists()){
+            cont.resume(null)
+            return@addOnSuccessListener
+        }
+
+        try {
+            val serializedData = it.toObject(T::class.java) ?: throw Exception("unable to serialize data to required object")
+            cont.resume(serializedData)
+        } catch (e: Exception) {
+            cont.resume(null)
+        }
+
+    }.addOnFailureListener {
+        cont.resume(null)
     }
 }
 

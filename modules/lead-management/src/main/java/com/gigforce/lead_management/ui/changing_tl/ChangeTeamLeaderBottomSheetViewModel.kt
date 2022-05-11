@@ -9,6 +9,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequ
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ResultItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,12 +55,20 @@ class ChangeTeamLeaderBottomSheetViewModel @Inject constructor(
     //data from view
     var gigerForChangeTL: List<ChangeTeamLeaderRequestItem> = emptyList()
     var sharedViewModel : LeadManagementSharedViewModel? = null
+    private lateinit var gigJoiningSharedViewModel: SharedGigViewModel
+
 
     private val _viewState = MutableLiveData<ChangeTeamLeaderBottomSheetState>()
     val viewState = _viewState.asLiveData()
 
     init {
         getTeamLeaders()
+    }
+
+    fun setGigJoiningSharedViewModel(
+        gigJoiningSharedViewModel: SharedGigViewModel
+    ){
+        this.gigJoiningSharedViewModel = gigJoiningSharedViewModel
     }
 
     private fun getTeamLeaders() = viewModelScope.launch {
@@ -112,6 +121,16 @@ class ChangeTeamLeaderBottomSheetViewModel @Inject constructor(
             if (changeTLResponse.result.isNullOrEmpty()) {
                 sharedViewModel?.joiningsChanged(emptyList()) //todo write logic for this one or shift to flow
                 _viewState.value = ChangeTeamLeaderBottomSheetState.TeamLeaderChangedForAllGigers
+
+                val tlChangedWithGigId = gigerForChangeTL.filter {
+                    it.gigId != null
+                }
+                if(tlChangedWithGigId.isNotEmpty()) {
+                    gigJoiningSharedViewModel.teamLeaderOfGigerChangedWithGigId(
+                        tlChangedWithGigId.first().gigId!!
+                    )
+                }
+
             } else {
                 sharedViewModel?.joiningsChanged(emptyList())
 

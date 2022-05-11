@@ -839,7 +839,7 @@
         android:label="OnboardingPreferredJobLocationFragment" />
       <fragment
         android:id="@+id/gigerAttendanceUnderManagerFragment"
-        android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_list.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
     <fragment
         android:id="@+id/invoicesListFragment"
@@ -1132,6 +1132,37 @@
         android:id="@+id/payoutListFilterFragment"
         android:name="com.gigforce.wallet.payouts.payout_list.filter.PayoutListFilterFragment"
         android:label="PayoutListFilterFragment"/>
+
+    <dialog
+        android:id="@+id/gigerAttendanceDetailsFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_details.GigerAttendanceDetailsFragment"
+        android:label="GigerAttendanceDetailsFragment"/>
+
+    <dialog
+        android:id="@+id/markActiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check.MarkActiveConfirmationBottomSheetFragment"
+        android:label="MarkActiveConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/markInactiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.MarkInactiveConfirmationBottomSheetFragment"
+        android:label="MarkInactiveConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/resolveAttendanceConflictConfirmationBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict.ResolveAttendanceConflictConfirmationBottomSheetFragment"
+        android:label="ResolveAttendanceConflictConfirmationBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/selectMarkInactiveReasonsBottomSheetFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.SelectMarkInactiveReasonsBottomSheetFragment"
+        android:label="SelectMarkInactiveReasonsBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/attendanceImageConfirmBottomSheet"
+        android:name="com.gigforce.common_image_picker.image_capture_camerax.fragments.AttendanceImageConfirmBottomSheet"
+        android:label="AttendanceImageConfirmBottomSheet" />
+
     <fragment
         android:id="@+id/selectClusterFragment"
         android:name="com.gigforce.lead_management.ui.select_cluster.SelectClusterFragment"

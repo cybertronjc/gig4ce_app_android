@@ -1,7 +1,5 @@
 package com.gigforce.common_ui.configrepository
 
-import android.R.attr
-import android.graphics.Bitmap
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
@@ -9,7 +7,7 @@ import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.metaDataHelper.FileMetaDataExtractor
 import com.gigforce.common_ui.remote.SignatureImageService
-import com.gigforce.core.date.DateHelper
+import com.gigforce.core.date.DateUtil
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.MediaType
@@ -116,7 +114,7 @@ class SignatureRepository @Inject constructor(
         }
 
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(fileMimeType)
-        return "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
+        return "IMG-${DateUtil.getFullDateTimeStamp()}.$extension"
     }
 
     private suspend fun createFullUrl(
