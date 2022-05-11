@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.R
@@ -48,9 +50,18 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     ) {
 
         if (viewCreatedForTheFirstTime) {
+            initView()
             observeViewStates()
             observeViewEffects()
         }
+    }
+
+    private fun initView()  = viewBinding.apply{
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.setDiffUtilCallback(TLWorkSpaceHomeAdapterDiffUtil())
+        recyclerView.setHasFixedSize(true)
     }
 
     private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
@@ -255,7 +266,6 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView -> handleDataLoadedState(
                         it.sectionData
                     )
-                    else -> {}
                 }
             }
     }
@@ -279,7 +289,22 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
         infoLayout.gone()
         recyclerView.collection = sectionData
-        showOrHideNoAttendanceLayout(attendanceItemData.size)
+        showOrHideNoDataLayout(
+            sectionData.isNotEmpty()
+        )
+    }
+
+    private fun showOrHideNoDataLayout(
+        dataAvailableToShowOnScreen: Boolean
+    ) = viewBinding.apply{
+
+        if (dataAvailableToShowOnScreen) {
+            infoLayout.root.visible()
+            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
+        } else {
+            infoLayout.root.gone()
+            infoLayout.infoMessageTv.text = null
+        }
     }
 
     private fun handleLoadingState(

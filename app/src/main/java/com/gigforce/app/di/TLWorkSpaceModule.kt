@@ -1,14 +1,12 @@
 package com.gigforce.app.di
 
-import com.gigforce.app.data.local.datastoreImpls.TlWorkSpaceLocalDataStoreImpl
+import com.gigforce.app.data.local.local_data_store_Implementations.tl_workspace.TlWorkSpaceLocalDataStoreImpl
 import com.gigforce.app.data.remote.datastoreImpls.tl_workspace.TlWorkSpaceRemoteDataStoreImpl
 import com.gigforce.app.data.remote.retrofitServices.TLWorkSpaceService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TLWorkSpaceHomeScreenRepositoryImpl
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TlWorkSpaceLocalDataStore
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TlWorkSpaceRemoteDataStore
-import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
-import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import dagger.Binds
 import dagger.Module

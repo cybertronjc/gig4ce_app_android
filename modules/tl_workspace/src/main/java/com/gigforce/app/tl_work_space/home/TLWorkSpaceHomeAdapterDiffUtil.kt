@@ -58,6 +58,7 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
                 oldItem is TLWorkspaceRecyclerItemData.TLWorkspaceType2RecyclerItemData &&
                 newItem is TLWorkspaceRecyclerItemData.TLWorkspaceType2RecyclerItemData
             ) {
+
                 return oldItem.sectionId == newItem.sectionId &&
                         oldItem.sectionTitle == newItem.sectionTitle &&
                         (oldItem.currentFilter?.filterId != null && newItem.currentFilter?.filterId != null) &&
@@ -67,8 +68,9 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
                 oldItem is TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData &&
                 newItem is TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData
             ){
-               return  oldItem.sectionId == newItem.sectionId
 
+               return  oldItem.sectionId == newItem.sectionId &&
+                       oldItem.upcomingGigers.hasSameGigersAs(newItem.upcomingGigers)
             }
 
             return false
@@ -101,7 +103,7 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
 
         for ((index, value) in this.withIndex()) {
 
-            if (!value.(otherList[index])) {
+            if (!value.hasSameContentAs(otherList[index])) {
                 return false
             }
         }
