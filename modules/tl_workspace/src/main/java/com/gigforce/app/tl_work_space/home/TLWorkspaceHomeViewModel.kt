@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.*
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
+import com.gigforce.app.tl_work_space.home.mapper.ApiModelToPresentationModelMapper
+import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -31,13 +34,14 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     /**
-     * Raw Data
+     * Raw Data, from Server
      */
     private var tlWorkSpaceDataRaw: List<TLWorkSpaceSectionApiModel> = emptyList()
 
     /**
      * Processed Data
      */
+    private var sectionsShownOnView: List<TLWorkspaceRecyclerItemData> = emptyList()
     private var sectionToSelectedFilterMap: MutableMap<
             TLWorkspaceHomeSection, //Section
             TLWorkSpaceFilterOption? //Currently Selected filter
@@ -53,8 +57,31 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             .getWorkspaceSectionAsFlow()
             .collect {
 
-
+                when (it) {
+                    is Lce.Content -> processDataReceivedFromServerAndUpdateOnView(
+                        null,
+                        it.content
+                    )
+                    is Lce.Error -> showErrorState(it.error)
+                    Lce.Loading -> showLoadingOnView()
+                }
             }
+    }
+
+    private fun showErrorState(error: String) {
+        setState {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                error = error
+            )
+        }
+    }
+
+    private fun showLoadingOnView() {
+        setState {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+                anyPreviousDataShownOnScreen = tlWorkSpaceDataRaw.isNotEmpty()
+            )
+        }
     }
 
     fun refreshWorkSpaceData() = viewModelScope.launch {
@@ -106,7 +133,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 )
             )
             processDataReceivedFromServerAndUpdateOnView(
-                false,
+                sectionToRefreshWithFiltersInfo,
                 rawSectionDataFromServer
             )
         } catch (e: Exception) {
@@ -129,33 +156,70 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun processDataReceivedFromServerAndUpdateOnView(
-        fetchedDataIsOfOneSectionOnly: Boolean,
+        filtersUsed: List<RequestedDataItem>?,
         rawSectionDataFromServer: List<TLWorkSpaceSectionApiModel>
     ) {
-        if (fetchedDataIsOfOneSectionOnly) {
+        this.tlWorkSpaceDataRaw = rawSectionDataFromServer
+
+        val initialFetch = sectionToSelectedFilterMap.isEmpty()
+        if (initialFetch) {
             //we need to update one section only
-
-
+            addFiltersToDefaultSelectedFilter()
         } else {
-
-            this.tlWorkSpaceDataRaw = rawSectionDataFromServer
-            if (sectionToSelectedFilterMap.isEmpty()) {
-                /**
-                 * Preparing a map of section id to default selected filter
-                 */
-                this.tlWorkSpaceDataRaw.forEach {
-                    sectionToSelectedFilterMap.put(
-                        TLWorkspaceHomeSection.fromId(it.type!!),
-                        it.filters?.find {
-                            it.default!!
-                        }?.mapToPresentationFilter()
-                    )
-                }
-            } else {
-
-            }
+            updateFiltersInSelectedFilters(
+                filtersUsed
+            )
         }
 
+        prepareUiModelsAndEmit()
+    }
+
+    private fun prepareUiModelsAndEmit() {
+        sectionsShownOnView = ApiModelToPresentationModelMapper.mapToPresentationList(
+            sectionToSelectedFilterMap,
+            tlWorkSpaceDataRaw,
+            this
+        )
+
+        setState {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView(
+                sectionsShownOnView
+            )
+        }
+    }
+
+    private fun updateFiltersInSelectedFilters(filtersUsed: List<RequestedDataItem>?) {
+        if (filtersUsed.isNullOrEmpty()) return
+
+        filtersUsed.filter {
+            it.filter != null && it.sectionId != null
+        }.forEach {
+            val section = TLWorkspaceHomeSection.fromId(it.sectionId!!)
+            sectionToSelectedFilterMap.put(
+                section,
+                it.filter!!.mapToPresentationFilter().apply {
+                    this.selected = true
+                }
+            )
+        }
+    }
+
+    private fun addFiltersToDefaultSelectedFilter() {
+        if (sectionToSelectedFilterMap.isEmpty()) {
+            /**
+             * Preparing a map of section id to default selected filter
+             */
+            this.tlWorkSpaceDataRaw.forEach {
+                sectionToSelectedFilterMap.put(
+                    TLWorkspaceHomeSection.fromId(it.sectionId!!),
+                    it.filters?.find {
+                        it.default!!
+                    }?.mapToPresentationFilter().apply {
+                        this?.selected = true
+                    }
+                )
+            }
+        }
     }
 
     override fun handleEvent(event: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents) {
@@ -174,6 +238,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 event.date1,
                 event.date2
             )
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked -> refreshWorkSpaceData()
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked -> TODO()
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType2Event.InnerCardClicked -> TODO()
+            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked -> TODO()
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> TODO()
         }
     }
 
@@ -213,7 +282,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         anchorView: View
     ) {
         val sectionWhereOpenFilterWasTapped = tlWorkSpaceDataRaw.find {
-            filterSectionId == it.type
+            filterSectionId == it.sectionId
         } ?: return
 
         val filters = sectionWhereOpenFilterWasTapped.filters?.map {

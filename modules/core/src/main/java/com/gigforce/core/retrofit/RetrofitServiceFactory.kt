@@ -5,6 +5,8 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.exceptions.InternalServerErrorException
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.custom_serialization.FirebaseTimestampFromMongoTimeStringDeserializer
+import com.gigforce.core.retrofit.custom_serialization.LocalDateFromIsoStringDateDeserializer
+import com.gigforce.core.retrofit.custom_serialization.LocalDateToIsoStringDateSerializer
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.gson.Gson
@@ -18,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.UnknownHostException
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -109,6 +112,14 @@ class RetrofitServiceFactory @Inject constructor(
             .registerTypeAdapter(
                 Timestamp::class.java,
                 FirebaseTimestampFromMongoTimeStringDeserializer
+            )
+            .registerTypeAdapter(
+                LocalDate::class.java,
+                LocalDateFromIsoStringDateDeserializer
+            )
+            .registerTypeAdapter(
+                LocalDate::class.java,
+                LocalDateToIsoStringDateSerializer
             )
             .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()

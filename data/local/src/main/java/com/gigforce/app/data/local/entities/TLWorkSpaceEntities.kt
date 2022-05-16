@@ -14,17 +14,17 @@ data class CachedTLWorkSpaceSectionModel(
     @ColumnInfo(name = "index")
     val index: Int? = null,
 
-    @Embedded(prefix = "filter")
-    val filters: List<CachedFiltersItemModel>? = null,
+//    @Embedded(prefix = "filter")
+//    val filters: List<CachedFiltersItemModel>? = null,
 
     @ColumnInfo(name = "title")
     val title: String? = null,
 
-    @Embedded
-    val items: List<SectionItemApiModel>? = null,
-
-    @Embedded
-    val upcomingGigers : List<UpcomingGigersApiModel>? = null
+//    @Embedded
+//    val items: List<SectionItemApiModel>? = null,
+//
+//    @Embedded
+//    val upcomingGigers : List<UpcomingGigersApiModel>? = null
 ){
 
     companion object {

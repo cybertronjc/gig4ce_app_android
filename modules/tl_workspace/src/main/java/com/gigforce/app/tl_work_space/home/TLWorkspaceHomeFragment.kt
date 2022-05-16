@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.R
@@ -62,6 +63,11 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setDiffUtilCallback(TLWorkSpaceHomeAdapterDiffUtil())
         recyclerView.setHasFixedSize(true)
+        recyclerView.isNestedScrollingEnabled = true
+
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.setEvent(TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked)
+        }
     }
 
     private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
@@ -287,7 +293,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         )
         shimmerContainer.gone()
 
-        infoLayout.gone()
+//        infoLayout.gone()
         recyclerView.collection = sectionData
         showOrHideNoDataLayout(
             sectionData.isNotEmpty()
@@ -299,11 +305,11 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     ) = viewBinding.apply{
 
         if (dataAvailableToShowOnScreen) {
-            infoLayout.root.visible()
-            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
+//            infoLayout.root.visible()
+//            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
         } else {
-            infoLayout.root.gone()
-            infoLayout.infoMessageTv.text = null
+//            infoLayout.root.gone()
+//            infoLayout.infoMessageTv.text = null
         }
     }
 

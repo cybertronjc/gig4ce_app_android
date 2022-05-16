@@ -79,6 +79,7 @@ class NavManagerImpl @Inject constructor(
         NavForProfileModule(this)
         NavForLeadManagmentModule(this)
         NavForTLReportModule(this)
+        NavForTlWorkSpace(this)
     }
 
     private fun registerForWalletAndPayouts() {

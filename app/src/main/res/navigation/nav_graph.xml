@@ -1195,5 +1195,10 @@
     <fragment android:id="@+id/travellingDetailInfoFragment"
         android:name="com.gigforce.giger_gigs.travelling_info.TravellingDetailInfoFragment"
         android:label="TravellingDetailInfoFragment"/>
+
+
+    <fragment android:id="@+id/tLWorkspaceHomeFragment"
+        android:name="com.gigforce.app.tl_work_space.home.TLWorkspaceHomeFragment"
+        android:label="TLWorkspaceHomeFragment"/>
 </navigation>
 

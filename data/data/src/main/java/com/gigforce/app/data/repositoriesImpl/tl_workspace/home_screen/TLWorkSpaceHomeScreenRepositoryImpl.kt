@@ -24,7 +24,7 @@ class TLWorkSpaceHomeScreenRepositoryImpl @Inject constructor(
             getWorkspaceSectionsData(
                 GetTLWorkspaceRequest.defaultRequest()
             )
-        },
+        }/*,
         sourceOfTruth = SourceOfTruth.Companion.of(
             reader = { key -> localDataStore.getCachedWorkspaceSectionAsFlow() },
             writer = { key: String, input: List<TLWorkSpaceSectionApiModel> ->
@@ -32,7 +32,7 @@ class TLWorkSpaceHomeScreenRepositoryImpl @Inject constructor(
                     input
                 )
             }
-        )
+        )*/
     ).build()
 
     override fun getWorkspaceSectionAsFlow(): Flow<Lce<List<TLWorkSpaceSectionApiModel>>> {

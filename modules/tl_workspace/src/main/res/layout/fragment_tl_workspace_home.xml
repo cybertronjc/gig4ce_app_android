@@ -15,8 +15,6 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             app:backgroundType="PinkBar"
-            app:isFilterVisible="true"
-            app:isSearchVisible="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +35,7 @@
                 <com.gigforce.core.recyclerView.CoreRecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
+                    android:overScrollMode="never"
                     android:layout_height="match_parent" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

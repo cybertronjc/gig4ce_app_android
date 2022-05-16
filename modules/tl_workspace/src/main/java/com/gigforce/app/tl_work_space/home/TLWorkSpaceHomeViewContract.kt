@@ -28,10 +28,13 @@ sealed class TLWorkSpaceHomeViewContract {
 
     sealed class TLWorkSpaceHomeUiEvents : UiEvent {
 
+
         data class OpenFilter(
             val sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
             val anchorView: View
         ) : TLWorkSpaceHomeUiEvents()
+
+        object RefreshWorkSpaceDataClicked : TLWorkSpaceHomeUiEvents()
 
         data class FilterSelected(
             val section: TLWorkspaceHomeSection,
@@ -44,6 +47,31 @@ sealed class TLWorkSpaceHomeViewContract {
             val date1: LocalDate,
             val date2: LocalDate? // will be non-null in case of range
         ) : TLWorkSpaceHomeUiEvents()
+
+        sealed class SectionType1Event : TLWorkSpaceHomeUiEvents() {
+
+            data class InnerCardClicked(
+                val innerClickedCard: TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData
+            ) : SectionType1Event()
+        }
+
+        sealed class SectionType2Event : TLWorkSpaceHomeUiEvents() {
+
+            data class InnerCardClicked(
+                val innerClickedCard: TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData
+            ) : SectionType1Event()
+        }
+
+        sealed class UpcomingGigersSectionEvent : TLWorkSpaceHomeUiEvents() {
+
+            object SeeAllUpcomingGigersClicked : UpcomingGigersSectionEvent()
+
+            data class GigerClicked(
+                val giger: TLWorkspaceRecyclerItemData.UpcomingGigerItemData
+            ) : UpcomingGigersSectionEvent()
+        }
+
+
     }
 
     sealed class TLWorkSpaceHomeViewUiEffects : UiEffect {
@@ -60,7 +88,7 @@ sealed class TLWorkSpaceHomeViewContract {
 
         data class OpenDateSelectedDialog(
             val sectionId: String,
-            val filterId : String,
+            val filterId: String,
             val showRange: Boolean,
             val minDate: LocalDate,
             val maxDate: LocalDate,

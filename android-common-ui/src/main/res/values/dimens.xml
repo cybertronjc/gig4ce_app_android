@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="size_0dp">0dp</dimen>
+
     <dimen name="text_view_rise_dip_drawable_size">8dp</dimen>
     <dimen name="layout_rise_dip_corner_size">6dp</dimen>
 

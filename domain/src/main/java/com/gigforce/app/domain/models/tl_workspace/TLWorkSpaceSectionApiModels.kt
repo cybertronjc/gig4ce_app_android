@@ -1,6 +1,7 @@
 package com.gigforce.app.domain.models.tl_workspace
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class TLWorkSpaceSectionApiModel(
@@ -14,8 +15,8 @@ data class TLWorkSpaceSectionApiModel(
     @field:SerializedName("title")
     val title: String? = null,
 
-    @field:SerializedName("type")
-    val type: String? = null,
+    @field:SerializedName("sectionId")
+    val sectionId: String? = null,
 
     @field:SerializedName("items")
     val items: List<SectionItemApiModel>? = null,
@@ -27,7 +28,7 @@ data class TLWorkSpaceSectionApiModel(
 data class FiltersItemApiModel(
 
     @field:SerializedName("endDate")
-    val endDate: LocalDateTime? = null,
+    val endDate: LocalDate? = null,
 
     @field:SerializedName("text")
     val text: String? = null,
@@ -36,10 +37,19 @@ data class FiltersItemApiModel(
     val filterId: String? = null,
 
     @field:SerializedName("startDate")
-    val startDate: LocalDateTime? = null,
+    val startDate: LocalDate? = null,
 
     @field:SerializedName("default")
     val default: Boolean? = false,
+
+    @field:SerializedName("customDateOrRangeFilter")
+    var customDateOrRangeFilter: Boolean,
+
+    @field:SerializedName("customFilterSelectRange")
+    var selectRangeInFilter: Boolean? = false,
+
+    @field:SerializedName("maxDaysDifferenceInCaseOfRange")
+    var maxDaysDifferenceInCaseOfRange: Int? = -1
 ) {
 
     fun mapToPresentationFilter(): TLWorkSpaceFilterOption {
@@ -52,7 +62,9 @@ data class FiltersItemApiModel(
             endDate = endDate,
             selected = false,
             default = default ?: false,
-
+            customDateOrRangeFilter = customDateOrRangeFilter,
+            selectRangeInFilter = selectRangeInFilter ?: false,
+            maxDaysDifferenceInCaseOfRange = maxDaysDifferenceInCaseOfRange ?: -1
         )
     }
 }
@@ -69,7 +81,10 @@ data class SectionItemApiModel(
     val valueChangedBy: Int? = null,
 
     @field:SerializedName("title")
-    val title: String? = null
+    val title: String? = null,
+
+    @field:SerializedName("cardIndex")
+    val cardIndex: Int? = null
 )
 
 data class UpcomingGigersApiModel(

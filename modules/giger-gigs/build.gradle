@@ -119,6 +119,7 @@ dependencies {
     implementation Libs.Google.playCoreKtx
 
     implementation Libs.Google.zxing
+    implementation Libs.progressButton
 
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf

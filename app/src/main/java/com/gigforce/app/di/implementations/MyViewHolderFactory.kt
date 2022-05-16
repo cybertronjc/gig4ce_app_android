@@ -1,5 +1,6 @@
 package com.gigforce.app.di.implementations
 
+import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeScreenCoreRecyclerViewBindings
 import com.gigforce.core.CoreViewHolderFactory
 import com.gigforce.giger_app.AppModuleLevelViewTypeLoader
 import com.gigforce.giger_app.ComponentViewLoader
@@ -24,5 +25,6 @@ class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
         this.registerViewTypeLoader(LoginSummaryViewTypeLoader)
         this.registerViewTypeLoader(VerificationViewTypeLoader)
         this.registerViewTypeLoader(PayoutCoreRecyclerViewBindings)
+        this.registerViewTypeLoader(TLWorkSpaceHomeScreenCoreRecyclerViewBindings)
     }
 }

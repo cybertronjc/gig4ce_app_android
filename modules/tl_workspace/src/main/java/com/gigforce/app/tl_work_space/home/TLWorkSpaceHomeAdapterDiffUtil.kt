@@ -1,7 +1,5 @@
 package com.gigforce.app.tl_work_space.home
 
-import com.gigforce.app.domain.models.tl_workspace.UpcomingGigersApiModel
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceCardItemData
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.recyclerView.CoreDiffUtilCallback
 
@@ -63,7 +61,7 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
                         oldItem.sectionTitle == newItem.sectionTitle &&
                         (oldItem.currentFilter?.filterId != null && newItem.currentFilter?.filterId != null) &&
                         oldItem.currentFilter.filterId == newItem.currentFilter.filterId &&
-                        oldItem.itemData.hasSameContentAs(newItem.itemData)
+                        oldItem.itemData.hasSameType2ContentAs(newItem.itemData)
             } else if(
                 oldItem is TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData &&
                 newItem is TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData
@@ -78,8 +76,8 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
     }
 
 
-    private fun List<TLWorkspaceCardItemData>.hasSameContentAs(
-        otherList: List<TLWorkspaceCardItemData>
+    private fun List<TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData>.hasSameContentAs(
+        otherList: List<TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData>
     ): Boolean {
         if (this.size != otherList.size) {
             return false
@@ -94,8 +92,24 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
         return true
     }
 
-    private fun List<UpcomingGigersApiModel>.hasSameGigersAs(
-        otherList: List<UpcomingGigersApiModel>
+    private fun List<TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData>.hasSameType2ContentAs(
+        otherList: List<TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData>
+    ): Boolean {
+        if (this.size != otherList.size) {
+            return false
+        }
+
+        for ((index, value) in this.withIndex()) {
+
+            if (!value.hasSameContentAs(otherList[index])) {
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData>.hasSameGigersAs(
+        otherList: List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData>
     ): Boolean {
         if (this.size != otherList.size) {
             return false

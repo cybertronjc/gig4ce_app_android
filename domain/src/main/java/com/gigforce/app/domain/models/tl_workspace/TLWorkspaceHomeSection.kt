@@ -20,7 +20,7 @@ enum class TLWorkspaceHomeSection constructor(
             sectionId: String
         ): TLWorkspaceHomeSection {
             values().forEach {
-                if (it.sectionId == sectionId)
+                if (it.sectionId == sectionId.trim().lowercase())
                     return it
             }
 

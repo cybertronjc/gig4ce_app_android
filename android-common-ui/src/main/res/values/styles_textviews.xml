@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    Text Styles-->
+
+    <style name="TextAppearance.Title.Primary" parent="TextAppearance.MaterialComponents.Headline5">
+
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:lineHeight">33dp</item>
+    </style>
+
+
+    <style name="TextAppearance.Heading.Secondary" parent="TextAppearance.MaterialComponents.Headline6">
+
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:lineHeight">21dp</item>
+    </style>
+
+    <style name="TextAppearance.Body.Primary" parent="TextAppearance.MaterialComponents.Body1">
+
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:lineHeight">18dp</item>
+        <item name="android:textColor">@color/grey_500</item>
+    </style>
+
+
+</resources>

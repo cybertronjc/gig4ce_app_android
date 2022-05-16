@@ -52,6 +52,7 @@ dependencies {
     implementation Libs.Dagger.hilt
 
     implementation Libs.Firebase.coreKtx
+    implementation Libs.Firebase.firestoreKtx
 
     /**
      * Module specific dependencies

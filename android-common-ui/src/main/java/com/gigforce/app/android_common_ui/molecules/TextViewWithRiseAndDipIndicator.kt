@@ -36,8 +36,8 @@ class TextViewWithRiseAndDipIndicator(
             true
         )
 
-        setupTextSwitcher(textSwitcher)
         findViews(inflatedView)
+        setupTextSwitcher(textSwitcher)
     }
 
     private fun setupTextSwitcher(textSwitcher: TextSwitcher) {
