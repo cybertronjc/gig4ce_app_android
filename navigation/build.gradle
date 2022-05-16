@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation project(path: ':modules:core')
+    implementation project(path: ':domain')
 
     /**
      * Common dependencies

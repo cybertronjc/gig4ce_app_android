@@ -1,4 +1,4 @@
-package com.gigforce.app.tl_work_space.home.views
+package com.gigforce.app.tl_work_space.upcoming_gigers.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,13 +7,15 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.databinding.RecyclerViewItemUpcomingGigersItemBinding
+import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
 import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigerItemData
 import com.gigforce.core.IViewHolder
 import com.google.android.material.card.MaterialCardView
 
-class TLWorkspaceUpcomingGigersItemView(
+class UpcomingGigersItemView(
     context: Context,
     attrs: AttributeSet?
 ) : MaterialCardView(
@@ -21,8 +23,8 @@ class TLWorkspaceUpcomingGigersItemView(
     attrs
 ), IViewHolder, View.OnClickListener {
 
-    private lateinit var viewBinding: RecyclerViewItemUpcomingGigersItemBinding
-    private var viewData: TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData? = null
+    private lateinit var viewBinding: FragmentUpcomingGigersItemBinding
+    private var viewData: UpcomingGigerItemData? = null
 
     init {
         elevation = resources.getDimension(R.dimen.card_elevation_mid)
@@ -41,7 +43,7 @@ class TLWorkspaceUpcomingGigersItemView(
     }
 
     private fun inflate() {
-        viewBinding = RecyclerViewItemUpcomingGigersItemBinding.inflate(
+        viewBinding = FragmentUpcomingGigersItemBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -80,11 +82,21 @@ class TLWorkspaceUpcomingGigersItemView(
     }
 
     override fun onClick(v: View?) {
-        viewData?.viewModel?.setEvent(
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked(
-                viewData!!
+        if(v?.id == R.id.call_giger_btn){
+
+            viewData?.viewModel?.setEvent(
+                UpcomingGigersViewContract.UpcomingGigersUiEvents.CallGigerClicked(
+                    viewData!!
+                )
             )
-        )
+        } else {
+
+            viewData?.viewModel?.setEvent(
+                UpcomingGigersViewContract.UpcomingGigersUiEvents.GigerClicked(
+                    viewData!!
+                )
+            )
+        }
     }
 
 }

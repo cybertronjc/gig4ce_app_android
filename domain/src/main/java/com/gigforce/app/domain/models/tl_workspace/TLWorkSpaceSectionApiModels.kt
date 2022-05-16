@@ -49,8 +49,18 @@ data class FiltersItemApiModel(
     var selectRangeInFilter: Boolean? = false,
 
     @field:SerializedName("maxDaysDifferenceInCaseOfRange")
-    var maxDaysDifferenceInCaseOfRange: Int? = -1
-) {
+    var maxDaysDifferenceInCaseOfRange: Int? = -1,
+
+    @field:SerializedName("defaultSelectedDate")
+    val defaultSelectedDate: LocalDate? = null,
+
+    @field:SerializedName("minimumDateAvailableForSelection")
+    val minimumDateAvailableForSelection: LocalDate? = null,
+
+    @field:SerializedName("maximumDateAvailableForSelection")
+    val maximumDateAvailableForSelection: LocalDate? = null,
+
+    ) {
 
     fun mapToPresentationFilter(): TLWorkSpaceFilterOption {
         return TLWorkSpaceFilterOption(
@@ -64,7 +74,10 @@ data class FiltersItemApiModel(
             default = default ?: false,
             customDateOrRangeFilter = customDateOrRangeFilter,
             selectRangeInFilter = selectRangeInFilter ?: false,
-            maxDaysDifferenceInCaseOfRange = maxDaysDifferenceInCaseOfRange ?: -1
+            maxDaysDifferenceInCaseOfRange = maxDaysDifferenceInCaseOfRange ?: -1,
+            defaultSelectedDate = defaultSelectedDate,
+            minimumDateAvailableForSelection = minimumDateAvailableForSelection,
+            maximumDateAvailableForSelection = maximumDateAvailableForSelection,
         )
     }
 }

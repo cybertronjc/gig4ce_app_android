@@ -108,8 +108,8 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
         return true
     }
 
-    private fun List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData>.hasSameGigersAs(
-        otherList: List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData>
+    private fun List<TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData>.hasSameGigersAs(
+        otherList: List<TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData>
     ): Boolean {
         if (this.size != otherList.size) {
             return false

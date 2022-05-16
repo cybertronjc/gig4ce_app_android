@@ -1,7 +1,7 @@
 package com.gigforce.app.tl_work_space.home.models
 
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
-import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeScreenCoreRecyclerViewBindings
+import com.gigforce.app.tl_work_space.TLWorkSpaceCoreRecyclerViewBindings
 import com.gigforce.app.tl_work_space.home.TLWorkspaceHomeViewModel
 import com.gigforce.core.SimpleDVM
 
@@ -20,7 +20,7 @@ open class TLWorkspaceRecyclerItemData(
         val noOfItemsToShowInGrid: Int,
         val viewModel: TLWorkspaceHomeViewModel
     ) : TLWorkspaceRecyclerItemData(
-        type = TLWorkSpaceHomeScreenCoreRecyclerViewBindings.TLWorkspaceType1ItemType
+        type = TLWorkSpaceCoreRecyclerViewBindings.TLWorkspaceType1SectionItemType
     )
 
     /**
@@ -33,7 +33,7 @@ open class TLWorkspaceRecyclerItemData(
         val changeType: ValueChangeType,
         val viewModel: TLWorkspaceHomeViewModel
     ) : SimpleDVM(
-        TLWorkSpaceHomeScreenCoreRecyclerViewBindings.TLWorkspaceType1InnerCardType
+        TLWorkSpaceCoreRecyclerViewBindings.TLWorkspaceType1InnerCardType
     ) {
 
         fun hasSameContentAs(
@@ -58,7 +58,7 @@ open class TLWorkspaceRecyclerItemData(
         val noOfItemsToShowInGrid: Int,
         val viewModel: TLWorkspaceHomeViewModel
     ) : TLWorkspaceRecyclerItemData(
-        type = TLWorkSpaceHomeScreenCoreRecyclerViewBindings.TLWorkspaceType2ItemType
+        type = TLWorkSpaceCoreRecyclerViewBindings.TLWorkspaceType2SectionItemType
     )
 
     /**
@@ -71,7 +71,7 @@ open class TLWorkspaceRecyclerItemData(
         val changeType: ValueChangeType,
         val viewModel: TLWorkspaceHomeViewModel
     ) : SimpleDVM(
-        TLWorkSpaceHomeScreenCoreRecyclerViewBindings.TLWorkspaceType2InnerCardType
+        TLWorkSpaceCoreRecyclerViewBindings.TLWorkspaceType2InnerCardType
     ) {
 
         fun hasSameContentAs(
@@ -90,16 +90,16 @@ open class TLWorkspaceRecyclerItemData(
     data class TLWorkspaceUpcomingGigersRecyclerItemData(
         val sectionId: String,
         val title : String,
-        val upcomingGigers: List<UpcomingGigerItemData>,
+        val upcomingGigers: List<UpcomingGigerInnerItemData>,
         val viewModel: TLWorkspaceHomeViewModel
     ) : TLWorkspaceRecyclerItemData(
-        type = TLWorkSpaceHomeScreenCoreRecyclerViewBindings.UpcomingGigersItemType
+        type = TLWorkSpaceCoreRecyclerViewBindings.UpcomingGigersSectionItemType
     )
 
     /**
      * ^ Upcoming giger section inner individual giger card data model
      */
-    data class UpcomingGigerItemData(
+    data class UpcomingGigerInnerItemData(
         val gigerId: String,
         val gigerName: String,
         val business: String? = null,
@@ -108,11 +108,11 @@ open class TLWorkspaceRecyclerItemData(
         val profilePictureThumbnail: String? = null,
         val viewModel: TLWorkspaceHomeViewModel
     ) : TLWorkspaceRecyclerItemData(
-        type = TLWorkSpaceHomeScreenCoreRecyclerViewBindings.UpcomingGigersInnerItemType
+        type = TLWorkSpaceCoreRecyclerViewBindings.UpcomingGigersInnerItemType
     ) {
 
         fun hasSameContentAs(
-            data: UpcomingGigerItemData
+            data: UpcomingGigerInnerItemData
         ): Boolean {
             return this.gigerId == data.gigerId &&
                     this.gigerName == data.gigerName &&

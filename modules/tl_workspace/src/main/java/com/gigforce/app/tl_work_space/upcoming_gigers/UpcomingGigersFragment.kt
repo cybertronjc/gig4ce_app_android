@@ -3,12 +3,16 @@ package com.gigforce.app.tl_work_space.upcoming_gigers
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
+import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation.Companion.FRAGMENT_RESULT_KEY_DATE_FILTER
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
+import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
@@ -16,17 +20,18 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.google.android.material.snackbar.Snackbar
-import com.skydoves.powermenu.OnMenuItemClickListener
-import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpcomingGigersFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
+class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
     fragmentName = "UpcomingGigersFragment",
-    layoutId = R.layout.fragment_tl_workspace_home,
+    layoutId = R.layout.fragment_upcoming_gigers,
     statusBarColor = R.color.status_bar_pink
-), OnMenuItemClickListener<PowerMenuItem> {
+) {
 
+    @Inject
+    lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
     private val viewModel: UpcomingGigersViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -34,15 +39,38 @@ class UpcomingGigersFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     override fun viewCreated(
-        viewBinding: FragmentTlWorkspaceHomeBinding,
+        viewBinding: FragmentUpcomingGigersBinding,
         savedInstanceState: Bundle?
     ) {
+        setFragmentListenerForDateFilterSelection()
 
         if (viewCreatedForTheFirstTime) {
             initView()
             observeViewStates()
             observeViewEffects()
         }
+    }
+
+    private fun setFragmentListenerForDateFilterSelection() {
+
+        setFragmentResultListener(
+            FRAGMENT_RESULT_KEY_DATE_FILTER,
+            listener = { requestKey: String, bundle: Bundle ->
+
+                if (FRAGMENT_RESULT_KEY_DATE_FILTER == requestKey) {
+                    val selectedFilter =
+                        TLWorkSpaceNavigation.FragmentResultHandler.getDateFilterResult(
+                            bundle
+                        ) ?: return@setFragmentResultListener
+
+                    viewModel.setEvent(
+                        UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.DateFilterApplied(
+                            filter = selectedFilter
+                        )
+                    )
+                }
+            }
+        )
     }
 
     private fun initView() = viewBinding.apply {
@@ -67,6 +95,9 @@ class UpcomingGigersFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                 when (it) {
                     is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
+                    )
+                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowFilterBottomSheet -> tlWorkSpaceNavigation.openFilterBottomSheet(
+                        it.filters
                     )
                 }
             }
@@ -154,7 +185,7 @@ class UpcomingGigersFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
             if (!shimmerContainer.isVisible) {
                 startShimmer(
-                    this.shimmerContainer,
+                    this.shimmerContainer as LinearLayout,
                     ShimmerDataModel(
                         minHeight = R.dimen.size_120,
                         minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
@@ -177,122 +208,4 @@ class UpcomingGigersFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             Snackbar.LENGTH_SHORT
         ).show()
     }
-
-    override fun onItemClick(position: Int, item: PowerMenuItem?): Unit = item.let {
-        val filterTag = it?.tag?.toString() ?: return@let
-        val filterId = filterTag.substringAfter("<>")
-
-//        viewModel.setEvent(
-//            UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.DateFilterApplied(
-//                filterId = filterId
-//            )
-//        )
-    }
-
-//    private fun openDateFilter(
-//        sectionId: String,
-//        filterId: String,
-//        showRange: Boolean,
-//        selectedDate: LocalDate,
-//        minDate: LocalDate,
-//        maxDate: LocalDate
-//    ) {
-//        if (showRange) {
-//
-//            openSelectDateRangeSelectionDialog(
-//                sectionId,
-//                filterId,
-//                selectedDate,
-//                minDate,
-//                maxDate
-//            )
-//        } else {
-//            openSingleDateSelectionDialog(
-//                sectionId,
-//                filterId,
-//                selectedDate,
-//                minDate,
-//                maxDate
-//            )
-//        }
-//    }
-
-//    private fun openSingleDateSelectionDialog(
-//        sectionId: String,
-//        filterId: String,
-//        defaultDate: LocalDate,
-//        minDate: LocalDate,
-//        maxDate: LocalDate
-//    ) {
-//        DatePickerDialog(
-//            requireContext(),
-//            R.style.DatePickerTheme,
-//            { datePickerView: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-//                val filterId = datePickerView?.tag?.toString() ?: return@DatePickerDialog
-//
-//                val date = LocalDate.of(
-//                    year,
-//                    month + 1,
-//                    dayOfMonth
-//                )
-//                viewModel.setEvent(
-//                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
-//                        currentViewSectionId,
-//                        currentViewFilterId,
-//                        date,
-//                        null
-//                    )
-//                )
-//            },
-//            defaultDate.year,
-//            defaultDate.monthValue - 1,
-//            defaultDate.dayOfMonth
-//        ).apply {
-//            val menuTag = "$sectionId<>$filterId"
-//            this.datePicker.tag = menuTag
-//
-//            this.show()
-//        }
-//    }
-//
-//    private fun openSelectDateRangeSelectionDialog(
-//        sectionId: String,
-//        filterId: String,
-//        defaultDate: LocalDate,
-//        minDate: LocalDate,
-//        maxDate: LocalDate
-//    ) {
-//        DatePickerDialog(
-//            requireContext(),
-//            R.style.DatePickerTheme,
-//            { datePickerView: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-//                val filterTag = datePickerView?.tag?.toString() ?: return@DatePickerDialog
-//
-//                val currentViewSectionId = filterTag.substringBefore("<>")
-//                val currentViewFilterId = filterTag.substringAfter("<>")
-//
-//                val date = LocalDate.of(
-//                    year,
-//                    month + 1,
-//                    dayOfMonth
-//                )
-////                viewModel.setEvent(
-////                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
-////                        currentViewSectionId,
-////                        currentViewFilterId,
-////                        date,
-////                        null
-////                    )
-////                )
-//            },
-//            defaultDate.year,
-//            defaultDate.monthValue - 1,
-//            defaultDate.dayOfMonth
-//        ).apply {
-//            val menuTag = "$sectionId<>$filterId"
-//            this.datePicker.tag = menuTag
-//
-//            this.show()
-//        }
-//    }
 }

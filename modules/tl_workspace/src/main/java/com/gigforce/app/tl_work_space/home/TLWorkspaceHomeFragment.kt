@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.R
@@ -57,7 +56,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         }
     }
 
-    private fun initView()  = viewBinding.apply{
+    private fun initView() = viewBinding.apply {
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -302,7 +301,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     private fun showOrHideNoDataLayout(
         dataAvailableToShowOnScreen: Boolean
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
 
         if (dataAvailableToShowOnScreen) {
 //            infoLayout.root.visible()
@@ -338,7 +337,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
             if (!shimmerContainer.isVisible) {
                 startShimmer(
-                    this.shimmerContainer,
+                    this.shimmerContainer as LinearLayout,
                     ShimmerDataModel(
                         minHeight = R.dimen.size_120,
                         minWidth = LinearLayout.LayoutParams.MATCH_PARENT,

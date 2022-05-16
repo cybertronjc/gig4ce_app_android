@@ -67,7 +67,7 @@ sealed class TLWorkSpaceHomeViewContract {
             object SeeAllUpcomingGigersClicked : UpcomingGigersSectionEvent()
 
             data class GigerClicked(
-                val giger: TLWorkspaceRecyclerItemData.UpcomingGigerItemData
+                val giger: TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData
             ) : UpcomingGigersSectionEvent()
         }
 

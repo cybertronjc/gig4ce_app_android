@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.*
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
+import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceUpcomingGigersRepository
 import com.gigforce.app.tl_work_space.home.mapper.ApiModelToPresentationModelMapper
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.logger.GigforceLogger
@@ -17,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UpcomingGigersViewModel @Inject constructor(
     private val logger: GigforceLogger,
-    private val tlWorkSpaceHomeScreenRepository: TLWorkSpaceHomeScreenRepository
+    private val repository: TLWorkspaceUpcomingGigersRepository
 ) : BaseViewModel<
         UpcomingGigersViewContract.UpcomingGigersUiEvents,
         UpcomingGigersViewContract.UpcomingGigersUiState,
@@ -65,6 +66,8 @@ class UpcomingGigersViewModel @Inject constructor(
 
 
         try {
+
+
 //            val rawSectionDataFromServer = tlWorkSpaceHomeScreenRepository.getWorkspaceSectionsData(
 //                GetTLWorkspaceRequest(
 //                    defaultRequest = false,

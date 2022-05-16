@@ -61,7 +61,7 @@ class TLWorkspaceUpcomingGigersSectionView(
     }
 
     private fun inflateUpcomingGigers(
-        upcomingGigers: List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData>
+        upcomingGigers: List<TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData>
     ) = viewBinding.linearLayout.apply {
         removeAllViews()
 

@@ -5,6 +5,7 @@ import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigerItemData
 
 sealed class UpcomingGigersViewContract {
 
@@ -19,7 +20,7 @@ sealed class UpcomingGigersViewContract {
         ) : UpcomingGigersUiState()
 
         data class ShowOrUpdateSectionListOnView(
-            val sectionData: List<TLWorkspaceRecyclerItemData>,
+            val sectionData: List<UpcomingGigerItemData>,
         ) : UpcomingGigersUiState()
     }
 
@@ -28,11 +29,11 @@ sealed class UpcomingGigersViewContract {
         object RefreshUpcomingGigersClicked : UpcomingGigersUiEvents()
 
         data class GigerClicked(
-            val giger: String
+            val giger: UpcomingGigerItemData
         ) : UpcomingGigersUiEvents()
 
         data class CallGigerClicked(
-            val giger: String
+            val giger: UpcomingGigerItemData
         ) : UpcomingGigersUiEvents()
 
         sealed class FilterApplied() : UpcomingGigersUiEvents(){

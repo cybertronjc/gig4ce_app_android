@@ -180,10 +180,10 @@ object ApiModelToPresentationModelMapper {
     private fun mapToPresentationUpcomingGigModel(
         it: List<UpcomingGigersApiModel>?,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
-    ): List<TLWorkspaceRecyclerItemData.UpcomingGigerItemData> {
+    ): List<TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData> {
         val gigersInApiModel = it ?: return emptyList()
         return gigersInApiModel.map {
-            TLWorkspaceRecyclerItemData.UpcomingGigerItemData(
+            TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData(
                 gigerId = it.gigerId!!,
                 gigerName = it.gigerName ?: "----",
                 business = it.business ?: "",
