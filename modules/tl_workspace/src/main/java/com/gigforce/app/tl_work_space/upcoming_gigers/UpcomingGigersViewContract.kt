@@ -42,13 +42,18 @@ sealed class UpcomingGigersViewContract {
                 val searchText: String?
             ) : UpcomingGigersUiEvents()
 
-            data class DateFilterApplied(
-                val filter : TLWorkSpaceFilterOption
-             ) : UpcomingGigersUiEvents()
         }
     }
 
     sealed class UpcomingGigersViewUiEffects : UiEffect {
+
+        data class DialogPhoneNumber(
+            val phoneNumber : String
+        ) : UpcomingGigersViewUiEffects()
+
+        data class OpenGigerDetailsBottomSheet(
+            val gigerDetails : UpcomingGigerItemData
+        ) : UpcomingGigersViewUiEffects()
 
         data class ShowFilterBottomSheet(
             val filters : List<TLWorkSpaceFilterOption>

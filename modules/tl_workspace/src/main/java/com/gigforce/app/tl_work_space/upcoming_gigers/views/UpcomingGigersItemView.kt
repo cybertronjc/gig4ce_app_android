@@ -8,10 +8,9 @@ import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
-import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.IViewHolder
 import com.google.android.material.card.MaterialCardView
 
@@ -24,7 +23,7 @@ class UpcomingGigersItemView(
 ), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: FragmentUpcomingGigersItemBinding
-    private var viewData: UpcomingGigerItemData? = null
+    private var viewData: UpcomingGigersListData.UpcomingGigerItemData? = null
 
     init {
         elevation = resources.getDimension(R.dimen.card_elevation_mid)
@@ -61,7 +60,7 @@ class UpcomingGigersItemView(
                 it.profilePictureThumbnail,
                 it.profilePicture
             )
-            viewBinding.gigerNameTextview.text = it.gigerName ?: ""
+            viewBinding.gigerNameTextview.text = it.gigerName
             viewBinding.gigerDesignationTextview.text = getCompanyDesignationString(
                 it.business,
                 it.jobProfile
@@ -82,7 +81,7 @@ class UpcomingGigersItemView(
     }
 
     override fun onClick(v: View?) {
-        if(v?.id == R.id.call_giger_btn){
+        if (v?.id == R.id.call_giger_btn) {
 
             viewData?.viewModel?.setEvent(
                 UpcomingGigersViewContract.UpcomingGigersUiEvents.CallGigerClicked(

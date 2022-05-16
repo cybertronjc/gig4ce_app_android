@@ -42,35 +42,11 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         viewBinding: FragmentUpcomingGigersBinding,
         savedInstanceState: Bundle?
     ) {
-        setFragmentListenerForDateFilterSelection()
-
         if (viewCreatedForTheFirstTime) {
             initView()
             observeViewStates()
             observeViewEffects()
         }
-    }
-
-    private fun setFragmentListenerForDateFilterSelection() {
-
-        setFragmentResultListener(
-            FRAGMENT_RESULT_KEY_DATE_FILTER,
-            listener = { requestKey: String, bundle: Bundle ->
-
-                if (FRAGMENT_RESULT_KEY_DATE_FILTER == requestKey) {
-                    val selectedFilter =
-                        TLWorkSpaceNavigation.FragmentResultHandler.getDateFilterResult(
-                            bundle
-                        ) ?: return@setFragmentResultListener
-
-                    viewModel.setEvent(
-                        UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.DateFilterApplied(
-                            filter = selectedFilter
-                        )
-                    )
-                }
-            }
-        )
     }
 
     private fun initView() = viewBinding.apply {

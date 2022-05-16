@@ -1,18 +1,14 @@
 package com.gigforce.app.tl_work_space.upcoming_gigers
 
-import android.view.View
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.*
-import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceUpcomingGigersRepository
-import com.gigforce.app.tl_work_space.home.mapper.ApiModelToPresentationModelMapper
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,16 +32,13 @@ class UpcomingGigersViewModel @Inject constructor(
     /**
      * Raw Data, from Server
      */
-    private var tlWorkSpaceDataRaw: List<TLWorkSpaceSectionApiModel> = emptyList()
+    private var rawUpcomingGigerList: List<UpcomingGigersApiModel> = emptyList()
 
     /**
      * Processed Data
      */
-    private var sectionsShownOnView: List<TLWorkspaceRecyclerItemData> = emptyList()
-    private var sectionToSelectedFilterMap: MutableMap<
-            TLWorkspaceHomeSection, //Section
-            TLWorkSpaceFilterOption? //Currently Selected filter
-            > = mutableMapOf()
+    private var upcomingGigersShownOnView: List<UpcomingGigersListData> = emptyList()
+    private var searchText: String? = null
 
     init {
         refreshGigersData()
@@ -60,7 +53,7 @@ class UpcomingGigersViewModel @Inject constructor(
 
         setState {
             UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers(
-                alreadyShowingGigersOnView = tlWorkSpaceDataRaw.isNotEmpty()
+                alreadyShowingGigersOnView = rawUpcomingGigerList.isNotEmpty()
             )
         }
 
@@ -68,16 +61,8 @@ class UpcomingGigersViewModel @Inject constructor(
         try {
 
 
-//            val rawSectionDataFromServer = tlWorkSpaceHomeScreenRepository.getWorkspaceSectionsData(
-//                GetTLWorkspaceRequest(
-//                    defaultRequest = false,
-//                    requestedData = sectionToRefreshWithFiltersInfo
-//                )
-//            )
-//            processDataReceivedFromServerAndUpdateOnView(
-//                sectionToRefreshWithFiltersInfo,
-//                rawSectionDataFromServer
-//            )
+            rawUpcomingGigerList = repository.getUpcomingGigers()
+            processDataReceivedFromServerAndUpdateOnView()
         } catch (e: Exception) {
 
             if (e is IOException) {
@@ -97,129 +82,67 @@ class UpcomingGigersViewModel @Inject constructor(
         }
     }
 
-    private fun processDataReceivedFromServerAndUpdateOnView(
-        filtersUsed: List<RequestedDataItem>?,
-        rawSectionDataFromServer: List<TLWorkSpaceSectionApiModel>
-    ) {
-//        this.tlWorkSpaceDataRaw = rawSectionDataFromServer
-//
-//        sectionsShownOnView = ApiModelToPresentationModelMapper.mapToPresentationList(
-//            sectionToSelectedFilterMap,
-//            tlWorkSpaceDataRaw,
-//            this
-//        )
+    private  fun processDataReceivedFromServerAndUpdateOnView() {
+        upcomingGigersShownOnView = UpcomingGigersListProcessor.processRawUpcomingListForView(
+            rawUpcomingGigerList,
+            searchText
+        )
 
         setState {
             UpcomingGigersViewContract.UpcomingGigersUiState.ShowOrUpdateSectionListOnView(
-                sectionsShownOnView
+                upcomingGigersShownOnView
             )
         }
     }
 
     override fun handleEvent(event: UpcomingGigersViewContract.UpcomingGigersUiEvents) {
-        TODO("Not yet implemented")
-    }
-
-//    override fun handleEvent(event: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents) {
-//        when (event) {
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.OpenFilter -> handleOpenFilterClicked(
-//                event.sectionOpenFilterClickedFrom,
-//                event.anchorView
-//            )
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterSelected -> handleFilterApplied(
-//                event.section,
-//                event.filterId
-//            )
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter -> handleCustomDateFilter(
-//                event.sectionId,
-//                event.filterId,
-//                event.date1,
-//                event.date2
-//            )
-//            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked -> refreshGigersData()
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked -> TODO()
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType2Event.InnerCardClicked -> TODO()
-//            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked -> TODO()
-//            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> TODO()
-//        }
-//    }
-
-    private fun handleCustomDateFilter(
-        sectionId: String,
-        filterId: String,
-        date1: LocalDate,
-        date2: LocalDate?
-    ) {
-
-    }
-
-
-    private fun handleOpenFilterClicked(
-        sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
-        anchorView: View
-    ) {
-        val filterSectionId = sectionOpenFilterClickedFrom.getSectionId()
-        val doesSectionHaveFilters = false
-
-        if (!doesSectionHaveFilters) {
-            logger.w(
-                TAG,
-                "handleOpenFilterClicked() - called from section $filterSectionId, section doesn't have filters"
+        when (event) {
+            is UpcomingGigersViewContract.UpcomingGigersUiEvents.CallGigerClicked -> callGiger(
+                event.giger
             )
+            is UpcomingGigersViewContract.UpcomingGigersUiEvents.GigerClicked -> gigerItemClicked(
+                event.giger
+            )
+            UpcomingGigersViewContract.UpcomingGigersUiEvents.RefreshUpcomingGigersClicked -> refreshGigersData()
+            is UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
+                event.searchText
+            )
+        }
+    }
+
+    private fun searchFilterApplied(
+        searchText: String?
+    ) {
+        this.searchText = searchText
+
+        if (currentState is UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers) {
+            return
+        }
+    }
+
+    private fun gigerItemClicked(
+        giger: UpcomingGigersListData.UpcomingGigerItemData
+    ) {
+        setEffect {
+            UpcomingGigersViewContract.UpcomingGigersViewUiEffects.OpenGigerDetailsBottomSheet(
+                giger
+            )
+        }
+    }
+
+    private fun callGiger(
+        giger: UpcomingGigersListData.UpcomingGigerItemData
+    ) {
+        if (giger.phoneNumber.isNullOrBlank()) {
             return
         }
 
-        showFilterScreen(
-            filterSectionId,
-            anchorView
-        )
+        setEffect {
+            UpcomingGigersViewContract.UpcomingGigersViewUiEffects.DialogPhoneNumber(
+                giger.phoneNumber
+            )
+        }
     }
 
-    private fun showFilterScreen(
-        filterSectionId: String,
-        anchorView: View
-    ) {
-//        val sectionWhereOpenFilterWasTapped = tlWorkSpaceDataRaw.find {
-//            filterSectionId == it.sectionId
-//        } ?: return
-//
-//        val filters = sectionWhereOpenFilterWasTapped.filters?.map {
-//            it.mapToPresentationFilter()
-//        } ?: return
-//
-//        if (filters.isEmpty()) {
-//            logger.w(
-//                TAG,
-//                "showFilterScreen() filters got from $filterSectionId has no items"
-//            )
-//            return
-//        }
-//
-//        filters.onEach {
-//            it.selected = it.filterId == sectionToSelectedFilterMap.get(
-//                TLWorkspaceHomeSection.fromId(it.filterId)
-//            )?.filterId
-//        }
-//
-//        setEffect {
-//            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.ShowFilterDialog(
-//                anchorView,
-//                filterSectionId,
-//                filters
-//            )
-//        }
-    }
 
-    private fun handleFilterApplied(
-        section: TLWorkspaceHomeSection,
-        filterId: String
-    ) = viewModelScope.launch {
-
-//       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
-//            RequestedDataItem(
-//                filter = filterApplied.mapToApiModel(),
-//                sectionId = section.getSectionId()
-//            )
-//        )
-    }
 }
