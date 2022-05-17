@@ -52,6 +52,7 @@ class UpcomingGigersItemView(
 
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
+        viewBinding.callGigerBtn.setOnClickListener(this)
     }
 
     override fun bind(data: Any?) {

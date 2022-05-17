@@ -1,5 +1,7 @@
 package com.gigforce.app.tl_work_space.upcoming_gigers
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
@@ -126,7 +128,12 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
     private fun dialPhoneNumber(
         phoneNumber: String
     ) {
-
+        try {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun observeViewStates() = lifecycleScope.launchWhenCreated {
