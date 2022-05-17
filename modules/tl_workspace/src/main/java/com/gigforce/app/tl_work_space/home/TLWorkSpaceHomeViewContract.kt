@@ -76,6 +76,13 @@ sealed class TLWorkSpaceHomeViewContract {
 
     sealed class TLWorkSpaceHomeViewUiEffects : UiEffect {
 
+        sealed class NavigationEvents : TLWorkSpaceHomeViewUiEffects() {
+
+            object OpenUpcomingGigersScreen : NavigationEvents()
+
+            object OpenCompliancePendingScreen : NavigationEvents()
+        }
+
         data class ShowFilterDialog(
             val anchorView: View,
             val sectionId: String,
@@ -94,5 +101,7 @@ sealed class TLWorkSpaceHomeViewContract {
             val maxDate: LocalDate,
             val selectedDate: LocalDate
         ) : TLWorkSpaceHomeViewUiEffects()
+
+
     }
 }

@@ -8,13 +8,15 @@ import com.gigforce.core.navigation.NavigationOptions
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class TLWorkSpaceNavigation @Inject constructor(
     private val navigation: INavigation
 ) {
     companion object {
 
         const val NAV_DESTINATION_TL_WORKSPACE_HOME = "tl_workspace/home"
+        const val NAV_DESTINATION_UPCOMING_GIGERS = "tl_workspace/upcoming_gigers"
+        const val NAV_DESTINATION_PENDING_COMPLIANCE = "tl_workspace/pending_compliance"
+
 
         //Intent extras
         const val INTENT_EXTRA_DATE_FILTER_OPTIONS = "date_filter_options"
@@ -34,6 +36,22 @@ class TLWorkSpaceNavigation @Inject constructor(
     fun navigateToTLWorkSpaceHomeScreen() {
         navigation.navigateTo(
             NAV_DESTINATION_TL_WORKSPACE_HOME,
+            null,
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToUpcomingGigersScreen() {
+        navigation.navigateTo(
+            NAV_DESTINATION_UPCOMING_GIGERS,
+            null,
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToPendingComplianceScreen() {
+        navigation.navigateTo(
+            NAV_DESTINATION_PENDING_COMPLIANCE,
             null,
             NavigationOptions.getNavOptions()
         )

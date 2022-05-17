@@ -2,7 +2,7 @@ package com.gigforce.app.tl_work_space.upcoming_gigers
 
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.domain.models.tl_workspace.*
+import com.gigforce.app.domain.models.tl_workspace.UpcomingGigersApiModel
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceUpcomingGigersRepository
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.logger.GigforceLogger
@@ -20,9 +20,7 @@ class UpcomingGigersViewModel @Inject constructor(
         UpcomingGigersViewContract.UpcomingGigersUiState,
         UpcomingGigersViewContract.UpcomingGigersViewUiEffects>
     (
-    initialState = UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers(
-        alreadyShowingGigersOnView = false
-    )
+    initialState = UpcomingGigersViewContract.UpcomingGigersUiState.ScreenInitialisedOrRestored
 ) {
 
     companion object {
@@ -59,10 +57,10 @@ class UpcomingGigersViewModel @Inject constructor(
 
 
         try {
-
+            val showSnackBar = rawUpcomingGigerList.isNotEmpty()
 
             rawUpcomingGigerList = repository.getUpcomingGigers()
-            processDataReceivedFromServerAndUpdateOnView()
+            processRawUpcmoningGigersAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
 
             if (e is IOException) {
@@ -82,16 +80,28 @@ class UpcomingGigersViewModel @Inject constructor(
         }
     }
 
-    private  fun processDataReceivedFromServerAndUpdateOnView() {
+    private fun processRawUpcmoningGigersAndUpdateOnView(
+        showDataUpdatedSnackbar: Boolean
+    ) {
         upcomingGigersShownOnView = UpcomingGigersListProcessor.processRawUpcomingListForView(
             rawUpcomingGigerList,
-            searchText
+            searchText,
+            this
         )
 
         setState {
             UpcomingGigersViewContract.UpcomingGigersUiState.ShowOrUpdateSectionListOnView(
                 upcomingGigersShownOnView
             )
+        }
+
+        if (showDataUpdatedSnackbar) {
+
+            setEffect {
+                UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowSnackBar(
+                    "Gigers list updated"
+                )
+            }
         }
     }
 
@@ -118,6 +128,9 @@ class UpcomingGigersViewModel @Inject constructor(
         if (currentState is UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers) {
             return
         }
+        processRawUpcmoningGigersAndUpdateOnView(
+            false
+        )
     }
 
     private fun gigerItemClicked(

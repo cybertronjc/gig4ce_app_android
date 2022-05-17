@@ -3,13 +3,13 @@ package com.gigforce.app.tl_work_space.upcoming_gigers
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 
 sealed class UpcomingGigersViewContract {
 
     sealed class UpcomingGigersUiState : UiState {
+
+        object ScreenInitialisedOrRestored : UpcomingGigersUiState()
 
         data class LoadingGigers(
             val alreadyShowingGigersOnView: Boolean
@@ -20,7 +20,7 @@ sealed class UpcomingGigersViewContract {
         ) : UpcomingGigersUiState()
 
         data class ShowOrUpdateSectionListOnView(
-            val sectionData: List<UpcomingGigerItemData>,
+            val upcomingGigers: List<UpcomingGigersListData>,
         ) : UpcomingGigersUiState()
     }
 
@@ -29,14 +29,14 @@ sealed class UpcomingGigersViewContract {
         object RefreshUpcomingGigersClicked : UpcomingGigersUiEvents()
 
         data class GigerClicked(
-            val giger: UpcomingGigerItemData
+            val giger: UpcomingGigersListData.UpcomingGigerItemData
         ) : UpcomingGigersUiEvents()
 
         data class CallGigerClicked(
-            val giger: UpcomingGigerItemData
+            val giger: UpcomingGigersListData.UpcomingGigerItemData
         ) : UpcomingGigersUiEvents()
 
-        sealed class FilterApplied() : UpcomingGigersUiEvents(){
+        sealed class FilterApplied : UpcomingGigersUiEvents() {
 
             data class SearchFilterApplied(
                 val searchText: String?
@@ -48,15 +48,11 @@ sealed class UpcomingGigersViewContract {
     sealed class UpcomingGigersViewUiEffects : UiEffect {
 
         data class DialogPhoneNumber(
-            val phoneNumber : String
+            val phoneNumber: String
         ) : UpcomingGigersViewUiEffects()
 
         data class OpenGigerDetailsBottomSheet(
-            val gigerDetails : UpcomingGigerItemData
-        ) : UpcomingGigersViewUiEffects()
-
-        data class ShowFilterBottomSheet(
-            val filters : List<TLWorkSpaceFilterOption>
+            val gigerDetails: UpcomingGigersListData.UpcomingGigerItemData
         ) : UpcomingGigersViewUiEffects()
 
         data class ShowSnackBar(

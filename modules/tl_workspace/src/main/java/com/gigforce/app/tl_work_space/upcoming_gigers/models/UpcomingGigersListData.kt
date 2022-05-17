@@ -21,5 +21,5 @@ open class UpcomingGigersListData(
 
     data class BusinessItemData(
         val businessName : String
-    ): UpcomingGigersListData(TLWorkSpaceCoreRecyclerViewBindings.UpcomingGigersItemType)
+    ): UpcomingGigersListData(TLWorkSpaceCoreRecyclerViewBindings.UpcomingGigersBusinessItemType)
 }

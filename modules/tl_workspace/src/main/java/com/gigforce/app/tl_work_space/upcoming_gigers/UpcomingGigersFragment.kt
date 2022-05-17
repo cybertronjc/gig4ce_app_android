@@ -1,26 +1,32 @@
 package com.gigforce.app.tl_work_space.upcoming_gigers
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
-import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation.Companion.FRAGMENT_RESULT_KEY_DATE_FILTER
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,11 +57,40 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
 
     private fun initView() = viewBinding.apply {
 
+        appBar.apply {
+            setBackButtonListener {
+
+                if (isSearchCurrentlyShown) {
+                    hideSoftKeyboard()
+                } else {
+                    findNavController().navigateUp()
+                }
+            }
+
+            changeBackButtonDrawable()
+            lifecycleScope.launchWhenCreated {
+
+                search_item.getTextChangeAsStateFlow()
+                    .debounce(300)
+                    .distinctUntilChanged()
+                    .flowOn(Dispatchers.Default)
+                    .collect { searchString ->
+
+                        Log.d("Search ", "Searhcingg...$searchString")
+                        viewModel.setEvent(
+                            UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.SearchFilterApplied(
+                                searchString
+                            )
+                        )
+                    }
+            }
+        }
+
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
-//        recyclerView.setDiffUtilCallback(TLWorkSpaceHomeAdapterDiffUtil())
+        recyclerView.setDiffUtilCallback(UpcomingGigersAdapterDiffUtil())
         recyclerView.setHasFixedSize(true)
-        recyclerView.isNestedScrollingEnabled = true
 
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.setEvent(UpcomingGigersViewContract.UpcomingGigersUiEvents.RefreshUpcomingGigersClicked)
@@ -72,13 +107,27 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
                     is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
                     )
-                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowFilterBottomSheet -> tlWorkSpaceNavigation.openFilterBottomSheet(
-                        it.filters
+                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
+                        it.phoneNumber
+                    )
+                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
+                        it.gigerDetails
                     )
                 }
             }
     }
 
+    private fun openGigerDetailsScreen(
+        gigerDetails: UpcomingGigersListData.UpcomingGigerItemData
+    ) {
+
+    }
+
+    private fun dialPhoneNumber(
+        phoneNumber: String
+    ) {
+
+    }
 
     private fun observeViewStates() = lifecycleScope.launchWhenCreated {
 
@@ -93,7 +142,7 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
                         it.alreadyShowingGigersOnView
                     )
                     is UpcomingGigersViewContract.UpcomingGigersUiState.ShowOrUpdateSectionListOnView -> handleDataLoadedState(
-                        emptyList()
+                        it.upcomingGigers
                     )
                 }
             }
@@ -106,7 +155,7 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
     }
 
     private fun handleDataLoadedState(
-        sectionData: List<TLWorkspaceRecyclerItemData>
+        gigers: List<UpcomingGigersListData>
     ) = viewBinding.apply {
 
         swipeRefreshLayout.isRefreshing = false
@@ -117,9 +166,9 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         shimmerContainer.gone()
 
 //        infoLayout.gone()
-        recyclerView.collection = sectionData
+        recyclerView.collection = gigers
         showOrHideNoDataLayout(
-            sectionData.isNotEmpty()
+            gigers.isNotEmpty()
         )
     }
 

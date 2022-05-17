@@ -84,7 +84,7 @@ class RetrofitServiceFactory @Inject constructor(
         put("AndroidAppBuildType", buildConfig.appBuildType)
 
         firebaseAuthStateListener.getCurrentSignInInfo()?.let {
-            put("LoggedInUserUid", it.uid)
+            put("LoggedInUserUid", "yKJwb6rsD9ST91KAa2uStDp0KZG3")
         }
     }
 

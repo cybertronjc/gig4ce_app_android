@@ -14,9 +14,14 @@ class NavForTlWorkSpace(
             R.id.tLWorkspaceHomeFragment
         )
 
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_UPCOMING_GIGERS,
+            R.id.upcomingGigersFragment
+        )
 
-
-
-
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_PENDING_COMPLIANCE,
+            R.id.compliancePendingFragment
+        )
     }
 }

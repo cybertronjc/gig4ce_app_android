@@ -12,6 +12,6 @@ class TLWorkspaceUpcomingGigersRepositoryImpl @Inject constructor(
 ) : TLWorkspaceUpcomingGigersRepository {
 
     override suspend fun getUpcomingGigers(): List<UpcomingGigersApiModel> {
-        TODO("Not yet implemented")
+       return remoteDatastore.getUpcomingGigers()
     }
 }

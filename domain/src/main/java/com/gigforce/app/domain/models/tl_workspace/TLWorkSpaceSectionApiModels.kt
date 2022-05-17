@@ -104,8 +104,11 @@ data class UpcomingGigersApiModel(
     @field:SerializedName("gigerId")
     val gigerId: String? = null,
 
-    @field:SerializedName("gigerName")
+    @field:SerializedName("name")
     val gigerName: String? = null,
+
+    @field:SerializedName("mobileNumber")
+    val mobileNumber: String? = null,
 
     @field:SerializedName("business")
     val business: String? = null,

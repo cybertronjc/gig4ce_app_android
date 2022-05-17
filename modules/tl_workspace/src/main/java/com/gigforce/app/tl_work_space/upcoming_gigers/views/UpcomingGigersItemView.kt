@@ -4,20 +4,21 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.RelativeLayout
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
+import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.IViewHolder
 import com.google.android.material.card.MaterialCardView
 
 class UpcomingGigersItemView(
     context: Context,
     attrs: AttributeSet?
-) : MaterialCardView(
+) : FrameLayout(
     context,
     attrs
 ), IViewHolder, View.OnClickListener {
@@ -34,9 +35,9 @@ class UpcomingGigersItemView(
     }
 
     private fun setDefault() {
-        val params = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
+        val params = LayoutParams(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT
         )
         this.layoutParams = params
     }
@@ -54,7 +55,8 @@ class UpcomingGigersItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData?)?.let {
+        (data as UpcomingGigersListData.UpcomingGigerItemData?)?.let {
+            viewData = it
 
             viewBinding.userImageIv.loadProfilePicture(
                 it.profilePictureThumbnail,

@@ -242,7 +242,14 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked -> TODO()
             is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType2Event.InnerCardClicked -> TODO()
             is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked -> TODO()
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> TODO()
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> openUpcomingGigersScreen()
+        }
+    }
+
+    private fun openUpcomingGigersScreen() {
+
+        setEffect {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen
         }
     }
 

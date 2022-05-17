@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
+import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
@@ -31,6 +32,7 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
@@ -38,6 +40,9 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     layoutId = R.layout.fragment_tl_workspace_home,
     statusBarColor = R.color.status_bar_pink
 ), OnMenuItemClickListener<PowerMenuItem> {
+
+    @Inject
+    lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
     private val viewModel: TLWorkspaceHomeViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -76,6 +81,9 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             .collect {
 
                 when (it) {
+                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents -> handleNavigationEvent(
+                        it
+                    )
                     is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.ShowFilterDialog -> showFilterMenu(
                         it.anchorView,
                         it.filters,
@@ -94,6 +102,15 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     )
                 }
             }
+    }
+
+    private fun handleNavigationEvent(
+        it: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents
+    ) {
+        when (it) {
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen -> tlWorkSpaceNavigation.navigateToPendingComplianceScreen()
+            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen -> tlWorkSpaceNavigation.navigateToUpcomingGigersScreen()
+        }
     }
 
 

@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.databinding.RecyclerViewItemUpcomingGigersItemBinding
+import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
 import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.IViewHolder
@@ -21,7 +21,7 @@ class TLWorkspaceUpcomingGigersItemView(
     attrs
 ), IViewHolder, View.OnClickListener {
 
-    private lateinit var viewBinding: RecyclerViewItemUpcomingGigersItemBinding
+    private lateinit var viewBinding: FragmentUpcomingGigersItemBinding
     private var viewData: TLWorkspaceRecyclerItemData.UpcomingGigerInnerItemData? = null
 
     init {
@@ -41,7 +41,7 @@ class TLWorkspaceUpcomingGigersItemView(
     }
 
     private fun inflate() {
-        viewBinding = RecyclerViewItemUpcomingGigersItemBinding.inflate(
+        viewBinding = FragmentUpcomingGigersItemBinding.inflate(
             LayoutInflater.from(context),
             this,
             true

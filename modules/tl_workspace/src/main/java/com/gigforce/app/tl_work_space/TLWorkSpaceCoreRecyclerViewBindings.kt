@@ -3,6 +3,7 @@ package com.gigforce.app.tl_work_space
 import android.content.Context
 import android.view.View
 import com.gigforce.app.tl_work_space.home.views.*
+import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersBusinessItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersItemView
 import com.gigforce.core.IViewTypeLoader
 
@@ -27,6 +28,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
      * Upcoming Giger view [UpcomingGigersFragment]
      */
     const val UpcomingGigersItemType = 3421456
+    const val UpcomingGigersBusinessItemType = 3427732
 
     override fun getView(
         context: Context,
@@ -42,6 +44,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         UpcomingGigersInnerItemType -> TLWorkspaceUpcomingGigersItemView(context,null)
 
         UpcomingGigersItemType -> UpcomingGigersItemView(context,null)
+        UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context,null)
         else -> null
     }
 }

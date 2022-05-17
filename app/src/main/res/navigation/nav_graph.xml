@@ -1200,5 +1200,13 @@
     <fragment android:id="@+id/tLWorkspaceHomeFragment"
         android:name="com.gigforce.app.tl_work_space.home.TLWorkspaceHomeFragment"
         android:label="TLWorkspaceHomeFragment"/>
+
+    <fragment android:id="@+id/upcomingGigersFragment"
+        android:name="com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersFragment"
+        android:label="UpcomingGigersFragment"/>
+
+    <fragment android:id="@+id/compliancePendingFragment"
+        android:name="com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragment"
+        android:label="CompliancePendingFragment"/>
 </navigation>
 
