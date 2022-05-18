@@ -1,4 +1,4 @@
-package com.gigforce.app.tl_work_space.upcoming_gigers.views
+package com.gigforce.app.tl_work_space.retentions.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,13 +9,12 @@ import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBusinessItemBinding
-import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.IViewHolder
 import com.google.android.material.card.MaterialCardView
 
-class UpcomingGigersBusinessItemView(
+class RetentionBusinessItemView(
     context: Context,
     attrs: AttributeSet?
 ) : FrameLayout(
@@ -48,7 +47,7 @@ class UpcomingGigersBusinessItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as RetentionScreenData.BusinessItemData).let {
+        (data as UpcomingGigersListData.BusinessItemData?)?.let {
 
             viewBinding.textview.text = it.businessName
         }

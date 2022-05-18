@@ -1,9 +1,10 @@
-package com.gigforce.app.tl_work_space.upcoming_gigers
+package com.gigforce.app.tl_work_space.retentions
 
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
+import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.core.recyclerView.CoreDiffUtilCallback
 
-class UpcomingGigersAdapterDiffUtil : CoreDiffUtilCallback<UpcomingGigersListData>() {
+class RetentionListDiffUtil : CoreDiffUtilCallback<RetentionScreenData>() {
 
 
     override fun areItemsTheSame(
@@ -16,12 +17,12 @@ class UpcomingGigersAdapterDiffUtil : CoreDiffUtilCallback<UpcomingGigersListDat
         if (oldItem.type != newItem.type) {
             return false
         } else {
-            if (oldItem is UpcomingGigersListData.BusinessItemData &&
-                newItem is UpcomingGigersListData.BusinessItemData
+            if (oldItem is RetentionScreenData.BusinessItemData &&
+                newItem is RetentionScreenData.BusinessItemData
             ) {
                 return oldItem.businessName == newItem.businessName
-            } else if (oldItem is UpcomingGigersListData.UpcomingGigerItemData &&
-                newItem is UpcomingGigersListData.UpcomingGigerItemData
+            } else if (oldItem is RetentionScreenData.GigerItemData &&
+                newItem is RetentionScreenData.GigerItemData
             ) {
                 return oldItem.gigerId == newItem.gigerId
             }
@@ -38,14 +39,16 @@ class UpcomingGigersAdapterDiffUtil : CoreDiffUtilCallback<UpcomingGigersListDat
             return false
         } else {
             if (
-                oldItem is UpcomingGigersListData.BusinessItemData &&
-                newItem is UpcomingGigersListData.BusinessItemData
+                oldItem is RetentionScreenData.BusinessItemData &&
+                newItem is RetentionScreenData.BusinessItemData
             ) {
 
-                return oldItem.businessName == newItem.businessName
+                return oldItem.businessName == newItem.businessName &&
+                        oldItem.expanded == newItem.expanded &&
+                        oldItem.count == newItem.count
             } else if (
-                oldItem is UpcomingGigersListData.UpcomingGigerItemData &&
-                newItem is UpcomingGigersListData.UpcomingGigerItemData
+                oldItem is RetentionScreenData.GigerItemData &&
+                newItem is RetentionScreenData.GigerItemData
             ) {
 
                 return oldItem.gigerId == newItem.gigerId &&
@@ -53,7 +56,9 @@ class UpcomingGigersAdapterDiffUtil : CoreDiffUtilCallback<UpcomingGigersListDat
                         oldItem.business == newItem.business &&
                         oldItem.jobProfile == newItem.jobProfile &&
                         oldItem.phoneNumber == newItem.phoneNumber &&
-                        oldItem.profilePicture == newItem.profilePicture
+                        oldItem.profilePicture == newItem.profilePicture &&
+                        oldItem.selectionDateString == newItem.selectionDateString &&
+                        oldItem.warningText == newItem.warningText
             }
 
             return false

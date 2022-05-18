@@ -3,6 +3,8 @@ package com.gigforce.app.tl_work_space
 import android.content.Context
 import android.view.View
 import com.gigforce.app.tl_work_space.home.views.*
+import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
+import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersBusinessItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersItemView
 import com.gigforce.core.IViewTypeLoader
@@ -30,6 +32,13 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val UpcomingGigersItemType = 3421456
     const val UpcomingGigersBusinessItemType = 3427732
 
+    /**
+     * -----------------
+     * Retention Fragments view [RetentionFragment]
+     */
+    const val RetentionGigerItemType = 392445
+    const val RetentionBusinessItemType = 3374882
+
     override fun getView(
         context: Context,
         viewType: Int
@@ -45,6 +54,11 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
         UpcomingGigersItemType -> UpcomingGigersItemView(context,null)
         UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context,null)
+
+        RetentionGigerItemType -> RetentionGigerItemView(context,null)
+        RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
+
+
         else -> null
     }
 }
