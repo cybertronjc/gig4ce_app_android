@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -22,9 +21,14 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     @ColorRes private val statusBarColor: Int
 ) : Fragment() {
 
-    val logTag : String get() {
-        return fragmentName
+    companion object {
+        const val INTENT_EXTRA_TOOLBAR_TITLE = "title"
     }
+
+    val logTag: String
+        get() {
+            return fragmentName
+        }
 
     val logger: GigforceLogger = GigforceLogger()
     private lateinit var _viewDataBinding: V
@@ -37,6 +41,17 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     private var _viewCreatedForTheFirstTime = false
     val viewCreatedForTheFirstTime get() = _viewCreatedForTheFirstTime
 
+    private var toolbarTitle: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            toolbarTitle = it.getString(INTENT_EXTRA_TOOLBAR_TITLE)
+        } ?: savedInstanceState?.let {
+            toolbarTitle = it.getString(INTENT_EXTRA_TOOLBAR_TITLE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +65,7 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             ResourcesCompat.getColor(resources, statusBarColor, null)
         )
 
-        if(shouldPreventViewRecreationOnNavigation()) {
+        if (shouldPreventViewRecreationOnNavigation()) {
             if (::_viewDataBinding.isInitialized.not()) {
                 _viewCreatedForTheFirstTime = true
 
@@ -60,10 +75,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
                     container,
                     false
                 )
-            } else{
+            } else {
                 _viewCreatedForTheFirstTime = false
             }
-        } else{
+        } else {
 
             _viewDataBinding = DataBindingUtil.inflate(
                 inflater,
@@ -86,6 +101,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         logger.d(fragmentName, "onSaveInstanceState()")
+        outState.putString(
+            INTENT_EXTRA_TOOLBAR_TITLE,
+            toolbarTitle
+        )
     }
 
     override fun onResume() {
@@ -103,7 +122,7 @@ abstract class BaseFragment2<V : ViewDataBinding>(
         logger.d(fragmentName, "onDestroy()")
     }
 
-    open fun shouldPreventViewRecreationOnNavigation() : Boolean{
+    open fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return false
     }
 
@@ -111,6 +130,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
         viewBinding: V,
         savedInstanceState: Bundle?
     )
+
+    fun getToolBarTitleReceivedFromPreviousScreen(): String? {
+        return toolbarTitle
+    }
 
     fun getNavOptions() = navOptions {
         this.anim {

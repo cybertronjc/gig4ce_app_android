@@ -3,10 +3,10 @@ package com.gigforce.app.navigation.tl_workspace
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class TLWorkSpaceNavigation @Inject constructor(
     private val navigation: INavigation
@@ -16,6 +16,7 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_TL_WORKSPACE_HOME = "tl_workspace/home"
         const val NAV_DESTINATION_UPCOMING_GIGERS = "tl_workspace/upcoming_gigers"
         const val NAV_DESTINATION_PENDING_COMPLIANCE = "tl_workspace/pending_compliance"
+        const val NAV_DESTINATION_RETENTION = "tl_workspace/retention"
 
 
         //Intent extras
@@ -33,26 +34,50 @@ class TLWorkSpaceNavigation @Inject constructor(
         )
     }
 
-    fun navigateToTLWorkSpaceHomeScreen() {
+    fun navigateToTLWorkSpaceHomeScreen(
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_TL_WORKSPACE_HOME,
-            null,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
             NavigationOptions.getNavOptions()
         )
     }
 
-    fun navigateToUpcomingGigersScreen() {
+    fun navigateToUpcomingGigersScreen(
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_UPCOMING_GIGERS,
-            null,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
             NavigationOptions.getNavOptions()
         )
     }
 
-    fun navigateToPendingComplianceScreen() {
+    fun navigateToPendingComplianceScreen(
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_PENDING_COMPLIANCE,
-            null,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToRetentionScreen(
+        title: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_RETENTION,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
             NavigationOptions.getNavOptions()
         )
     }

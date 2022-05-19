@@ -60,6 +60,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     private fun initView() = viewBinding.apply {
 
         appBar.apply {
+            setAppBarTitle(getToolBarTitleReceivedFromPreviousScreen() ?: "Retention")
             setBackButtonListener {
 
                 if (isSearchCurrentlyShown) {
@@ -79,11 +80,11 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
                     .collect { searchString ->
 
                         Log.d("Search ", "Searhcingg...$searchString")
-//                        viewModel.setEvent(
-//                            UpcomingGigersViewContract.UpcomingGigersUiEvents.FilterApplied.SearchFilterApplied(
-//                                searchString
-//                            )
-//                        )
+                        viewModel.setEvent(
+                            RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied(
+                                searchString
+                            )
+                        )
                     }
             }
         }

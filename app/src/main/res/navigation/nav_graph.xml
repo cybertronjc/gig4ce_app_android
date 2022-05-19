@@ -1208,5 +1208,9 @@
     <fragment android:id="@+id/compliancePendingFragment"
         android:name="com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragment"
         android:label="CompliancePendingFragment"/>
+
+    <fragment android:id="@+id/retentionFragment"
+        android:name="com.gigforce.app.tl_work_space.retentions.RetentionFragment"
+        android:label="RetentionFragment"/>
 </navigation>
 

@@ -23,5 +23,10 @@ class NavForTlWorkSpace(
             TLWorkSpaceNavigation.NAV_DESTINATION_PENDING_COMPLIANCE,
             R.id.compliancePendingFragment
         )
+
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_RETENTION,
+            R.id.retentionFragment
+        )
     }
 }
