@@ -5,6 +5,7 @@ import com.gigforce.app.tl_work_space.home.models.ValueChangeType
 import com.gigforce.app.tl_work_space.retentions.RetentionViewModel
 
 data class RetentionStatusData(
+    val id: String,
     val title: String,
     val value: Int,
     val valueChangedBy: Int,
@@ -18,11 +19,13 @@ data class RetentionStatusData(
             viewModel: RetentionViewModel
         ): RetentionStatusData {
             return RetentionStatusData(
-                title = "",
-                value = 0,
-                valueChangedBy = 0,
-                changeType =,
-                viewModel = viewModel
+                title = statusMasterWithCountItem.title ?: "",
+                value = statusMasterWithCountItem.count ?: 0,
+                valueChangedBy = statusMasterWithCountItem.valueChangedBy ?: 0,
+                changeType = ValueChangeType.fromChangeString(statusMasterWithCountItem.valueChangeType),
+                viewModel = viewModel,
+                id = statusMasterWithCountItem.id
+                    ?: throw IllegalArgumentException("id found null in retention status")
             )
         }
     }

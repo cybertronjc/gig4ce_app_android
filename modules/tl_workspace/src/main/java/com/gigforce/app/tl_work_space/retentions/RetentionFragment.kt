@@ -11,12 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentRetentionBinding
-import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBinding
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
@@ -98,7 +97,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.setEvent(RetentionFragmentViewContract.UpcomingGigersUiEvents.RefreshRetentionDataClicked)
+            viewModel.setEvent(RetentionFragmentViewContract.RetentionFragmentViewEvents.RefreshRetentionDataClicked)
         }
     }
 
@@ -109,21 +108,28 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             .collect {
 
                 when (it) {
-                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.ShowSnackBar -> showSnackBar(
-                        it.message
-                    )
-                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
+                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
                         it.phoneNumber
                     )
-                    is UpcomingGigersViewContract.UpcomingGigersViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
+                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
                         it.gigerDetails
+                    )
+                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
+                        it.filters
+                    )
+                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.ShowSnackBar -> showSnackBar(
+                        it.message
                     )
                 }
             }
     }
 
+    private fun showDateFilter(filters: List<TLWorkSpaceFilterOption>) {
+
+    }
+
     private fun openGigerDetailsScreen(
-        gigerDetails: UpcomingGigersListData.UpcomingGigerItemData
+        gigerDetails: RetentionScreenData.GigerItemData
     ) {
 
     }
@@ -145,14 +151,16 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             .collect {
 
                 when (it) {
-                    is UpcomingGigersViewContract.UpcomingGigersUiState.ErrorWhileLoadingScreenContent -> handleErrorInLoadingData(
+                    is RetentionFragmentViewContract.RetentionFragmentUiState.ErrorWhileLoadingRetentionData -> handleErrorInLoadingData(
                         it.error
                     )
-                    is UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers -> handleLoadingState(
+                    is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData -> handleLoadingState(
                         it.alreadyShowingGigersOnView
                     )
-                    is UpcomingGigersViewContract.UpcomingGigersUiState.ShowOrUpdateSectionListOnView -> handleDataLoadedState(
-                        it.upcomingGigers
+                    RetentionFragmentViewContract.RetentionFragmentUiState.ScreenInitialisedOrRestored -> {}
+                    is RetentionFragmentViewContract.RetentionFragmentUiState.ShowOrUpdateRetentionData -> handleDataLoadedState(
+                        it.dateFilterSelected,
+                        it.retentionData
                     )
                 }
             }
@@ -165,7 +173,8 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     private fun handleDataLoadedState(
-        gigers: List<UpcomingGigersListData>
+        gigers: TLWorkSpaceFilterOption,
+        retentionData: List<RetentionScreenData>
     ) = viewBinding.apply {
 
         swipeRefreshLayout.isRefreshing = false
@@ -176,9 +185,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         shimmerContainer.gone()
 
 //        infoLayout.gone()
-        recyclerView.collection = gigers
+        this.retentionMainLayout.recyclerView.collection = retentionData
         showOrHideNoDataLayout(
-            gigers.isNotEmpty()
+            retentionData.isNotEmpty()
         )
     }
 

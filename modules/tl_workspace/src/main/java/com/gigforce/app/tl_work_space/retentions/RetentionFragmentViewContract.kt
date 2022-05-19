@@ -22,7 +22,7 @@ sealed class RetentionFragmentViewContract {
         ) : RetentionFragmentUiState()
 
         data class ShowOrUpdateRetentionData(
-            val filterSelected: TLWorkSpaceFilterOption,
+            val dateFilterSelected: TLWorkSpaceFilterOption,
             val retentionData: List<RetentionScreenData>,
         ) : RetentionFragmentUiState()
     }
@@ -32,11 +32,11 @@ sealed class RetentionFragmentViewContract {
         object RefreshRetentionDataClicked : RetentionFragmentViewEvents()
 
         data class GigerClicked(
-            val giger: UpcomingGigersListData.UpcomingGigerItemData
+            val giger:  RetentionScreenData.GigerItemData
         ) : RetentionFragmentViewEvents()
 
         data class CallGigerClicked(
-            val giger: UpcomingGigersListData.UpcomingGigerItemData
+            val giger:  RetentionScreenData.GigerItemData
         ) : RetentionFragmentViewEvents()
 
         sealed class FilterApplied : RetentionFragmentViewEvents() {

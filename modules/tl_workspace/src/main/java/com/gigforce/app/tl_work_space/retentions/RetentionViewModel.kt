@@ -3,12 +3,11 @@ package com.gigforce.app.tl_work_space.retentions
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
-import com.gigforce.app.domain.models.tl_workspace.UpcomingGigersApiModel
 import com.gigforce.app.domain.models.tl_workspace.retention.GetRetentionDataRequest
 import com.gigforce.app.domain.models.tl_workspace.retention.GigersRetentionListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceRetentionRepository
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionStatusData
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,10 +33,10 @@ class RetentionViewModel @Inject constructor(
     /**
      * Raw Data, from Server
      */
-    private var rawUpcomingGigerList: List<GigersRetentionListItem> = emptyList()
+    private var rawRetentionGigersList: List<GigersRetentionListItem> = emptyList()
 
     /**
-     *  Master Data
+     * Master Data
      */
     private var filterMaster: List<TLWorkSpaceFilterOption> = emptyList()
     private var statusMaster: List<RetentionStatusData> = emptyList()
@@ -45,14 +44,15 @@ class RetentionViewModel @Inject constructor(
     /**
      * Processed Data
      */
+    private var gigersRetentionShownOnView: List<RetentionScreenData> = emptyList()
 
-
-    private var upcomingGigersShownOnView: List<UpcomingGigersListData> = emptyList()
-
+    /**
+     *  Current Filters
+     */
     private lateinit var selectedTabId: String
-
+    private lateinit var currentlySelectedDateFilter: TLWorkSpaceFilterOption
     private var searchText: String? = null
-    private var currentlySelectedDateFilter: TLWorkSpaceFilterOption? = null
+
 
     init {
         refreshGigersData(null)
@@ -69,12 +69,12 @@ class RetentionViewModel @Inject constructor(
 
         setState {
             RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData(
-                alreadyShowingGigersOnView = rawUpcomingGigerList.isNotEmpty()
+                alreadyShowingGigersOnView = rawRetentionGigersList.isNotEmpty()
             )
         }
 
         try {
-            val showSnackBar = rawUpcomingGigerList.isNotEmpty()
+            val showSnackBar = rawRetentionGigersList.isNotEmpty()
             val retentionResponse = repository.getRetentionData(
                 GetRetentionDataRequest(
                     filter = dateFilter?.mapToApiModel()
@@ -92,9 +92,10 @@ class RetentionViewModel @Inject constructor(
                 )
             } ?: emptyList()
 
-            rawUpcomingGigerList = retentionResponse.gigersRetentionList  ?: emptyList()
+            rawRetentionGigersList = retentionResponse.gigersRetentionList ?: emptyList()
 
-            this@RetentionViewModel.currentlySelectedDateFilter = dateFilter
+            this@RetentionViewModel.currentlySelectedDateFilter =
+                dateFilter ?: getDefaultDateFilter()
             processRawUpcmoningGigersAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
 
@@ -115,19 +116,26 @@ class RetentionViewModel @Inject constructor(
         }
     }
 
+    private fun getDefaultDateFilter(): TLWorkSpaceFilterOption {
+        return filterMaster.find {
+            it.default
+        } ?: throw IllegalStateException("no default filter found")
+    }
+
     private fun processRawUpcmoningGigersAndUpdateOnView(
         showDataUpdatedSnackbar: Boolean
     ) {
-        upcomingGigersShownOnView = RetentionDataProcessor.processRawRetentionDataForListForView(
-            rawUpcomingGigerList,
-            searchText,
-            getDateFilterOptionFromId(selectedTabId),
-            this
+        gigersRetentionShownOnView = RetentionDataProcessor.processRawRetentionDataForListForView(
+            rawUpcomingGigerList = rawRetentionGigersList,
+            searchText = searchText,
+            dateFilterOptionFromId = getDateFilterOptionFromId(selectedTabId),
+            retentionViewModel = this
         )
 
         setState {
             RetentionFragmentViewContract.RetentionFragmentUiState.ShowOrUpdateRetentionData(
-                upcomingGigersShownOnView
+                dateFilterSelected = currentlySelectedDateFilter,
+                retentionData = gigersRetentionShownOnView
             )
         }
 
@@ -152,7 +160,9 @@ class RetentionViewModel @Inject constructor(
             is RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied -> handleFilter(
                 event
             )
-            RetentionFragmentViewContract.RetentionFragmentViewEvents.RefreshRetentionDataClicked -> refreshGigersData()
+            RetentionFragmentViewContract.RetentionFragmentViewEvents.RefreshRetentionDataClicked -> refreshGigersData(
+                currentlySelectedDateFilter
+            )
         }
     }
 
@@ -174,41 +184,47 @@ class RetentionViewModel @Inject constructor(
         tabId: String
     ) {
         this.selectedTabId = tabId
+        if (currentState is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData) {
+            return
+        }
 
+        processRawUpcmoningGigersAndUpdateOnView(
+            false
+        )
     }
 
     private fun searchFilterApplied(
         searchText: String?
     ) {
         this.searchText = searchText
-
-        if (currentState is UpcomingGigersViewContract.UpcomingGigersUiState.LoadingGigers) {
+        if (currentState is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData) {
             return
         }
+
         processRawUpcmoningGigersAndUpdateOnView(
             false
         )
     }
 
     private fun gigerItemClicked(
-        giger: UpcomingGigersListData.UpcomingGigerItemData
+        giger: RetentionScreenData.GigerItemData
     ) {
         setEffect {
-            UpcomingGigersViewContract.UpcomingGigersViewUiEffects.OpenGigerDetailsBottomSheet(
+            RetentionFragmentViewContract.RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet(
                 giger
             )
         }
     }
 
     private fun callGiger(
-        giger: UpcomingGigersListData.UpcomingGigerItemData
+        giger: RetentionScreenData.GigerItemData
     ) {
         if (giger.phoneNumber.isNullOrBlank()) {
             return
         }
 
         setEffect {
-            UpcomingGigersViewContract.UpcomingGigersViewUiEffects.DialogPhoneNumber(
+            RetentionFragmentViewContract.RetentionFragmentViewUiEffects.DialogPhoneNumber(
                 giger.phoneNumber
             )
         }
@@ -216,9 +232,9 @@ class RetentionViewModel @Inject constructor(
 
     private fun getDateFilterOptionFromId(
         filterId: String
-    ): TLWorkSpaceFilterOption {
-
-    }
+    ): TLWorkSpaceFilterOption = filterMaster.find {
+        it.filterId == filterId
+    } ?: throw IllegalStateException("status master is empty, there is no filter with $filterId")
 
 
 }
