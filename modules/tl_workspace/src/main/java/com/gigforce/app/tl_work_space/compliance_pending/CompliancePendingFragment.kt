@@ -1,32 +1,44 @@
 package com.gigforce.app.tl_work_space.compliance_pending
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.databinding.FragmentCompliancePendingBinding
+import com.gigforce.core.base.BaseFragment2
 
-class CompliancePendingFragment : Fragment() {
-
+class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding>(
+    fragmentName = TAG,
+    layoutId = R.layout.fragment_compliance_pending,
+    statusBarColor = R.color.lipstick_2
+) {
     companion object {
-        fun newInstance() = CompliancePendingFragment()
+        const val TAG = "CompliancePendingFragment"
     }
 
-    private lateinit var viewModel: CompliancePendingViewModel
+    private val viewModel: CompliancePendingViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
+    override fun viewCreated(
+        viewBinding: FragmentCompliancePendingBinding,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_compliance_pending, container, false)
+    ) {
+
+        if (viewCreatedForTheFirstTime) {
+
+            initView()
+            initViewModel()
+        }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CompliancePendingViewModel::class.java)
-        // TODO: Use the ViewModel
+    private fun initView() {
+        TODO("Not yet implemented")
     }
 
+    private fun initViewModel() {
+        TODO("Not yet implemented")
+    }
 }

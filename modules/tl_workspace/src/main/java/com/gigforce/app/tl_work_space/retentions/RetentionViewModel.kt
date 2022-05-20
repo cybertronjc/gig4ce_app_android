@@ -96,7 +96,7 @@ class RetentionViewModel @Inject constructor(
 
             this@RetentionViewModel.currentlySelectedDateFilter =
                 dateFilter ?: getDefaultDateFilter()
-            processRawUpcmoningGigersAndUpdateOnView(showSnackBar)
+            processRawRetentionDataAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
 
             if (e is IOException) {
@@ -122,7 +122,7 @@ class RetentionViewModel @Inject constructor(
         } ?: throw IllegalStateException("no default filter found")
     }
 
-    private fun processRawUpcmoningGigersAndUpdateOnView(
+    private fun processRawRetentionDataAndUpdateOnView(
         showDataUpdatedSnackbar: Boolean
     ) {
         gigersRetentionShownOnView = RetentionDataProcessor.processRawRetentionDataForListForView(
@@ -188,7 +188,7 @@ class RetentionViewModel @Inject constructor(
             return
         }
 
-        processRawUpcmoningGigersAndUpdateOnView(
+        processRawRetentionDataAndUpdateOnView(
             false
         )
     }
@@ -201,7 +201,7 @@ class RetentionViewModel @Inject constructor(
             return
         }
 
-        processRawUpcmoningGigersAndUpdateOnView(
+        processRawRetentionDataAndUpdateOnView(
             false
         )
     }
