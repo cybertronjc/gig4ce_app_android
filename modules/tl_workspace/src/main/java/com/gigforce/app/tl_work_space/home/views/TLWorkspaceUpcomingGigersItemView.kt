@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
-import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
+import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeUiEvents
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.IViewHolder
 import com.google.android.material.card.MaterialCardView
@@ -81,7 +81,7 @@ class TLWorkspaceUpcomingGigersItemView(
 
     override fun onClick(v: View?) {
         viewData?.viewModel?.setEvent(
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked(
+            TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked(
                 viewData!!
             )
         )

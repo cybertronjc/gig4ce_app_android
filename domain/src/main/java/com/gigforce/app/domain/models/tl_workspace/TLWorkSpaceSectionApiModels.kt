@@ -84,6 +84,9 @@ data class FiltersItemApiModel(
 
 data class SectionItemApiModel(
 
+    @field:SerializedName("cardId")
+    val cardId: String? = null,
+
     @field:SerializedName("valueChangeType")
     val valueChangeType: String? = null,
 
@@ -98,6 +101,8 @@ data class SectionItemApiModel(
 
     @field:SerializedName("cardIndex")
     val cardIndex: Int? = null
+
+
 )
 
 data class UpcomingGigersApiModel(

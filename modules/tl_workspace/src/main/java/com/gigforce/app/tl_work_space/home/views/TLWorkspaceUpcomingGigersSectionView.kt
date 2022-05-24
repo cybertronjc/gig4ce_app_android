@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.RecyclerViewSectionUpcomingGigersBinding
-import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
+import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeUiEvents
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.core.IViewHolder
 
@@ -75,7 +75,7 @@ class TLWorkspaceUpcomingGigersSectionView(
 
     override fun onClick(v: View?) {
         viewData?.viewModel?.setEvent(
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked
+            TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked
         )
     }
 }

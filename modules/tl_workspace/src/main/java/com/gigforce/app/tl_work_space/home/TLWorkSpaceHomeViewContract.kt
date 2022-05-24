@@ -9,7 +9,6 @@ import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import java.time.LocalDate
 
-sealed class TLWorkSpaceHomeViewContract {
 
     sealed class TLWorkSpaceHomeUiState : UiState {
 
@@ -78,9 +77,33 @@ sealed class TLWorkSpaceHomeViewContract {
 
         sealed class NavigationEvents : TLWorkSpaceHomeViewUiEffects() {
 
-            object OpenUpcomingGigersScreen : NavigationEvents()
+            data class OpenUpcomingGigersScreen(
+                val title : String
+            ) : NavigationEvents()
 
-            object OpenCompliancePendingScreen : NavigationEvents()
+            data class OpenCompliancePendingScreen(
+                val title : String
+            ) : NavigationEvents()
+
+            data class OpenPayoutScreen(
+                val title : String
+            ) : NavigationEvents()
+
+            data class OpenActivityTrackerScreen(
+                val title : String
+            ) : NavigationEvents()
+
+            data class OpenRetentionScreen(
+                val title : String
+            ) : NavigationEvents()
+
+            data class OpenJoininingScreen(
+                val title : String
+            ) : NavigationEvents()
+
+            data class OpenGigerDetailsBottomSheet(
+                val gigerId : String
+            ) : NavigationEvents()
         }
 
         data class ShowFilterDialog(
@@ -104,4 +127,3 @@ sealed class TLWorkSpaceHomeViewContract {
 
 
     }
-}

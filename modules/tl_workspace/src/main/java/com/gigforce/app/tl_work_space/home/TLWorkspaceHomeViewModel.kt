@@ -20,11 +20,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val tlWorkSpaceHomeScreenRepository: TLWorkSpaceHomeScreenRepository
 ) : BaseViewModel<
-        TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents,
-        TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState,
-        TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects>
+        TLWorkSpaceHomeUiEvents,
+        TLWorkSpaceHomeUiState,
+        TLWorkSpaceHomeViewUiEffects>
     (
-    initialState = TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+    initialState = TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
         anyPreviousDataShownOnScreen = false
     )
 ) {
@@ -70,7 +70,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun showErrorState(error: String) {
         setState {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+            TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
                 error = error
             )
         }
@@ -78,7 +78,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun showLoadingOnView() {
         setState {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+            TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
                 anyPreviousDataShownOnScreen = tlWorkSpaceDataRaw.isNotEmpty()
             )
         }
@@ -86,7 +86,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     fun refreshWorkSpaceData() = viewModelScope.launch {
 
-        if (currentState is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent) {
+        if (currentState is TLWorkSpaceHomeUiState.LoadingHomeScreenContent) {
             logger.d(TAG, "ignoring refreshWorkSpaceData call, already loading data , no-op")
             return@launch
         }
@@ -120,7 +120,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         setState {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+            TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
                 tlWorkSpaceDataRaw.isNotEmpty()
             )
         }
@@ -140,14 +140,14 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
             if (e is IOException) {
                 setState {
-                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                    TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
                         e.message ?: "Unable to fetch load data"
                     )
                 }
             } else {
 
                 setState {
-                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                    TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
                         "Unable to fetch load data"
                     )
                 }
@@ -182,7 +182,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         )
 
         setState {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView(
+            TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView(
                 sectionsShownOnView
             )
         }
@@ -222,34 +222,88 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
     }
 
-    override fun handleEvent(event: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents) {
+    override fun handleEvent(event: TLWorkSpaceHomeUiEvents) {
         when (event) {
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.OpenFilter -> handleOpenFilterClicked(
+            is TLWorkSpaceHomeUiEvents.OpenFilter -> handleOpenFilterClicked(
                 event.sectionOpenFilterClickedFrom,
                 event.anchorView
             )
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterSelected -> handleFilterApplied(
+            is TLWorkSpaceHomeUiEvents.FilterSelected -> handleFilterApplied(
                 event.section,
                 event.filterId
             )
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter -> handleCustomDateFilter(
+            is TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter -> handleCustomDateFilter(
                 event.sectionId,
                 event.filterId,
                 event.date1,
                 event.date2
             )
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked -> refreshWorkSpaceData()
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked -> TODO()
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType2Event.InnerCardClicked -> TODO()
-            is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked -> TODO()
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> openUpcomingGigersScreen()
+            TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked -> refreshWorkSpaceData()
+            is TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked -> handleType1InnerCardClick(
+                event.innerClickedCard
+            )
+            is TLWorkSpaceHomeUiEvents.SectionType2Event.InnerCardClicked -> handleType2InnerCardClicked(
+                event.innerClickedCard
+            )
+            is TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.GigerClicked -> openGigerDetailBottomSheet(
+                event.giger.gigerId
+            )
+            TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> openUpcomingGigersScreen()
         }
     }
 
-    private fun openUpcomingGigersScreen() {
+    private fun handleType1InnerCardClick(
+        cardClicked: TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData
+    ) {
+        when (TLWorkspaceHomeSection.fromId(cardClicked.sectionId)) {
+            TLWorkspaceHomeSection.ACTIVITY_TRACKER -> openActivityTrackerScreen()
+            TLWorkspaceHomeSection.UPCOMING_GIGERS -> openUpcomingGigersScreen()
+            TLWorkspaceHomeSection.PAYOUT -> openPayoutScreen()
+            TLWorkspaceHomeSection.COMPLIANCE_PENDING -> openCompliancePendingScreen()
+            TLWorkspaceHomeSection.RETENTION -> openRetentionScreen()
+            TLWorkspaceHomeSection.SELECTIONS -> openSelectionListScreen()
+        }
+    }
 
+    private fun handleType2InnerCardClicked(
+        cardClicked: TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData
+    ) {
+        when (TLWorkspaceHomeSection.fromId(cardClicked.sectionId)) {
+            TLWorkspaceHomeSection.ACTIVITY_TRACKER -> openActivityTrackerScreen()
+            TLWorkspaceHomeSection.UPCOMING_GIGERS -> openUpcomingGigersScreen()
+            TLWorkspaceHomeSection.PAYOUT -> openPayoutScreen()
+            TLWorkspaceHomeSection.COMPLIANCE_PENDING -> openCompliancePendingScreen()
+            TLWorkspaceHomeSection.RETENTION -> openRetentionScreen()
+            TLWorkspaceHomeSection.SELECTIONS -> openSelectionListScreen()
+        }
+    }
+
+    private fun openGigerDetailBottomSheet(gigerId: String) {
         setEffect {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenGigerDetailsBottomSheet(
+                gigerId
+            )
+        }
+    }
+
+
+    private fun getTitleForSection(
+        section: TLWorkspaceHomeSection
+    ): String {
+        return tlWorkSpaceDataRaw.find {
+            section.getSectionId() == it.sectionId
+        }?.title ?: getDefaultTitleForScreen(section)
+    }
+
+    private fun getDefaultTitleForScreen(section: TLWorkspaceHomeSection): String {
+        return when (section) {
+            TLWorkspaceHomeSection.ACTIVITY_TRACKER -> "Activity Tracker"
+            TLWorkspaceHomeSection.UPCOMING_GIGERS -> "Upcoming Gigers"
+            TLWorkspaceHomeSection.PAYOUT -> "Payout"
+            TLWorkspaceHomeSection.COMPLIANCE_PENDING -> "Compliance Pending"
+            TLWorkspaceHomeSection.RETENTION -> "Retention"
+            TLWorkspaceHomeSection.SELECTIONS -> "Selections"
+            else -> ""
         }
     }
 
@@ -268,7 +322,9 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         anchorView: View
     ) {
         val filterSectionId = sectionOpenFilterClickedFrom.getSectionId()
-        val doesSectionHaveFilters = false
+        val doesSectionHaveFilters = tlWorkSpaceDataRaw.find {
+            sectionOpenFilterClickedFrom.getSectionId() == it.sectionId
+        }?.filters?.count() != 0
 
         if (!doesSectionHaveFilters) {
             logger.w(
@@ -311,7 +367,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         setEffect {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.ShowFilterDialog(
+            TLWorkSpaceHomeViewUiEffects.ShowFilterDialog(
                 anchorView,
                 filterSectionId,
                 filters
@@ -330,5 +386,54 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 //                sectionId = section.getSectionId()
 //            )
 //        )
+    }
+
+    private fun openSelectionListScreen() {
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenJoininingScreen(
+                getTitleForSection(TLWorkspaceHomeSection.SELECTIONS)
+            )
+        }
+    }
+
+    private fun openRetentionScreen() {
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenRetentionScreen(
+                getTitleForSection(TLWorkspaceHomeSection.RETENTION)
+            )
+        }
+    }
+
+    private fun openCompliancePendingScreen() {
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen(
+                getTitleForSection(TLWorkspaceHomeSection.COMPLIANCE_PENDING)
+            )
+        }
+    }
+
+    private fun openActivityTrackerScreen() {
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenActivityTrackerScreen(
+                getTitleForSection(TLWorkspaceHomeSection.ACTIVITY_TRACKER)
+            )
+        }
+    }
+
+    private fun openPayoutScreen() {
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenPayoutScreen(
+                getTitleForSection(TLWorkspaceHomeSection.PAYOUT)
+            )
+        }
+    }
+
+    private fun openUpcomingGigersScreen() {
+
+        setEffect {
+            TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen(
+                getTitleForSection(TLWorkspaceHomeSection.UPCOMING_GIGERS)
+            )
+        }
     }
 }

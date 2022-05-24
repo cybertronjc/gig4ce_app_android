@@ -70,6 +70,7 @@ object ApiModelToPresentationModelMapper {
                 null
             ),
             itemData = mapType1InnerItems(
+                it.sectionId!!,
                 it.items,
                 tlWorkspaceHomeViewModel
             ),
@@ -91,6 +92,7 @@ object ApiModelToPresentationModelMapper {
     }
 
     private fun mapType1InnerItems(
+        sectionId: String,
         items: List<SectionItemApiModel>?,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): List<TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData> {
@@ -101,6 +103,8 @@ object ApiModelToPresentationModelMapper {
             }
             .map {
                 TLWorkspaceRecyclerItemData.TLWorkType1CardInnerItemData(
+                    cardId = it.cardId ?: "",
+                    sectionId = sectionId,
                     title = it.title ?: "",
                     value = it.count ?: 0,
                     valueChangedBy = it.valueChangedBy ?: 0,
@@ -130,6 +134,7 @@ object ApiModelToPresentationModelMapper {
                 null
             ),
             itemData = mapToSectionType2InnerItems(
+                it.sectionId!!,
                 it.items,
                 tlWorkspaceHomeViewModel
             ),
@@ -140,6 +145,7 @@ object ApiModelToPresentationModelMapper {
     }
 
     private fun mapToSectionType2InnerItems(
+        sectionId: String,
         items: List<SectionItemApiModel>?,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): List<TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData> {
@@ -148,6 +154,8 @@ object ApiModelToPresentationModelMapper {
             it.cardIndex ?: 0
         }.map {
             TLWorkspaceRecyclerItemData.TLWorkType2CardInnerItemData(
+                sectionId = sectionId,
+                cardId = it.cardId ?: "",
                 title = it.title ?: "",
                 value = it.count ?: 0,
                 valueChangedBy = it.valueChangedBy ?: 0,

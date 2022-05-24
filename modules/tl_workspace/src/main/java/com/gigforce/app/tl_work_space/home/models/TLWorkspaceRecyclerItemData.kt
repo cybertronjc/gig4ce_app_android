@@ -27,6 +27,8 @@ open class TLWorkspaceRecyclerItemData(
      * ^ Type 1 Card inner data model
      */
     data class TLWorkType1CardInnerItemData(
+        val sectionId: String,
+        val cardId: String,
         val title: String,
         val value: Int,
         val valueChangedBy: Int,
@@ -42,7 +44,8 @@ open class TLWorkspaceRecyclerItemData(
             return this.title == data.title &&
                     this.value == data.value &&
                     this.valueChangedBy == data.valueChangedBy &&
-                    this.changeType == data.changeType
+                    this.changeType == data.changeType &&
+                    this.sectionId == data.sectionId
         }
     }
 
@@ -65,6 +68,8 @@ open class TLWorkspaceRecyclerItemData(
      * ^ Type 2 Card inner data model
      */
     data class TLWorkType2CardInnerItemData(
+        val sectionId: String,
+        val cardId: String,
         val title: String,
         val value: Int,
         val valueChangedBy: Int,
@@ -80,7 +85,8 @@ open class TLWorkspaceRecyclerItemData(
             return this.title == data.title &&
                     this.value == data.value &&
                     this.valueChangedBy == data.valueChangedBy &&
-                    this.changeType == data.changeType
+                    this.changeType == data.changeType &&
+                    this.sectionId == data.sectionId
         }
     }
 
@@ -89,7 +95,7 @@ open class TLWorkspaceRecyclerItemData(
      */
     data class TLWorkspaceUpcomingGigersRecyclerItemData(
         val sectionId: String,
-        val title : String,
+        val title: String,
         val upcomingGigers: List<UpcomingGigerInnerItemData>,
         val viewModel: TLWorkspaceHomeViewModel
     ) : TLWorkspaceRecyclerItemData(

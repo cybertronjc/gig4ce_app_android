@@ -22,6 +22,10 @@ class TLWorkSpaceNavigation @Inject constructor(
         //Intent extras
         const val INTENT_EXTRA_DATE_FILTER_OPTIONS = "date_filter_options"
         const val INTENT_EXTRA_SELECTED_DATE_FILTER = "selected_date_filter"
+        const val INTENT_EXTRA_GIG_ID = "gig_id"
+        const val INTENT_EXTRA_GIGER_ID = "giger_id"
+        const val INTENT_EXTRA_PAYOUT_ID = "payout_id"
+
 
         //Fragment ListenerKey
         const val FRAGMENT_RESULT_KEY_DATE_FILTER = "key_date_filter"
@@ -93,4 +97,75 @@ class TLWorkSpaceNavigation @Inject constructor(
             NavigationOptions.getNavOptions()
         )
     }
+
+    fun openGigerInfoBottomSheetForPayout(
+        gigerId: String,
+        payoutId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            bundleOf(
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_PAYOUT_ID to payoutId,
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openGigerInfoBottomSheet(
+        gigerId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            bundleOf(
+                INTENT_EXTRA_GIGER_ID to gigerId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openGigerInfoBottomSheetForAttendance(
+        gigerId: String,
+        gigId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            bundleOf(
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_GIG_ID to gigId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openGigerInfoBottomSheetForRetention(
+        gigerId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            bundleOf(
+                INTENT_EXTRA_GIGER_ID to gigerId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToJoiningListScreen(
+        title : String
+    ){
+
+    }
+
+    fun navigateToPayoutListScreen(
+        title : String
+    ){
+
+    }
+
+    fun navigateToActivityTrackerListScreen(
+        title : String
+    ){
+
+    }
+
 }

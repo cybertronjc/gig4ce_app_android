@@ -10,7 +10,7 @@ import androidx.core.view.marginLeft
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.RecyclerViewSectionType1InnerItemBinding
-import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeViewContract
+import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeUiEvents
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.app.tl_work_space.home.models.ValueChangeType
 import com.gigforce.core.IViewHolder
@@ -79,7 +79,7 @@ open class TLWorkspaceType1SectionInnerCardView(
 
     override fun onClick(v: View?) {
         viewData?.viewModel?.setEvent(
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked(
+            TLWorkSpaceHomeUiEvents.SectionType1Event.InnerCardClicked(
                 viewData!!
             )
         )

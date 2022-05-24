@@ -30,5 +30,16 @@
         <item name="android:textColor">@color/grey_500</item>
     </style>
 
+    <style name="TextAppearance.Button.Tertiary" parent="TextAppearance.AppCompat.Widget.Button.Inverse">
+
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:textColor">@color/grey_500</item>
+    </style>
+
+
+    Inverse
 
 </resources>

@@ -70,7 +70,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         recyclerView.isNestedScrollingEnabled = true
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.setEvent(TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked)
+            viewModel.setEvent(TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked)
         }
     }
 
@@ -81,18 +81,18 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             .collect {
 
                 when (it) {
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents -> handleNavigationEvent(
+                    is TLWorkSpaceHomeViewUiEffects.NavigationEvents -> handleNavigationEvent(
                         it
                     )
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.ShowFilterDialog -> showFilterMenu(
+                    is TLWorkSpaceHomeViewUiEffects.ShowFilterDialog -> showFilterMenu(
                         it.anchorView,
                         it.filters,
                         it.sectionId
                     )
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.ShowSnackBar -> showSnackBar(
+                    is TLWorkSpaceHomeViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
                     )
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.OpenDateSelectedDialog -> openDateFilter(
+                    is TLWorkSpaceHomeViewUiEffects.OpenDateSelectedDialog -> openDateFilter(
                         it.sectionId,
                         it.filterId,
                         it.showRange,
@@ -105,11 +105,30 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     private fun handleNavigationEvent(
-        it: TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents
+        it: TLWorkSpaceHomeViewUiEffects.NavigationEvents
     ) {
         when (it) {
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen -> tlWorkSpaceNavigation.navigateToPendingComplianceScreen()
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen -> tlWorkSpaceNavigation.navigateToUpcomingGigersScreen()
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen -> tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
+                it.title
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen -> tlWorkSpaceNavigation.navigateToUpcomingGigersScreen(
+                it.title
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenActivityTrackerScreen -> tlWorkSpaceNavigation.navigateToActivityTrackerListScreen(
+                it.title
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenGigerDetailsBottomSheet -> tlWorkSpaceNavigation.openGigerInfoBottomSheet(
+                it.gigerId
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenJoininingScreen -> tlWorkSpaceNavigation.navigateToJoiningListScreen(
+                it.title
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenPayoutScreen -> tlWorkSpaceNavigation.navigateToPayoutListScreen(
+                it.title
+            )
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenRetentionScreen -> tlWorkSpaceNavigation.navigateToRetentionScreen(
+                it.title
+            )
         }
     }
 
@@ -164,7 +183,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     dayOfMonth
                 )
                 viewModel.setEvent(
-                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
+                    TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
                         currentViewSectionId,
                         currentViewFilterId,
                         date,
@@ -205,7 +224,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     dayOfMonth
                 )
                 viewModel.setEvent(
-                    TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
+                    TLWorkSpaceHomeUiEvents.DateSelectedInCustomDateFilter(
                         currentViewSectionId,
                         currentViewFilterId,
                         date,
@@ -279,13 +298,13 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             .collect {
 
                 when (it) {
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent -> handleErrorInLoadingData(
+                    is TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent -> handleErrorInLoadingData(
                         it.error
                     )
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.LoadingHomeScreenContent -> handleLoadingState(
+                    is TLWorkSpaceHomeUiState.LoadingHomeScreenContent -> handleLoadingState(
                         it.anyPreviousDataShownOnScreen
                     )
-                    is TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView -> handleDataLoadedState(
+                    is TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView -> handleDataLoadedState(
                         it.sectionData
                     )
                 }
@@ -385,7 +404,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         val filterId = filterTag.substringAfter("<>")
 
         viewModel.setEvent(
-            TLWorkSpaceHomeViewContract.TLWorkSpaceHomeUiEvents.FilterSelected(
+            TLWorkSpaceHomeUiEvents.FilterSelected(
                 section = TLWorkspaceHomeSection.fromId(sectionId),
                 filterId = filterId
             )
