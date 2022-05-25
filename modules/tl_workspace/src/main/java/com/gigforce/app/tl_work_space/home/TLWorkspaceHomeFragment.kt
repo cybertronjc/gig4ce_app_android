@@ -2,7 +2,6 @@ package com.gigforce.app.tl_work_space.home
 
 import android.app.DatePickerDialog
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
@@ -23,7 +23,9 @@ import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.google.android.material.snackbar.Snackbar
 import com.skydoves.powermenu.MenuAnimation
@@ -40,6 +42,10 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     layoutId = R.layout.fragment_tl_workspace_home,
     statusBarColor = R.color.status_bar_pink
 ), OnMenuItemClickListener<PowerMenuItem> {
+
+    companion object{
+        const val TAG = "TLWorkspaceHomeFragment"
+    }
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
@@ -62,6 +68,12 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     private fun initView() = viewBinding.apply {
+        this.appBar.apply {
+            changeBackButtonDrawable()
+            setBackButtonListener{
+                findNavController().navigateUp()
+            }
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -92,7 +104,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     is TLWorkSpaceHomeViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
                     )
-                    is TLWorkSpaceHomeViewUiEffects.OpenDateSelectedDialog -> openDateFilter(
+                    is TLWorkSpaceHomeViewUiEffects.OpenDateSelectDialog -> openDateFilter(
                         it.sectionId,
                         it.filterId,
                         it.showRange,
@@ -138,8 +150,8 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         filterId: String,
         showRange: Boolean,
         selectedDate: LocalDate,
-        minDate: LocalDate,
-        maxDate: LocalDate
+        minDate: LocalDate?,
+        maxDate: LocalDate?
     ) {
         if (showRange) {
 
@@ -165,8 +177,8 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         sectionId: String,
         filterId: String,
         defaultDate: LocalDate,
-        minDate: LocalDate,
-        maxDate: LocalDate
+        minDate: LocalDate?,
+        maxDate: LocalDate?
     ) {
         DatePickerDialog(
             requireContext(),
@@ -206,8 +218,8 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         sectionId: String,
         filterId: String,
         defaultDate: LocalDate,
-        minDate: LocalDate,
-        maxDate: LocalDate
+        minDate: LocalDate?,
+        maxDate: LocalDate?
     ) {
         DatePickerDialog(
             requireContext(),
@@ -277,18 +289,20 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     )
                 }
             }
-        }.setAnimation(MenuAnimation.SHOWUP_TOP_LEFT) // Animation start point (TOP | LEFT).
+        }.setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT) // Animation start point (TOP | LEFT).
             .setMenuRadius(10f) // sets the corner radius.
             .setMenuShadow(10f) // sets the shadow.
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.inkDefault))
             .setTextGravity(Gravity.START)
-            .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
             .setSelectedTextColor(ContextCompat.getColor(requireContext(), R.color.inkDefault))
             .setMenuColor(Color.WHITE)
             .setSelectedMenuColor(ContextCompat.getColor(requireContext(), R.color.blue_50))
             .setOnMenuItemClickListener(this@TLWorkspaceHomeFragment)
+            .setAutoDismiss(true)
+            .setShowBackground(false)
+            .setLifecycleOwner(viewLifecycleOwner)
             .build()
-            .showAsAnchorCenter(anchorView)
+            .showAsAnchorLeftBottom(anchorView)
     }
 
 
@@ -297,6 +311,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         viewModel.uiState
             .collect {
 
+                logger.d(TAG,"State : $it")
                 when (it) {
                     is TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent -> handleErrorInLoadingData(
                         it.error
@@ -399,6 +414,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     override fun onItemClick(position: Int, item: PowerMenuItem?): Unit = item.let {
         val filterTag = it?.tag?.toString() ?: return@let
+
 
         val sectionId = filterTag.substringBefore("<>")
         val filterId = filterTag.substringAfter("<>")

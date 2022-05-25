@@ -2,6 +2,7 @@ package com.gigforce.app.android_common_ui.molecules
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import com.gigforce.app.android_common_ui.R
+import com.gigforce.app.android_common_utils.extensions.dpToPx
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -29,12 +31,12 @@ class TextViewWithRiseAndDipIndicator(
     private lateinit var riseDipIndicatorImageView: ImageView
 
     init {
-        setupLinearLayout()
         val inflatedView = LayoutInflater.from(context).inflate(
             R.layout.layout_text_with_rise_dip_indicator,
             this,
             true
         )
+
 
         findViews(inflatedView)
         setupTextSwitcher(textSwitcher)
@@ -51,10 +53,6 @@ class TextViewWithRiseAndDipIndicator(
         }
     }
 
-    private fun setupLinearLayout() {
-        orientation = HORIZONTAL
-
-    }
 
     private fun findViews(inflatedView: View?) = inflatedView?.let {
         textSwitcher = it.findViewById(R.id.textSwitcher)
@@ -107,7 +105,7 @@ class TextViewWithRiseAndDipIndicator(
     ) {
         val radius = resources.getDimension(R.dimen.layout_rise_dip_corner_size)
         val shapeAppearanceModel = ShapeAppearanceModel().toBuilder()
-            .setAllCorners(CornerFamily.ROUNDED,radius)
+            .setAllCorners(CornerFamily.ROUNDED, radius)
             .build()
         val materialShapeDrawable = MaterialShapeDrawable(shapeAppearanceModel).apply {
             fillColor = ContextCompat.getColorStateList(
@@ -115,7 +113,7 @@ class TextViewWithRiseAndDipIndicator(
                 color
             )
         }
-        ViewCompat.setBackground(this,materialShapeDrawable)
+        ViewCompat.setBackground(this, materialShapeDrawable)
     }
 
     fun setTextColor(
@@ -132,7 +130,7 @@ class TextViewWithRiseAndDipIndicator(
         @ColorRes indicatorDrawableTint: Int
     ) {
         riseDipIndicatorImageView.setImageResource(drawable)
-        riseDipIndicatorImageView.setColorFilter(indicatorDrawableTint)
+        //  riseDipIndicatorImageView.setColorFilter(indicatorDrawableTint)
     }
 
     private fun shouldAnimateTextChange(
@@ -154,12 +152,24 @@ class TextViewWithRiseAndDipIndicator(
     fun showTextWithRiseIndicator(
         riseString: String
     ) {
-
+        setText(
+            text = riseString,
+            textColor = R.color.green_1,
+            backgroundColor = R.color.green_8,
+            indicatorDrawable = R.drawable.ic_rise_green,
+            indicatorDrawableTint = 0
+        )
     }
 
     fun showTextWithDipIndicator(
         dipString: String
     ) {
-
+        setText(
+            text = dipString,
+            textColor = R.color.red_1,
+            backgroundColor = R.color.red_8,
+            indicatorDrawable = R.drawable.ic_dip_red,
+            indicatorDrawableTint = 0
+        )
     }
 }

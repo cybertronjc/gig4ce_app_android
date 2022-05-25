@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingStart="14dp"
-        android:paddingTop="20dp"
         android:paddingEnd="14dp"
         android:paddingBottom="14dp">
 
@@ -16,13 +16,19 @@
             style="@style/TextAppearance.Title.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Section Name" />
+            tools:text="Section Name"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:id="@+id/filter_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/ic_filter_background"
             android:drawablePadding="20dp"
             android:paddingStart="20dp"
             android:paddingTop="6dp"

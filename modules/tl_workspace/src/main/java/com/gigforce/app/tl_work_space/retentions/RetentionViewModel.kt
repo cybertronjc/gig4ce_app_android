@@ -7,7 +7,8 @@ import com.gigforce.app.domain.models.tl_workspace.retention.GetRetentionDataReq
 import com.gigforce.app.domain.models.tl_workspace.retention.GigersRetentionListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceRetentionRepository
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
-import com.gigforce.app.tl_work_space.retentions.models.RetentionStatusData
+import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
+import com.gigforce.core.deque.dequeLimiter
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,11 +20,11 @@ class RetentionViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val repository: TLWorkspaceRetentionRepository
 ) : BaseViewModel<
-        RetentionFragmentViewContract.RetentionFragmentViewEvents,
-        RetentionFragmentViewContract.RetentionFragmentUiState,
-        RetentionFragmentViewContract.RetentionFragmentViewUiEffects>
+        RetentionFragmentViewEvents,
+        RetentionFragmentUiState,
+        RetentionFragmentViewUiEffects>
     (
-    initialState = RetentionFragmentViewContract.RetentionFragmentUiState.ScreenInitialisedOrRestored
+    initialState = RetentionFragmentUiState.ScreenInitialisedOrRestored
 ) {
 
     companion object {
@@ -39,7 +40,7 @@ class RetentionViewModel @Inject constructor(
      * Master Data
      */
     private var filterMaster: List<TLWorkSpaceFilterOption> = emptyList()
-    private var statusMaster: List<RetentionStatusData> = emptyList()
+    private var statusMaster: List<RetentionTabData> = emptyList()
 
     /**
      * Processed Data
@@ -49,10 +50,10 @@ class RetentionViewModel @Inject constructor(
     /**
      *  Current Filters
      */
-    private lateinit var selectedTabId: String
-    private lateinit var currentlySelectedDateFilter: TLWorkSpaceFilterOption
+    private var selectedTabId: String? = null
+    private var currentlySelectedDateFilter: TLWorkSpaceFilterOption? = null
     private var searchText: String? = null
-
+    private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
     init {
         refreshGigersData(null)
@@ -62,13 +63,13 @@ class RetentionViewModel @Inject constructor(
         dateFilter: TLWorkSpaceFilterOption?
     ) = viewModelScope.launch {
 
-        if (currentState is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData) {
+        if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
             logger.d(TAG, "ignoring refreshGigersData call, already loading data , no-op")
             return@launch
         }
 
         setState {
-            RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData(
+            RetentionFragmentUiState.LoadingRetentionData(
                 alreadyShowingGigersOnView = rawRetentionGigersList.isNotEmpty()
             )
         }
@@ -86,7 +87,7 @@ class RetentionViewModel @Inject constructor(
             } ?: emptyList()
 
             statusMaster = retentionResponse.statusMasterWithCount?.map {
-                RetentionStatusData.fromAPiModel(
+                RetentionTabData.fromAPiModel(
                     statusMasterWithCountItem = it,
                     viewModel = this@RetentionViewModel
                 )
@@ -94,25 +95,43 @@ class RetentionViewModel @Inject constructor(
 
             rawRetentionGigersList = retentionResponse.gigersRetentionList ?: emptyList()
 
-            this@RetentionViewModel.currentlySelectedDateFilter =
-                dateFilter ?: getDefaultDateFilter()
+            setDefaultSeletectedIfNotSet()
+            setDefaultDateFilter(dateFilter)
+
             processRawRetentionDataAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
 
             if (e is IOException) {
                 setState {
-                    RetentionFragmentViewContract.RetentionFragmentUiState.ErrorWhileLoadingRetentionData(
+                    RetentionFragmentUiState.ErrorWhileLoadingRetentionData(
                         e.message ?: "Unable to load data"
                     )
                 }
             } else {
 
                 setState {
-                    RetentionFragmentViewContract.RetentionFragmentUiState.ErrorWhileLoadingRetentionData(
+                    RetentionFragmentUiState.ErrorWhileLoadingRetentionData(
                         "Unable to load data"
                     )
                 }
             }
+        }
+    }
+
+    private fun setDefaultDateFilter(dateFilter: TLWorkSpaceFilterOption?) {
+        this.currentlySelectedDateFilter = dateFilter ?: getDefaultDateFilter()
+    }
+
+    private fun setDefaultSeletectedIfNotSet() {
+        if (selectedTabId != null)
+            return
+
+        selectedTabId = statusMaster.firstOrNull()?.id
+    }
+
+    private fun getSelectedTab(): RetentionTabData? {
+        return statusMaster.find {
+            selectedTabId == it.id
         }
     }
 
@@ -125,56 +144,61 @@ class RetentionViewModel @Inject constructor(
     private fun processRawRetentionDataAndUpdateOnView(
         showDataUpdatedSnackbar: Boolean
     ) {
-        gigersRetentionShownOnView = RetentionDataProcessor.processRawRetentionDataForListForView(
-            rawUpcomingGigerList = rawRetentionGigersList,
-            searchText = searchText,
-            dateFilterOptionFromId = getDateFilterOptionFromId(selectedTabId),
-            retentionViewModel = this
+        val updatedStatusToGigerWithComplianceMap = RetentionDataProcessor.processRawRetentionDataForListForView(
+                rawGigerRetentionList = rawRetentionGigersList,
+                searchText = searchText,
+                tabMaster = statusMaster,
+                collapsedBusinessIds = collapsedBusiness,
+                selectedTab = getSelectedTab(),
+                retentionViewModel = this
         )
+        gigersRetentionShownOnView = updatedStatusToGigerWithComplianceMap.second
+        val updatedTabMaster = updatedStatusToGigerWithComplianceMap.first
 
         setState {
-            RetentionFragmentViewContract.RetentionFragmentUiState.ShowOrUpdateRetentionData(
+            RetentionFragmentUiState.ShowOrUpdateRetentionData(
                 dateFilterSelected = currentlySelectedDateFilter,
-                retentionData = gigersRetentionShownOnView
+                retentionData = gigersRetentionShownOnView,
+                updatedTabMaster = updatedTabMaster
             )
         }
 
         if (showDataUpdatedSnackbar) {
 
             setEffect {
-                RetentionFragmentViewContract.RetentionFragmentViewUiEffects.ShowSnackBar(
+                RetentionFragmentViewUiEffects.ShowSnackBar(
                     "Retention data updated"
                 )
             }
         }
     }
 
-    override fun handleEvent(event: RetentionFragmentViewContract.RetentionFragmentViewEvents) {
+    override fun handleEvent(event: RetentionFragmentViewEvents) {
         when (event) {
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.CallGigerClicked -> callGiger(
+            is RetentionFragmentViewEvents.CallGigerClicked -> callGiger(
                 event.giger
             )
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.GigerClicked -> gigerItemClicked(
+            is RetentionFragmentViewEvents.GigerClicked -> gigerItemClicked(
                 event.giger
             )
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied -> handleFilter(
+            is RetentionFragmentViewEvents.FilterApplied -> handleFilter(
                 event
             )
-            RetentionFragmentViewContract.RetentionFragmentViewEvents.RefreshRetentionDataClicked -> refreshGigersData(
+            RetentionFragmentViewEvents.RefreshRetentionDataClicked -> refreshGigersData(
                 currentlySelectedDateFilter
             )
         }
     }
 
-    private fun handleFilter(event: RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied) {
+    private fun handleFilter(event: RetentionFragmentViewEvents.FilterApplied) {
         when (event) {
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshGigersData(
+            is RetentionFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshGigersData(
                 event.filter
             )
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
+            is RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
                 event.searchText
             )
-            is RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied.TabSelected -> tabSelected(
+            is RetentionFragmentViewEvents.FilterApplied.TabSelected -> tabSelected(
                 event.tabId
             )
         }
@@ -184,7 +208,7 @@ class RetentionViewModel @Inject constructor(
         tabId: String
     ) {
         this.selectedTabId = tabId
-        if (currentState is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData) {
+        if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
             return
         }
 
@@ -197,7 +221,7 @@ class RetentionViewModel @Inject constructor(
         searchText: String?
     ) {
         this.searchText = searchText
-        if (currentState is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData) {
+        if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
             return
         }
 
@@ -210,7 +234,7 @@ class RetentionViewModel @Inject constructor(
         giger: RetentionScreenData.GigerItemData
     ) {
         setEffect {
-            RetentionFragmentViewContract.RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet(
+            RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet(
                 giger
             )
         }
@@ -224,7 +248,7 @@ class RetentionViewModel @Inject constructor(
         }
 
         setEffect {
-            RetentionFragmentViewContract.RetentionFragmentViewUiEffects.DialogPhoneNumber(
+            RetentionFragmentViewUiEffects.DialogPhoneNumber(
                 giger.phoneNumber
             )
         }

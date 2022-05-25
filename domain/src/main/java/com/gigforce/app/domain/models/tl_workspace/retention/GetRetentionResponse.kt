@@ -23,7 +23,7 @@ data class StatusMasterWithCountItem(
 	@field:SerializedName("count")
 	val count: Int? = null,
 
-	@field:SerializedName("id")
+	@field:SerializedName("id", alternate = arrayOf("cardId"))
 	val id: String? = null,
 
 	@field:SerializedName("valueChangedBy")
@@ -60,5 +60,13 @@ data class GigersRetentionListItem(
 	val name: String? = null,
 
 	@field:SerializedName("profilePictureThumbnail")
-	val profilePictureThumbnail: String? = null
-)
+	val profilePictureThumbnail: String? = null,
+
+	@field:SerializedName("reation")
+	val tabStatus : List<String>? = null
+){
+
+	fun getBusinessNonNull() : String{
+		return business ?: "Other"
+	}
+}

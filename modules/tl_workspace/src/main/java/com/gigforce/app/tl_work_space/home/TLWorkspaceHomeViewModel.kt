@@ -56,6 +56,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         tlWorkSpaceHomeScreenRepository
             .getWorkspaceSectionAsFlow()
             .collect {
+                logger.d(TAG,"new state received : $it")
 
                 when (it) {
                     is Lce.Content -> processDataReceivedFromServerAndUpdateOnView(
@@ -77,6 +78,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun showLoadingOnView() {
+        logger.d(TAG,"emitting loading state...")
+
         setState {
             TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
                 anyPreviousDataShownOnScreen = tlWorkSpaceDataRaw.isNotEmpty()
@@ -107,6 +110,12 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         } else {
             // No Filter (excluding default filter) has beeen applied
             // refreshing data with updating cache
+            setState {
+                TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
+                    tlWorkSpaceDataRaw.isNotEmpty()
+                )
+            }
+
             tlWorkSpaceHomeScreenRepository.refreshCachedWorkspaceSectionData()
         }
     }
@@ -159,6 +168,9 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         filtersUsed: List<RequestedDataItem>?,
         rawSectionDataFromServer: List<TLWorkSpaceSectionApiModel>
     ) {
+        logger.d(TAG,"processing data received from server...")
+        val shouldShowDataUpdatedToast = this.tlWorkSpaceDataRaw.isNotEmpty()
+
         this.tlWorkSpaceDataRaw = rawSectionDataFromServer
 
         val initialFetch = sectionToSelectedFilterMap.isEmpty()
@@ -172,6 +184,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         prepareUiModelsAndEmit()
+        if(shouldShowDataUpdatedToast){
+            setEffect {
+                TLWorkSpaceHomeViewUiEffects.ShowSnackBar("Workspace updated")
+            }
+        }
     }
 
     private fun prepareUiModelsAndEmit() {
@@ -181,6 +198,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             this
         )
 
+        logger.d(TAG,"emiting new state...")
         setState {
             TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView(
                 sectionsShownOnView
@@ -321,7 +339,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
         anchorView: View
     ) {
-        val filterSectionId = sectionOpenFilterClickedFrom.getSectionId()
+        val sectionId = sectionOpenFilterClickedFrom.getSectionId()
         val doesSectionHaveFilters = tlWorkSpaceDataRaw.find {
             sectionOpenFilterClickedFrom.getSectionId() == it.sectionId
         }?.filters?.count() != 0
@@ -329,23 +347,23 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         if (!doesSectionHaveFilters) {
             logger.w(
                 TAG,
-                "handleOpenFilterClicked() - called from section $filterSectionId, section doesn't have filters"
+                "handleOpenFilterClicked() - called from section $sectionId, section doesn't have filters"
             )
             return
         }
 
         showFilterScreen(
-            filterSectionId,
+            sectionId,
             anchorView
         )
     }
 
     private fun showFilterScreen(
-        filterSectionId: String,
+        sectionId: String,
         anchorView: View
     ) {
         val sectionWhereOpenFilterWasTapped = tlWorkSpaceDataRaw.find {
-            filterSectionId == it.sectionId
+            sectionId == it.sectionId
         } ?: return
 
         val filters = sectionWhereOpenFilterWasTapped.filters?.map {
@@ -355,21 +373,21 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         if (filters.isEmpty()) {
             logger.w(
                 TAG,
-                "showFilterScreen() filters got from $filterSectionId has no items"
+                "showFilterScreen() filters got from $sectionId has no items"
             )
             return
         }
 
         filters.onEach {
             it.selected = it.filterId == sectionToSelectedFilterMap.get(
-                TLWorkspaceHomeSection.fromId(it.filterId)
+                TLWorkspaceHomeSection.fromId(sectionId)
             )?.filterId
         }
 
         setEffect {
             TLWorkSpaceHomeViewUiEffects.ShowFilterDialog(
                 anchorView,
-                filterSectionId,
+                sectionId,
                 filters
             )
         }
@@ -380,12 +398,45 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         filterId: String
     ) = viewModelScope.launch {
 
+        val selectedFilter = getFilterFrom(
+            section,
+            filterId
+        ) ?: return@launch
+
+        if (selectedFilter.customDateOrRangeFilter) {
+
+            setEffect {
+                TLWorkSpaceHomeViewUiEffects.OpenDateSelectDialog(
+                    sectionId = section.getSectionId(),
+                    filterId = selectedFilter.filterId,
+                    showRange = selectedFilter.selectRangeInFilter,
+                    minDate = selectedFilter.minimumDateAvailableForSelection,
+                    maxDate = selectedFilter.maximumDateAvailableForSelection,
+                    selectedDate = selectedFilter.defaultSelectedDate ?: LocalDate.now()
+                )
+            }
+        } else {
+
+        }
+
 //       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
 //            RequestedDataItem(
 //                filter = filterApplied.mapToApiModel(),
 //                sectionId = section.getSectionId()
 //            )
 //        )
+    }
+
+    private fun getFilterFrom(
+        section: TLWorkspaceHomeSection,
+        filterId: String
+    ): TLWorkSpaceFilterOption? {
+        return tlWorkSpaceDataRaw.find {
+            section.getSectionId() == it.sectionId
+        }?.filters?.find {
+            filterId == it.filterId
+        }?.mapToPresentationFilter()
+
     }
 
     private fun openSelectionListScreen() {

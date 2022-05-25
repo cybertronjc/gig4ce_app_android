@@ -37,7 +37,7 @@ dependencies {
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':domain')
     implementation project(path: ':android-common-ui')
-    implementation project(path: ':data:data')
+    implementation project(path: ':data')
     implementation project(path: ':android-common-utils')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

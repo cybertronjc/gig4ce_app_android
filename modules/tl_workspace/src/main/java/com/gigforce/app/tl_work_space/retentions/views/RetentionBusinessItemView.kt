@@ -9,6 +9,7 @@ import android.widget.RelativeLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBusinessItemBinding
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.IViewHolder
@@ -47,7 +48,7 @@ class RetentionBusinessItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as UpcomingGigersListData.BusinessItemData?)?.let {
+        (data as RetentionScreenData.BusinessItemData?)?.let {
 
             viewBinding.textview.text = it.businessName
         }

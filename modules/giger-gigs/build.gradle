@@ -39,7 +39,7 @@ dependencies {
     implementation project(path: ':modules:user-tracking')
     implementation project(path: ':domain')
     implementation project(path: ':android-common-ui')
-    implementation project(path: ':data:data')
+    implementation project(path: ':data')
     implementation project(path: ':android-common-utils')
     implementation fileTree(dir: "libs", include: ["*.jar"])
 

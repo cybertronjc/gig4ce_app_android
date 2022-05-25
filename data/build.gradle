@@ -32,7 +32,8 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':android-common-utils')
+    implementation project(path: ':domain')
+    implementation project(path: ':modules:core')
 
     /**
      * Common dependencies
@@ -50,11 +51,17 @@ dependencies {
     implementation Libs.Dagger.hilt
 
     implementation Libs.Firebase.coreKtx
-    implementation Libs.Google.material
+    implementation Libs.Dropbox.store
 
     /**
      * Module specific dependencies
      */
+    implementation Libs.Square.Retrofit.retrofit
+    implementation Libs.Square.Retrofit.gsonConverter
 
+    implementation Libs.AndroidX.dataStore
 
+    kapt Libs.AndroidX.Room.compiler
+    implementation Libs.AndroidX.Room.roomKtx
+    implementation Libs.AndroidX.Room.runtime
 }

@@ -9,6 +9,8 @@ import androidx.core.view.updateLayoutParams
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersItemBinding
+import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.common_ui.utils.dp2Px
@@ -24,7 +26,7 @@ class RetentionGigerItemView(
 ), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: FragmentUpcomingGigersItemBinding
-    private var viewData: UpcomingGigersListData.UpcomingGigerItemData? = null
+    private var viewData: RetentionScreenData.GigerItemData? = null
 
     init {
         elevation = resources.getDimension(R.dimen.card_elevation_mid)
@@ -56,7 +58,7 @@ class RetentionGigerItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as UpcomingGigersListData.UpcomingGigerItemData?)?.let {
+        (data as RetentionScreenData.GigerItemData?)?.let {
             viewData = it
 
             viewBinding.userImageIv.loadProfilePicture(
@@ -87,14 +89,14 @@ class RetentionGigerItemView(
         if (v?.id == R.id.call_giger_btn) {
 
             viewData?.viewModel?.setEvent(
-                UpcomingGigersViewContract.UpcomingGigersUiEvents.CallGigerClicked(
+                RetentionFragmentViewEvents.CallGigerClicked(
                     viewData!!
                 )
             )
         } else {
 
             viewData?.viewModel?.setEvent(
-                UpcomingGigersViewContract.UpcomingGigersUiEvents.GigerClicked(
+                RetentionFragmentViewEvents.GigerClicked(
                     viewData!!
                 )
             )

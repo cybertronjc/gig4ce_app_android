@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:paddingEnd="5dp"
+    android:orientation="horizontal"
+    android:paddingStart="5dp"
+    android:gravity="center_vertical"
     tools:parentTag="android.widget.LinearLayout">
 
     <TextSwitcher
@@ -11,6 +19,7 @@
     <ImageView
         android:id="@+id/indicator_image_view"
         android:layout_width="8dp"
+        android:layout_marginStart="1dp"
         android:layout_height="8dp" />
 
-</merge>
+</LinearLayout>

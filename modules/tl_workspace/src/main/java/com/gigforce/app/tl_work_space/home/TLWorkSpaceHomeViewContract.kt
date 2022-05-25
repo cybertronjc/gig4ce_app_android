@@ -116,12 +116,12 @@ import java.time.LocalDate
             val message: String
         ) : TLWorkSpaceHomeViewUiEffects()
 
-        data class OpenDateSelectedDialog(
+        data class OpenDateSelectDialog(
             val sectionId: String,
             val filterId: String,
             val showRange: Boolean,
-            val minDate: LocalDate,
-            val maxDate: LocalDate,
+            val minDate: LocalDate?,
+            val maxDate: LocalDate?,
             val selectedDate: LocalDate
         ) : TLWorkSpaceHomeViewUiEffects()
 

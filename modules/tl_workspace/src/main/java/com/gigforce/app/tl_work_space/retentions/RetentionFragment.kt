@@ -16,6 +16,7 @@ import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentRetentionBinding
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
+import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
@@ -81,7 +82,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
                         Log.d("Search ", "Searhcingg...$searchString")
                         viewModel.setEvent(
-                            RetentionFragmentViewContract.RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied(
+                            RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied(
                                 searchString
                             )
                         )
@@ -98,7 +99,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.setEvent(RetentionFragmentViewContract.RetentionFragmentViewEvents.RefreshRetentionDataClicked)
+            viewModel.setEvent(RetentionFragmentViewEvents.RefreshRetentionDataClicked)
         }
     }
 
@@ -109,16 +110,16 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             .collect {
 
                 when (it) {
-                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
+                    is RetentionFragmentViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
                         it.phoneNumber
                     )
-                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
+                    is RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
                         it.gigerDetails
                     )
-                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
+                    is RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
                         it.filters
                     )
-                    is RetentionFragmentViewContract.RetentionFragmentViewUiEffects.ShowSnackBar -> showSnackBar(
+                    is RetentionFragmentViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
                     )
                 }
@@ -152,16 +153,17 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             .collect {
 
                 when (it) {
-                    is RetentionFragmentViewContract.RetentionFragmentUiState.ErrorWhileLoadingRetentionData -> handleErrorInLoadingData(
+                    is RetentionFragmentUiState.ErrorWhileLoadingRetentionData -> handleErrorInLoadingData(
                         it.error
                     )
-                    is RetentionFragmentViewContract.RetentionFragmentUiState.LoadingRetentionData -> handleLoadingState(
+                    is RetentionFragmentUiState.LoadingRetentionData -> handleLoadingState(
                         it.alreadyShowingGigersOnView
                     )
-                    RetentionFragmentViewContract.RetentionFragmentUiState.ScreenInitialisedOrRestored -> {}
-                    is RetentionFragmentViewContract.RetentionFragmentUiState.ShowOrUpdateRetentionData -> handleDataLoadedState(
+                    RetentionFragmentUiState.ScreenInitialisedOrRestored -> {}
+                    is RetentionFragmentUiState.ShowOrUpdateRetentionData -> handleDataLoadedState(
                         it.dateFilterSelected,
-                        it.retentionData
+                        it.retentionData,
+                        it.updatedTabMaster
                     )
                 }
             }
@@ -174,8 +176,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     private fun handleDataLoadedState(
-        gigers: TLWorkSpaceFilterOption,
-        retentionData: List<RetentionScreenData>
+        selectedDateFilter : TLWorkSpaceFilterOption?,
+        retentionData: List<RetentionScreenData>,
+        updatedTabMaster: List<RetentionTabData>
     ) = viewBinding.apply {
 
         swipeRefreshLayout.isRefreshing = false
