@@ -86,12 +86,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:elevation="4dp"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:src="@drawable/ic_action_attachment_fab"
-        android:tint="@color/white"
+        app:tint="@android:color/white"
         android:visibility="visible" />
 
 </LinearLayout>

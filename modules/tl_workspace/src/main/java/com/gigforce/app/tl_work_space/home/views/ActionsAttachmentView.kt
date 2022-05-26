@@ -88,6 +88,7 @@ class ActionsAttachmentView(context: Context, attrs: AttributeSet) :
         private fun setupAttachmentOptions() = viewBinding.apply{
             actionsFab.setOnClickListener(View.OnClickListener {
                 if (layoutAttachment!!.visibility == View.VISIBLE) {
+
                     val x =
                         if (isLayoutDirectionRightToLeft) (dp * (18 + 40 + 4 + 56)).toInt() else (screenWidth - dp * (18 + 40 + 4 + 56)).toInt()
                     val y = (dp * 220).toInt()
@@ -112,6 +113,7 @@ class ActionsAttachmentView(context: Context, attrs: AttributeSet) :
                         override fun onAnimationRepeat(animator: Animator) {}
                     })
                     anim.start()
+                    attachmentOptionsListener.isVisible(visible = false)
                 } else {
                     if (!removeAttachmentOptionAnimation) {
                         var count = 0
@@ -154,6 +156,7 @@ class ActionsAttachmentView(context: Context, attrs: AttributeSet) :
                     anim.duration = 500
                     layoutAttachment!!.visibility = View.VISIBLE
                     anim.start()
+                    attachmentOptionsListener.isVisible(visible = true)
                 }
             })
         }

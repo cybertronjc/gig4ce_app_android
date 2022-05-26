@@ -41,6 +41,13 @@
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+            <View
+                android:id="@+id/middle_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="@color/semi_transparent_blur"/>
+
             <com.gigforce.app.tl_work_space.home.views.ActionsAttachmentView
                 android:id="@+id/actions_attachment"
                 android:layout_width="match_parent"

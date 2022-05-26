@@ -33,6 +33,7 @@ import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.google.android.material.snackbar.Snackbar
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -87,9 +88,15 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             this@TLWorkspaceHomeFragment
         )
 
-        if (actionsAttachment.isAttachmentOptionViewVisible()){
-            view?.foreground = resources.getDrawable(R.drawable.tl_workspace_home_screen_dim)
+        middleView.setOnClickListener {
+            if (middleView.isVisible && actionsAttachment.isAttachmentOptionViewVisible()){
+                actionsAttachment.hideAttachmentOptionView()
+                middleView.gone()
+            } else {
+                //do nothing
+            }
         }
+
 
         rootLayout.setOnTouchListener { view, motionEvent ->
             actionsAttachment.hideAttachmentOptionView()
@@ -471,6 +478,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             }
             ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
 
+
             }
             ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
 
@@ -482,6 +490,14 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
             }
 
+        }
+    }
+
+    override fun isVisible(visible: Boolean?) {
+        if (visible == true){
+            viewBinding.middleView.visible()
+        } else {
+            viewBinding.middleView.gone()
         }
     }
 }
