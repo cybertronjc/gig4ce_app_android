@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="110dp"
+    android:layout_width="110dp"
+    android:background="?android:selectableItemBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/action_root_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:elevation="@dimen/size_1"
+        android:background="@drawable/action_card_item_background"
+        android:layout_margin="@dimen/size_5"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/action_image_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:id="@+id/action_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="@dimen/size_2"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:lines="2"
+            android:singleLine="false"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            tools:text="Bangalore" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

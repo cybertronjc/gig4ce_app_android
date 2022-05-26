@@ -6,6 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/rootLayout"
         android:orientation="vertical"
         tools:context=".home.TLWorkspaceHomeFragment">
 
@@ -39,6 +40,12 @@
                     android:layout_height="match_parent" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <com.gigforce.app.tl_work_space.home.views.ActionsAttachmentView
+                android:id="@+id/actions_attachment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
 
             <include
                 android:id="@+id/shimmer_container"
