@@ -19,6 +19,7 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_RETENTION = "tl_workspace/retention"
         const val NAV_DESTINATION_SELECTION_FORM = "tl_workspace/selection_form"
         const val NAV_DESTINATION_LOGIN_SUMMARY = "tl_workspace/login_summary"
+        const val NAV_DESTINATION_GIGER_PAYOUT = "tl_workspace/payout"
 
         //Intent extras
         const val INTENT_EXTRA_DATE_FILTER_OPTIONS = "date_filter_options"
@@ -178,7 +179,13 @@ class TLWorkSpaceNavigation @Inject constructor(
     fun navigateToPayoutListScreen(
         title : String
     ){
-
+        navigation.navigateTo(
+            NAV_DESTINATION_GIGER_PAYOUT,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
     fun navigateToActivityTrackerListScreen(

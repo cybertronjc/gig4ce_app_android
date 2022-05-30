@@ -1212,5 +1212,9 @@
     <fragment android:id="@+id/retentionFragment"
         android:name="com.gigforce.app.tl_work_space.retentions.RetentionFragment"
         android:label="RetentionFragment"/>
+    <fragment
+        android:id="@+id/gigerPayoutFragment"
+        android:name="com.gigforce.app.tl_work_space.payout.GigerPayoutFragment"
+        android:label="GigerPayoutFragment" />
 </navigation>
 

@@ -481,7 +481,9 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
             }
             ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
-
+                tlWorkSpaceNavigation.navigateToPayoutListScreen(
+                    "Payout"
+                )
             }
             ActionsAttachmentOption.GIGER_RETENTION_ID -> {
 

@@ -39,6 +39,13 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val RetentionGigerItemType = 392445
     const val RetentionBusinessItemType = 3374882
 
+    /**
+     * -----------------
+     * GigerPayout Fragments view [RetentionFragment]
+     */
+    const val GigerPayoutGigerItemType = 392457
+    const val GigerPayoutBusinessItemType = 3374890
+
     override fun getView(
         context: Context,
         viewType: Int
