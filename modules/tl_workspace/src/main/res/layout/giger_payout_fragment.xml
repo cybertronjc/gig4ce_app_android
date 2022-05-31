@@ -18,7 +18,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Payout" />
+            app:titleText="Payout 1" />
 
 
         <FrameLayout
@@ -34,7 +34,7 @@
 
                 <include
                     android:id="@+id/payout_main_layout"
-                    layout="@layout/fragment_payout_main" />
+                    layout="@layout/fragment_giger_payout_main" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
