@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBinding
-import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -23,6 +21,7 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +96,7 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.setEvent(UpcomingGigersViewContract.UpcomingGigersUiEvents.RefreshUpcomingGigersClicked)
         }
+        infoLayout.infoIv.loadImage(R.drawable.ic_dragon_sleeping_animation)
     }
 
     private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
@@ -158,7 +158,20 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
     private fun handleErrorInLoadingData(
         error: String
     ) = viewBinding.apply {
+        swipeRefreshLayout.isRefreshing = false
+        stopShimmer(
+            shimmerContainer,
+            R.id.shimmer_controller
+        )
+        shimmerContainer.gone()
 
+        if (recyclerView.collection.isEmpty()) {
+            infoLayout.root.visible()
+            infoLayout.infoMessageTv.text = error
+        } else {
+            infoLayout.root.gone()
+            showSnackBar(error)
+        }
     }
 
     private fun handleDataLoadedState(
@@ -172,7 +185,7 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         )
         shimmerContainer.gone()
 
-//        infoLayout.gone()
+        infoLayout.root.gone()
         recyclerView.collection = gigers
         showOrHideNoDataLayout(
             gigers.isNotEmpty()
@@ -183,12 +196,12 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         dataAvailableToShowOnScreen: Boolean
     ) = viewBinding.apply {
 
-        if (dataAvailableToShowOnScreen) {
-//            infoLayout.root.visible()
-//            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
+        if (!dataAvailableToShowOnScreen) {
+            infoLayout.root.visible()
+            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
         } else {
-//            infoLayout.root.gone()
-//            infoLayout.infoMessageTv.text = null
+            infoLayout.root.gone()
+            infoLayout.infoMessageTv.text = null
         }
     }
 
@@ -196,38 +209,35 @@ class UpcomingGigersFragment : BaseFragment2<FragmentUpcomingGigersBinding>(
         anyPreviousDataShownOnScreen: Boolean
     ) = viewBinding.apply {
 
+        infoLayout.root.gone()
         if (anyPreviousDataShownOnScreen) {
 
             if (!swipeRefreshLayout.isRefreshing) {
                 swipeRefreshLayout.isRefreshing = true
             }
 
-            if (shimmerContainer.isVisible) {
-                shimmerContainer.gone()
-                stopShimmer(
-                    this.shimmerContainer,
-                    R.id.shimmer_controller
-                )
-            }
+            shimmerContainer.gone()
+            stopShimmer(
+                this.shimmerContainer,
+                R.id.shimmer_controller
+            )
         } else {
 
             if (swipeRefreshLayout.isRefreshing) {
                 swipeRefreshLayout.isRefreshing = false
             }
 
-            if (!shimmerContainer.isVisible) {
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
-            }
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
         }
     }
 

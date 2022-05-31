@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.VerticalItemDecorator
@@ -120,6 +121,9 @@ class GigPage2Fragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var gigNavigation: GigNavigation
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -847,19 +851,18 @@ class GigPage2Fragment : Fragment(),
                 val gig = viewModel.currentGig ?: return
 
                 val currentDate = LocalDate.now()
-                navigation.navigateTo(
-                    "gig/gigMonthlyAttendanceFragment", bundleOf(
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
-                            currentDate.year,
-                            currentDate.monthValue,
-                            1
-                        ),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
-                    )
+
+                gigNavigation.openGigAttendanceHistoryScreen(
+                    gigDate = LocalDate.of(
+                        currentDate.year,
+                        currentDate.monthValue,
+                        1
+                    ), gigTitle = gig.getGigTitle(),
+                    gigOrderId = gig.gigOrderId,
+                    companyLogo = gig.getFullCompanyLogo()!!,
+                    companyName = gig.getFullCompanyName()!!
                 )
+
             }
             ID_DECLINE_GIG -> {
                 showDeclineGigDialog()

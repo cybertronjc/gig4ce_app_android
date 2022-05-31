@@ -2,6 +2,7 @@ package com.gigforce.app.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.gigforce.app.data.repositoriesImpl.gigs.GigerAttendanceService
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.*
 import com.gigforce.common_ui.remote.verification.VerificationKycService
@@ -9,7 +10,6 @@ import com.gigforce.core.CoreConstants
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
-import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_app.help.HelpSectionService

@@ -7,6 +7,20 @@ class GigforceLogger @Inject constructor() {
 
     fun v(
         tag: String,
+        message: String
+    ) {
+        try {
+            Timber.tag(tag)
+            Timber.v(
+                message
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun v(
+        tag: String,
         message: String,
         vararg args: Any
     ) {
@@ -143,11 +157,11 @@ class GigforceLogger @Inject constructor() {
 
         try {
 
-            return if(any is Array<*> && any.isNotEmpty()){
+            return if (any is Array<*> && any.isNotEmpty()) {
                 convertAnyToStringOrNull(
                     any[0]!!
                 )
-            } else{
+            } else {
                 any.toString()
             }
         } catch (e: Exception) {

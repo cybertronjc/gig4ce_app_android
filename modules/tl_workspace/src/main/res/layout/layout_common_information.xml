@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/info_iv"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            tools:src="@tools:sample/avatars"/>
+
+        <TextView
+            android:id="@+id/info_message_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/black_two"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            tools:text="Some  ded ded ded ded ed ed ed e d ed ed ed ed e dd e de d de edd ed e d de dd e derror"/>
+
+
+
+    </LinearLayout>
+</layout>

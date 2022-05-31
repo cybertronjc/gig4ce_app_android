@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingTop="40dp"
+            android:paddingBottom="10dp"
+            tools:context=".payouts.payout_details.PayoutDetailsFragment">
+
+            <com.gigforce.app.tl_work_space.activity_tacker.common_views.AttendanceStatusView
+                android:id="@+id/statusView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/marked_by_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/lato"
+                android:textColor="#7C7C7C"
+                android:textFontWeight="400"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/statusView" />
+
+
+            <com.gigforce.common_ui.views.GigforceImageView
+                android:id="@+id/user_image_imageview"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                tools:src="@tools:sample/avatars" />
+
+
+            <TextView
+                android:id="@+id/name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/lato_bold"
+                android:lineHeight="18sp"
+                android:textColor="@color/lipstick_2"
+                android:textFontWeight="700"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_image_imageview"
+                app:layout_goneMarginTop="15dp"
+                tools:text="Whoo ho Company Name" />
+
+            <TextView
+                android:id="@+id/last_active_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:textColor="@color/black"
+                android:textFontWeight="400"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name_textview"
+                app:layout_goneMarginTop="15dp"
+                tools:text="Whoo ho Company Name" />
+
+
+            <LinearLayout
+                android:id="@+id/action_button_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/last_active_textview">
+
+                <include
+                    android:id="@+id/call_layout"
+                    layout="@layout/fragment_giger_attendance_details_main_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <include
+                    android:id="@+id/change_tl_layout"
+                    layout="@layout/fragment_giger_attendance_details_main_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <include
+                    android:id="@+id/attendance_history_layout"
+                    layout="@layout/fragment_giger_attendance_details_main_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <include
+                    android:id="@+id/drop_giger_layout"
+                    layout="@layout/fragment_giger_attendance_details_main_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <com.gigforce.app.tl_work_space.activity_tacker.common_views.GigerMarkedAttendanceStatusView
+                android:id="@+id/giger_marked_attendance_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/action_button_container" />
+
+            <com.gigforce.app.tl_work_space.activity_tacker.attendance_details.views.AttendanceDetailsInfoLayout
+                android:id="@+id/infoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="#E9F0FE"
+                app:cardCornerRadius="6dp"
+                app:layout_constraintTop_toBottomOf="@id/giger_marked_attendance_status" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="#EBEBEB"
+                app:layout_constraintTop_toBottomOf="@id/infoLayout" />
+
+            <TextView
+                android:id="@+id/attendance_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_bold"
+                android:lineHeight="18sp"
+                android:textColor="@color/inkDefault"
+                android:textFontWeight="700"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider1"
+                tools:text="Heyyyy" />
+
+            <LinearLayout
+                android:id="@+id/attendance_action_buttons_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/attendance_textview">
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/active_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:text="ACTIVE"
+                    android:textColor="#33B642"
+                    android:textFontWeight="700"
+                    android:textSize="12sp"
+                    app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
+                    app:strokeColor="#33B642"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/inactive_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:text="INACTIVE"
+                    android:textColor="#E11900"
+                    android:textFontWeight="700"
+                    android:textSize="12sp"
+                    app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
+                    app:strokeColor="#E11900"
+                    app:strokeWidth="1dp" />
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

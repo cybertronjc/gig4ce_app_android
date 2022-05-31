@@ -1,14 +1,11 @@
 package com.gigforce.common_ui.repository.gig
 
 import android.content.SharedPreferences
-import com.gigforce.common_ui.datamodels.attendance.GigAttendanceApiModel
-import com.gigforce.common_ui.ext.bodyOrErrorBodyElseThrow
-import com.gigforce.common_ui.ext.bodyOrThrow
-import com.gigforce.common_ui.remote.GigerAttendanceService
+import com.gigforce.app.data.remote.bodyOrThrow
+import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
+import com.gigforce.app.data.repositoriesImpl.gigs.GigerAttendanceService
 import com.gigforce.common_ui.viewdatamodels.gig.DeclineReason
-import com.gigforce.common_ui.viewdatamodels.gig.MarkAttendanceRequest
-import com.gigforce.common_ui.viewdatamodels.gig.ResolveAttendanceRequest
-import com.gigforce.common_ui.viewdatamodels.gig.ResolveAttendanceRequestOptions
+import com.gigforce.common_ui.ext.bodyOrErrorBodyElseThrow
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.logger.GigforceLogger
@@ -72,7 +69,7 @@ class GigAttendanceRepository @Inject constructor(
 
         try {
             val response = gigAttendanceService.markAttendance(
-                markAttendanceRequest = MarkAttendanceRequest(
+                markAttendanceRequest = com.gigforce.app.data.repositoriesImpl.gigs.models.MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_PRESENT,
                     type = TYPE_PRESENT_CHECK_IN,
@@ -132,7 +129,7 @@ class GigAttendanceRepository @Inject constructor(
 
         try {
             val response = gigAttendanceService.markAttendance(
-                markAttendanceRequest = MarkAttendanceRequest(
+                markAttendanceRequest = com.gigforce.app.data.repositoriesImpl.gigs.models.MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_PRESENT,
                     type = TYPE_PRESENT_CHECK_OUT,
@@ -183,7 +180,7 @@ class GigAttendanceRepository @Inject constructor(
 
         try {
             val response = gigAttendanceService.markAttendance(
-                markAttendanceRequest = MarkAttendanceRequest(
+                markAttendanceRequest = com.gigforce.app.data.repositoriesImpl.gigs.models.MarkAttendanceRequest(
                     gigId = gigId,
                     attendance = ATTENDANCE_ABSENT,
                     absentReason = reasonId,
@@ -269,8 +266,10 @@ class GigAttendanceRepository @Inject constructor(
         optionSelected: Boolean
     ) : GigAttendanceApiModel {
         val response = gigAttendanceService.resolveAttendanceConflict(
-            ResolveAttendanceRequest(
-                optionSelected = ResolveAttendanceRequestOptions.fromBoolean(optionSelected),
+            com.gigforce.app.data.repositoriesImpl.gigs.models.ResolveAttendanceRequest(
+                optionSelected = com.gigforce.app.data.repositoriesImpl.gigs.models.ResolveAttendanceRequestOptions.fromBoolean(
+                    optionSelected
+                ),
                 resolveId = resolveId
             )
         ).bodyOrErrorBodyElseThrow()

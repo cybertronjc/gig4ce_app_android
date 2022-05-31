@@ -2,6 +2,9 @@ package com.gigforce.app.tl_work_space
 
 import android.content.Context
 import android.view.View
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.BusinessHeaderRecyclerItemView
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.GigerAttendanceItemRecyclerItemView
+import com.gigforce.app.tl_work_space.custom_tab.TabWithCountAndChangeInfoCardView
 import com.gigforce.app.tl_work_space.home.views.*
 import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
@@ -11,6 +14,10 @@ import com.gigforce.core.IViewTypeLoader
 
 object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
+
+    /** Tab in Retention, Payout etc */
+    const val CustomTabType1 = 3323312
+    const val CustomTabType2 = 3323312
     /**
      * -----------------------------
      * TL Workspace HomeScreen Items
@@ -34,6 +41,13 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
     /**
      * -----------------
+     * Upcoming Giger view [Attendance Tracker]
+     */
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER  = 34351111
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM  = 34351166;
+
+    /**
+     * -----------------
      * Retention Fragments view [RetentionFragment]
      */
     const val RetentionGigerItemType = 392445
@@ -43,6 +57,8 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         context: Context,
         viewType: Int
     ): View? = when(viewType) {
+        CustomTabType1 -> TabWithCountAndChangeInfoCardView(context,null)
+
         TLWorkspaceType1SectionItemType -> TLWorkspaceType1SectionView(context,null)
         TLWorkspaceType1InnerCardType -> TLWorkspaceType1SectionInnerCardView(context,null)
 
@@ -54,6 +70,15 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
         UpcomingGigersItemType -> UpcomingGigersItemView(context,null)
         UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context,null)
+
+        VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER -> BusinessHeaderRecyclerItemView(
+            context,
+            null
+        )
+        VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM -> GigerAttendanceItemRecyclerItemView(
+            context,
+            null
+        )
 
         RetentionGigerItemType -> RetentionGigerItemView(context,null)
         RetentionBusinessItemType -> RetentionBusinessItemView(context,null)

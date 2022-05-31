@@ -3,6 +3,7 @@ import mobile.buildsrc.Libs
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
@@ -72,6 +73,7 @@ dependencies {
     implementation Libs.localization
     implementation Libs.statusbarUtil
     implementation Libs.powerMenu
+    implementation Libs.progressButton
 
     implementation Libs.AirBnb.lottie
 
@@ -97,6 +99,15 @@ dependencies {
     implementation Libs.AndroidX.coreKtx
 
     implementation Libs.Kotlin.playServicesCoroutinesKtx
+
+    implementation Libs.Firebase.mlKitFaceDetection
+    implementation Libs.Firebase.dynamicLinksKtx
+    implementation Libs.Firebase.remoteConfigKtx
+    implementation Libs.Firebase.crashlyticsKtx
+    implementation Libs.Firebase.authKtx
+    implementation Libs.Firebase.firestoreKtx
+    implementation Libs.Firebase.storageKtx
+    implementation Libs.Firebase.storageUi
 
 
     /**

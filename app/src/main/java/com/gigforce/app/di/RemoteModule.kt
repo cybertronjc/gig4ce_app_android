@@ -1,6 +1,6 @@
 package com.gigforce.app.di
 
-import com.gigforce.common_ui.remote.GigService
+import com.gigforce.app.data.repositoriesImpl.gigs.GigService
 import com.gigforce.common_ui.remote.PayoutRetrofitService
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import dagger.Module

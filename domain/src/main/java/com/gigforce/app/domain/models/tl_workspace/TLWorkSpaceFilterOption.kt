@@ -3,7 +3,7 @@ package com.gigforce.app.domain.models.tl_workspace
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Parcelize
 data class TLWorkSpaceFilterOption(
@@ -23,7 +23,7 @@ data class TLWorkSpaceFilterOption(
     var maxDaysDifferenceInCaseOfRange: Int = 7,
     var minimumDateAvailableForSelection: LocalDate? = null,
     var maximumDateAvailableForSelection: LocalDate? = null,
-) : Parcelable{
+) : Parcelable {
 
     fun mapToApiModel(): FiltersItemApiModel {
         return FiltersItemApiModel(
@@ -36,6 +36,22 @@ data class TLWorkSpaceFilterOption(
             selectRangeInFilter = selectRangeInFilter,
             maxDaysDifferenceInCaseOfRange = maxDaysDifferenceInCaseOfRange
         )
+    }
+
+    fun getFilterString(): String {
+        return if (customDateOrRangeFilter) {
+            val dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM")
+
+            if (endDate != null && startDate != null) {
+                startDate!!.format(dateTimeFormatter) + " - " + endDate!!.format(dateTimeFormatter)
+            } else if (startDate != null) {
+                startDate!!.format(dateTimeFormatter)
+            } else {
+                text
+            }
+        } else {
+            text
+        }
     }
 
 }

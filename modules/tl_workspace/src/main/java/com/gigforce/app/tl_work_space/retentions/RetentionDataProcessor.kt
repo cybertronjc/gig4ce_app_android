@@ -3,16 +3,21 @@ package com.gigforce.app.tl_work_space.retentions
 import com.gigforce.app.domain.models.tl_workspace.retention.GigersRetentionListItem
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
+import com.gigforce.core.logger.GigforceLogger
+import kotlin.math.log
 
 object RetentionDataProcessor {
+
+    const val TAG = "RetentionDataProcessor"
 
     fun processRawRetentionDataForListForView(
         rawGigerRetentionList: List<GigersRetentionListItem>,
         searchText: String?,
         tabMaster: List<RetentionTabData>,
-        collapsedBusinessIds: List<String>,
+        collapsedBusiness: List<String>,
         selectedTab: RetentionTabData?,
-        retentionViewModel: RetentionViewModel
+        retentionViewModel: RetentionViewModel,
+        logger: GigforceLogger
     ): Pair<List<RetentionTabData>, List<RetentionScreenData>> {
 
         val filteredGigers = filterGigersWithSearchString(
@@ -22,7 +27,9 @@ object RetentionDataProcessor {
 
         val updatedStatusMaster = updateCountInTabs(
             tabMaster,
-            filteredGigers
+            selectedTab,
+            filteredGigers,
+            logger
         )
 
         val gigersAfterFinalFilter = filterGigersWithStatus(
@@ -32,7 +39,7 @@ object RetentionDataProcessor {
         val gigersListForView = mapGigersDataToPresentationModel(
             gigersAfterFinalFilter,
             retentionViewModel,
-            collapsedBusinessIds
+            collapsedBusiness
         )
 
         return updatedStatusMaster to gigersListForView
@@ -42,9 +49,9 @@ object RetentionDataProcessor {
         rawGigerList: List<GigersRetentionListItem>,
         searchText: String?
     ): List<GigersRetentionListItem> {
-        if (searchText.isNullOrBlank())
+        if (searchText.isNullOrBlank()) {
             return rawGigerList
-        else {
+        } else {
 
             return rawGigerList.filter {
                 it.name?.contains(
@@ -60,13 +67,21 @@ object RetentionDataProcessor {
     }
 
     private fun updateCountInTabs(
-        statusMaster: List<RetentionTabData>,
-        filteredGigersWithIncompleteCompliance: List<GigersRetentionListItem>
+        tabMaster: List<RetentionTabData>,
+        selectedTab: RetentionTabData?,
+        filteredGigersWithIncompleteCompliance: List<GigersRetentionListItem>,
+        logger: GigforceLogger
     ): List<RetentionTabData> {
-        return statusMaster.apply {
-            onEach { status ->
-                status.value = filteredGigersWithIncompleteCompliance.count {
-                    it.tabStatus != null && it.tabStatus!!.contains(status.id)
+        return tabMaster.apply {
+            onEach { tab ->
+                tab.value = filteredGigersWithIncompleteCompliance.count {
+                    it.tabStatus != null && it.tabStatus!!.contains(tab.id)
+                }
+                if (tab.id == selectedTab?.id) {
+                    tab.selected = true
+                    logger.v(TAG, "tab set as selected : ${tab.id}")
+                } else {
+                    tab.selected = false
                 }
             }
         }

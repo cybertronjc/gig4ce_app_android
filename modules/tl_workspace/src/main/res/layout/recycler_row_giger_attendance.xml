@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/view_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            >
+
+            <RelativeLayout
+                android:id="@+id/swipe_bck_left_half"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/background_tl_attendance_swipe_present"
+                android:orientation="vertical"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:id="@+id/checkin_image"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_swipe_check_in_24" />
+
+                <TextView
+                    android:id="@+id/swipe_check_in_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/checkin_image"
+                    android:fontFamily="@font/lato"
+                    android:text="Active"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/swipe_bck_right_half"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/background_tl_attendance_swipe_absent"
+                android:orientation="vertical"
+                android:paddingEnd="12dp">
+
+
+                <ImageView
+                    android:id="@+id/decline_image"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_swipe_decline_24" />
+
+                <TextView
+                    android:id="@+id/swipe_decline_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/decline_image"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/lato"
+                    android:text="Inactive"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/view_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:cardElevation="6dp">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view_foregr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/user_image_iv"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <com.gigforce.app.tl_work_space.activity_tacker.common_views.AttendanceStatusView
+                    android:id="@+id/overall_status_textview"
+                    android:layout_width="90dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/marked_by_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="#7C7C7C"
+                    android:textFontWeight="400"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overall_status_textview" />
+
+                <TextView
+                    android:id="@+id/giger_name_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/lato"
+                    android:lineHeight="12sp"
+                    android:textColor="@color/inkDefault"
+                    android:textFontWeight="700"
+                    tools:text="User Name that ssss"
+                    app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
+                    app:layout_constraintStart_toEndOf="@id/user_image_iv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/giger_designation_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/lato"
+                    android:lineHeight="18sp"
+                    android:textColor="@color/inkDefault"
+                    android:textFontWeight="400"
+                    android:textSize="10sp"
+                    tools:text="User Desingation"
+                    app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
+                    app:layout_constraintStart_toStartOf="@id/giger_name_textview"
+                    app:layout_constraintTop_toBottomOf="@id/giger_name_textview" />
+
+                <TextView
+                    android:id="@+id/giger_last_active_date_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/lato"
+                    android:lineHeight="18sp"
+                    android:textColor="#979C9E"
+                    android:textFontWeight="400"
+                    android:textSize="10sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@id/overall_status_textview"
+                    app:layout_constraintStart_toStartOf="@id/giger_name_textview"
+                    app:layout_constraintTop_toBottomOf="@id/giger_designation_textview" />
+
+
+                <com.gigforce.app.tl_work_space.activity_tacker.common_views.GigerMarkedAttendanceStatusView
+                    android:id="@+id/giger_attendance_status_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:minHeight="40dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/marked_by_textview"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+</layout>

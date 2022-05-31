@@ -6,6 +6,7 @@ import com.gigforce.app.android_common_utils.base.viewModel.UiState
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
+import kotlin.random.Random
 
 
 sealed class RetentionFragmentUiState : UiState {
@@ -24,7 +25,24 @@ sealed class RetentionFragmentUiState : UiState {
         val dateFilterSelected: TLWorkSpaceFilterOption?,
         val retentionData: List<RetentionScreenData>,
         val updatedTabMaster: List<RetentionTabData>,
-    ) : RetentionFragmentUiState()
+    ) : RetentionFragmentUiState(){
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return Random.nextInt()
+    }
 }
 
 sealed class RetentionFragmentViewEvents : UiEvent {
@@ -35,9 +53,15 @@ sealed class RetentionFragmentViewEvents : UiEvent {
         val giger: RetentionScreenData.GigerItemData
     ) : RetentionFragmentViewEvents()
 
+    data class BusinessClicked(
+        val business: RetentionScreenData.BusinessItemData
+    ) : RetentionFragmentViewEvents()
+
     data class CallGigerClicked(
         val giger: RetentionScreenData.GigerItemData
     ) : RetentionFragmentViewEvents()
+
+    object OpenDateFilterIconClicked : RetentionFragmentViewEvents()
 
     sealed class FilterApplied : RetentionFragmentViewEvents() {
 

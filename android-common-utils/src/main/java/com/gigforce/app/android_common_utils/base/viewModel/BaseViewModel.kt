@@ -55,8 +55,8 @@ abstract class BaseViewModel<
     /**
      * Set new Ui State
      */
-    protected fun setState(reduce: State.() -> State) {
-        val newState = currentState.reduce()
+    protected fun setState(reduce: () -> State) {
+        val newState = reduce()
         _uiState.value = newState
     }
 

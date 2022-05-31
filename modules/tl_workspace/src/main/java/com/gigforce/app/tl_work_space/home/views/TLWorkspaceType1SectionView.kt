@@ -54,7 +54,7 @@ class TLWorkspaceType1SectionView(
 
             viewBinding.titleTextview.text = it.sectionTitle.capitalizeFirstLetter()
             viewBinding.filterTextview.isVisible = it.currentFilter != null
-            viewBinding.filterTextview.text = it.currentFilter?.text
+            viewBinding.filterTextview.text = it.currentFilter?.getFilterString()
 
             viewBinding.recyclerView.layoutManager = GridLayoutManager(
                 context,

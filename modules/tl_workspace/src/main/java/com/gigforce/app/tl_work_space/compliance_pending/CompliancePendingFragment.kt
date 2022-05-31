@@ -15,7 +15,6 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
     companion object {
         const val TAG = "CompliancePendingFragment"
     }
-
     private val viewModel: CompliancePendingViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {

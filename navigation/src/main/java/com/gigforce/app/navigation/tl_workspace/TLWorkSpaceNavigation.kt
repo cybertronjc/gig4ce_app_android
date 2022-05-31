@@ -17,6 +17,11 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_UPCOMING_GIGERS = "tl_workspace/upcoming_gigers"
         const val NAV_DESTINATION_PENDING_COMPLIANCE = "tl_workspace/pending_compliance"
         const val NAV_DESTINATION_RETENTION = "tl_workspace/retention"
+        const val NAV_DESTINATION_ACTIVITY_TRACKER = "gig/gigerAttendanceUnderManagerFragment"
+        const val NAV_DESTINATION_SELECTION_LIST = "LeadMgmt/joiningListFragment"
+
+
+        const val NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET = "tl_workspace/date_filter_bottom_sheet"
 
 
         //Intent extras
@@ -90,7 +95,7 @@ class TLWorkSpaceNavigation @Inject constructor(
         filterOptions: List<TLWorkSpaceFilterOption>
     ) {
         navigation.navigateTo(
-            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET,
             bundleOf(
                 INTENT_EXTRA_DATE_FILTER_OPTIONS to ArrayList(filterOptions)
             ),
@@ -153,7 +158,13 @@ class TLWorkSpaceNavigation @Inject constructor(
     fun navigateToJoiningListScreen(
         title : String
     ){
-
+        navigation.navigateTo(
+            NAV_DESTINATION_SELECTION_LIST,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
     fun navigateToPayoutListScreen(
@@ -165,7 +176,13 @@ class TLWorkSpaceNavigation @Inject constructor(
     fun navigateToActivityTrackerListScreen(
         title : String
     ){
-
+        navigation.navigateTo(
+            NAV_DESTINATION_ACTIVITY_TRACKER,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
 }

@@ -103,7 +103,7 @@
             </LinearLayout>
 
 
-<!--            <com.gigforce.giger_gigs.attendance_tl.attendance_details.views.AttendanceDetailsInfoLayout-->
+<!--            <com.gigforce.app.tl_work_space.activity_tacker.AttendanceDetailsInfoLayout-->
 <!--                android:id="@+id/infoLayout"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->

@@ -1,11 +1,11 @@
 package com.gigforce.common_ui.repository.gig
 
 import android.location.Location
-import com.gigforce.common_ui.ext.bodyOrThrow
-import com.gigforce.common_ui.remote.GigService
+import com.gigforce.app.data.remote.bodyOrThrow
+import com.gigforce.app.data.repositoriesImpl.gigs.GigService
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
-import com.gigforce.common_ui.viewdatamodels.gig.GigInfoBasicApiModel
+import com.gigforce.app.data.repositoriesImpl.gigs.models.GigInfoBasicApiModel
 import com.gigforce.core.datamodels.gigpage.BussinessLocation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
@@ -37,7 +37,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class GigsRepository @Inject constructor(
-    private val gigService: GigService
+    private val gigService: com.gigforce.app.data.repositoriesImpl.gigs.GigService
 ) : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String =
@@ -382,7 +382,7 @@ class GigsRepository @Inject constructor(
 
     fun getGigsForADay(
         localDate: LocalDate
-    ): Flow<List<GigInfoBasicApiModel>> = flow {
+    ): Flow<List<com.gigforce.app.data.repositoriesImpl.gigs.models.GigInfoBasicApiModel>> = flow {
         val finalDateInYYMMDD = DateTimeFormatter.ISO_DATE.format(localDate)
         emit(gigService.getGigsForDate(finalDateInYYMMDD).bodyOrThrow())
     }

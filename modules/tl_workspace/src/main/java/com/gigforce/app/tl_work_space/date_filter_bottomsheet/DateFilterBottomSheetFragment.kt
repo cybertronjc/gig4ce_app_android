@@ -2,22 +2,30 @@ package com.gigforce.app.tl_work_space.date_filter_bottomsheet
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
+import androidx.core.util.Pair
 import androidx.fragment.app.setFragmentResult
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.BotttomsheetDateFilterBinding
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.resources.MaterialAttributes.resolveOrThrow
 import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
 
 @AndroidEntryPoint
@@ -35,22 +43,25 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getDataFromIntents(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
     override fun viewCreated(
         viewBinding: BotttomsheetDateFilterBinding,
         savedInstanceState: Bundle?
     ) {
+        val bottomSheet = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
 
-        if (viewCreatedForTheFirstTime) {
-            setFilterOptions()
-            listeners()
-        }
+        setFilterOptions()
+        listeners()
+
     }
 
     @SuppressLint("InflateParams")
     private fun setFilterOptions() = viewBinding.radioGroup.apply {
+        removeAllViews()
 
         for (option in filterOptions) {
             val radioButton = layoutInflater.inflate(
@@ -82,12 +93,16 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
 
     private fun listeners() = viewBinding.apply {
 
-        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        radioGroup.setOnCheckedChangeListener { _, _ ->
             applyFilterButton.isEnabled = true
         }
 
         applyFilterButton.setOnClickListener {
             checkForCustomDateRangeElsePublishResults()
+        }
+
+        cancelButton.setOnClickListener {
+            dismiss()
         }
     }
 
@@ -123,10 +138,7 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
         if (filterOption.selectRangeInFilter) {
 
             openSelectDateRangeSelectionDialog(
-                filterOption.filterId,
-                filterOption.defaultSelectedDate ?: LocalDate.now(),
-                filterOption.minimumDateAvailableForSelection,
-                filterOption.maximumDateAvailableForSelection
+                filterOption
             )
         } else {
 
@@ -184,13 +196,87 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private fun openSelectDateRangeSelectionDialog(
-        filterId: String,
-        defaultDate: LocalDate,
-        minDate: LocalDate?,
-        maxDate: LocalDate?
-    ) {
+        filter: TLWorkSpaceFilterOption
+    ) = filter.apply {
 
+        val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
+        val dateRangeValidator = if (maxDaysDifferenceInCaseOfRange > 0) {
+            DateRangeValidator(maxDaysDifferenceInCaseOfRange)
+        } else {
+            null
+        }
+
+        val constraints = CalendarConstraints.Builder().apply {
+
+            if (minimumDateAvailableForSelection != null) {
+                this.setStart(
+                    minimumDateAvailableForSelection!!.atStartOfDay().toInstant(
+                        ZoneOffset.UTC
+                    ).toEpochMilli()
+                )
+            }
+
+            if (maximumDateAvailableForSelection != null) {
+                this.setEnd(
+                    maximumDateAvailableForSelection!!.atStartOfDay().toInstant(
+                        ZoneOffset.UTC
+                    ).toEpochMilli()
+                )
+            }
+
+            if (dateRangeValidator != null) {
+                setValidator(dateRangeValidator)
+            }
+
+            if (defaultSelectedDate != null) {
+                this.setOpenAt(
+                    defaultSelectedDate!!.atStartOfDay().toInstant(
+                        ZoneOffset.UTC
+                    ).toEpochMilli()
+                )
+            }
+        }.build()
+
+        dateRangePickerBuilder
+            .setCalendarConstraints(constraints)
+            .setTheme(
+                resolveOrThrow(requireContext(), R.attr.materialCalendarTheme, "")
+            ).build().apply {
+                dateRangeValidator?.setMaterialDatePicker(this)
+                addOnPositiveButtonClickListener {
+
+                    if (it.first != null && it.second != null) {
+                        handleDateRangeSelected(
+                            filterId,
+                            it
+                        )
+                    }
+                }
+            }.show(childFragmentManager, "date_range_picker")
+
+    }
+
+    private fun handleDateRangeSelected(
+        filterId: String,
+        it: Pair<Long, Long>
+    ) {
+        val startDate = Instant
+            .ofEpochMilli(it.first!!)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+
+        val endDate = Instant
+            .ofEpochMilli(it.second!!)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+
+        publishCustomFilter(
+            filterId,
+            startDate,
+            endDate
+        )
     }
 
     private fun publishCustomFilter(

@@ -24,8 +24,10 @@ object LocalDateToIsoStringDateSerializer : JsonSerializer<LocalDate?> {
         typeOfSrc: Type?,
         context: JsonSerializationContext?
     ): JsonElement {
+
+        val date = src ?: return JsonNull.INSTANCE
         return JsonPrimitive(
-            "s"
+            DateTimeFormatter.ISO_DATE.format(date)
         )
     }
 }

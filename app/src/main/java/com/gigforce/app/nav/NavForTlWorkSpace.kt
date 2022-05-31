@@ -28,5 +28,10 @@ class NavForTlWorkSpace(
             TLWorkSpaceNavigation.NAV_DESTINATION_RETENTION,
             R.id.retentionFragment
         )
+
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET,
+            R.id.dateFilterBottomSheetFragment
+        )
     }
 }

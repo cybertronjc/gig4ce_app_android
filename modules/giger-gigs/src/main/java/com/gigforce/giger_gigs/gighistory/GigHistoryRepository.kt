@@ -2,17 +2,12 @@ package com.gigforce.giger_gigs.gighistory
 
 import android.util.Log
 import com.gigforce.common_ui.ext.bodyOrThrow
-import com.gigforce.common_ui.remote.GigService
+import com.gigforce.app.data.repositoriesImpl.gigs.GigService
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 //import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 

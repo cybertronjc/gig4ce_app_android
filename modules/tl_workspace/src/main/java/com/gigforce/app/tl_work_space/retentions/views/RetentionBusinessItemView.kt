@@ -5,15 +5,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
+import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.databinding.FragmentUpcomingGigersBusinessItemBinding
+import com.gigforce.app.tl_work_space.databinding.FragmentRetentionMainBusinessItemBinding
+import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
-import com.gigforce.app.tl_work_space.upcoming_gigers.UpcomingGigersViewContract
-import com.gigforce.app.tl_work_space.upcoming_gigers.models.UpcomingGigersListData
 import com.gigforce.core.IViewHolder
-import com.google.android.material.card.MaterialCardView
 
 class RetentionBusinessItemView(
     context: Context,
@@ -21,9 +18,10 @@ class RetentionBusinessItemView(
 ) : FrameLayout(
     context,
     attrs
-), IViewHolder {
+), IViewHolder, View.OnClickListener {
 
-    private lateinit var viewBinding: FragmentUpcomingGigersBusinessItemBinding
+    private lateinit var viewBinding: FragmentRetentionMainBusinessItemBinding
+    private var viewData: RetentionScreenData.BusinessItemData? = null
 
     init {
 
@@ -37,20 +35,45 @@ class RetentionBusinessItemView(
             LayoutParams.WRAP_CONTENT
         )
         this.layoutParams = params
+
     }
 
     private fun inflate() {
-        viewBinding = FragmentUpcomingGigersBusinessItemBinding.inflate(
+        viewBinding = FragmentRetentionMainBusinessItemBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
         )
+        viewBinding.root.setOnClickListener(this)
     }
 
     override fun bind(data: Any?) {
         (data as RetentionScreenData.BusinessItemData?)?.let {
+            viewData = it
 
-            viewBinding.textview.text = it.businessName
+            if (it.expanded) {
+                viewBinding.companyNameTv.setTextColor(
+                    ResourcesCompat.getColor(resources, R.color.pink_text, null)
+                )
+                viewBinding.collapseButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_up, null)
+                )
+            } else {
+                viewBinding.companyNameTv.setTextColor(
+                    ResourcesCompat.getColor(resources, R.color.text_grey, null)
+                )
+                viewBinding.collapseButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_dropdown_drop, null)
+                )
+            }
+
+            viewBinding.companyNameTv.text = "${it.businessName} (${it.count})"
         }
+    }
+
+    override fun onClick(v: View?) {
+        viewData?.viewModel?.setEvent(
+            RetentionFragmentViewEvents.BusinessClicked(viewData!!)
+        )
     }
 }
