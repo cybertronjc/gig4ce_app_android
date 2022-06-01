@@ -3,12 +3,9 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rootLayout"
-        android:orientation="vertical"
-        tools:context=".home.TLWorkspaceHomeFragment">
+        android:orientation="vertical">
 
         <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBar"
@@ -16,10 +13,12 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
+            app:isSearchVisible="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="TL Workspace" />
+            app:titleText="Payout 1" />
 
 
         <FrameLayout
@@ -33,26 +32,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.gigforce.core.recyclerView.CoreRecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:overScrollMode="never"
-                    android:layout_height="match_parent" />
+                <include
+                    android:id="@+id/payout_main_layout"
+                    layout="@layout/fragment_giger_payout_main" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-            <View
-                android:id="@+id/middle_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:background="@color/semi_transparent_blur"/>
-
-            <com.gigforce.app.tl_work_space.home.views.ActionsAttachmentView
-                android:id="@+id/actions_attachment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom" />
 
             <include
                 android:id="@+id/shimmer_container"
@@ -64,7 +48,7 @@
 
             <include
                 android:id="@+id/info_layout"
-                layout="@layout/layout_common_information" />
+                layout="@layout/layout_information_with_button" />
 
         </FrameLayout>
     </LinearLayout>

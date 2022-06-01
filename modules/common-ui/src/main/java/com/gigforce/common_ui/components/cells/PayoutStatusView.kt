@@ -1,4 +1,4 @@
-package com.gigforce.wallet.common_views
+package com.gigforce.common_ui.components.cells
 
 import android.content.Context
 import android.graphics.Color
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
-import com.gigforce.wallet.R
+import com.gigforce.common_ui.R
 
 class PayoutStatusView(
     context: Context,

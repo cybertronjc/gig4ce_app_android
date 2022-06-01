@@ -17,6 +17,9 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_UPCOMING_GIGERS = "tl_workspace/upcoming_gigers"
         const val NAV_DESTINATION_PENDING_COMPLIANCE = "tl_workspace/pending_compliance"
         const val NAV_DESTINATION_RETENTION = "tl_workspace/retention"
+        const val NAV_DESTINATION_SELECTION_FORM = "tl_workspace/selection_form"
+        const val NAV_DESTINATION_LOGIN_SUMMARY = "tl_workspace/login_summary"
+        const val NAV_DESTINATION_GIGER_PAYOUT = "tl_workspace/payout"
         const val NAV_DESTINATION_ACTIVITY_TRACKER = "gig/gigerAttendanceUnderManagerFragment"
         const val NAV_DESTINATION_SELECTION_LIST = "LeadMgmt/joiningListFragment"
         const val NAV_HELP_SCREEN = "HelpSectionFragment"
@@ -167,10 +170,17 @@ class TLWorkSpaceNavigation @Inject constructor(
         )
     }
 
+
     fun navigateToPayoutListScreen(
         title : String
     ){
-
+        navigation.navigateTo(
+            NAV_DESTINATION_GIGER_PAYOUT,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
     fun navigateToActivityTrackerListScreen(

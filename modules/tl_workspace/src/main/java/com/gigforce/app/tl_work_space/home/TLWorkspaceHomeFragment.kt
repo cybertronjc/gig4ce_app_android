@@ -1,13 +1,18 @@
 package com.gigforce.app.tl_work_space.home
 
+import android.animation.Animator
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.animation.OvershootInterpolator
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -20,6 +25,8 @@ import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNaviga
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.home.views.ActionAttachmentOptionsListetner
+import com.gigforce.app.tl_work_space.home.views.ActionsAttachmentOption
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -40,7 +47,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     fragmentName = "TLWorkspaceHomeFragment",
     layoutId = R.layout.fragment_tl_workspace_home,
     statusBarColor = R.color.status_bar_pink
-), OnMenuItemClickListener<PowerMenuItem> {
+), OnMenuItemClickListener<PowerMenuItem>, ActionAttachmentOptionsListetner {
 
     companion object {
         const val TAG = "TLWorkspaceHomeFragment"
@@ -85,6 +92,28 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             helpImageButton.setOnClickListener {
                 tlWorkSpaceNavigation.navigateToHelpScreen()
             }
+        }
+
+        actionsAttachment.setAttachmentOptions(
+            ActionsAttachmentOption.allOptionsList,
+            ActionsAttachmentOption.quickOptionsList,
+            this@TLWorkspaceHomeFragment
+        )
+
+        middleView.setOnClickListener {
+            if (middleView.isVisible && actionsAttachment.isAttachmentOptionViewVisible()){
+                actionsAttachment.hideAttachmentOptionView()
+                middleView.gone()
+            } else {
+                //do nothing
+            }
+        }
+
+
+        rootLayout.setOnTouchListener { view, motionEvent ->
+            actionsAttachment.hideAttachmentOptionView()
+            view.foreground = null
+            true
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -451,5 +480,56 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                 filterId = filterId
             )
         )
+    }
+
+    override fun onClick(attachmentOption: ActionsAttachmentOption?) {
+        when(attachmentOption?.id) {
+            ActionsAttachmentOption.SELECTION_FORM_ID -> {
+                tlWorkSpaceNavigation.navigateToJoiningListScreen(
+                    "Selection Form"
+                )
+            }
+            ActionsAttachmentOption.LOGIN_SUMMARY_ID -> {
+
+
+            }
+            ActionsAttachmentOption.RAISE_GIGER_TICKET_ID -> {
+
+            }
+            ActionsAttachmentOption.GIGER_ATTENDANCE_ID -> {
+
+            }
+            ActionsAttachmentOption.ALL_SELECTIONS_ID -> {
+
+            }
+            ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
+                tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
+                    "Compliance Pending"
+                )
+
+            }
+            ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
+                tlWorkSpaceNavigation.navigateToPayoutListScreen(
+                    "Payout"
+                )
+            }
+            ActionsAttachmentOption.GIGER_RETENTION_ID -> {
+                tlWorkSpaceNavigation.navigateToRetentionScreen(
+                    "Retention"
+                )
+            }
+            ActionsAttachmentOption.GIGER_TICKET_ID -> {
+
+            }
+
+        }
+    }
+
+    override fun isVisible(visible: Boolean?) {
+        if (visible == true){
+            viewBinding.middleView.visible()
+        } else {
+            viewBinding.middleView.gone()
+        }
     }
 }

@@ -9,6 +9,8 @@ import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceGigerIt
 import com.gigforce.app.tl_work_space.custom_tab.TabType1CardView
 import com.gigforce.app.tl_work_space.custom_tab.TabType2CardView
 import com.gigforce.app.tl_work_space.home.views.*
+import com.gigforce.app.tl_work_space.payout.GigerPayoutBusinessItemView
+import com.gigforce.app.tl_work_space.payout.GigerPayoutGigerItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersBusinessItemView
@@ -64,6 +66,13 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val ComplianceGigerItemType = 3112455
     const val ComplianceBusinessItemType = 3666323
 
+    /**
+     * -----------------
+     * GigerPayout Fragments view [RetentionFragment]
+     */
+    const val GigerPayoutGigerItemType = 392457
+    const val GigerPayoutBusinessItemType = 3374890
+
     override fun getView(
         context: Context,
         viewType: Int
@@ -94,6 +103,9 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
         RetentionGigerItemType -> RetentionGigerItemView(context,null)
         RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
+
+        GigerPayoutGigerItemType -> GigerPayoutGigerItemView(context, null)
+        GigerPayoutBusinessItemType -> GigerPayoutBusinessItemView(context, null)
 
         ComplianceBusinessItemType -> ComplianceBusinessItemView(context,null)
         ComplianceGigerItemType -> ComplianceGigerItemView(context,null)

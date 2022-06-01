@@ -1216,5 +1216,9 @@
     <dialog android:id="@+id/dateFilterBottomSheetFragment"
         android:name="com.gigforce.app.tl_work_space.date_filter_bottomsheet.DateFilterBottomSheetFragment"
         android:label="DateFilterBottomSheetFragment"/>
+    <fragment
+        android:id="@+id/gigerPayoutFragment"
+        android:name="com.gigforce.app.tl_work_space.payout.GigerPayoutFragment"
+        android:label="GigerPayoutFragment" />
 </navigation>
 
