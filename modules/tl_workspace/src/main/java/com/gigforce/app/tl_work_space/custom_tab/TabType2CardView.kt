@@ -9,12 +9,13 @@ import androidx.core.content.ContextCompat
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.CustomTabItemBinding
+import com.gigforce.app.tl_work_space.databinding.CustomTabItemType2Binding
 import com.gigforce.app.tl_work_space.home.models.ValueChangeType
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
-open class TabWithCountAndChangeInfoCardView(
+open class TabType2CardView(
     context: Context,
     attrs: AttributeSet?
 ) : FrameLayout(
@@ -22,8 +23,8 @@ open class TabWithCountAndChangeInfoCardView(
     attrs
 ), IViewHolder, View.OnClickListener {
 
-    private var viewData: CustomTabData? = null
-    private lateinit var viewBinding: CustomTabItemBinding
+    private var viewDataType2: CustomTabDataType2? = null
+    private lateinit var viewBinding: CustomTabItemType2Binding
 
     init {
         //setDefault()
@@ -32,7 +33,7 @@ open class TabWithCountAndChangeInfoCardView(
     }
 
     private fun inflate(context: Context) {
-        viewBinding = CustomTabItemBinding.inflate(
+        viewBinding = CustomTabItemType2Binding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -49,8 +50,8 @@ open class TabWithCountAndChangeInfoCardView(
     }
 
     override fun bind(data: Any?) {
-        (data as CustomTabData).apply {
-            viewData = this
+        (data as CustomTabDataType2).apply {
+            viewDataType2 = this
 
             viewBinding.titleTextview.text = title.capitalizeFirstLetter()
             viewBinding.textView.text = value.toString()
@@ -63,25 +64,11 @@ open class TabWithCountAndChangeInfoCardView(
             } else {
                 viewBinding.rootConstraintLayout.setBackgroundResource(R.drawable.cardview_not_selected)
             }
-
-            if (changeType == ValueChangeType.UNCHANGED) {
-                viewBinding.valueRiseDipIndicator.gone()
-            } else if (changeType == ValueChangeType.INCREMENT) {
-                viewBinding.valueRiseDipIndicator.visible()
-                viewBinding.valueRiseDipIndicator.showTextWithRiseIndicator(
-                    valueChangedBy.toString()
-                )
-            } else {
-                viewBinding.valueRiseDipIndicator.visible()
-                viewBinding.valueRiseDipIndicator.showTextWithDipIndicator(
-                    valueChangedBy.toString()
-                )
-            }
         }
     }
 
     override fun onClick(v: View?) {
-        viewData?.viewModel?.handleCustomTabClick(viewData!!)
+        viewDataType2?.viewModel?.handleCustomTabClick(viewDataType2!!)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.gigforce.app.tl_work_space.compliance_pending
 
+import com.gigforce.app.android_common_utils.extensions.containsIgnoreCase
 import com.gigforce.app.domain.models.tl_workspace.compliance.GigersWithPendingComplainceDataItem
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
@@ -11,7 +12,7 @@ object ComplianceDataProcessor {
         statusMaster: List<ComplianceStatusData>,
         searchText: String?,
         collapsedBusinessId: List<String>,
-        selectedStatus: ComplianceStatusData,
+        selectedStatus: ComplianceStatusData?,
         viewModel: CompliancePendingViewModel
     ): Pair<List<ComplianceStatusData>, List<CompliancePendingScreenData>> {
 
@@ -22,6 +23,7 @@ object ComplianceDataProcessor {
 
         val updatedStatusMaster = updateCountInStatuses(
             statusMaster,
+            selectedStatus,
             filteredGigersWithIncompleteCompliance
         )
 
@@ -112,24 +114,32 @@ object ComplianceDataProcessor {
     }
 
     private fun filterGigersWithStatus(
-        selectedStatus: ComplianceStatusData,
+        selectedStatus: ComplianceStatusData?,
         gigers: List<GigersWithPendingComplainceDataItem>
     ): List<GigersWithPendingComplainceDataItem> {
 
-        return gigers.filter {
-            it.compliancePending != null && it.compliancePending!!.contains(selectedStatus.id)
+        if (selectedStatus != null) {
+            return gigers.filter {
+                it.compliancePending != null && it.compliancePending!!.containsIgnoreCase(
+                    selectedStatus.id
+                )
+            }
+        } else {
+            return gigers
         }
     }
 
     private fun updateCountInStatuses(
         statusMaster: List<ComplianceStatusData>,
+        selectedStatus: ComplianceStatusData?,
         filteredGigersWithIncompleteCompliance: List<GigersWithPendingComplainceDataItem>
     ): List<ComplianceStatusData> {
         return statusMaster.apply {
             onEach { status ->
                 status.value = filteredGigersWithIncompleteCompliance.count {
-                    it.compliancePending != null && it.compliancePending!!.contains(status.id)
+                    it.compliancePending != null && it.compliancePending!!.containsIgnoreCase(status.id)
                 }
+                status.selected = selectedStatus?.id == status.id
             }
         }
     }

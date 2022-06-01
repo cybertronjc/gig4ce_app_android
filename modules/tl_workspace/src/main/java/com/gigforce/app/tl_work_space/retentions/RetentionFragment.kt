@@ -13,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.app.tl_work_space.databinding.FragmentRetentionBinding
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
@@ -158,7 +158,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
                         it.gigerDetails
                     )
                     is RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
-                        it.filters
+                        it.dateFilters
                     )
                     is RetentionFragmentViewUiEffects.ShowSnackBar -> showSnackBar(
                         it.message
@@ -167,9 +167,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             }
     }
 
-    private fun showDateFilter(filters: List<TLWorkSpaceFilterOption>) {
+    private fun showDateFilter(dateFilters: List<TLWorkSpaceDateFilterOption>) {
         tlWorkSpaceNavigation.openFilterBottomSheet(
-            filters
+            dateFilters
         )
     }
 
@@ -206,7 +206,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
                     )
                     RetentionFragmentUiState.ScreenInitialisedOrRestored -> {}
                     is RetentionFragmentUiState.ShowOrUpdateRetentionData -> handleDataLoadedState(
-                        it.dateFilterSelected,
+                        it.dateDateFilterSelected,
                         it.retentionData,
                         it.updatedTabMaster
                     )
@@ -240,12 +240,12 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     private fun handleDataLoadedState(
-        selectedDateFilter: TLWorkSpaceFilterOption?,
+        selectedDateDateFilter: TLWorkSpaceDateFilterOption?,
         retentionData: List<RetentionScreenData>,
         updatedTabMaster: List<RetentionTabData>
     ) = viewBinding.apply {
 
-        setSelectedDateFilterOnAppBar(selectedDateFilter)
+        setSelectedDateFilterOnAppBar(selectedDateDateFilter)
         updateTabs(updatedTabMaster)
 
         swipeRefreshLayout.isRefreshing = false
@@ -263,9 +263,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     private fun setSelectedDateFilterOnAppBar(
-        selectedDateFilter: TLWorkSpaceFilterOption?
+        selectedDateDateFilter: TLWorkSpaceDateFilterOption?
     ) {
-        val dateFilter = selectedDateFilter ?: return
+        val dateFilter = selectedDateDateFilter ?: return
         viewBinding.appBar.setSubTitle(dateFilter.getFilterString())
     }
 
@@ -283,14 +283,14 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         }
 
         val tabsList = updatedTabMaster.map {
-            CustomTabData(
+            CustomTabDataType1(
                 id = it.id,
                 title = it.title,
                 value = it.value,
                 selected = it.selected,
                 valueChangedBy = it.valueChangedBy,
                 changeType = it.changeType,
-                viewModel = it.viewModel
+                tabClickListener = it.viewModel
             )
         }
         collection = tabsList

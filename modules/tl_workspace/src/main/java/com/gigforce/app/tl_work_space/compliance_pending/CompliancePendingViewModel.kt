@@ -2,11 +2,14 @@ package com.gigforce.app.tl_work_space.compliance_pending
 
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.compliance.GigersWithPendingComplainceDataItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceComplianceRepository
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.core.deque.dequeLimiter
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +24,8 @@ class CompliancePendingViewModel @Inject constructor(
 ) : BaseViewModel<
         CompliancePendingFragmentViewEvents,
         CompliancePendingFragmentUiState,
-        CompliancePendingViewUiEffects>(initialState = CompliancePendingFragmentUiState.ScreenInitialisedOrRestored) {
+        CompliancePendingViewUiEffects>(initialState = CompliancePendingFragmentUiState.ScreenInitialisedOrRestored),
+    CustomTabClickListener {
 
     companion object {
         private const val TAG = "CompliancePendingViewModel"
@@ -35,7 +39,7 @@ class CompliancePendingViewModel @Inject constructor(
     /**
      * Master Data
      */
-    private var dateFilterMaster: List<TLWorkSpaceFilterOption> = emptyList()
+    private var dateDateFilterMaster: List<TLWorkSpaceDateFilterOption> = emptyList()
     private var statusMaster: List<ComplianceStatusData> = emptyList()
 
     /**
@@ -46,8 +50,8 @@ class CompliancePendingViewModel @Inject constructor(
     /**
      *  Current Filters
      */
-    private lateinit var selectedTab: ComplianceStatusData
-    private lateinit var currentlySelectedDateFilter: TLWorkSpaceFilterOption
+    private var selectedTab: ComplianceStatusData? = null
+    private lateinit var currentlySelectedDateDateFilter: TLWorkSpaceDateFilterOption
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
@@ -56,10 +60,10 @@ class CompliancePendingViewModel @Inject constructor(
     }
 
     private fun refreshComplianceData(
-        dateFilter: TLWorkSpaceFilterOption?
+        dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 
-        if (currentState is CompliancePendingFragmentUiState.LoadingComplianceData) {
+        if (currentState is CompliancePendingFragmentUiState.LoadingData) {
             logger.d(
                 TAG,
                 "ignoring refreshComplianceData call, already loading data , no-op"
@@ -68,7 +72,7 @@ class CompliancePendingViewModel @Inject constructor(
         }
 
         setState {
-            CompliancePendingFragmentUiState.LoadingComplianceData(
+            CompliancePendingFragmentUiState.LoadingData(
                 alreadyShowingGigersOnView = rawComplianceGigersList.isNotEmpty()
             )
         }
@@ -76,10 +80,10 @@ class CompliancePendingViewModel @Inject constructor(
         try {
             val showSnackBar = rawComplianceGigersList.isNotEmpty()
             val complianceResponse = repository.getComplianceData(
-                filter = dateFilter?.mapToApiModel()
+                filter = dateDateFilter?.mapToApiModel()
             )
 
-            dateFilterMaster = complianceResponse.filters?.map {
+            dateDateFilterMaster = complianceResponse.filters?.map {
                 it.mapToPresentationFilter()
             } ?: emptyList()
 
@@ -89,25 +93,30 @@ class CompliancePendingViewModel @Inject constructor(
                     viewModel = this@CompliancePendingViewModel
                 )
             } ?: emptyList()
+            setDefaultSelectedTabIfNotSet()
 
             rawComplianceGigersList =
                 complianceResponse.gigersWithPendingComplainceData ?: emptyList()
 
-            this@CompliancePendingViewModel.currentlySelectedDateFilter =
-                dateFilter ?: getDefaultDateFilter()
+            this@CompliancePendingViewModel.currentlySelectedDateDateFilter =
+                dateDateFilter ?: getDefaultDateFilter()
             processRawComplianceDataAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
 
             if (e is IOException) {
                 setState {
-                    CompliancePendingFragmentUiState.ErrorWhileLoadingRetentionData(
+                    CompliancePendingFragmentUiState.ErrorWhileLoadingData(
                         e.message ?: "Unable to load data"
                     )
                 }
             } else {
-
+                logger.e(
+                    TAG,
+                    "while refreshing compliance data",
+                    e
+                )
                 setState {
-                    CompliancePendingFragmentUiState.ErrorWhileLoadingRetentionData(
+                    CompliancePendingFragmentUiState.ErrorWhileLoadingData(
                         "Unable to load data"
                     )
                 }
@@ -115,6 +124,12 @@ class CompliancePendingViewModel @Inject constructor(
         }
     }
 
+    private fun setDefaultSelectedTabIfNotSet() {
+        if (selectedTab != null)
+            return
+
+        selectedTab = statusMaster.firstOrNull() ?: return
+    }
 
     private fun processRawComplianceDataAndUpdateOnView(
         showDataUpdatedSnackbar: Boolean
@@ -132,10 +147,12 @@ class CompliancePendingViewModel @Inject constructor(
 
 
         gigersComplianceShownOnView = updatedStatusToGigerWithComplianceMap.second
+        val statusData = updatedStatusToGigerWithComplianceMap.first
         setState {
-            CompliancePendingFragmentUiState.ShowOrUpdateComplainceData(
-                dateFilterSelected = currentlySelectedDateFilter,
-                retentionData = gigersComplianceShownOnView
+            CompliancePendingFragmentUiState.ShowOrUpdateData(
+                dateDateFilterSelected = currentlySelectedDateDateFilter,
+                complianceData = gigersComplianceShownOnView,
+                tabData = statusData
             )
         }
 
@@ -164,7 +181,7 @@ class CompliancePendingViewModel @Inject constructor(
                 event.giger
             )
             CompliancePendingFragmentViewEvents.RefreshDataClicked -> refreshComplianceData(
-                dateFilter = currentlySelectedDateFilter
+                dateDateFilter = currentlySelectedDateDateFilter
             )
         }
     }
@@ -188,27 +205,25 @@ class CompliancePendingViewModel @Inject constructor(
     ) {
         when (filterEvent) {
             is CompliancePendingFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshComplianceData(
-                filterEvent.filter
+                filterEvent.dateFilter
             )
             CompliancePendingFragmentViewEvents.FilterApplied.OpenDateFilterDialog -> openDateFilterDialog()
             is CompliancePendingFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
                 filterEvent.searchText
             )
-            is CompliancePendingFragmentViewEvents.FilterApplied.TabSelected -> tabSelected(
-                filterEvent.tabId
-            )
+            is CompliancePendingFragmentViewEvents.FilterApplied.TabSelected -> {}
         }
     }
 
     private fun openDateFilterDialog() {
 
-        val dateFilterList = dateFilterMaster.onEach {
-            it.selected = it.filterId == currentlySelectedDateFilter.filterId
+        val dateFilterList = dateDateFilterMaster.onEach {
+            it.selected = it.filterId == currentlySelectedDateDateFilter.filterId
         }
 
         setEffect {
             CompliancePendingViewUiEffects.ShowDateFilterBottomSheet(
-                filters = dateFilterList
+                dateFilters = dateFilterList
             )
         }
     }
@@ -237,25 +252,12 @@ class CompliancePendingViewModel @Inject constructor(
         }
     }
 
-    private fun tabSelected(
-        tabId: String
-    ) {
-        this.selectedTab = getStatusFromId(tabId)
-        if (currentState is CompliancePendingFragmentUiState.LoadingComplianceData) {
-            return
-        }
-
-        processRawComplianceDataAndUpdateOnView(
-            false
-        )
-    }
-
 
     private fun searchFilterApplied(
         searchText: String?
     ) {
         this.searchText = searchText
-        if (currentState is CompliancePendingFragmentUiState.LoadingComplianceData) {
+        if (currentState is CompliancePendingFragmentUiState.LoadingData) {
             return
         }
 
@@ -264,8 +266,8 @@ class CompliancePendingViewModel @Inject constructor(
         )
     }
 
-    private fun getDefaultDateFilter(): TLWorkSpaceFilterOption {
-        return dateFilterMaster.find {
+    private fun getDefaultDateFilter(): TLWorkSpaceDateFilterOption {
+        return dateDateFilterMaster.find {
             it.default
         } ?: throw IllegalStateException("no default filter found")
     }
@@ -275,6 +277,20 @@ class CompliancePendingViewModel @Inject constructor(
     ): ComplianceStatusData = statusMaster.find {
         it.id == statusId
     } ?: throw IllegalStateException("status master is empty, there is no filter with $statusId")
+
+
+    override fun handleCustomTabClick(
+        tabClickedType1: CustomTabData
+    ) {
+        this.selectedTab = getStatusFromId(tabClickedType1.tabId)
+        if (currentState is CompliancePendingFragmentUiState.LoadingData) {
+            return
+        }
+
+        processRawComplianceDataAndUpdateOnView(
+            false
+        )
+    }
 
 
 }

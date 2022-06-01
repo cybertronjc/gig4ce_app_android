@@ -7,12 +7,14 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragmentViewEvents
+import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.databinding.FragmentRetentionMainBusinessItemBinding
 import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.core.IViewHolder
 
-class ComplainceBusinessItemView(
+class ComplianceBusinessItemView(
     context: Context,
     attrs: AttributeSet?
 ) : FrameLayout(
@@ -21,7 +23,7 @@ class ComplainceBusinessItemView(
 ), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: FragmentRetentionMainBusinessItemBinding
-    private var viewData: RetentionScreenData.BusinessItemData? = null
+    private var viewData: CompliancePendingScreenData.BusinessItemData? = null
 
     init {
 
@@ -48,7 +50,7 @@ class ComplainceBusinessItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as RetentionScreenData.BusinessItemData?)?.let {
+        (data as CompliancePendingScreenData.BusinessItemData?)?.let {
             viewData = it
 
             if (it.expanded) {
@@ -73,7 +75,9 @@ class ComplainceBusinessItemView(
 
     override fun onClick(v: View?) {
         viewData?.viewModel?.setEvent(
-            RetentionFragmentViewEvents.BusinessClicked(viewData!!)
+            CompliancePendingFragmentViewEvents.BusinessItemClicked(
+                viewData!!.businessName
+            )
         )
     }
 }

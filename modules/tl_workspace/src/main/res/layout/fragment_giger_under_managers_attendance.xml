@@ -22,26 +22,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleText="Giger Attendance" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout"
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/tab_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="20dp"
-            android:clipToPadding="false"
-            android:minWidth="40dp"
-            app:tabBackground="@drawable/payout_tab_selector_background"
-            app:tabGravity="fill"
-            app:tabIndicator="@null"
-            app:tabIndicatorHeight="0dp"
-            app:tabMaxWidth="0dp"
-            app:tabMode="scrollable"
-            app:tabPaddingEnd="16dp"
-            app:tabPaddingStart="16dp"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            app:tabTextColor="@color/black" />
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp" />
 
         <LinearLayout
             android:id="@+id/swipe_direction_label_layout"

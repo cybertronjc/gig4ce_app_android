@@ -2,7 +2,7 @@ package com.gigforce.app.navigation.tl_workspace
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.navigation.NavigationOptions
@@ -19,7 +19,7 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_RETENTION = "tl_workspace/retention"
         const val NAV_DESTINATION_ACTIVITY_TRACKER = "gig/gigerAttendanceUnderManagerFragment"
         const val NAV_DESTINATION_SELECTION_LIST = "LeadMgmt/joiningListFragment"
-
+        const val NAV_HELP_SCREEN = "HelpSectionFragment"
 
         const val NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET = "tl_workspace/date_filter_bottom_sheet"
 
@@ -38,7 +38,7 @@ class TLWorkSpaceNavigation @Inject constructor(
 
     object FragmentResultHandler {
 
-        fun getDateFilterResult(bundle: Bundle): TLWorkSpaceFilterOption? = bundle.getParcelable(
+        fun getDateFilterResult(bundle: Bundle): TLWorkSpaceDateFilterOption? = bundle.getParcelable(
             INTENT_EXTRA_SELECTED_DATE_FILTER
         )
     }
@@ -92,12 +92,12 @@ class TLWorkSpaceNavigation @Inject constructor(
     }
 
     fun openFilterBottomSheet(
-        filterOptions: List<TLWorkSpaceFilterOption>
+        dateFilterOptions: List<TLWorkSpaceDateFilterOption>
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET,
             bundleOf(
-                INTENT_EXTRA_DATE_FILTER_OPTIONS to ArrayList(filterOptions)
+                INTENT_EXTRA_DATE_FILTER_OPTIONS to ArrayList(dateFilterOptions)
             ),
             NavigationOptions.getNavOptions()
         )
@@ -180,6 +180,16 @@ class TLWorkSpaceNavigation @Inject constructor(
             NAV_DESTINATION_ACTIVITY_TRACKER,
             bundleOf(
                 BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToHelpScreen() {
+        navigation.navigateTo(
+            NAV_HELP_SCREEN,
+            bundleOf(
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to "Help"
             ),
             NavigationOptions.getNavOptions()
         )

@@ -9,6 +9,9 @@ import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerI
 import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
 import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
+import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.IEventTracker
@@ -30,7 +33,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private var eventTracker: IEventTracker,
     private val logger: GigforceLogger,
     private val attendanceRepository: GigAttendanceRepository
-) : ViewModel() {
+) : ViewModel(), CustomTabClickListener {
 
     companion object {
         const val TAG = "GigerAttendanceUnderManagerViewModel"
@@ -38,6 +41,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
     /* data*/
     private var attendanceListRaw: List<GigAttendanceApiModel> = emptyList()
+    private var statusMaster: List<RetentionTabData> = emptyList()
     private var attendanceShownOnScreen: MutableList<AttendanceRecyclerItemData> = mutableListOf()
 
     //Filters
@@ -385,6 +389,12 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             showDataUpdatedToast = false,
             updateStatusTabsCount = true
         )
+    }
+
+    override fun handleCustomTabClick(
+        tabClickedType1: CustomTabData
+    ) {
+        filterAttendanceByStatus(tabClickedType1.tabId)
     }
 
 

@@ -1,7 +1,7 @@
 package com.gigforce.app.tl_work_space.activity_tacker.attendance_list
 
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
-import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceStatusAndCountItemData
+import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
 import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
 import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
 
@@ -16,7 +16,7 @@ object AttendanceUnderTLListDataProcessor {
         currentlySearchTerm: String?,
         prepareAttendanceStatusAndCount: Boolean,
         gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel
-    ): Pair<List<AttendanceRecyclerItemData>, List<AttendanceStatusAndCountItemData>?> {
+    ): Pair<List<AttendanceRecyclerItemData>, List<AttendanceTabData>?> {
 
 
         val attendanceFilteredBySearchTerm = filterAttendanceBySearchTerm(
@@ -121,7 +121,7 @@ object AttendanceUnderTLListDataProcessor {
     private fun prepareAttendanceTabsCountList(
         attendance: List<GigAttendanceApiModel>,
         currentlySelectedStatus: String
-    ): List<AttendanceStatusAndCountItemData> {
+    ): List<AttendanceTabData> {
         var enabledCount = 0
         var activeCount = 0
         var inactiveCount = 0
@@ -137,21 +137,32 @@ object AttendanceUnderTLListDataProcessor {
         }
 
         return listOf(
-            AttendanceStatusAndCountItemData(
-                status = StatusFilters.ENABLED,
-                attendanceCount = enabledCount,
-                statusSelected = currentlySelectedStatus == StatusFilters.ENABLED
-            ),
-            AttendanceStatusAndCountItemData(
-                status = StatusFilters.ACTIVE,
-                attendanceCount = activeCount,
-                statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
-            ),
-            AttendanceStatusAndCountItemData(
-                status = StatusFilters.INACTIVE,
-                attendanceCount = inactiveCount,
-                statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
-            ),
+//            AttendanceTabData(
+//
+//                status = StatusFilters.ENABLED,
+//                attendanceCount = enabledCount,
+//                statusSelected = currentlySelectedStatus == StatusFilters.ENABLED,
+//                id = "",
+//                title = "",
+//                value = 0,
+//                selected = false,
+//                valueChangedBy = 0,
+//                changeType =,
+//                viewModel = RetentionViewModel(
+//                    logger = GigforceLogger(),
+//                    repository =
+//                )
+//            ),
+//            AttendanceTabData(
+//                status = StatusFilters.ACTIVE,
+//                attendanceCount = activeCount,
+//                statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
+//            ),
+//            AttendanceTabData(
+//                status = StatusFilters.INACTIVE,
+//                attendanceCount = inactiveCount,
+//                statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
+//            ),
         )
     }
 

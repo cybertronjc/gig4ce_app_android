@@ -7,6 +7,7 @@ data class ComplianceStatusData(
     val id: String,
     val title: String,
     var value: Int,
+    var selected : Boolean,
     val viewModel: CompliancePendingViewModel
 ) {
 
@@ -19,6 +20,7 @@ data class ComplianceStatusData(
                 title = statusMasterWithCountItem.title ?: "",
                 value = statusMasterWithCountItem.count ?: 0,
                 viewModel = viewModel,
+                selected = false,
                 id = statusMasterWithCountItem.id
                     ?: throw IllegalArgumentException("id found null in retention status")
             )

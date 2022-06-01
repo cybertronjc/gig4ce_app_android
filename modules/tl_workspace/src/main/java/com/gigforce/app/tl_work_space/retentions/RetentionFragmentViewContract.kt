@@ -3,7 +3,7 @@ package com.gigforce.app.tl_work_space.retentions
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
 import kotlin.random.Random
@@ -22,7 +22,7 @@ sealed class RetentionFragmentUiState : UiState {
     ) : RetentionFragmentUiState()
 
     data class ShowOrUpdateRetentionData(
-        val dateFilterSelected: TLWorkSpaceFilterOption?,
+        val dateDateFilterSelected: TLWorkSpaceDateFilterOption?,
         val retentionData: List<RetentionScreenData>,
         val updatedTabMaster: List<RetentionTabData>,
     ) : RetentionFragmentUiState(){
@@ -74,7 +74,7 @@ sealed class RetentionFragmentViewEvents : UiEvent {
         ) : FilterApplied()
 
         data class DateFilterApplied(
-            val filter: TLWorkSpaceFilterOption
+            val dateFilter: TLWorkSpaceDateFilterOption
         ) : FilterApplied()
     }
 }
@@ -94,6 +94,6 @@ sealed class RetentionFragmentViewUiEffects : UiEffect {
     ) : RetentionFragmentViewUiEffects()
 
     data class ShowDateFilterBottomSheet(
-        val filters: List<TLWorkSpaceFilterOption>
+        val dateFilters: List<TLWorkSpaceDateFilterOption>
     ) : RetentionFragmentViewUiEffects()
 }

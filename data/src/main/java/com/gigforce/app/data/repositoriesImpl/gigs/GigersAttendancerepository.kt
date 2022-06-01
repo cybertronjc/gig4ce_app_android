@@ -1,6 +1,8 @@
 package com.gigforce.app.data.repositoriesImpl.gigs
 
 import com.gigforce.app.data.remote.bodyOrThrow
+import com.gigforce.app.data.repositoriesImpl.gigs.models.GetGigersAttendanceRequest
+import com.gigforce.app.data.repositoriesImpl.gigs.models.GetGigersAttendanceRequestFilter
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GigAttendanceRequest
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -23,7 +25,11 @@ class GigersAttendanceRepository @Inject constructor(
     ): List<GigAttendanceApiModel> {
 
         return gigerAttendanceService.getGigersAttendance(
-            dateInYYYMMDD = date.format(dateFormatter)
+            GetGigersAttendanceRequest(
+                filter = GetGigersAttendanceRequestFilter(
+                    date = date
+                )
+            )
         ).bodyOrThrow()
     }
 

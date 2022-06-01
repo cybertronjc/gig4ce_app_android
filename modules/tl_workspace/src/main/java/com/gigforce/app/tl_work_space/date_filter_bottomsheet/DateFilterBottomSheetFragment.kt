@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.util.Pair
 import androidx.fragment.app.setFragmentResult
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.BotttomsheetDateFilterBinding
@@ -38,7 +38,7 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
         const val TAG = "JoiningFilterFragment"
     }
 
-    private lateinit var filterOptions: List<TLWorkSpaceFilterOption>
+    private lateinit var dateFilterOptions: List<TLWorkSpaceDateFilterOption>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +56,13 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
 
         setFilterOptions()
         listeners()
-
     }
 
     @SuppressLint("InflateParams")
     private fun setFilterOptions() = viewBinding.radioGroup.apply {
         removeAllViews()
 
-        for (option in filterOptions) {
+        for (option in dateFilterOptions) {
             val radioButton = layoutInflater.inflate(
                 R.layout.common_radio_button,
                 null,
@@ -73,19 +72,20 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
             radioButton.id = View.generateViewId()
             radioButton.text = option.text
             radioButton.tag = option.filterId
+            radioButton.isChecked = option.selected
             this.addView(radioButton)
         }
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            filterOptions = it.getParcelableArrayList(
+            dateFilterOptions = it.getParcelableArrayList(
                 TLWorkSpaceNavigation.INTENT_EXTRA_DATE_FILTER_OPTIONS
             ) ?: return@let
         }
 
         arguments?.let {
-            filterOptions = it.getParcelableArrayList(
+            dateFilterOptions = it.getParcelableArrayList(
                 TLWorkSpaceNavigation.INTENT_EXTRA_DATE_FILTER_OPTIONS
             ) ?: return@let
         }
@@ -121,7 +121,7 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
             viewBinding.radioGroup.checkedRadioButtonId
         ).tag.toString()
 
-        val optionSelected = filterOptions.find {
+        val optionSelected = dateFilterOptions.find {
             filterOptionSelectedId == it.filterId
         } ?: return
 
@@ -133,20 +133,20 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
     }
 
     private fun openDateFilter(
-        filterOption: TLWorkSpaceFilterOption,
+        dateFilterOption: TLWorkSpaceDateFilterOption,
     ) {
-        if (filterOption.selectRangeInFilter) {
+        if (dateFilterOption.selectRangeInFilter) {
 
             openSelectDateRangeSelectionDialog(
-                filterOption
+                dateFilterOption
             )
         } else {
 
             openSingleDateSelectionDialog(
-                filterOption.filterId,
-                filterOption.defaultSelectedDate ?: LocalDate.now(),
-                filterOption.minimumDateAvailableForSelection,
-                filterOption.maximumDateAvailableForSelection
+                dateFilterOption.filterId,
+                dateFilterOption.defaultSelectedDate ?: LocalDate.now(),
+                dateFilterOption.minimumDateAvailableForSelection,
+                dateFilterOption.maximumDateAvailableForSelection
             )
         }
     }
@@ -198,8 +198,8 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
 
     @SuppressLint("RestrictedApi")
     private fun openSelectDateRangeSelectionDialog(
-        filter: TLWorkSpaceFilterOption
-    ) = filter.apply {
+        dateFilter: TLWorkSpaceDateFilterOption
+    ) = dateFilter.apply {
 
         val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
         val dateRangeValidator = if (maxDaysDifferenceInCaseOfRange > 0) {
@@ -284,7 +284,7 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
         startDate: LocalDate,
         endDate: LocalDate?
     ) {
-        val optionSelected = filterOptions.find {
+        val optionSelected = dateFilterOptions.find {
             filterId == it.filterId
         } ?: return
 
@@ -295,11 +295,11 @@ class DateFilterBottomSheetFragment : BaseBottomSheetDialogFragment<Botttomsheet
         publishFilterResults(optionSelected)
     }
 
-    private fun publishFilterResults(optionSelected: TLWorkSpaceFilterOption) {
+    private fun publishFilterResults(optionSelectedDate: TLWorkSpaceDateFilterOption) {
         setFragmentResult(
             TLWorkSpaceNavigation.FRAGMENT_RESULT_KEY_DATE_FILTER,
             bundleOf(
-                TLWorkSpaceNavigation.INTENT_EXTRA_SELECTED_DATE_FILTER to optionSelected
+                TLWorkSpaceNavigation.INTENT_EXTRA_SELECTED_DATE_FILTER to optionSelectedDate
             )
         )
         dismiss()

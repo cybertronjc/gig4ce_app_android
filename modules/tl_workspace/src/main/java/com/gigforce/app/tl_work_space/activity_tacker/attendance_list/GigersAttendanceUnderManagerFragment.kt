@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,24 +13,20 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
+import androidx.recyclerview.widget.*
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GigAttendanceData
 import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
-import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceStatusAndCountItemData
+import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.app.tl_work_space.databinding.FragmentGigerUnderManagersAttendanceBinding
-import com.gigforce.common_ui.DisplayUtil.px
+import com.gigforce.app.tl_work_space.retentions.RetentionFragment
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
-import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
@@ -176,7 +171,6 @@ class GigersAttendanceUnderManagerFragment :
             }
         }
 
-        setDefaultTabs()
         infoLayout.infoIv.loadImage(R.drawable.ic_dragon_sleeping_animation)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -206,45 +200,6 @@ class GigersAttendanceUnderManagerFragment :
         swipeDirectionTextSwitcher.setOutAnimation(requireContext(), R.anim.animscale_out)
     }
 
-    private fun setDefaultTabs() = viewBinding.tablayout.apply {
-
-        addTab(
-            newTab().apply {
-                text = "Enabled (0)"
-                tag = StatusFilters.ENABLED
-            }
-        )
-        addTab(
-            newTab().apply {
-                text = "Inactive (0)"
-                tag = StatusFilters.INACTIVE
-            }
-        )
-        addTab(
-            newTab().apply {
-                text = "Active (0)"
-                tag = StatusFilters.ACTIVE
-            }
-        )
-
-        val tabs = getChildAt(0) as ViewGroup
-        for (i in 0 until tabs.childCount) {
-            val tab = tabs.getChildAt(i)
-            val layoutParams = tab.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 0f
-
-            layoutParams.marginEnd = 12.px
-            tab.layoutParams = layoutParams
-            requestLayout()
-        }
-
-        onTabSelected {
-            val tab = it ?: return@onTabSelected
-            viewModel.filterAttendanceByStatus(
-                tab.tag.toString()
-            )
-        }
-    }
 
     private fun initViewModel() {
         viewModel.setGigsSharedViewModel(sharedGigViewModel)
@@ -447,23 +402,31 @@ class GigersAttendanceUnderManagerFragment :
     }
 
     private fun setStatusTabs(
-        attendanceStatuses: List<AttendanceStatusAndCountItemData>
-    ) = viewBinding.apply {
+        updatedTabMaster: List<AttendanceTabData>
+    ) = viewBinding.tabRecyclerView.apply {
 
-        attendanceStatuses.forEach {
+        if (updatedTabMaster.isEmpty()) return@apply
+        logger.d(RetentionFragment.TAG, "received status from viewmodel : $updatedTabMaster")
 
-            for (i in 0 until tablayout.tabCount) {
-
-                val tab = tablayout.getTabAt(i)
-                val tabStatus = tab!!.tag.toString()
-                val tabText = tabStatus.capitalizeFirstLetter()
-
-                if (tabStatus == it.status) {
-                    tab.text = "$tabText (${it.attendanceCount})"
-                    break
-                }
-            }
+        if (layoutManager == null) {
+            layoutManager = GridLayoutManager(
+                requireContext(),
+                3
+            )
         }
+
+//        val tabsList = updatedTabMaster.map {
+//            CustomTabDataType1(
+//                id = it.status,
+//                title = it.title,
+//                value = it.value,
+//                selected = it.selected,
+//                valueChangedBy = it.valueChangedBy,
+//                changeType = it.changeType,
+//                tabClickListener = it.viewModel
+//            )
+//        }
+//        collection = tabsList
     }
 
 

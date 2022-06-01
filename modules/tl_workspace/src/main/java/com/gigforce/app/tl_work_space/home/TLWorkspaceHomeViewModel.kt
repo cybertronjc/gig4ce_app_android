@@ -43,9 +43,9 @@ class TLWorkspaceHomeViewModel @Inject constructor(
      * Processed Data
      */
     private var sectionsShownOnView: List<TLWorkspaceRecyclerItemData> = emptyList()
-    private var sectionToSelectedFilterMap: MutableMap<
+    private var sectionToSelectedDateFilterMap: MutableMap<
             TLWorkspaceHomeSection, //Section
-            TLWorkSpaceFilterOption? //Currently Selected filter
+            TLWorkSpaceDateFilterOption? //Currently Selected filter
             > = mutableMapOf()
 
     init {
@@ -102,7 +102,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         var anyFilterOtherThanDefaultAppliedToAnySection = false
-        sectionToSelectedFilterMap.forEach { (_, filterCurrentlyApplied) ->
+        sectionToSelectedDateFilterMap.forEach { (_, filterCurrentlyApplied) ->
 
             // Checking If there any filter (other than default one) is applied to any section
             if (filterCurrentlyApplied != null && !filterCurrentlyApplied.default) {
@@ -128,7 +128,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun refreshWorkSpaceDataWithFiltersApplied() = viewModelScope.launch {
-        val sectionToRefreshWithFiltersInfo = sectionToSelectedFilterMap.map {
+        val sectionToRefreshWithFiltersInfo = sectionToSelectedDateFilterMap.map {
             RequestedDataItem(
                 filter = it.value?.mapToApiModel(),
                 sectionId = it.key.getSectionId()
@@ -179,7 +179,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     ) {
         logger.d(TAG, "processing data received from server...")
 
-        val initialFetch = sectionToSelectedFilterMap.isEmpty()
+        val initialFetch = sectionToSelectedDateFilterMap.isEmpty()
         if (initialFetch) {
             //we need to update one section only
             addFiltersToDefaultSelectedFilter()
@@ -199,7 +199,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun prepareUiModelsAndEmit() {
         sectionsShownOnView = ApiModelToPresentationModelMapper.mapToPresentationList(
-            sectionToSelectedFilterMap,
+            sectionToSelectedDateFilterMap,
             tlWorkSpaceDataRaw,
             this
         )
@@ -219,7 +219,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             it.filter != null && it.sectionId != null
         }.forEach {
             val section = TLWorkspaceHomeSection.fromId(it.sectionId!!)
-            sectionToSelectedFilterMap.put(
+            sectionToSelectedDateFilterMap.put(
                 section,
                 it.filter!!.mapToPresentationFilter().apply {
                     this.selected = true
@@ -229,12 +229,12 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun addFiltersToDefaultSelectedFilter() {
-        if (sectionToSelectedFilterMap.isEmpty()) {
+        if (sectionToSelectedDateFilterMap.isEmpty()) {
             /**
              * Preparing a map of section id to default selected filter
              */
             this.tlWorkSpaceDataRaw.forEach {
-                sectionToSelectedFilterMap.put(
+                sectionToSelectedDateFilterMap.put(
                     TLWorkspaceHomeSection.fromId(it.sectionId!!),
                     it.filters?.find {
                         it.default!!
@@ -376,7 +376,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         filters.onEach {
-            it.selected = it.filterId == sectionToSelectedFilterMap.get(
+            it.selected = it.filterId == sectionToSelectedDateFilterMap.get(
                 TLWorkspaceHomeSection.fromId(sectionId)
             )?.filterId
         }
@@ -446,7 +446,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private suspend fun updatedSingleSection(
         section: TLWorkspaceHomeSection,
-        tlWorkSpaceFilterOption: TLWorkSpaceFilterOption?
+        tlWorkSpaceDateFilterOption: TLWorkSpaceDateFilterOption?
     ) {
 
         setState {
@@ -456,7 +456,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         try {
             val singleSectionData = tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
                 RequestedDataItem(
-                    filter = tlWorkSpaceFilterOption?.mapToApiModel(),
+                    filter = tlWorkSpaceDateFilterOption?.mapToApiModel(),
                     sectionId = section.getSectionId()
                 )
             )
@@ -467,15 +467,15 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 section.getSectionId() == it.sectionId
             }
 
-            sectionToSelectedFilterMap.put(
+            sectionToSelectedDateFilterMap.put(
                 section,
-                tlWorkSpaceFilterOption
+                tlWorkSpaceDateFilterOption
             )
 
             processDataReceivedFromServerAndUpdateOnView(
                 filtersUsed = listOf(
                     RequestedDataItem(
-                        filter = tlWorkSpaceFilterOption?.mapToApiModel(),
+                        filter = tlWorkSpaceDateFilterOption?.mapToApiModel(),
                         sectionId = section.getSectionId()
                     )
                 ),
@@ -505,7 +505,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun getFilterFrom(
         section: TLWorkspaceHomeSection,
         filterId: String
-    ): TLWorkSpaceFilterOption? {
+    ): TLWorkSpaceDateFilterOption? {
         return tlWorkSpaceDataRaw.find {
             section.getSectionId() == it.sectionId
         }?.filters?.find {

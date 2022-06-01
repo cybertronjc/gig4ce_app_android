@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.databinding.RecyclerViewSectionType1Binding
 import com.gigforce.app.tl_work_space.home.TLWorkSpaceHomeUiEvents
@@ -53,8 +52,8 @@ class TLWorkspaceType1SectionView(
             viewData = it
 
             viewBinding.titleTextview.text = it.sectionTitle.capitalizeFirstLetter()
-            viewBinding.filterTextview.isVisible = it.currentFilter != null
-            viewBinding.filterTextview.text = it.currentFilter?.getFilterString()
+            viewBinding.filterTextview.isVisible = it.currentDateFilter != null
+            viewBinding.filterTextview.text = it.currentDateFilter?.getFilterString()
 
             viewBinding.recyclerView.layoutManager = GridLayoutManager(
                 context,

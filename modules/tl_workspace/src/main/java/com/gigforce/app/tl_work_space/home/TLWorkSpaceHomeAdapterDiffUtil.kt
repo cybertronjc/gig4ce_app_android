@@ -48,8 +48,8 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
 
                 return oldItem.sectionId == newItem.sectionId &&
                         oldItem.sectionTitle == newItem.sectionTitle &&
-                        (oldItem.currentFilter?.filterId != null && newItem.currentFilter?.filterId != null) &&
-                        oldItem.currentFilter.filterId == newItem.currentFilter.filterId &&
+                        (oldItem.currentDateFilter?.filterId != null && newItem.currentDateFilter?.filterId != null) &&
+                        oldItem.currentDateFilter.filterId == newItem.currentDateFilter.filterId &&
                         oldItem.itemData.hasSameContentAs(newItem.itemData)
 
             } else if (
@@ -59,8 +59,8 @@ class TLWorkSpaceHomeAdapterDiffUtil : CoreDiffUtilCallback<TLWorkspaceRecyclerI
 
                 return oldItem.sectionId == newItem.sectionId &&
                         oldItem.sectionTitle == newItem.sectionTitle &&
-                        (oldItem.currentFilter?.filterId != null && newItem.currentFilter?.filterId != null) &&
-                        oldItem.currentFilter.filterId == newItem.currentFilter.filterId &&
+                        (oldItem.currentDateFilter?.filterId != null && newItem.currentDateFilter?.filterId != null) &&
+                        oldItem.currentDateFilter.filterId == newItem.currentDateFilter.filterId &&
                         oldItem.itemData.hasSameType2ContentAs(newItem.itemData)
             } else if(
                 oldItem is TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData &&

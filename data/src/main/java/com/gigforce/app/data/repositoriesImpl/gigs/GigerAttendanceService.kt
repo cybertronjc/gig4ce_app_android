@@ -6,9 +6,9 @@ import retrofit2.http.*
 
 interface GigerAttendanceService {
 
-    @GET("gigAttendance/tlAttendanceReport")
+    @POST("operationsChampion/tlWorkspace/tlAttendanceReport")
     suspend fun getGigersAttendance(
-        @Query("attendanceDate") dateInYYYMMDD: String
+        @Body request : GetGigersAttendanceRequest
     ): Response<List<GigAttendanceApiModel>>
 
     @POST("gigAttendance/attendanceHistory")

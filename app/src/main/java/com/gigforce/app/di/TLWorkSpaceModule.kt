@@ -1,5 +1,6 @@
 package com.gigforce.app.di
 
+import com.gigforce.app.data.repositoriesImpl.tl_workspace.compliance_pending.TLWorkCompliancePendingService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TlWorkSpaceLocalDataStore
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.upcoming_gigers.TlWorkspaceUpcomingGigersRemoteDatastore
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TLWorkSpaceService
@@ -68,6 +69,14 @@ abstract class TLWorkSpaceModule {
         ): RetentionRetrofitService {
             return retrofitServiceFactory.prepareService(RetentionRetrofitService::class.java)
         }
+
+        @Provides
+        fun provideTLWorkCompliancePendingService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): TLWorkCompliancePendingService {
+            return retrofitServiceFactory.prepareService(TLWorkCompliancePendingService::class.java)
+        }
+
 
 
     }

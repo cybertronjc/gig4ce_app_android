@@ -2,7 +2,7 @@ package com.gigforce.app.tl_work_space.activity_tacker.attendance_list
 
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GigAttendanceData
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
-import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceStatusAndCountItemData
+import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
 import java.time.LocalDate
 
 class GigerAttendanceUnderManagerViewContract {
@@ -22,7 +22,7 @@ class GigerAttendanceUnderManagerViewContract {
             val enableDeclineSwipeAction: Boolean,
             val attendanceItemData: List<AttendanceRecyclerItemData>,
             val showUpdateToast: Boolean,
-            val tabsDataCounts : List<AttendanceStatusAndCountItemData>?
+            val tabsDataCounts : List<AttendanceTabData>?
         ) : State()
 
         data class ErrorInLoadingOrUpdatingAttendanceList(

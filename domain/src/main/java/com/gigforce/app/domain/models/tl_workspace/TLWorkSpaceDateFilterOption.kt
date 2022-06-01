@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Parcelize
-data class TLWorkSpaceFilterOption(
+data class TLWorkSpaceDateFilterOption(
     val filterId: String,
     val text: String,
     var startDate: LocalDate?,

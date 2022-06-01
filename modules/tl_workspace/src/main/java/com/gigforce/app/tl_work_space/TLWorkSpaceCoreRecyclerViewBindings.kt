@@ -4,7 +4,10 @@ import android.content.Context
 import android.view.View
 import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.BusinessHeaderRecyclerItemView
 import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.GigerAttendanceItemRecyclerItemView
-import com.gigforce.app.tl_work_space.custom_tab.TabWithCountAndChangeInfoCardView
+import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceBusinessItemView
+import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceGigerItemView
+import com.gigforce.app.tl_work_space.custom_tab.TabType1CardView
+import com.gigforce.app.tl_work_space.custom_tab.TabType2CardView
 import com.gigforce.app.tl_work_space.home.views.*
 import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
@@ -17,7 +20,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
     /** Tab in Retention, Payout etc */
     const val CustomTabType1 = 3323312
-    const val CustomTabType2 = 3323312
+    const val CustomTabType2 = 3325622
     /**
      * -----------------------------
      * TL Workspace HomeScreen Items
@@ -53,11 +56,20 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val RetentionGigerItemType = 392445
     const val RetentionBusinessItemType = 3374882
 
+
+    /**
+     * -----------------
+     * Retention Fragments view [CompliancePendingFragment]
+     */
+    const val ComplianceGigerItemType = 3112455
+    const val ComplianceBusinessItemType = 3666323
+
     override fun getView(
         context: Context,
         viewType: Int
     ): View? = when(viewType) {
-        CustomTabType1 -> TabWithCountAndChangeInfoCardView(context,null)
+        CustomTabType1 -> TabType1CardView(context,null)
+        CustomTabType2 ->  TabType2CardView(context,null)
 
         TLWorkspaceType1SectionItemType -> TLWorkspaceType1SectionView(context,null)
         TLWorkspaceType1InnerCardType -> TLWorkspaceType1SectionInnerCardView(context,null)
@@ -83,6 +95,8 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         RetentionGigerItemType -> RetentionGigerItemView(context,null)
         RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
 
+        ComplianceBusinessItemType -> ComplianceBusinessItemView(context,null)
+        ComplianceGigerItemType -> ComplianceGigerItemView(context,null)
 
         else -> null
     }

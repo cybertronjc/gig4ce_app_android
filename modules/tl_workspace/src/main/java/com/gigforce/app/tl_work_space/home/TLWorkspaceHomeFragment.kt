@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
@@ -48,6 +48,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
     @Inject
     lateinit var activityTrackerNavigation: ActivityTrackerNavigation
 
@@ -74,6 +75,15 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             changeBackButtonDrawable()
             setBackButtonListener {
                 findNavController().navigateUp()
+            }
+
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
+            makeHelpVisible(true)
+
+            helpImageButton.setOnClickListener {
+                tlWorkSpaceNavigation.navigateToHelpScreen()
             }
         }
 
@@ -102,7 +112,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     )
                     is TLWorkSpaceHomeViewUiEffects.ShowFilterDialog -> showFilterMenu(
                         it.anchorView,
-                        it.filters,
+                        it.dateFilters,
                         it.sectionId
                     )
                     is TLWorkSpaceHomeViewUiEffects.ShowSnackBar -> showSnackBar(
@@ -262,16 +272,16 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     private fun showFilterMenu(
         anchorView: View,
-        filters: List<TLWorkSpaceFilterOption>,
+        dateFilters: List<TLWorkSpaceDateFilterOption>,
         sectionId: String
     ) {
-        val anyValueSelected = filters.find {
+        val anyValueSelected = dateFilters.find {
             it.selected
         } != null
 
         PowerMenu.Builder(requireContext()).apply {
 
-            filters.forEach {
+            dateFilters.forEach {
                 val menuTag = sectionId + "<>" + it.filterId
                 if (anyValueSelected) {
 
