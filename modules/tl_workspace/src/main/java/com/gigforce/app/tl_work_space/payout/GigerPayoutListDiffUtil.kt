@@ -55,8 +55,8 @@ class GigerPayoutListDiffUtil : CoreDiffUtilCallback<GigerPayoutScreenData>(){
                         oldItem.jobProfile == newItem.jobProfile &&
                         oldItem.phoneNumber == newItem.phoneNumber &&
                         oldItem.profilePicture == newItem.profilePicture &&
-                        oldItem.selectionDateString == newItem.selectionDateString &&
-                        oldItem.warningText == newItem.warningText
+                        oldItem.selectionDateString == newItem.selectionDateString
+//                        oldItem.warningText == newItem.warningText
             }
 
             return false

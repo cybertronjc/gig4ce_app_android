@@ -8,6 +8,9 @@ import com.gigforce.app.domain.models.tl_workspace.payout.GigerPayoutListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspacePayoutRepository
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
+import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
+import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewUiEffects
+import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.core.deque.dequeLimiter
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -171,6 +174,42 @@ class GigerPayoutViewModel @Inject constructor(
     }
 
     override fun handleEvent(event: GigerPayoutFragmentViewEvents) {
+        when(event) {
+
+            is GigerPayoutFragmentViewEvents.BusinessClicked -> businessHeaderClicker(event.businessData)
+
+            is GigerPayoutFragmentViewEvents.GigerClicked  -> gigerClicked(
+                event.giger
+            )
+            is GigerPayoutFragmentViewEvents.FilterApplied -> handleFilter(
+                event
+            )
+        }
+    }
+
+    private fun handleFilter(event: GigerPayoutFragmentViewEvents.FilterApplied) {
+        when (event) {
+            is GigerPayoutFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshGigersData(
+                event.filter
+            )
+            is GigerPayoutFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
+                event.searchText
+            )
+            is GigerPayoutFragmentViewEvents.FilterApplied.TabSelected -> tabSelected(
+                event.tabId
+            )
+        }
+    }
+
+    private fun businessHeaderClicker(businessData: GigerPayoutScreenData.BusinessItemData) = viewModelScope.launch{
+
+        if (collapsedBusiness.contains(businessData.businessName)){
+            collapsedBusiness.remove(businessData.businessName)
+        } else {
+            collapsedBusiness.add(businessData.businessName)
+        }
+
+        processRawGigerPayoutDataAndUpdateOnView(true)
 
     }
 
@@ -198,5 +237,15 @@ class GigerPayoutViewModel @Inject constructor(
         processRawGigerPayoutDataAndUpdateOnView(
             false
         )
+    }
+
+    private fun gigerClicked(
+        giger: GigerPayoutScreenData.GigerItemData
+    ) {
+        setEffect {
+            GigerPayoutFragmentViewUiEffects.OpenGigerDetailsBottomSheet(
+                giger
+            )
+        }
     }
 }

@@ -35,7 +35,7 @@
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <com.gigforce.wallet.common_views.PayoutStatusView
+            <com.gigforce.common_ui.components.cells.PayoutStatusView
                 android:id="@+id/payoutStatusView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

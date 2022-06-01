@@ -34,17 +34,50 @@ data class StatusMasterWithCountItem(
 
 data class GigerPayoutListItem(
 
+    @field:SerializedName("_id")
+    val gigerId: String? = null,
+
+    @field:SerializedName("amount")
+    val amount: Double? = null,
+
+    @field:SerializedName("payoutId")
+    val payoutId: String? = null,
+
+    @field:SerializedName("colorString")
+    val colorString: String? = null,
+
+    @field:SerializedName("payoutStatus")
+    val payoutStatus: String? = null,
+
+    @field:SerializedName("statusColorCode")
+    val statusColorCode: String? = null,
+
+    @field:SerializedName("status")
+    val tabStatus : List<String>? = null,
+
+    @field:SerializedName("category")
+    val category: String? = null,
+
+    @field:SerializedName("rejectionReason")
+    val rejectionReason: String? = null,
+
+    @field:SerializedName("paidOnDate")
+    val paidOnDate: String? = null,
+
+    @field:SerializedName("lastPaidOnDate")
+    val lastPaidOnDate: String? = null,
+
+    @field:SerializedName("paidOnString")
+    val paidOnString: String? = null,
+
     @field:SerializedName("businessName")
     val businessName: String? = null,
 
-    @field:SerializedName("gigerId")
-    val gigerId: String? = null,
-
-    @field:SerializedName("warningString")
-    val warningString: String? = null,
-
     @field:SerializedName("jobProfile")
     val jobProfile: String? = null,
+
+    @field:SerializedName("jobProfileId")
+    val jobProfileId: String? = null,
 
     @field:SerializedName("mobileNumber")
     val mobileNumber: String? = null,
@@ -58,29 +91,6 @@ data class GigerPayoutListItem(
     @field:SerializedName("profilePictureThumbnail")
     val profilePictureThumbnail: String? = null,
 
-    @field:SerializedName("amount")
-    val amount: String? = null,
-
-    @field:SerializedName("category")
-    val category: String? = null,
-
-    @field:SerializedName("rejectionReason")
-    val rejectionReason: String? = null,
-
-    @field:SerializedName("statusColorCode")
-    val statusColorCode: String? = null,
-
-    @field:SerializedName("paidOnDate")
-    val paidOnDate: String? = null,
-
-    @field:SerializedName("lastPaidOnDate")
-    val lastPaidOnDate: String? = null,
-
-    @field:SerializedName("paidOnString")
-    val paidOnString: String? = null,
-
-    @field:SerializedName("reation")
-    val tabStatus : List<String>? = null
 ){
 
     fun getBusinessNonNull() : String{

@@ -125,7 +125,7 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         gigerPayoutData: List<GigerPayoutScreenData>,
         updatedTabMaster: List<GigerPayoutStatusData>
     ) = viewBinding.apply{
-
+        Log.d("PayoutData", "gigers: $gigerPayoutData")
         swipeRefreshLayout.isRefreshing = false
         stopShimmer(
             shimmerContainer,

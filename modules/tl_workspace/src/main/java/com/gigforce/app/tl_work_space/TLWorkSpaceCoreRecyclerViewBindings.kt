@@ -3,6 +3,8 @@ package com.gigforce.app.tl_work_space
 import android.content.Context
 import android.view.View
 import com.gigforce.app.tl_work_space.home.views.*
+import com.gigforce.app.tl_work_space.payout.GigerPayoutBusinessItemView
+import com.gigforce.app.tl_work_space.payout.GigerPayoutGigerItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersBusinessItemView
@@ -64,6 +66,9 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
         RetentionGigerItemType -> RetentionGigerItemView(context,null)
         RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
+
+        GigerPayoutGigerItemType -> GigerPayoutGigerItemView(context, null)
+        GigerPayoutBusinessItemType -> GigerPayoutBusinessItemView(context, null)
 
 
         else -> null

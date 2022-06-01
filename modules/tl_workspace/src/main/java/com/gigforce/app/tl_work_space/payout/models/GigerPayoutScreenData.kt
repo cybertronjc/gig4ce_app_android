@@ -18,7 +18,11 @@ open class GigerPayoutScreenData(
         val profilePicture: String? ,
         val profilePictureThumbnail: String?,
         val selectionDateString : String,
-        val warningText : String?,
+        val category: String?,
+        val amount: Double?,
+        val status: String,
+        val statusColorCode: String,
+        val paymentDate: String?,
         val viewModel: GigerPayoutViewModel
     ) : GigerPayoutScreenData(TLWorkSpaceCoreRecyclerViewBindings.GigerPayoutGigerItemType)
 
@@ -27,5 +31,5 @@ open class GigerPayoutScreenData(
         val count: Int,
         val expanded: Boolean,
         val viewModel: GigerPayoutViewModel
-    ) : GigerPayoutScreenData(TLWorkSpaceCoreRecyclerViewBindings.GigerPayoutGigerItemType)
+    ) : GigerPayoutScreenData(TLWorkSpaceCoreRecyclerViewBindings.GigerPayoutBusinessItemType)
 }

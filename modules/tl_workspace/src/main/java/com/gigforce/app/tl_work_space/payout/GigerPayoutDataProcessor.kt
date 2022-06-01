@@ -152,7 +152,11 @@ object GigerPayoutDataProcessor {
                 profilePicture = it.profilePicture,
                 profilePictureThumbnail = it.profilePictureThumbnail,
                 selectionDateString = "",
-                warningText = it.warningString,
+                category = it.category,
+                amount = it.amount,
+                status = it.payoutStatus.toString() ?: "N/A",
+                statusColorCode = it.statusColorCode.toString(),
+                paymentDate = it.paidOnDate,
                 viewModel = viewModel
             )
         }

@@ -39,6 +39,10 @@ sealed class GigerPayoutFragmentViewEvents : UiEvent {
         val giger: GigerPayoutScreenData.GigerItemData
     ) : GigerPayoutFragmentViewEvents()
 
+    data class BusinessClicked(
+        val businessData: GigerPayoutScreenData.BusinessItemData
+    ) : GigerPayoutFragmentViewEvents()
+
     sealed class FilterApplied : GigerPayoutFragmentViewEvents() {
 
         data class TabSelected(
