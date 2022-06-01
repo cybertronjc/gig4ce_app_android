@@ -503,7 +503,9 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
             }
             ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
-
+                tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
+                    "Compliance Pending"
+                )
 
             }
             ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
@@ -512,7 +514,9 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                 )
             }
             ActionsAttachmentOption.GIGER_RETENTION_ID -> {
-
+                tlWorkSpaceNavigation.navigateToRetentionScreen(
+                    "Retention"
+                )
             }
             ActionsAttachmentOption.GIGER_TICKET_ID -> {
 
