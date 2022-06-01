@@ -1,8 +1,10 @@
 package com.gigforce.app.data.repositoriesImpl.gigs
 
+import com.gigforce.app.data.remote.bodyFromBaseResponseElseThrow
 import com.gigforce.app.data.remote.bodyOrThrow
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GetGigersAttendanceRequest
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GetGigersAttendanceRequestFilter
+import com.gigforce.app.data.repositoriesImpl.gigs.models.GetGigersAttendanceResponse
 import com.gigforce.app.data.repositoriesImpl.gigs.models.GigAttendanceRequest
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -22,7 +24,7 @@ class GigersAttendanceRepository @Inject constructor(
 
     suspend fun getAttendance(
         date: LocalDate
-    ): List<GigAttendanceApiModel> {
+    ): GetGigersAttendanceResponse {
 
         return gigerAttendanceService.getGigersAttendance(
             GetGigersAttendanceRequest(
@@ -30,7 +32,7 @@ class GigersAttendanceRepository @Inject constructor(
                     date = date
                 )
             )
-        ).bodyOrThrow()
+        ).bodyFromBaseResponseElseThrow()
     }
 
     suspend fun getAttendanceMonthly(

@@ -2,16 +2,17 @@ package com.gigforce.app.tl_work_space.activity_tacker.attendance_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
+import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
 import com.gigforce.app.data.repositoriesImpl.gigs.GigersAttendanceRepository
 import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.SharedAttendanceTLSharedViewModelEvents
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
-import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
-import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
-import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
+import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
-import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
+import com.gigforce.app.tl_work_space.home.models.ValueChangeType
+import com.gigforce.common_ui.repository.gig.GigAttendanceRepository
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.IEventTracker
@@ -19,7 +20,10 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.time.LocalDate
@@ -41,7 +45,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
     /* data*/
     private var attendanceListRaw: List<GigAttendanceApiModel> = emptyList()
-    private var statusMaster: List<RetentionTabData> = emptyList()
+    private var statusMaster: List<AttendanceTabData> = emptyList()
     private var attendanceShownOnScreen: MutableList<AttendanceRecyclerItemData> = mutableListOf()
 
     //Filters
@@ -238,7 +242,19 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             val gigersAttendance = gigersAttendanceRepository.getAttendance(
                 date
             )
-            attendanceListRaw = gigersAttendance
+            attendanceListRaw = gigersAttendance.gigers
+            statusMaster = gigersAttendance.statusCount.map {
+                AttendanceTabData(
+                    id = it.id ?: "",
+                    title = it.title ?: "",
+                    value = it.count ?: 0,
+                    selected = false,
+                    valueChangedBy = it.valueChangedBy ?: 0,
+                    changeType = ValueChangeType.fromChangeString(it.valueChangeType),
+                    viewModel = this@GigerAttendanceUnderManagerViewModel
+                )
+            }
+
             processAttendanceListAndEmitToView(
                 showDataUpdatedToast = true,
                 updateStatusTabsCount = true
@@ -279,7 +295,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 currentlySelectedStatus = currentlySelectedStatus,
                 currentlySearchTerm = currentlySearchTerm,
                 prepareAttendanceStatusAndCount = updateStatusTabsCount,
-                gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel
+                gigerAttendanceUnderManagerViewModel = this@GigerAttendanceUnderManagerViewModel,
+                statusMaster
             )
         attendanceShownOnScreen = attendanceToStatusWithCountPair.first.toMutableList()
 

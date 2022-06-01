@@ -1,6 +1,8 @@
 package com.gigforce.app.data.repositoriesImpl.gigs
 
+import com.gigforce.app.data.remote.BaseResponse
 import com.gigforce.app.data.repositoriesImpl.gigs.models.*
+
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -9,7 +11,7 @@ interface GigerAttendanceService {
     @POST("operationsChampion/tlWorkspace/tlAttendanceReport")
     suspend fun getGigersAttendance(
         @Body request : GetGigersAttendanceRequest
-    ): Response<List<GigAttendanceApiModel>>
+    ): Response<BaseResponse<GetGigersAttendanceResponse>>
 
     @POST("gigAttendance/attendanceHistory")
     suspend fun getGigOrderAttendanceMonthly(

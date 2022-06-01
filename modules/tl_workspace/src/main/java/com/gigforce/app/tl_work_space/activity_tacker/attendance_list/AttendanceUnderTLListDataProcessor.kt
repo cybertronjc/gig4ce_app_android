@@ -1,9 +1,9 @@
 package com.gigforce.app.tl_work_space.activity_tacker.attendance_list
 
+import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
+import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
-import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
-import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
 
 object AttendanceUnderTLListDataProcessor {
 
@@ -15,7 +15,8 @@ object AttendanceUnderTLListDataProcessor {
         currentlySelectedStatus: String,
         currentlySearchTerm: String?,
         prepareAttendanceStatusAndCount: Boolean,
-        gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel
+        gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel,
+        tabsMaster: List<AttendanceTabData>
     ): Pair<List<AttendanceRecyclerItemData>, List<AttendanceTabData>?> {
 
 
@@ -26,6 +27,7 @@ object AttendanceUnderTLListDataProcessor {
 
         val tabStatusWithCount = if (prepareAttendanceStatusAndCount) {
             prepareAttendanceTabsCountList(
+                tabsMaster,
                 attendanceFilteredBySearchTerm,
                 currentlySelectedStatus
             )
@@ -56,7 +58,7 @@ object AttendanceUnderTLListDataProcessor {
         businessToAttendanceGroup: Map<String, List<GigAttendanceApiModel>>,
         gigerAttendanceUnderManagerViewModel: GigerAttendanceUnderManagerViewModel,
         collapsedBusiness: List<String>,
-        currentlySelectedStatus : String,
+        currentlySelectedStatus: String,
         currentMarkingAttendanceForGigs: MutableSet<String> //Gigs for which currently attendance mark process is going on
     ) = mutableListOf<AttendanceRecyclerItemData>()
         .apply {
@@ -119,51 +121,26 @@ object AttendanceUnderTLListDataProcessor {
     }
 
     private fun prepareAttendanceTabsCountList(
+        tabsMaster: List<AttendanceTabData>,
         attendance: List<GigAttendanceApiModel>,
         currentlySelectedStatus: String
     ): List<AttendanceTabData> {
-        var enabledCount = 0
-        var activeCount = 0
-        var inactiveCount = 0
 
-        attendance.forEach {
-            enabledCount++
 
-            if (it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT) {
-                activeCount++
-            } else {
-                inactiveCount++
+        return tabsMaster.onEach { currentWorkingOnItem ->
+
+            if (currentWorkingOnItem.id == StatusFilters.ENABLED) {
+                currentWorkingOnItem.value = tabsMaster.count()
+            } else if (currentWorkingOnItem.id == StatusFilters.ACTIVE) {
+                currentWorkingOnItem.value = attendance.count {
+                    it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT
+                }
+            } else if (currentWorkingOnItem.id == StatusFilters.INACTIVE) {
+                currentWorkingOnItem.value = attendance.count {
+                    it.getFinalAttendanceStatus() == AttendanceStatus.ABSENT
+                }
             }
         }
-
-        return listOf(
-//            AttendanceTabData(
-//
-//                status = StatusFilters.ENABLED,
-//                attendanceCount = enabledCount,
-//                statusSelected = currentlySelectedStatus == StatusFilters.ENABLED,
-//                id = "",
-//                title = "",
-//                value = 0,
-//                selected = false,
-//                valueChangedBy = 0,
-//                changeType =,
-//                viewModel = RetentionViewModel(
-//                    logger = GigforceLogger(),
-//                    repository =
-//                )
-//            ),
-//            AttendanceTabData(
-//                status = StatusFilters.ACTIVE,
-//                attendanceCount = activeCount,
-//                statusSelected = currentlySelectedStatus == StatusFilters.ACTIVE
-//            ),
-//            AttendanceTabData(
-//                status = StatusFilters.INACTIVE,
-//                attendanceCount = inactiveCount,
-//                statusSelected = currentlySelectedStatus == StatusFilters.INACTIVE
-//            ),
-        )
     }
 
 
