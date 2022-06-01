@@ -12,15 +12,15 @@ import android.view.animation.OvershootInterpolator
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
+import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
@@ -29,9 +29,7 @@ import com.gigforce.app.tl_work_space.home.views.ActionsAttachmentOption
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.base.BaseFragment2
-import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.google.android.material.snackbar.Snackbar
@@ -50,12 +48,16 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     statusBarColor = R.color.status_bar_pink
 ), OnMenuItemClickListener<PowerMenuItem>, ActionAttachmentOptionsListetner {
 
-    companion object{
+    companion object {
         const val TAG = "TLWorkspaceHomeFragment"
     }
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
+    @Inject
+    lateinit var activityTrackerNavigation: ActivityTrackerNavigation
+
     private val viewModel: TLWorkspaceHomeViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -77,8 +79,17 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     private fun initView() = viewBinding.apply {
         this.appBar.apply {
             changeBackButtonDrawable()
-            setBackButtonListener{
+            setBackButtonListener {
                 findNavController().navigateUp()
+            }
+
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
+            makeHelpVisible(true)
+
+            helpImageButton.setOnClickListener {
+                tlWorkSpaceNavigation.navigateToHelpScreen()
             }
         }
 
@@ -113,6 +124,8 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.setEvent(TLWorkSpaceHomeUiEvents.RefreshWorkSpaceDataClicked)
         }
+
+        infoLayout.infoIv.loadImage(R.drawable.ic_dragon_sleeping_animation)
     }
 
     private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
@@ -127,7 +140,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                     )
                     is TLWorkSpaceHomeViewUiEffects.ShowFilterDialog -> showFilterMenu(
                         it.anchorView,
-                        it.filters,
+                        it.dateFilters,
                         it.sectionId
                     )
                     is TLWorkSpaceHomeViewUiEffects.ShowSnackBar -> showSnackBar(
@@ -287,16 +300,16 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     private fun showFilterMenu(
         anchorView: View,
-        filters: List<TLWorkSpaceFilterOption>,
+        dateFilters: List<TLWorkSpaceDateFilterOption>,
         sectionId: String
     ) {
-        val anyValueSelected = filters.find {
+        val anyValueSelected = dateFilters.find {
             it.selected
         } != null
 
         PowerMenu.Builder(requireContext()).apply {
 
-            filters.forEach {
+            dateFilters.forEach {
                 val menuTag = sectionId + "<>" + it.filterId
                 if (anyValueSelected) {
 
@@ -340,7 +353,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         viewModel.uiState
             .collect {
 
-                logger.d(TAG,"State : $it")
+                logger.d(TAG, "State : $it")
                 when (it) {
                     is TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent -> handleErrorInLoadingData(
                         it.error
@@ -358,7 +371,20 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     private fun handleErrorInLoadingData(
         error: String
     ) = viewBinding.apply {
+        swipeRefreshLayout.isRefreshing = false
+        stopShimmer(
+            shimmerContainer,
+            R.id.shimmer_controller
+        )
+        shimmerContainer.gone()
 
+        if (recyclerView.collection.isEmpty()) {
+            infoLayout.root.visible()
+            infoLayout.infoMessageTv.text = error
+        } else {
+            infoLayout.root.gone()
+            showSnackBar(error)
+        }
     }
 
     private fun handleDataLoadedState(
@@ -372,7 +398,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         )
         shimmerContainer.gone()
 
-//        infoLayout.gone()
+        infoLayout.root.gone()
         recyclerView.collection = sectionData
         showOrHideNoDataLayout(
             sectionData.isNotEmpty()
@@ -384,17 +410,19 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     ) = viewBinding.apply {
 
         if (dataAvailableToShowOnScreen) {
-//            infoLayout.root.visible()
-//            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
+            infoLayout.root.gone()
+            infoLayout.infoMessageTv.text = null
         } else {
-//            infoLayout.root.gone()
-//            infoLayout.infoMessageTv.text = null
+            infoLayout.root.visible()
+            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
         }
     }
 
     private fun handleLoadingState(
         anyPreviousDataShownOnScreen: Boolean
     ) = viewBinding.apply {
+        logger.v(TAG, "showing loading state : previousDataShown : $anyPreviousDataShownOnScreen")
+        infoLayout.root.gone()
 
         if (anyPreviousDataShownOnScreen) {
 
@@ -402,32 +430,29 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
                 swipeRefreshLayout.isRefreshing = true
             }
 
-            if (shimmerContainer.isVisible) {
-                shimmerContainer.gone()
-                stopShimmer(
-                    this.shimmerContainer,
-                    R.id.shimmer_controller
-                )
-            }
+            shimmerContainer.gone()
+            stopShimmer(
+                this.shimmerContainer,
+                R.id.shimmer_controller
+            )
         } else {
 
             if (swipeRefreshLayout.isRefreshing) {
                 swipeRefreshLayout.isRefreshing = false
             }
 
-            if (!shimmerContainer.isVisible) {
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
-            }
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
+
         }
     }
 

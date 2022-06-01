@@ -839,7 +839,7 @@
         android:label="OnboardingPreferredJobLocationFragment" />
       <fragment
         android:id="@+id/gigerAttendanceUnderManagerFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_list.GigersAttendanceUnderManagerFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.attendance_list.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
     <fragment
         android:id="@+id/invoicesListFragment"
@@ -1135,27 +1135,27 @@
 
     <dialog
         android:id="@+id/gigerAttendanceDetailsFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.attendance_details.GigerAttendanceDetailsFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.attendance_details.GigerAttendanceDetailsFragment"
         android:label="GigerAttendanceDetailsFragment"/>
 
     <dialog
         android:id="@+id/markActiveConfirmationBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.mark_active_attendance_confirm_check.MarkActiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.mark_active_attendance_confirm_check.MarkActiveConfirmationBottomSheetFragment"
         android:label="MarkActiveConfirmationBottomSheetFragment" />
 
     <dialog
         android:id="@+id/markInactiveConfirmationBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.MarkInactiveConfirmationBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.mark_inactive_attendance.MarkInactiveConfirmationBottomSheetFragment"
         android:label="MarkInactiveConfirmationBottomSheetFragment" />
 
     <dialog
         android:id="@+id/resolveAttendanceConflictConfirmationBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.resolve_attendance_conflict.ResolveAttendanceConflictConfirmationBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.resolve_attendance_conflict.ResolveAttendanceConflictConfirmationBottomSheetFragment"
         android:label="ResolveAttendanceConflictConfirmationBottomSheetFragment" />
 
     <dialog
         android:id="@+id/selectMarkInactiveReasonsBottomSheetFragment"
-        android:name="com.gigforce.giger_gigs.attendance_tl.mark_inactive_attendance.SelectMarkInactiveReasonsBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.activity_tacker.mark_inactive_attendance.SelectMarkInactiveReasonsBottomSheetFragment"
         android:label="SelectMarkInactiveReasonsBottomSheetFragment" />
 
     <dialog
@@ -1212,6 +1212,10 @@
     <fragment android:id="@+id/retentionFragment"
         android:name="com.gigforce.app.tl_work_space.retentions.RetentionFragment"
         android:label="RetentionFragment"/>
+
+    <dialog android:id="@+id/dateFilterBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.date_filter_bottomsheet.DateFilterBottomSheetFragment"
+        android:label="DateFilterBottomSheetFragment"/>
     <fragment
         android:id="@+id/gigerPayoutFragment"
         android:name="com.gigforce.app.tl_work_space.payout.GigerPayoutFragment"

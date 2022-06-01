@@ -2,7 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
-import com.gigforce.giger_gigs.GigNavigation
+import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 
 class NavForGigPageModule(
     baseImplementation: BaseNavigationImpl
@@ -24,23 +24,23 @@ class NavForGigPageModule(
         baseImplementation.registerRoute("${moduleName}/TravellingDetailInfoFragment",R.id.travellingDetailInfoFragment)
 
         baseImplementation.registerRoute(
-            GigNavigation.NAV_DESTINATION_ATTENDANCE_DETAILS,
+            ActivityTrackerNavigation.NAV_DESTINATION_ATTENDANCE_DETAILS,
             R.id.gigerAttendanceDetailsFragment
         )
         baseImplementation.registerRoute(
-            GigNavigation.NAV_DESTINATION_MARK_ACTIVE_CONFIRMATION_DIALOG,
+            ActivityTrackerNavigation.NAV_DESTINATION_MARK_ACTIVE_CONFIRMATION_DIALOG,
             R.id.markActiveConfirmationBottomSheetFragment
         )
         baseImplementation.registerRoute(
-            GigNavigation.NAV_DESTINATION_MARK_INACTIVE_CONFIRMATION_DIALOG,
+            ActivityTrackerNavigation.NAV_DESTINATION_MARK_INACTIVE_CONFIRMATION_DIALOG,
             R.id.markInactiveConfirmationBottomSheetFragment
         )
         baseImplementation.registerRoute(
-            GigNavigation.NAV_DESTINATION_SELECT_INACTIVE_REASON_DIALOG,
+            ActivityTrackerNavigation.NAV_DESTINATION_SELECT_INACTIVE_REASON_DIALOG,
             R.id.selectMarkInactiveReasonsBottomSheetFragment
         )
         baseImplementation.registerRoute(
-            GigNavigation.NAV_DESTINATION_RESOLVE_ATTENDANCE_CONFIRMATION_DIALOG,
+            ActivityTrackerNavigation.NAV_DESTINATION_RESOLVE_ATTENDANCE_CONFIRMATION_DIALOG,
             R.id.resolveAttendanceConflictConfirmationBottomSheetFragment
         )
 

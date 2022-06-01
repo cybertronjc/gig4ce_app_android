@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="brand_primary">#E42C64</color>
+
     <color name="grey_500">#757575</color>
     <color name="green_1">#33B642</color>
     <color name="green_8">#EBF8EC</color>
@@ -7,4 +9,5 @@
     <color name="red_1">#E11900</color>
     <color name="red_8">#FCE8E5</color>
 
+    <color name="text_grey_medium">#707070</color>
 </resources>

@@ -2,6 +2,12 @@ package com.gigforce.app.tl_work_space
 
 import android.content.Context
 import android.view.View
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.BusinessHeaderRecyclerItemView
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.views.GigerAttendanceItemRecyclerItemView
+import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceBusinessItemView
+import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceGigerItemView
+import com.gigforce.app.tl_work_space.custom_tab.TabType1CardView
+import com.gigforce.app.tl_work_space.custom_tab.TabType2CardView
 import com.gigforce.app.tl_work_space.home.views.*
 import com.gigforce.app.tl_work_space.payout.GigerPayoutBusinessItemView
 import com.gigforce.app.tl_work_space.payout.GigerPayoutGigerItemView
@@ -13,6 +19,10 @@ import com.gigforce.core.IViewTypeLoader
 
 object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
+
+    /** Tab in Retention, Payout etc */
+    const val CustomTabType1 = 3323312
+    const val CustomTabType2 = 3325622
     /**
      * -----------------------------
      * TL Workspace HomeScreen Items
@@ -36,10 +46,25 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
 
     /**
      * -----------------
+     * Upcoming Giger view [Attendance Tracker]
+     */
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER  = 34351111
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM  = 34351166;
+
+    /**
+     * -----------------
      * Retention Fragments view [RetentionFragment]
      */
     const val RetentionGigerItemType = 392445
     const val RetentionBusinessItemType = 3374882
+
+
+    /**
+     * -----------------
+     * Retention Fragments view [CompliancePendingFragment]
+     */
+    const val ComplianceGigerItemType = 3112455
+    const val ComplianceBusinessItemType = 3666323
 
     /**
      * -----------------
@@ -52,6 +77,9 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         context: Context,
         viewType: Int
     ): View? = when(viewType) {
+        CustomTabType1 -> TabType1CardView(context,null)
+        CustomTabType2 ->  TabType2CardView(context,null)
+
         TLWorkspaceType1SectionItemType -> TLWorkspaceType1SectionView(context,null)
         TLWorkspaceType1InnerCardType -> TLWorkspaceType1SectionInnerCardView(context,null)
 
@@ -64,12 +92,23 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         UpcomingGigersItemType -> UpcomingGigersItemView(context,null)
         UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context,null)
 
+        VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER -> BusinessHeaderRecyclerItemView(
+            context,
+            null
+        )
+        VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM -> GigerAttendanceItemRecyclerItemView(
+            context,
+            null
+        )
+
         RetentionGigerItemType -> RetentionGigerItemView(context,null)
         RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
 
         GigerPayoutGigerItemType -> GigerPayoutGigerItemView(context, null)
         GigerPayoutBusinessItemType -> GigerPayoutBusinessItemView(context, null)
 
+        ComplianceBusinessItemType -> ComplianceBusinessItemView(context,null)
+        ComplianceGigerItemType -> ComplianceGigerItemView(context,null)
 
         else -> null
     }

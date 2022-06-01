@@ -45,6 +45,8 @@ dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:user-tracking')
     implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':navigation')
+    implementation project(path: ':data')
 
     /**
      * Common dependencies

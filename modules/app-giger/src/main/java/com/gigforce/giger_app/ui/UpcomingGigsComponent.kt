@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.client_activation.R
 import com.gigforce.common_image_picker.image_capture_camerax.utils.decodeExifOrientation
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
-import com.gigforce.common_ui.navigation.gig.GigNavigation
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
@@ -19,9 +18,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UpcomingGigsComponent(context: Context, attrs: AttributeSet?) :
     FeatureLayoutComponent(context, attrs) {
-
-    @Inject
-    lateinit var gigNavigation : GigNavigation
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface

@@ -15,8 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
+import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.navigation.gig.GigNavigation
 import com.gigforce.common_ui.utils.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.common_ui.views.GigforceImageView

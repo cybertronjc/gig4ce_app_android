@@ -33,5 +33,10 @@ class NavForTlWorkSpace(
             TLWorkSpaceNavigation.NAV_DESTINATION_GIGER_PAYOUT,
             R.id.gigerPayoutFragment
         )
+
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET,
+            R.id.dateFilterBottomSheetFragment
+        )
     }
 }

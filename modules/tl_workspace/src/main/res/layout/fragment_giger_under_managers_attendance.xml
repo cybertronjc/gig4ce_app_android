@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        tools:context=".payouts.PayoutMainFragment">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
+            app:isSearchVisible="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="Giger Attendance" />
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/tab_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp" />
+
+        <LinearLayout
+            android:id="@+id/swipe_direction_label_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            android:animateLayoutChanges="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/swipe_direction_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/lato_bold"
+                android:textFontWeight="700"
+                android:textSize="12sp"
+                android:lineHeight="18sp"
+                android:text="Note: "/>
+
+            <TextSwitcher
+                android:id="@+id/swipe_direction_text_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/lato"
+                android:textFontWeight="400"
+                android:textSize="12sp"
+                android:lineHeight="18sp"
+                android:text="Swipe right to mark present and left to mark absent."/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/rootFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.gigforce.core.recyclerView.CoreRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <include
+                android:id="@+id/shimmer_container"
+                layout="@layout/shimmer_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/info_layout"
+                layout="@layout/layout_common_information" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

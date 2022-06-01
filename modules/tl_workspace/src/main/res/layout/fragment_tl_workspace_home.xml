@@ -64,7 +64,7 @@
 
             <include
                 android:id="@+id/info_layout"
-                layout="@layout/layout_information_with_button" />
+                layout="@layout/layout_common_information" />
 
         </FrameLayout>
     </LinearLayout>

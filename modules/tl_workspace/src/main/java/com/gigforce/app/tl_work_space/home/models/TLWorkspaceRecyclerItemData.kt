@@ -1,6 +1,6 @@
 package com.gigforce.app.tl_work_space.home.models
 
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.tl_work_space.TLWorkSpaceCoreRecyclerViewBindings
 import com.gigforce.app.tl_work_space.home.TLWorkspaceHomeViewModel
 import com.gigforce.core.SimpleDVM
@@ -15,7 +15,7 @@ open class TLWorkspaceRecyclerItemData(
     data class TLWorkspaceType1RecyclerItemData(
         val sectionId: String,
         val sectionTitle: String,
-        val currentFilter: TLWorkSpaceFilterOption?,
+        val currentDateFilter: TLWorkSpaceDateFilterOption?,
         val itemData: List<TLWorkType1CardInnerItemData>,
         val noOfItemsToShowInGrid: Int,
         val viewModel: TLWorkspaceHomeViewModel
@@ -56,7 +56,7 @@ open class TLWorkspaceRecyclerItemData(
     data class TLWorkspaceType2RecyclerItemData(
         val sectionId: String,
         val sectionTitle: String,
-        val currentFilter: TLWorkSpaceFilterOption?,
+        val currentDateFilter: TLWorkSpaceDateFilterOption?,
         val itemData: List<TLWorkType2CardInnerItemData>,
         val noOfItemsToShowInGrid: Int,
         val viewModel: TLWorkspaceHomeViewModel

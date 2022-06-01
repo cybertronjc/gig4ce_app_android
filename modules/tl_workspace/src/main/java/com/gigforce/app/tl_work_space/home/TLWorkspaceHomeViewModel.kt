@@ -7,6 +7,7 @@ import com.gigforce.app.domain.models.tl_workspace.*
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
 import com.gigforce.app.tl_work_space.home.mapper.ApiModelToPresentationModelMapper
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.core.extensions.replace
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,9 +43,9 @@ class TLWorkspaceHomeViewModel @Inject constructor(
      * Processed Data
      */
     private var sectionsShownOnView: List<TLWorkspaceRecyclerItemData> = emptyList()
-    private var sectionToSelectedFilterMap: MutableMap<
+    private var sectionToSelectedDateFilterMap: MutableMap<
             TLWorkspaceHomeSection, //Section
-            TLWorkSpaceFilterOption? //Currently Selected filter
+            TLWorkSpaceDateFilterOption? //Currently Selected filter
             > = mutableMapOf()
 
     init {
@@ -56,13 +57,19 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         tlWorkSpaceHomeScreenRepository
             .getWorkspaceSectionAsFlow()
             .collect {
-                logger.d(TAG,"new state received : $it")
+                logger.d(TAG, "new state received : $it")
 
                 when (it) {
-                    is Lce.Content -> processDataReceivedFromServerAndUpdateOnView(
-                        null,
-                        it.content
-                    )
+                    is Lce.Content -> {
+
+                        val shouldShowDataUpdatedToast = tlWorkSpaceDataRaw.isNotEmpty()
+                        tlWorkSpaceDataRaw = it.content
+
+                        processDataReceivedFromServerAndUpdateOnView(
+                            null,
+                            shouldShowDataUpdatedToast
+                        )
+                    }
                     is Lce.Error -> showErrorState(it.error)
                     Lce.Loading -> showLoadingOnView()
                 }
@@ -78,7 +85,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun showLoadingOnView() {
-        logger.d(TAG,"emitting loading state...")
+        logger.d(TAG, "emitting loading state...")
 
         setState {
             TLWorkSpaceHomeUiState.LoadingHomeScreenContent(
@@ -95,7 +102,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         var anyFilterOtherThanDefaultAppliedToAnySection = false
-        sectionToSelectedFilterMap.forEach { (_, filterCurrentlyApplied) ->
+        sectionToSelectedDateFilterMap.forEach { (_, filterCurrentlyApplied) ->
 
             // Checking If there any filter (other than default one) is applied to any section
             if (filterCurrentlyApplied != null && !filterCurrentlyApplied.default) {
@@ -121,7 +128,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun refreshWorkSpaceDataWithFiltersApplied() = viewModelScope.launch {
-        val sectionToRefreshWithFiltersInfo = sectionToSelectedFilterMap.map {
+        val sectionToRefreshWithFiltersInfo = sectionToSelectedDateFilterMap.map {
             RequestedDataItem(
                 filter = it.value?.mapToApiModel(),
                 sectionId = it.key.getSectionId()
@@ -141,9 +148,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                     requestedData = sectionToRefreshWithFiltersInfo
                 )
             )
+            tlWorkSpaceDataRaw = rawSectionDataFromServer
+
             processDataReceivedFromServerAndUpdateOnView(
                 sectionToRefreshWithFiltersInfo,
-                rawSectionDataFromServer
+                true
             )
         } catch (e: Exception) {
 
@@ -166,14 +175,11 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun processDataReceivedFromServerAndUpdateOnView(
         filtersUsed: List<RequestedDataItem>?,
-        rawSectionDataFromServer: List<TLWorkSpaceSectionApiModel>
+        showDataUpdatedToast: Boolean
     ) {
-        logger.d(TAG,"processing data received from server...")
-        val shouldShowDataUpdatedToast = this.tlWorkSpaceDataRaw.isNotEmpty()
+        logger.d(TAG, "processing data received from server...")
 
-        this.tlWorkSpaceDataRaw = rawSectionDataFromServer
-
-        val initialFetch = sectionToSelectedFilterMap.isEmpty()
+        val initialFetch = sectionToSelectedDateFilterMap.isEmpty()
         if (initialFetch) {
             //we need to update one section only
             addFiltersToDefaultSelectedFilter()
@@ -184,7 +190,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         prepareUiModelsAndEmit()
-        if(shouldShowDataUpdatedToast){
+        if (showDataUpdatedToast) {
             setEffect {
                 TLWorkSpaceHomeViewUiEffects.ShowSnackBar("Workspace updated")
             }
@@ -193,12 +199,12 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
     private fun prepareUiModelsAndEmit() {
         sectionsShownOnView = ApiModelToPresentationModelMapper.mapToPresentationList(
-            sectionToSelectedFilterMap,
+            sectionToSelectedDateFilterMap,
             tlWorkSpaceDataRaw,
             this
         )
 
-        logger.d(TAG,"emiting new state...")
+        logger.d(TAG, "emiting new state...")
         setState {
             TLWorkSpaceHomeUiState.ShowOrUpdateSectionListOnView(
                 sectionsShownOnView
@@ -213,7 +219,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
             it.filter != null && it.sectionId != null
         }.forEach {
             val section = TLWorkspaceHomeSection.fromId(it.sectionId!!)
-            sectionToSelectedFilterMap.put(
+            sectionToSelectedDateFilterMap.put(
                 section,
                 it.filter!!.mapToPresentationFilter().apply {
                     this.selected = true
@@ -223,12 +229,12 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     }
 
     private fun addFiltersToDefaultSelectedFilter() {
-        if (sectionToSelectedFilterMap.isEmpty()) {
+        if (sectionToSelectedDateFilterMap.isEmpty()) {
             /**
              * Preparing a map of section id to default selected filter
              */
             this.tlWorkSpaceDataRaw.forEach {
-                sectionToSelectedFilterMap.put(
+                sectionToSelectedDateFilterMap.put(
                     TLWorkspaceHomeSection.fromId(it.sectionId!!),
                     it.filters?.find {
                         it.default!!
@@ -325,15 +331,6 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
     }
 
-    private fun handleCustomDateFilter(
-        sectionId: String,
-        filterId: String,
-        date1: LocalDate,
-        date2: LocalDate?
-    ) {
-
-    }
-
 
     private fun handleOpenFilterClicked(
         sectionOpenFilterClickedFrom: TLWorkspaceHomeSection,
@@ -379,7 +376,7 @@ class TLWorkspaceHomeViewModel @Inject constructor(
         }
 
         filters.onEach {
-            it.selected = it.filterId == sectionToSelectedFilterMap.get(
+            it.selected = it.filterId == sectionToSelectedDateFilterMap.get(
                 TLWorkspaceHomeSection.fromId(sectionId)
             )?.filterId
         }
@@ -415,22 +412,100 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                     selectedDate = selectedFilter.defaultSelectedDate ?: LocalDate.now()
                 )
             }
-        } else {
 
+            return@launch
         }
 
-//       val updatedFilterData =  tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
-//            RequestedDataItem(
-//                filter = filterApplied.mapToApiModel(),
-//                sectionId = section.getSectionId()
-//            )
-//        )
+        updatedSingleSection(
+            section,
+            selectedFilter
+        )
     }
+
+    private fun handleCustomDateFilter(
+        sectionId: String,
+        filterId: String,
+        date1: LocalDate,
+        date2: LocalDate?
+    ) = viewModelScope.launch {
+        val section = TLWorkspaceHomeSection.fromId(sectionId)
+
+        val selectedFilter = getFilterFrom(
+            section,
+            filterId
+        ) ?: return@launch
+
+        selectedFilter.startDate = date1
+        selectedFilter.endDate = date2
+
+        updatedSingleSection(
+            section,
+            selectedFilter
+        )
+    }
+
+    private suspend fun updatedSingleSection(
+        section: TLWorkspaceHomeSection,
+        tlWorkSpaceDateFilterOption: TLWorkSpaceDateFilterOption?
+    ) {
+
+        setState {
+            TLWorkSpaceHomeUiState.LoadingHomeScreenContent(true)
+        }
+
+        try {
+            val singleSectionData = tlWorkSpaceHomeScreenRepository.getSingleWorkSpaceSectionData(
+                RequestedDataItem(
+                    filter = tlWorkSpaceDateFilterOption?.mapToApiModel(),
+                    sectionId = section.getSectionId()
+                )
+            )
+
+            tlWorkSpaceDataRaw.replace(
+                singleSectionData
+            ) {
+                section.getSectionId() == it.sectionId
+            }
+
+            sectionToSelectedDateFilterMap.put(
+                section,
+                tlWorkSpaceDateFilterOption
+            )
+
+            processDataReceivedFromServerAndUpdateOnView(
+                filtersUsed = listOf(
+                    RequestedDataItem(
+                        filter = tlWorkSpaceDateFilterOption?.mapToApiModel(),
+                        sectionId = section.getSectionId()
+                    )
+                ),
+                showDataUpdatedToast = true
+            )
+        } catch (e: Exception) {
+
+            if (e is IOException) {
+                setState {
+                    TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                        e.message ?: "Unable to fetch load data"
+                    )
+                }
+            } else {
+
+                setState {
+                    TLWorkSpaceHomeUiState.ErrorWhileLoadingScreenContent(
+                        "Unable to fetch load data"
+                    )
+                }
+            }
+        }
+
+    }
+
 
     private fun getFilterFrom(
         section: TLWorkspaceHomeSection,
         filterId: String
-    ): TLWorkSpaceFilterOption? {
+    ): TLWorkSpaceDateFilterOption? {
         return tlWorkSpaceDataRaw.find {
             section.getSectionId() == it.sectionId
         }?.filters?.find {

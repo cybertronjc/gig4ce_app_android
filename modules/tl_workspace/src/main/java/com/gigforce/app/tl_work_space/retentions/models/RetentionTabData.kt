@@ -8,6 +8,7 @@ data class RetentionTabData(
     val id: String,
     val title: String,
     var value: Int,
+    var selected : Boolean,
     val valueChangedBy: Int,
     val changeType: ValueChangeType,
     val viewModel: RetentionViewModel
@@ -25,7 +26,8 @@ data class RetentionTabData(
                 changeType = ValueChangeType.fromChangeString(statusMasterWithCountItem.valueChangeType),
                 viewModel = viewModel,
                 id = statusMasterWithCountItem.id
-                    ?: throw IllegalArgumentException("RetentionTabData: fromAPiModel() -id found null in retention status")
+                    ?: throw IllegalArgumentException("RetentionTabData: fromAPiModel() -id found null in retention status"),
+                selected = false
             )
         }
     }

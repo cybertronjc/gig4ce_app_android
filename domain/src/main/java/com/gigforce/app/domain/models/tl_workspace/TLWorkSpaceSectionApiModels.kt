@@ -2,7 +2,6 @@ package com.gigforce.app.domain.models.tl_workspace
 
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 data class TLWorkSpaceSectionApiModel(
 
@@ -62,8 +61,8 @@ data class FiltersItemApiModel(
 
     ) {
 
-    fun mapToPresentationFilter(): TLWorkSpaceFilterOption {
-        return TLWorkSpaceFilterOption(
+    fun mapToPresentationFilter(): TLWorkSpaceDateFilterOption {
+        return TLWorkSpaceDateFilterOption(
             filterId = filterId
                 ?: throw IllegalStateException("mapToPresentationFilter() - no filter id found in api model FiltersItem model"),
             text = text

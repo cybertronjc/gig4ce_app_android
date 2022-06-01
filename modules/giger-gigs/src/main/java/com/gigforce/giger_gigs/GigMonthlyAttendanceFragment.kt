@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -81,24 +82,24 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
-            val monthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE)
+            val monthYear = it.getSerializable(GigNavigation.INTENT_EXTRA_SELECTED_DATE)
             if (monthYear != null) currentlySelectedMonthYear = monthYear as LocalDate
 
-            role = it.getString(INTENT_EXTRA_ROLE)
-            companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
-            companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
+            role = it.getString(GigNavigation.INTENT_EXTRA_ROLE)
+            companyName = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_NAME)
+            companyLogo = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO)
+            gigOrderId = it.getString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
                 "Gig order id not passed in intent"
             )
         }
 
         savedInstanceState?.let {
-            currentlySelectedMonthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE) as LocalDate
+            currentlySelectedMonthYear = it.getSerializable(GigNavigation.INTENT_EXTRA_SELECTED_DATE) as LocalDate
 
-            role = it.getString(INTENT_EXTRA_ROLE)
-            companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
-            companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
+            role = it.getString(GigNavigation.INTENT_EXTRA_ROLE)
+            companyName = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_NAME)
+            companyLogo = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO)
+            gigOrderId = it.getString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
                 "Gig order id not passed in saved intent"
             )
         }
@@ -106,12 +107,12 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(INTENT_EXTRA_SELECTED_DATE, currentlySelectedMonthYear)
+        outState.putSerializable(GigNavigation.INTENT_EXTRA_SELECTED_DATE, currentlySelectedMonthYear)
 
-        outState.putString(INTENT_EXTRA_ROLE, role)
-        outState.putString(INTENT_EXTRA_COMPANY_NAME, companyName)
-        outState.putString(INTENT_EXTRA_COMPANY_LOGO, companyLogo)
-        outState.putString(INTENT_EXTRA_GIG_ORDER_ID, gigOrderId)
+        outState.putString(GigNavigation.INTENT_EXTRA_ROLE, role)
+        outState.putString(GigNavigation.INTENT_EXTRA_COMPANY_NAME, companyName)
+        outState.putString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO, companyLogo)
+        outState.putString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID, gigOrderId)
     }
 
     private fun initUi() {
@@ -294,14 +295,4 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
             year = currentlySelectedMonthYear.year
         )
     }
-
-
-    companion object {
-        const val INTENT_EXTRA_ROLE = "role"
-        const val INTENT_EXTRA_COMPANY_NAME = "company_name"
-        const val INTENT_EXTRA_COMPANY_LOGO = "company_logo"
-        const val INTENT_EXTRA_SELECTED_DATE = "selected_month_year"
-        const val INTENT_EXTRA_GIG_ORDER_ID = "gig_order_id"
-    }
-
 }

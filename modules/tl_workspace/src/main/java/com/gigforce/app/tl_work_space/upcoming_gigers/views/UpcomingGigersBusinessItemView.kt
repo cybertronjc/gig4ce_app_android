@@ -48,7 +48,7 @@ class UpcomingGigersBusinessItemView(
     }
 
     override fun bind(data: Any?) {
-        (data as RetentionScreenData.BusinessItemData).let {
+        (data as UpcomingGigersListData.BusinessItemData).let {
 
             viewBinding.textview.text = it.businessName
         }

@@ -3,27 +3,46 @@ package com.gigforce.app.tl_work_space.compliance_pending
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
-import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
+import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
+import kotlin.random.Random
 
 
 sealed class CompliancePendingFragmentUiState : UiState {
 
     object ScreenInitialisedOrRestored : CompliancePendingFragmentUiState()
 
-    data class LoadingComplianceData(
+    data class LoadingData(
         val alreadyShowingGigersOnView: Boolean
     ) : CompliancePendingFragmentUiState()
 
-    data class ErrorWhileLoadingRetentionData(
+    data class ErrorWhileLoadingData(
         val error: String
     ) : CompliancePendingFragmentUiState()
 
-    data class ShowOrUpdateComplainceData(
-        val dateFilterSelected: TLWorkSpaceFilterOption,
-        val retentionData: List<CompliancePendingScreenData>,
-    ) : CompliancePendingFragmentUiState()
+    data class ShowOrUpdateData(
+        val dateDateFilterSelected: TLWorkSpaceDateFilterOption,
+        val complianceData: List<CompliancePendingScreenData>,
+        val tabData: List<ComplianceStatusData>
+    ) : CompliancePendingFragmentUiState() {
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return Random.nextInt()
+    }
 }
 
 sealed class CompliancePendingFragmentViewEvents : UiEvent {
@@ -31,7 +50,7 @@ sealed class CompliancePendingFragmentViewEvents : UiEvent {
     object RefreshDataClicked : CompliancePendingFragmentViewEvents()
 
     data class BusinessItemClicked(
-        val businessId : String
+        val businessId: String
     ) : CompliancePendingFragmentViewEvents()
 
     data class GigerClicked(
@@ -55,7 +74,7 @@ sealed class CompliancePendingFragmentViewEvents : UiEvent {
         ) : FilterApplied()
 
         data class DateFilterApplied(
-            val filter: TLWorkSpaceFilterOption
+            val dateFilter: TLWorkSpaceDateFilterOption
         ) : FilterApplied()
     }
 }
@@ -75,6 +94,6 @@ sealed class CompliancePendingViewUiEffects : UiEffect {
     ) : CompliancePendingViewUiEffects()
 
     data class ShowDateFilterBottomSheet(
-        val filters: List<TLWorkSpaceFilterOption>
+        val dateFilters: List<TLWorkSpaceDateFilterOption>
     ) : CompliancePendingViewUiEffects()
 }

@@ -2,10 +2,12 @@ package com.gigforce.app.tl_work_space.retentions
 
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.retention.GetRetentionDataRequest
 import com.gigforce.app.domain.models.tl_workspace.retention.GigersRetentionListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceRetentionRepository
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
 import com.gigforce.core.deque.dequeLimiter
@@ -25,7 +27,7 @@ class RetentionViewModel @Inject constructor(
         RetentionFragmentViewUiEffects>
     (
     initialState = RetentionFragmentUiState.ScreenInitialisedOrRestored
-) {
+), CustomTabClickListener {
 
     companion object {
         private const val TAG = "RetentionViewModel"
@@ -39,7 +41,7 @@ class RetentionViewModel @Inject constructor(
     /**
      * Master Data
      */
-    private var filterMaster: List<TLWorkSpaceFilterOption> = emptyList()
+    private var dateDateFilterMaster: List<TLWorkSpaceDateFilterOption> = emptyList()
     private var statusMaster: List<RetentionTabData> = emptyList()
 
     /**
@@ -51,7 +53,7 @@ class RetentionViewModel @Inject constructor(
      *  Current Filters
      */
     private var selectedTabId: String? = null
-    private var currentlySelectedDateFilter: TLWorkSpaceFilterOption? = null
+    private var currentlySelectedDateDateFilter: TLWorkSpaceDateFilterOption? = null
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
@@ -60,8 +62,17 @@ class RetentionViewModel @Inject constructor(
     }
 
     private fun refreshGigersData(
-        dateFilter: TLWorkSpaceFilterOption?
+        dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
+
+        if (dateDateFilter?.filterId == selectedTabId) {
+            //TODO fix this one
+            logger.d(
+                TAG,
+                "ignoring refreshGigersData call as $selectedTabId tab is already selected"
+            )
+            return@launch
+        }
 
         if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
             logger.d(TAG, "ignoring refreshGigersData call, already loading data , no-op")
@@ -78,11 +89,11 @@ class RetentionViewModel @Inject constructor(
             val showSnackBar = rawRetentionGigersList.isNotEmpty()
             val retentionResponse = repository.getRetentionData(
                 GetRetentionDataRequest(
-                    filter = dateFilter?.mapToApiModel()
+                    filter = dateDateFilter?.mapToApiModel()
                 )
             )
 
-            filterMaster = retentionResponse.filters?.map {
+            dateDateFilterMaster = retentionResponse.filters?.map {
                 it.mapToPresentationFilter()
             } ?: emptyList()
 
@@ -95,8 +106,8 @@ class RetentionViewModel @Inject constructor(
 
             rawRetentionGigersList = retentionResponse.gigersRetentionList ?: emptyList()
 
-            setDefaultSeletectedIfNotSet()
-            setDefaultDateFilter(dateFilter)
+            setDefaultSelectedTabIfNotSet()
+            setDefaultDateFilter(dateDateFilter)
 
             processRawRetentionDataAndUpdateOnView(showSnackBar)
         } catch (e: Exception) {
@@ -118,11 +129,11 @@ class RetentionViewModel @Inject constructor(
         }
     }
 
-    private fun setDefaultDateFilter(dateFilter: TLWorkSpaceFilterOption?) {
-        this.currentlySelectedDateFilter = dateFilter ?: getDefaultDateFilter()
+    private fun setDefaultDateFilter(dateDateFilter: TLWorkSpaceDateFilterOption?) {
+        this.currentlySelectedDateDateFilter = dateDateFilter ?: getDefaultDateFilter()
     }
 
-    private fun setDefaultSeletectedIfNotSet() {
+    private fun setDefaultSelectedTabIfNotSet() {
         if (selectedTabId != null)
             return
 
@@ -135,29 +146,36 @@ class RetentionViewModel @Inject constructor(
         }
     }
 
-    private fun getDefaultDateFilter(): TLWorkSpaceFilterOption {
-        return filterMaster.find {
+    private fun getDefaultDateFilter(): TLWorkSpaceDateFilterOption {
+        return dateDateFilterMaster.find {
             it.default
         } ?: throw IllegalStateException("no default filter found")
     }
 
+    /**
+     * Process
+     */
     private fun processRawRetentionDataAndUpdateOnView(
         showDataUpdatedSnackbar: Boolean
     ) {
-        val updatedStatusToGigerWithComplianceMap = RetentionDataProcessor.processRawRetentionDataForListForView(
+        val updatedStatusToGigerWithComplianceMap =
+            RetentionDataProcessor.processRawRetentionDataForListForView(
                 rawGigerRetentionList = rawRetentionGigersList,
                 searchText = searchText,
                 tabMaster = statusMaster,
-                collapsedBusinessIds = collapsedBusiness,
+                collapsedBusiness = collapsedBusiness,
                 selectedTab = getSelectedTab(),
-                retentionViewModel = this
-        )
+                retentionViewModel = this,
+                logger = logger
+            )
         gigersRetentionShownOnView = updatedStatusToGigerWithComplianceMap.second
         val updatedTabMaster = updatedStatusToGigerWithComplianceMap.first
 
         setState {
+
+
             RetentionFragmentUiState.ShowOrUpdateRetentionData(
-                dateFilterSelected = currentlySelectedDateFilter,
+                dateDateFilterSelected = currentlySelectedDateDateFilter,
                 retentionData = gigersRetentionShownOnView,
                 updatedTabMaster = updatedTabMaster
             )
@@ -181,35 +199,50 @@ class RetentionViewModel @Inject constructor(
             is RetentionFragmentViewEvents.GigerClicked -> gigerItemClicked(
                 event.giger
             )
+            is RetentionFragmentViewEvents.BusinessClicked -> businessItemClicked(
+                event.business
+            )
             is RetentionFragmentViewEvents.FilterApplied -> handleFilter(
                 event
             )
             RetentionFragmentViewEvents.RefreshRetentionDataClicked -> refreshGigersData(
-                currentlySelectedDateFilter
+                currentlySelectedDateDateFilter
             )
+            RetentionFragmentViewEvents.OpenDateFilterIconClicked -> openFilterBottomSheet()
+        }
+    }
+
+
+    private fun openFilterBottomSheet() {
+        dateDateFilterMaster.onEach {
+            it.selected = it.filterId == currentlySelectedDateDateFilter?.filterId
+        }
+
+        setEffect {
+            RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet(dateDateFilterMaster)
         }
     }
 
     private fun handleFilter(event: RetentionFragmentViewEvents.FilterApplied) {
         when (event) {
             is RetentionFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshGigersData(
-                event.filter
+                event.dateFilter
             )
             is RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
                 event.searchText
             )
-            is RetentionFragmentViewEvents.FilterApplied.TabSelected -> tabSelected(
-                event.tabId
-            )
+            is RetentionFragmentViewEvents.FilterApplied.TabSelected -> {}
         }
     }
 
-    private fun tabSelected(
-        tabId: String
+
+    private fun businessItemClicked(
+        business: RetentionScreenData.BusinessItemData
     ) {
-        this.selectedTabId = tabId
-        if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
-            return
+        if (collapsedBusiness.contains(business.businessName)) {
+            collapsedBusiness.remove(business.businessName)
+        } else {
+            collapsedBusiness.add(business.businessName)
         }
 
         processRawRetentionDataAndUpdateOnView(
@@ -254,11 +287,22 @@ class RetentionViewModel @Inject constructor(
         }
     }
 
-    private fun getDateFilterOptionFromId(
-        filterId: String
-    ): TLWorkSpaceFilterOption = filterMaster.find {
-        it.filterId == filterId
-    } ?: throw IllegalStateException("status master is empty, there is no filter with $filterId")
 
+    override fun handleCustomTabClick(tabClickedType1: CustomTabData) {
+        logger.v(TAG, "tab clicked : ${tabClickedType1.tabId}")
 
+        if (tabClickedType1.tabId == selectedTabId) {
+            logger.d(TAG, "ignoring tab selected as $selectedTabId tab is already selected")
+            return
+        }
+
+        this.selectedTabId = tabClickedType1.tabId
+        if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
+            return
+        }
+
+        processRawRetentionDataAndUpdateOnView(
+            false
+        )
+    }
 }

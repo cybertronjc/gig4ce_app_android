@@ -8,7 +8,7 @@ import com.gigforce.app.tl_work_space.home.models.ValueChangeType
 object ApiModelToPresentationModelMapper {
 
     fun mapToPresentationList(
-        sectionToSelectedFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceFilterOption?>,
+        sectionToSelectedDateFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceDateFilterOption?>,
         rawData: List<TLWorkSpaceSectionApiModel>,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): List<TLWorkspaceRecyclerItemData> {
@@ -34,17 +34,17 @@ object ApiModelToPresentationModelMapper {
                 TLWorkspaceHomeSection.SELECTIONS
                 -> mapToType1Item(
                     it,
-                    sectionToSelectedFilterMap,
+                    sectionToSelectedDateFilterMap,
                     tlWorkspaceHomeViewModel
                 )
                 TLWorkspaceHomeSection.UPCOMING_GIGERS -> mapToUpcomingGigerItem(
                     it,
-                    sectionToSelectedFilterMap,
+                    sectionToSelectedDateFilterMap,
                     tlWorkspaceHomeViewModel
                 )
                 TLWorkspaceHomeSection.COMPLIANCE_PENDING -> mapToType2Item(
                     it,
-                    sectionToSelectedFilterMap,
+                    sectionToSelectedDateFilterMap,
                     tlWorkspaceHomeViewModel
                 )
             }
@@ -53,7 +53,7 @@ object ApiModelToPresentationModelMapper {
 
     private fun mapToType1Item(
         it: TLWorkSpaceSectionApiModel,
-        sectionToSelectedFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceFilterOption?>,
+        sectionToSelectedDateFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceDateFilterOption?>,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): TLWorkspaceRecyclerItemData.TLWorkspaceType1RecyclerItemData {
         val section = TLWorkspaceHomeSection.fromId(it.sectionId!!)
@@ -65,7 +65,7 @@ object ApiModelToPresentationModelMapper {
                 it.title,
                 it.sectionId!!
             ),
-            currentFilter = sectionToSelectedFilterMap.getOrDefault(
+            currentDateFilter = sectionToSelectedDateFilterMap.getOrDefault(
                 section,
                 null
             ),
@@ -117,7 +117,7 @@ object ApiModelToPresentationModelMapper {
 
     private fun mapToType2Item(
         it: TLWorkSpaceSectionApiModel,
-        sectionToSelectedFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceFilterOption?>,
+        sectionToSelectedDateFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceDateFilterOption?>,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): TLWorkspaceRecyclerItemData.TLWorkspaceType2RecyclerItemData {
         val section = TLWorkspaceHomeSection.fromId(it.sectionId!!)
@@ -129,7 +129,7 @@ object ApiModelToPresentationModelMapper {
                 it.title,
                 it.sectionId!!
             ),
-            currentFilter = sectionToSelectedFilterMap.getOrDefault(
+            currentDateFilter = sectionToSelectedDateFilterMap.getOrDefault(
                 section,
                 null
             ),
@@ -167,7 +167,7 @@ object ApiModelToPresentationModelMapper {
 
     private fun mapToUpcomingGigerItem(
         it: TLWorkSpaceSectionApiModel,
-        sectionToSelectedFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceFilterOption?>,
+        sectionToSelectedDateFilterMap: MutableMap<TLWorkspaceHomeSection, TLWorkSpaceDateFilterOption?>,
         tlWorkspaceHomeViewModel: TLWorkspaceHomeViewModel
     ): TLWorkspaceRecyclerItemData.TLWorkspaceUpcomingGigersRecyclerItemData {
 

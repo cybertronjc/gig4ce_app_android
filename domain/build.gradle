@@ -56,4 +56,12 @@ dependencies {
      */
     implementation Libs.Square.Retrofit.gsonConverter
 
+    implementation Libs.Firebase.mlKitFaceDetection
+    implementation Libs.Firebase.dynamicLinksKtx
+    implementation Libs.Firebase.remoteConfigKtx
+    implementation Libs.Firebase.crashlyticsKtx
+    implementation Libs.Firebase.authKtx
+    implementation Libs.Firebase.firestoreKtx
+    implementation Libs.Firebase.storageKtx
+    implementation Libs.Firebase.storageUi
 }
