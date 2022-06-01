@@ -1,16 +1,17 @@
 package com.gigforce.app.tl_work_space.payout
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.payout.GetGigerPayoutDataRequest
 import com.gigforce.app.domain.models.tl_workspace.payout.GigerPayoutListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspacePayoutRepository
+import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingViewUiEffects
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
-import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
-import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewUiEffects
-import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
 import com.gigforce.core.deque.dequeLimiter
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,7 @@ class GigerPayoutViewModel @Inject constructor(
         GigerPayoutFragmentViewUiEffects>
     (
     initialState = GigerPayoutFragmentUiState.ScreenInitialisedOrRestored
-) {
+), CustomTabClickListener {
     companion object {
         private const val TAG = "GigerPayoutViewModel"
     }
@@ -40,7 +41,7 @@ class GigerPayoutViewModel @Inject constructor(
     /**
      * Master Data
      */
-    private var filterMaster: List<TLWorkSpaceFilterOption> = emptyList()
+    private var filterMaster: List<TLWorkSpaceDateFilterOption> = emptyList()
     private var statusMaster: List<GigerPayoutStatusData> = emptyList()
 
     /**
@@ -52,7 +53,7 @@ class GigerPayoutViewModel @Inject constructor(
      *  Current Filters
      */
     private var selectedTabId: String? = null
-    private var currentlySelectedDateFilter: TLWorkSpaceFilterOption? = null
+    private var currentlySelectedDateFilter: TLWorkSpaceDateFilterOption? = null
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
@@ -61,7 +62,7 @@ class GigerPayoutViewModel @Inject constructor(
     }
 
     private fun refreshGigersData(
-        dateFilter: TLWorkSpaceFilterOption?
+        dateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 
         if (currentState is GigerPayoutFragmentUiState.LoadingGigerPayoutData) {
@@ -126,7 +127,7 @@ class GigerPayoutViewModel @Inject constructor(
         selectedTabId = statusMaster.firstOrNull()?.id
     }
 
-    private fun setDefaultDateFilter(dateFilter: TLWorkSpaceFilterOption?) {
+    private fun setDefaultDateFilter(dateFilter: TLWorkSpaceDateFilterOption?) {
         this.currentlySelectedDateFilter = dateFilter ?: getDefaultDateFilter()
     }
 
@@ -136,7 +137,7 @@ class GigerPayoutViewModel @Inject constructor(
         }
     }
 
-    private fun getDefaultDateFilter(): TLWorkSpaceFilterOption {
+    private fun getDefaultDateFilter(): TLWorkSpaceDateFilterOption {
         return filterMaster.find {
             it.default
         } ?: throw IllegalStateException("no default filter found")
@@ -176,7 +177,7 @@ class GigerPayoutViewModel @Inject constructor(
     override fun handleEvent(event: GigerPayoutFragmentViewEvents) {
         when(event) {
 
-            is GigerPayoutFragmentViewEvents.BusinessClicked -> businessHeaderClicker(event.businessData)
+            is GigerPayoutFragmentViewEvents.BusinessClicked -> businessHeaderClicker(event.businessName)
 
             is GigerPayoutFragmentViewEvents.GigerClicked  -> gigerClicked(
                 event.giger
@@ -192,6 +193,7 @@ class GigerPayoutViewModel @Inject constructor(
             is GigerPayoutFragmentViewEvents.FilterApplied.DateFilterApplied -> refreshGigersData(
                 event.filter
             )
+            is GigerPayoutFragmentViewEvents.FilterApplied.OpenDateFilterDialog -> openDateFilterDialog()
             is GigerPayoutFragmentViewEvents.FilterApplied.SearchFilterApplied -> searchFilterApplied(
                 event.searchText
             )
@@ -201,15 +203,28 @@ class GigerPayoutViewModel @Inject constructor(
         }
     }
 
-    private fun businessHeaderClicker(businessData: GigerPayoutScreenData.BusinessItemData) = viewModelScope.launch{
+    private fun openDateFilterDialog() {
 
-        if (collapsedBusiness.contains(businessData.businessName)){
-            collapsedBusiness.remove(businessData.businessName)
-        } else {
-            collapsedBusiness.add(businessData.businessName)
+        val dateFilterList = filterMaster.onEach {
+            it.selected = it.filterId == currentlySelectedDateFilter?.filterId
         }
 
-        processRawGigerPayoutDataAndUpdateOnView(true)
+        setEffect {
+            GigerPayoutFragmentViewUiEffects.ShowDateFilterBottomSheet(
+                filters = dateFilterList
+            )
+        }
+    }
+
+    private fun businessHeaderClicker(businessName: String) = viewModelScope.launch{
+
+        if (collapsedBusiness.contains(businessName)){
+            collapsedBusiness.remove(businessName)
+        } else {
+            collapsedBusiness.add(businessName)
+        }
+        Log.d("GigerPayoutViewModel", "collapsed: $collapsedBusiness")
+        processRawGigerPayoutDataAndUpdateOnView(false)
 
     }
 
@@ -247,5 +262,9 @@ class GigerPayoutViewModel @Inject constructor(
                 giger
             )
         }
+    }
+
+    override fun handleCustomTabClick(tabClickedType1: CustomTabData) {
+
     }
 }

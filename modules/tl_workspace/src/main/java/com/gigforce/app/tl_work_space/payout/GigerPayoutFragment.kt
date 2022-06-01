@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragmentViewEvents
+import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType2
 import com.gigforce.app.tl_work_space.databinding.GigerPayoutFragmentBinding
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
@@ -22,6 +28,7 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +39,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
-    fragmentName = "GigerPayoutFragment",
+    fragmentName = TAG,
     layoutId = R.layout.giger_payout_fragment,
     statusBarColor = R.color.status_bar_pink
 ) {
+    companion object {
+        const val TAG = "GigerPayoutFragment"
+    }
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
@@ -43,6 +53,31 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentListenerForDateFilterSelection()
+    }
+
+    private fun setFragmentListenerForDateFilterSelection() {
+
+        setFragmentResultListener(
+            TLWorkSpaceNavigation.FRAGMENT_RESULT_KEY_DATE_FILTER,
+            listener = { requestKey: String, bundle: Bundle ->
+
+                if (TLWorkSpaceNavigation.FRAGMENT_RESULT_KEY_DATE_FILTER == requestKey) {
+                    val selectedFilter =
+                        TLWorkSpaceNavigation.FragmentResultHandler.getDateFilterResult(
+                            bundle
+                        ) ?: return@setFragmentResultListener
+
+                    viewModel.setEvent(
+                        GigerPayoutFragmentViewEvents.FilterApplied.DateFilterApplied(selectedFilter)
+                    )
+                }
+            }
+        )
     }
 
     override fun viewCreated(
@@ -67,7 +102,11 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
                     findNavController().navigateUp()
                 }
             }
-
+            filterImageButton.setOnClickListener {
+                viewModel.setEvent(
+                    GigerPayoutFragmentViewEvents.FilterApplied.OpenDateFilterDialog
+                )
+            }
             changeBackButtonDrawable()
             lifecycleScope.launchWhenCreated {
 
@@ -121,11 +160,14 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
     }
 
     private fun handleDataLoaded(
-        dateFilterSelected: TLWorkSpaceFilterOption?,
+        dateFilterSelected: TLWorkSpaceDateFilterOption?,
         gigerPayoutData: List<GigerPayoutScreenData>,
         updatedTabMaster: List<GigerPayoutStatusData>
     ) = viewBinding.apply{
-        Log.d("PayoutData", "gigers: $gigerPayoutData")
+
+        setSelectedDateFilterOnAppBar(dateFilterSelected)
+        updateTabs(updatedTabMaster)
+
         swipeRefreshLayout.isRefreshing = false
         stopShimmer(
             shimmerContainer,
@@ -139,18 +181,20 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         )
     }
 
-    private fun showOrHideNoDataLayout(dataAvailableToShowOnScreen: Boolean) = viewBinding.apply{
+    private fun showOrHideNoDataLayout(dataAvailableToShowOnScreen: Boolean) = viewBinding.payoutMainLayout.infoLayoutPayout.apply{
         if (dataAvailableToShowOnScreen) {
-//            infoLayout.root.visible()
-//            infoLayout.infoMessageTv.text = "Nothing to show yet, please check later"
+            root.gone()
+            infoMessageTv.text = null
         } else {
-//            infoLayout.root.gone()
-//            infoLayout.infoMessageTv.text = null
+            this.root.visible()
+            this.infoMessageTv.text = "No gigers to show"
         }
 
     }
 
     private fun handleLoadingState(alreadyShowingGigersOnView: Boolean) = viewBinding.apply{
+        this.payoutMainLayout.infoLayoutPayout.root.gone()
+
         if (alreadyShowingGigersOnView) {
 
             if (!swipeRefreshLayout.isRefreshing) {
@@ -187,9 +231,27 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
 
     }
 
-    private fun handleErrorLoadingInPayoutData(error: String)  = viewBinding.apply{
+    private fun handleErrorLoadingInPayoutData(error: String)  = viewBinding.apply {
+        swipeRefreshLayout.isRefreshing = false
+        stopShimmer(
+            shimmerContainer,
+            R.id.shimmer_controller
+        )
+        shimmerContainer.gone()
 
+        if (this.payoutMainLayout.recyclerViewPayout.childCount == 0) {
 
+            payoutMainLayout.infoLayoutPayout.root.visible()
+            payoutMainLayout.infoLayoutPayout.infoMessageTv.text = error
+        } else {
+            payoutMainLayout.infoLayoutPayout.root.gone()
+
+            Snackbar.make(
+                rootFrameLayout,
+                error,
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun observeViewEffects() = lifecycleScope.launchWhenCreated{
@@ -213,13 +275,50 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
 
     }
 
-    private fun showDateFilterBottomSheet(filters: List<TLWorkSpaceFilterOption>) {
-
+    private fun showDateFilterBottomSheet(filters: List<TLWorkSpaceDateFilterOption>) {
+        tlWorkSpaceNavigation.openFilterBottomSheet(
+            filters
+        )
     }
 
     private fun openGigerDetailScreen(gigerDetails: GigerPayoutScreenData.GigerItemData) {
+        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
+            gigerDetails.gigerId
+        )
 
+    }
 
+    private fun setSelectedDateFilterOnAppBar(
+        selectedDateDateFilter: TLWorkSpaceDateFilterOption?
+    ) {
+        val dateFilter = selectedDateDateFilter ?: return
+        viewBinding.appBar.setSubTitle(dateFilter.getFilterString())
+    }
+
+    private fun updateTabs(
+        updatedTabMaster: List<GigerPayoutStatusData>
+    ) = viewBinding.payoutMainLayout.tabRecyclerView.apply {
+        if (updatedTabMaster.isEmpty()) return@apply
+
+        if (layoutManager == null) {
+            layoutManager = GridLayoutManager(
+                requireContext(),
+                3
+            )
+        }
+
+        val tabsList = updatedTabMaster.map {
+            CustomTabDataType1(
+                id = it.id,
+                title = it.title,
+                value = it.value,
+                selected = it.selected,
+                valueChangedBy = it.countChangedBy,
+                changeType = it.changeType,
+                tabClickListener = it.viewModel
+            )
+        }
+        collection = tabsList
     }
 
     private fun showSnackBar(

@@ -9,6 +9,7 @@ open class GigerPayoutStatusData(
      val title: String,
      var value: Int,
      val countChangedBy: Int,
+     var selected : Boolean,
      val changeType: ValueChangeType,
      val viewModel: GigerPayoutViewModel
 ) {
@@ -24,6 +25,7 @@ open class GigerPayoutStatusData(
                 countChangedBy = statusMasterWithCountItem.countChangedBy ?: 0,
                 changeType = ValueChangeType.fromChangeString(statusMasterWithCountItem.countChangeType),
                 viewModel = viewModel,
+                selected = false,
                 id = statusMasterWithCountItem.id
                     ?: throw IllegalArgumentException("RetentionTabData: fromAPiModel() -id found null in retention status")
             )

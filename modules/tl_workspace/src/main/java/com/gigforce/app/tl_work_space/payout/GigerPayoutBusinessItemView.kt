@@ -2,6 +2,7 @@ package com.gigforce.app.tl_work_space.payout
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -26,7 +27,7 @@ class GigerPayoutBusinessItemView (
 
         setDefault()
         inflate()
-        setOnClickListener(this)
+
     }
 
     private fun setDefault() {
@@ -43,12 +44,14 @@ class GigerPayoutBusinessItemView (
             this,
             true
         )
+
+        viewBinding.root.setOnClickListener(this)
     }
 
     override fun bind(data: Any?) {
         (data as GigerPayoutScreenData.BusinessItemData?)?.let {
 
-            viewBinding.statusTv.text = it.businessName
+            viewBinding.statusTv.text = "${it.businessName + "(" + it.count + ")"}"
 
             if (it.expanded) {
 
@@ -73,8 +76,8 @@ class GigerPayoutBusinessItemView (
     override fun onClick(
         p0: View?
     ) {
-        viewData?.let {
-            it.viewModel.handleEvent(GigerPayoutFragmentViewEvents.BusinessClicked(it))
-        }
+        viewData?.viewModel?.setEvent(
+            GigerPayoutFragmentViewEvents.BusinessClicked(viewData!!.businessName)
+        )
     }
 }

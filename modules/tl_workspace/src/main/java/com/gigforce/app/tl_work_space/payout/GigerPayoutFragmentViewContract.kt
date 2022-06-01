@@ -3,7 +3,8 @@ package com.gigforce.app.tl_work_space.payout
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
-import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceFilterOption
+import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
+import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragmentViewEvents
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
 
@@ -20,7 +21,7 @@ sealed class GigerPayoutFragmentUiState : UiState{
     ) : GigerPayoutFragmentUiState()
 
     data class ShowOrUpdateGigerPayoutData(
-        val dateFilterSelected: TLWorkSpaceFilterOption?,
+        val dateFilterSelected: TLWorkSpaceDateFilterOption?,
         val gigerPayoutData: List<GigerPayoutScreenData>,
         val updatedTabMaster: List<GigerPayoutStatusData>,
     ) : GigerPayoutFragmentUiState()
@@ -40,10 +41,12 @@ sealed class GigerPayoutFragmentViewEvents : UiEvent {
     ) : GigerPayoutFragmentViewEvents()
 
     data class BusinessClicked(
-        val businessData: GigerPayoutScreenData.BusinessItemData
+        val businessName: String
     ) : GigerPayoutFragmentViewEvents()
 
     sealed class FilterApplied : GigerPayoutFragmentViewEvents() {
+
+        object OpenDateFilterDialog : FilterApplied()
 
         data class TabSelected(
             val tabId: String
@@ -54,7 +57,7 @@ sealed class GigerPayoutFragmentViewEvents : UiEvent {
         ) : FilterApplied()
 
         data class DateFilterApplied(
-            val filter: TLWorkSpaceFilterOption
+            val filter: TLWorkSpaceDateFilterOption
         ) : FilterApplied()
     }
 }
@@ -74,6 +77,6 @@ sealed class GigerPayoutFragmentViewUiEffects : UiEffect {
     ) : GigerPayoutFragmentViewUiEffects()
 
     data class ShowDateFilterBottomSheet(
-        val filters: List<TLWorkSpaceFilterOption>
+        val filters: List<TLWorkSpaceDateFilterOption>
     ) : GigerPayoutFragmentViewUiEffects()
 }
