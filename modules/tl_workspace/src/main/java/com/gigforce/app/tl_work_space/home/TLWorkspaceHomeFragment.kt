@@ -1,21 +1,19 @@
 package com.gigforce.app.tl_work_space.home
 
-import android.animation.Animator
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.animation.OvershootInterpolator
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
@@ -65,6 +63,27 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         return true
     }
 
+    private val backPressCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+
+            if (viewBinding.actionsAttachment.isAttachmentOptionViewVisible()) {
+                viewBinding.actionsAttachment.hideAttachmentOptionView()
+                viewBinding.middleView.gone()
+            } else {
+                findNavController().navigateUp()
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(backPressCallback)
+    }
+
     override fun viewCreated(
         viewBinding: FragmentTlWorkspaceHomeBinding,
         savedInstanceState: Bundle?
@@ -101,7 +120,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         )
 
         middleView.setOnClickListener {
-            if (middleView.isVisible && actionsAttachment.isAttachmentOptionViewVisible()){
+            if (middleView.isVisible && actionsAttachment.isAttachmentOptionViewVisible()) {
                 actionsAttachment.hideAttachmentOptionView()
                 middleView.gone()
             } else {
@@ -172,7 +191,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenActivityTrackerScreen -> tlWorkSpaceNavigation.navigateToActivityTrackerListScreen(
                 it.title
             )
-            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenGigerDetailsBottomSheet -> tlWorkSpaceNavigation.openGigerInfoBottomSheet(
+            is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenGigerDetailsBottomSheet -> tlWorkSpaceNavigation.openUpcomingGigerInfoBottomSheet(
                 it.gigerId
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenJoininingScreen -> tlWorkSpaceNavigation.navigateToJoiningListScreen(
@@ -483,7 +502,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     override fun onClick(attachmentOption: ActionsAttachmentOption?) {
-        when(attachmentOption?.id) {
+        when (attachmentOption?.id) {
             ActionsAttachmentOption.SELECTION_FORM_ID -> {
                 tlWorkSpaceNavigation.navigateToJoiningListScreen(
                     "Selection Form"
@@ -526,10 +545,15 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     override fun isVisible(visible: Boolean?) {
-        if (visible == true){
+        if (visible == true) {
             viewBinding.middleView.visible()
         } else {
             viewBinding.middleView.gone()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        backPressCallback.remove()
     }
 }

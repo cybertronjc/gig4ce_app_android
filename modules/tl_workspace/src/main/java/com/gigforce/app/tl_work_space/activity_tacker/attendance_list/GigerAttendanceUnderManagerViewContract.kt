@@ -46,10 +46,6 @@ class GigerAttendanceUnderManagerViewContract {
 
         sealed class FiltersApplied : UiEvent(){
 
-            data class TabChanged(
-                val tab : String
-            ) : FiltersApplied()
-
             data class DateChanged(
                 val date : LocalDate
             ) : FiltersApplied()

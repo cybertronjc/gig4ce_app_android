@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="action_icon"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            app:backgroundTint="@color/white"
+            app:fabCustomSize="40dp"
+            app:tint="@color/lipstick_2" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/lato"
+            android:lineHeight="18sp"
+            android:textColor="@color/black"
+            android:textFontWeight="400"
+            android:textSize="9sp" />
+
+    </LinearLayout>
+
+</layout>

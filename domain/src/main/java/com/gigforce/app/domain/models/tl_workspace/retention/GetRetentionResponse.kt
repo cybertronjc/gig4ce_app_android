@@ -17,7 +17,7 @@ data class GetRetentionResponse(
 
 data class StatusMasterWithCountItem(
 
-	@field:SerializedName("valueChangeType")
+	@field:SerializedName("valueChangeType", alternate = arrayOf("countChangeType"))
 	val valueChangeType: String? = null,
 
 	@field:SerializedName("count")
@@ -26,7 +26,7 @@ data class StatusMasterWithCountItem(
 	@field:SerializedName("id", alternate = arrayOf("cardId"))
 	val id: String? = null,
 
-	@field:SerializedName("valueChangedBy")
+	@field:SerializedName("valueChangedBy", alternate = arrayOf("countChangedBy"))
 	val valueChangedBy: Int? = null,
 
 	@field:SerializedName("title")

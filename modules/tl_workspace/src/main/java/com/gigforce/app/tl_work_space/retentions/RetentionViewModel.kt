@@ -65,14 +65,14 @@ class RetentionViewModel @Inject constructor(
         dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 
-        if (dateDateFilter?.filterId == selectedTabId) {
-            //TODO fix this one
-            logger.d(
-                TAG,
-                "ignoring refreshGigersData call as $selectedTabId tab is already selected"
-            )
-            return@launch
-        }
+//        if (dateDateFilter?.filterId == selectedTabId) {
+//            //TODO fix this one
+//            logger.d(
+//                TAG,
+//                "ignoring refreshGigersData call as $selectedTabId tab is already selected"
+//            )
+//            return@launch
+//        }
 
         if (currentState is RetentionFragmentUiState.LoadingRetentionData) {
             logger.d(TAG, "ignoring refreshGigersData call, already loading data , no-op")

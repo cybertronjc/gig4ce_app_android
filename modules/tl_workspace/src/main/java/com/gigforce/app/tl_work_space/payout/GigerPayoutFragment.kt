@@ -282,9 +282,9 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
     }
 
     private fun openGigerDetailScreen(gigerDetails: GigerPayoutScreenData.GigerItemData) {
-        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-            gigerDetails.gigerId
-        )
+//        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
+//            gigerDetails.gigerId
+//        )
 
     }
 

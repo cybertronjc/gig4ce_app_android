@@ -23,6 +23,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     /** Tab in Retention, Payout etc */
     const val CustomTabType1 = 3323312
     const val CustomTabType2 = 3325622
+
     /**
      * -----------------------------
      * TL Workspace HomeScreen Items
@@ -48,8 +49,8 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
      * -----------------
      * Upcoming Giger view [Attendance Tracker]
      */
-    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER  = 34351111
-    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM  = 34351166;
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER = 34351111
+    const val VIEW_TYPE_TL_GIGER_ATTENDANCE_ITEM = 34351166;
 
     /**
      * -----------------
@@ -73,24 +74,25 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val GigerPayoutGigerItemType = 392457
     const val GigerPayoutBusinessItemType = 3374890
 
+
     override fun getView(
         context: Context,
         viewType: Int
-    ): View? = when(viewType) {
-        CustomTabType1 -> TabType1CardView(context,null)
-        CustomTabType2 ->  TabType2CardView(context,null)
+    ): View? = when (viewType) {
+        CustomTabType1 -> TabType1CardView(context, null)
+        CustomTabType2 -> TabType2CardView(context, null)
 
-        TLWorkspaceType1SectionItemType -> TLWorkspaceType1SectionView(context,null)
-        TLWorkspaceType1InnerCardType -> TLWorkspaceType1SectionInnerCardView(context,null)
+        TLWorkspaceType1SectionItemType -> TLWorkspaceType1SectionView(context, null)
+        TLWorkspaceType1InnerCardType -> TLWorkspaceType1SectionInnerCardView(context, null)
 
-        TLWorkspaceType2SectionItemType -> TLWorkspaceType2SectionView(context,null)
-        TLWorkspaceType2InnerCardType -> TLWorkspaceType2InnerCardView(context,null)
+        TLWorkspaceType2SectionItemType -> TLWorkspaceType2SectionView(context, null)
+        TLWorkspaceType2InnerCardType -> TLWorkspaceType2InnerCardView(context, null)
 
-        UpcomingGigersSectionItemType -> TLWorkspaceUpcomingGigersSectionView(context,null)
-        UpcomingGigersInnerItemType -> TLWorkspaceUpcomingGigersItemView(context,null)
+        UpcomingGigersSectionItemType -> TLWorkspaceUpcomingGigersSectionView(context, null)
+        UpcomingGigersInnerItemType -> TLWorkspaceUpcomingGigersItemView(context, null)
 
-        UpcomingGigersItemType -> UpcomingGigersItemView(context,null)
-        UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context,null)
+        UpcomingGigersItemType -> UpcomingGigersItemView(context, null)
+        UpcomingGigersBusinessItemType -> UpcomingGigersBusinessItemView(context, null)
 
         VIEW_TYPE_TL_GIGER_ATTENDANCE_BUSINESS_HEADER -> BusinessHeaderRecyclerItemView(
             context,
@@ -101,14 +103,14 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
             null
         )
 
-        RetentionGigerItemType -> RetentionGigerItemView(context,null)
-        RetentionBusinessItemType -> RetentionBusinessItemView(context,null)
+        RetentionGigerItemType -> RetentionGigerItemView(context, null)
+        RetentionBusinessItemType -> RetentionBusinessItemView(context, null)
 
         GigerPayoutGigerItemType -> GigerPayoutGigerItemView(context, null)
         GigerPayoutBusinessItemType -> GigerPayoutBusinessItemView(context, null)
 
-        ComplianceBusinessItemType -> ComplianceBusinessItemView(context,null)
-        ComplianceGigerItemType -> ComplianceGigerItemView(context,null)
+        ComplianceBusinessItemType -> ComplianceBusinessItemView(context, null)
+        ComplianceGigerItemType -> ComplianceGigerItemView(context, null)
 
         else -> null
     }

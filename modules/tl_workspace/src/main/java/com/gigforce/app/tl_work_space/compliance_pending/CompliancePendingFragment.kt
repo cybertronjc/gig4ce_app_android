@@ -341,9 +341,9 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
     private fun openGigerDetailsScreen(
         gigerDetails: CompliancePendingScreenData.GigerItemData
     ) {
-        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-            gigerDetails.gigerId
-        )
+//        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
+//            gigerDetails.gigerId
+//        )
     }
 
     private fun showDateFilter(dateFilters: List<TLWorkSpaceDateFilterOption>) {

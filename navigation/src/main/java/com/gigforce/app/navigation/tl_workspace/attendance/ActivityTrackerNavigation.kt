@@ -92,6 +92,4 @@ class ActivityTrackerNavigation @Inject constructor(
         ),
         NavigationOptions.getNavOptions()
     )
-
-
 }

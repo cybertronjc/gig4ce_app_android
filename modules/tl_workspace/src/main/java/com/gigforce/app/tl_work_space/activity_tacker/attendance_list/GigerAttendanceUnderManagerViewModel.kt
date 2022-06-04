@@ -133,9 +133,6 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         is GigerAttendanceUnderManagerViewContract.UiEvent.FiltersApplied.SearchTextChanged -> searchAttendance(
             event.searchText
         )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.FiltersApplied.TabChanged -> filterAttendanceByStatus(
-            event.tab
-        )
         is GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemResolveClicked -> resolveButtonClicked(
             event.attendance
         )
@@ -323,16 +320,16 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     fun filterAttendanceByStatus(
-        status: String
+        status: CustomTabData
     ) = viewModelScope.launch(Dispatchers.IO) {
-        currentlySelectedStatus = status
+        currentlySelectedStatus = status.tabId
 
         if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
             return@launch
         }
         processAttendanceListAndEmitToView(
             showDataUpdatedToast = false,
-            updateStatusTabsCount = false
+            updateStatusTabsCount = true
         )
     }
 
@@ -411,7 +408,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     override fun handleCustomTabClick(
         tabClickedType1: CustomTabData
     ) {
-        filterAttendanceByStatus(tabClickedType1.tabId)
+        filterAttendanceByStatus(tabClickedType1)
     }
 
 

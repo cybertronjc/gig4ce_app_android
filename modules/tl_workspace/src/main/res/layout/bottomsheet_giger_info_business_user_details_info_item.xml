@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/imageView"
+            android:layout_width="14dp"
+            android:layout_height="14dp" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/lato"
+            android:lineHeight="18sp"
+            android:textColor="#556268"
+            android:textFontWeight="400"
+            android:textSize="12sp"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/valueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:lineHeight="18sp"
+            android:textColor="#000000"
+            android:textFontWeight="600"
+            android:textSize="12sp"
+            tools:text=": Data" />
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/action_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginRight="20dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_content_copy_24" />
+
+    </LinearLayout>
+</layout>

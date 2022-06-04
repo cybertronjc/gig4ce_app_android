@@ -176,9 +176,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     private fun openGigerDetailsScreen(
         gigerDetails: RetentionScreenData.GigerItemData
     ) {
-        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-            gigerDetails.gigerId
-        )
+//        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
+//            gigerDetails.gigerId
+//        )
     }
 
     private fun dialPhoneNumber(

@@ -25,7 +25,7 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_HELP_SCREEN = "HelpSectionFragment"
 
         const val NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET = "tl_workspace/date_filter_bottom_sheet"
-
+        const val NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET = "tl_workspace/giger_info_bottomsheet"
 
         //Intent extras
         const val INTENT_EXTRA_DATE_FILTER_OPTIONS = "date_filter_options"
@@ -33,7 +33,14 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val INTENT_EXTRA_GIGER_ID = "giger_id"
         const val INTENT_EXTRA_PAYOUT_ID = "payout_id"
+        const val INTENT_EXTRA_BUSINESS_ID = "business_id"
+        const val INTENT_EXTRA_JOB_PROFILE_ID = "job_profile_id"
+        const val INTENT_EXTRA_E_JOINING_ID = "e_joining_id"
+        const val INTENT_OPEN_USER_DETAILS_OF = "open_details_of"
 
+        const val COMPLIANCE = "compliance"
+        const val RETENTION = "retention"
+        const val PAYOUT = "payout"
 
         //Fragment ListenerKey
         const val FRAGMENT_RESULT_KEY_DATE_FILTER = "key_date_filter"
@@ -41,9 +48,10 @@ class TLWorkSpaceNavigation @Inject constructor(
 
     object FragmentResultHandler {
 
-        fun getDateFilterResult(bundle: Bundle): TLWorkSpaceDateFilterOption? = bundle.getParcelable(
-            INTENT_EXTRA_SELECTED_DATE_FILTER
-        )
+        fun getDateFilterResult(bundle: Bundle): TLWorkSpaceDateFilterOption? =
+            bundle.getParcelable(
+                INTENT_EXTRA_SELECTED_DATE_FILTER
+            )
     }
 
     fun navigateToTLWorkSpaceHomeScreen(
@@ -120,12 +128,13 @@ class TLWorkSpaceNavigation @Inject constructor(
         )
     }
 
-    fun openGigerInfoBottomSheet(
+    fun openUpcomingGigerInfoBottomSheet(
         gigerId: String
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_TL_WORKSPACE_HOME,
             bundleOf(
+                INTENT_OPEN_USER_DETAILS_OF to COMPLIANCE,
                 INTENT_EXTRA_GIGER_ID to gigerId
             ),
             NavigationOptions.getNavOptions()
@@ -147,20 +156,67 @@ class TLWorkSpaceNavigation @Inject constructor(
     }
 
     fun openGigerInfoBottomSheetForRetention(
-        gigerId: String
+        gigerId: String,
+        jobProfileId: String,
+        businessId: String,
+        eJoiningId: String
     ) {
         navigation.navigateTo(
-            NAV_DESTINATION_TL_WORKSPACE_HOME,
+            NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
             bundleOf(
-                INTENT_EXTRA_GIGER_ID to gigerId
+                INTENT_OPEN_USER_DETAILS_OF to RETENTION,
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_BUSINESS_ID to businessId,
+                INTENT_EXTRA_E_JOINING_ID to eJoiningId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openGigerInfoBottomSheetForCompliance(
+        gigerId: String,
+        jobProfileId: String,
+        businessId: String,
+        eJoiningId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
+            bundleOf(
+                INTENT_OPEN_USER_DETAILS_OF to COMPLIANCE,
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_BUSINESS_ID to businessId,
+                INTENT_EXTRA_E_JOINING_ID to eJoiningId
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openGigerInfoBottomSheetForPayout(
+        gigerId: String,
+        jobProfileId: String,
+        businessId: String,
+        eJoiningId: String,
+        payoutId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
+            bundleOf(
+                INTENT_OPEN_USER_DETAILS_OF to PAYOUT,
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_BUSINESS_ID to businessId,
+                INTENT_EXTRA_E_JOINING_ID to eJoiningId,
+                INTENT_EXTRA_PAYOUT_ID to payoutId
             ),
             NavigationOptions.getNavOptions()
         )
     }
 
     fun navigateToJoiningListScreen(
-        title : String
-    ){
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_SELECTION_LIST,
             bundleOf(
@@ -172,8 +228,8 @@ class TLWorkSpaceNavigation @Inject constructor(
 
 
     fun navigateToPayoutListScreen(
-        title : String
-    ){
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_GIGER_PAYOUT,
             bundleOf(
@@ -184,8 +240,8 @@ class TLWorkSpaceNavigation @Inject constructor(
     }
 
     fun navigateToActivityTrackerListScreen(
-        title : String
-    ){
+        title: String
+    ) {
         navigation.navigateTo(
             NAV_DESTINATION_ACTIVITY_TRACKER,
             bundleOf(

@@ -126,20 +126,31 @@ object AttendanceUnderTLListDataProcessor {
         currentlySelectedStatus: String
     ): List<AttendanceTabData> {
 
+        var enabled = 0
+        var active = 0
+        var inactive = 0
+
+        attendance.forEach {
+            enabled++
+
+            if(it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT){
+                active++
+            } else{
+                inactive++
+            }
+        }
 
         return tabsMaster.onEach { currentWorkingOnItem ->
 
             if (currentWorkingOnItem.id == StatusFilters.ENABLED) {
-                currentWorkingOnItem.value = tabsMaster.count()
+                currentWorkingOnItem.value = enabled
             } else if (currentWorkingOnItem.id == StatusFilters.ACTIVE) {
-                currentWorkingOnItem.value = attendance.count {
-                    it.getFinalAttendanceStatus() == AttendanceStatus.PRESENT
-                }
+                currentWorkingOnItem.value = active
             } else if (currentWorkingOnItem.id == StatusFilters.INACTIVE) {
-                currentWorkingOnItem.value = attendance.count {
-                    it.getFinalAttendanceStatus() == AttendanceStatus.ABSENT
-                }
+                currentWorkingOnItem.value = inactive
             }
+
+            currentWorkingOnItem.selected  = currentWorkingOnItem.id == currentlySelectedStatus
         }
     }
 

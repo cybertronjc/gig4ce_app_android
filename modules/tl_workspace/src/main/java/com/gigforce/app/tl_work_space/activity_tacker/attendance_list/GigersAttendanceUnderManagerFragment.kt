@@ -415,18 +415,18 @@ class GigersAttendanceUnderManagerFragment :
             )
         }
 
-//        val tabsList = updatedTabMaster.map {
-//            CustomTabDataType1(
-//                id = it.status,
-//                title = it.title,
-//                value = it.value,
-//                selected = it.selected,
-//                valueChangedBy = it.valueChangedBy,
-//                changeType = it.changeType,
-//                tabClickListener = it.viewModel
-//            )
-//        }
-//        collection = tabsList
+        val tabsList = updatedTabMaster.map {
+            CustomTabDataType1(
+                id = it.id,
+                title = it.title,
+                value = it.value,
+                selected = it.selected,
+                valueChangedBy = it.valueChangedBy,
+                changeType = it.changeType,
+                tabClickListener = it.viewModel
+            )
+        }
+        collection = tabsList
     }
 
 
