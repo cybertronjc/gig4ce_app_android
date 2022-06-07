@@ -19,14 +19,14 @@ open class UserInfoBottomSheetData {
         val id: String,
         @DrawableRes val icon: Int,
         val text: String,
-        val viewModel : UserInfoBottomSheetViewModel
+        val viewModel : UserInfoBottomSheetViewModel,
+        val navigationRoute: String? = null,
     )
 
     data class RetentionComplianceWarningCardData(
         val warningText: String,
         @DrawableRes val icon: Int,
         val backgroundColorCode: String,
-        val lastActiveText: String?,
         val actionButton: UserInfoActionButtonData?,
         val viewModel: UserInfoBottomSheetViewModel
     ) : UserInfoBottomSheetData()

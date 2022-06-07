@@ -4,6 +4,7 @@ import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
+import java.time.LocalDate
 
 sealed class GigerInformationDetailsBottomSheetFragmentViewState : UiState {
 
@@ -36,8 +37,18 @@ sealed class GigerInformationDetailsBottomSheetFragmentViewEffects : UiEffect {
     /**
      * Buttons below user picture clicked
      */
-    data class ActionButtonClicked(
-        val actionButton : UserInfoBottomSheetData.UserInfoActionButtonData
+    data class CallPhoneNumber(
+        val phoneNumber : String
+    ) : GigerInformationDetailsBottomSheetFragmentViewEffects()
+
+    data class DropGiger(
+        val jobProfileId : String,
+        val gigerId : String
+    ) : GigerInformationDetailsBottomSheetFragmentViewEffects()
+
+    data class DownloadPayslip(
+        val businessName :String,
+        val payslipUrl : String
     ) : GigerInformationDetailsBottomSheetFragmentViewEffects()
 
 }

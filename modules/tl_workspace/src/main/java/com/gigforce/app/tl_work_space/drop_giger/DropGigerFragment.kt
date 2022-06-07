@@ -1,11 +1,10 @@
-package com.gigforce.app.tl_work_space.retentions
+package com.gigforce.app.tl_work_space.drop_giger
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,10 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
-import com.gigforce.app.tl_work_space.databinding.FragmentRetentionBinding
-import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
-import com.gigforce.app.tl_work_space.retentions.models.RetentionTabData
+import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
+import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
+import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType2
+import com.gigforce.app.tl_work_space.databinding.FragmentCompliancePendingBinding
+import com.gigforce.app.tl_work_space.databinding.FragmentDropGigerBinding
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
@@ -37,19 +37,18 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
-    fragmentName = "RetentionFragment",
-    layoutId = R.layout.fragment_retention,
-    statusBarColor = R.color.status_bar_pink
+class DropGigerFragment : BaseFragment2<FragmentDropGigerBinding>(
+    fragmentName = TAG,
+    layoutId = R.layout.fragment_drop_giger,
+    statusBarColor = R.color.lipstick_2
 ) {
     companion object {
-        const val TAG = "RetentionFragment"
+        const val TAG = "DropGigerFragment"
     }
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
-    private val viewModel: RetentionViewModel by viewModels()
-
+    private val viewModel: CompliancePendingViewModel by viewModels()
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
     }
@@ -72,7 +71,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
                         ) ?: return@setFragmentResultListener
 
                     viewModel.setEvent(
-                        RetentionFragmentViewEvents.FilterApplied.DateFilterApplied(selectedFilter)
+                        CompliancePendingFragmentViewEvents.FilterApplied.DateFilterApplied(
+                            selectedFilter
+                        )
                     )
                 }
             }
@@ -80,10 +81,12 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     override fun viewCreated(
-        viewBinding: FragmentRetentionBinding,
+        viewBinding: FragmentDropGigerBinding,
         savedInstanceState: Bundle?
     ) {
+
         if (viewCreatedForTheFirstTime) {
+
             initView()
             observeViewStates()
             observeViewEffects()
@@ -93,8 +96,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
     private fun initView() = viewBinding.apply {
 
+
         appBar.apply {
-            setAppBarTitle(getToolBarTitleReceivedFromPreviousScreen() ?: "Retention")
+            setAppBarTitle(getToolBarTitleReceivedFromPreviousScreen() ?: "Pending Compliance")
             setBackButtonListener {
 
                 if (isSearchCurrentlyShown) {
@@ -105,7 +109,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             }
             filterImageButton.setOnClickListener {
                 viewModel.setEvent(
-                    RetentionFragmentViewEvents.OpenDateFilterIconClicked
+                    CompliancePendingFragmentViewEvents.FilterApplied.OpenDateFilterDialog
                 )
             }
 
@@ -120,7 +124,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
                         Log.d("Search ", "Searhcingg...$searchString")
                         viewModel.setEvent(
-                            RetentionFragmentViewEvents.FilterApplied.SearchFilterApplied(
+                            CompliancePendingFragmentViewEvents.FilterApplied.SearchFilterApplied(
                                 searchString
                             )
                         )
@@ -129,69 +133,23 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         }
 
 
-        this.retentionMainLayout.recyclerView.apply {
+        this.mainLayout.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             itemAnimator = DefaultItemAnimator()
-            setDiffUtilCallback(RetentionListDiffUtil())
+            setDiffUtilCallback(CompliancePendingListDiffUtil())
             setHasFixedSize(true)
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.setEvent(RetentionFragmentViewEvents.RefreshRetentionDataClicked)
+
+            viewModel.setEvent(
+                CompliancePendingFragmentViewEvents.RefreshDataClicked
+            )
         }
-        viewBinding.retentionMainLayout.infoLayout.infoIv.loadImage(
+
+        viewBinding.mainLayout.infoLayout.infoIv.loadImage(
             R.drawable.ic_dragon_sleeping_animation
         )
-    }
-
-    private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
-
-        viewModel
-            .effect
-            .collect {
-
-                when (it) {
-                    is RetentionFragmentViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
-                        it.phoneNumber
-                    )
-                    is RetentionFragmentViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
-                        it.gigerDetails
-                    )
-                    is RetentionFragmentViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
-                        it.dateFilters
-                    )
-                    is RetentionFragmentViewUiEffects.ShowSnackBar -> showSnackBar(
-                        it.message
-                    )
-                }
-            }
-    }
-
-    private fun showDateFilter(dateFilters: List<TLWorkSpaceDateFilterOption>) {
-        tlWorkSpaceNavigation.openFilterBottomSheet(
-            dateFilters
-        )
-    }
-
-    private fun openGigerDetailsScreen(
-        gigerDetails: RetentionScreenData.GigerItemData
-    ) {
-        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-            gigerId = gigerDetails.gigerId,
-            jobProfileId = gigerDetails.jobProfileId ?: "",//TODO fix this
-            businessId = gigerDetails.businessId ?: ""
-        )
-    }
-
-    private fun dialPhoneNumber(
-        phoneNumber: String
-    ) {
-        try {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
-            startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     private fun observeViewStates() = lifecycleScope.launchWhenCreated {
@@ -200,17 +158,17 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             .collect {
 
                 when (it) {
-                    is RetentionFragmentUiState.ErrorWhileLoadingRetentionData -> handleErrorInLoadingData(
+                    is CompliancePendingFragmentUiState.ErrorWhileLoadingData -> handleErrorInLoadingData(
                         it.error
                     )
-                    is RetentionFragmentUiState.LoadingRetentionData -> handleLoadingState(
+                    is CompliancePendingFragmentUiState.LoadingData -> handleLoadingState(
                         it.alreadyShowingGigersOnView
                     )
-                    RetentionFragmentUiState.ScreenInitialisedOrRestored -> {}
-                    is RetentionFragmentUiState.ShowOrUpdateRetentionData -> handleDataLoadedState(
-                        it.dateDateFilterSelected,
-                        it.retentionData,
-                        it.updatedTabMaster
+                    CompliancePendingFragmentUiState.ScreenInitialisedOrRestored -> {}
+                    is CompliancePendingFragmentUiState.ShowOrUpdateData -> handleDataLoadedState(
+                        selectedDateDateFilter = it.dateDateFilterSelected,
+                        complianceData = it.complianceData,
+                        updatedTabMaster = it.tabData
                     )
                 }
             }
@@ -226,12 +184,12 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         )
         shimmerContainer.gone()
 
-        if (this.retentionMainLayout.recyclerView.childCount == 0) {
+        if (this.mainLayout.recyclerView.childCount == 0) {
 
-            retentionMainLayout.infoLayout.root.visible()
-            retentionMainLayout.infoLayout.infoMessageTv.text = error
+            mainLayout.infoLayout.root.visible()
+            mainLayout.infoLayout.infoMessageTv.text = error
         } else {
-            retentionMainLayout.infoLayout.root.gone()
+            mainLayout.infoLayout.root.gone()
 
             Snackbar.make(
                 rootFrameLayout,
@@ -243,8 +201,8 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
     private fun handleDataLoadedState(
         selectedDateDateFilter: TLWorkSpaceDateFilterOption?,
-        retentionData: List<RetentionScreenData>,
-        updatedTabMaster: List<RetentionTabData>
+        complianceData: List<CompliancePendingScreenData>,
+        updatedTabMaster: List<ComplianceStatusData>
     ) = viewBinding.apply {
 
         setSelectedDateFilterOnAppBar(selectedDateDateFilter)
@@ -257,10 +215,10 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         )
         shimmerContainer.gone()
 
-        this.retentionMainLayout.infoLayout.root.gone()
-        this.retentionMainLayout.recyclerView.collection = retentionData
+        this.mainLayout.infoLayout.root.gone()
+        this.mainLayout.recyclerView.collection = complianceData
         showOrHideNoDataLayout(
-            retentionData.isNotEmpty()
+            complianceData.isNotEmpty()
         )
     }
 
@@ -272,10 +230,9 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     }
 
     private fun updateTabs(
-        updatedTabMaster: List<RetentionTabData>
-    ) = viewBinding.retentionMainLayout.tabRecyclerView.apply {
+        updatedTabMaster: List<ComplianceStatusData>
+    ) = viewBinding.mainLayout.tabRecyclerView.apply {
         if (updatedTabMaster.isEmpty()) return@apply
-        logger.d(TAG, "received status from viewmodel : $updatedTabMaster")
 
         if (layoutManager == null) {
             layoutManager = GridLayoutManager(
@@ -285,13 +242,11 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         }
 
         val tabsList = updatedTabMaster.map {
-            CustomTabDataType1(
+            CustomTabDataType2(
                 id = it.id,
                 title = it.title,
                 value = it.value,
                 selected = it.selected,
-                valueChangedBy = it.valueChangedBy,
-                changeType = it.changeType,
                 tabClickListener = it.viewModel
             )
         }
@@ -300,7 +255,7 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
     private fun showOrHideNoDataLayout(
         dataAvailableToShowOnScreen: Boolean
-    ) = viewBinding.retentionMainLayout.infoLayout.apply {
+    ) = viewBinding.mainLayout.infoLayout.apply {
 
         if (dataAvailableToShowOnScreen) {
             root.gone()
@@ -314,32 +269,81 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     private fun handleLoadingState(
         anyPreviousDataShownOnScreen: Boolean
     ) = viewBinding.apply {
-        this.retentionMainLayout.infoLayout.root.gone()
+        this.mainLayout.infoLayout.root.gone()
 
         if (anyPreviousDataShownOnScreen) {
-
             swipeRefreshLayout.isRefreshing = true
 
             shimmerContainer.gone()
             stopShimmer(
-                this.shimmerContainer as LinearLayout,
+                this.shimmerContainer,
                 R.id.shimmer_controller
             )
         } else {
-                swipeRefreshLayout.isRefreshing = false
-
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
+            swipeRefreshLayout.isRefreshing = false
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
         }
+    }
+
+    private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
+
+        viewModel
+            .effect
+            .collect {
+
+                when (it) {
+                    is CompliancePendingViewUiEffects.DialogPhoneNumber -> dialPhoneNumber(
+                        it.phoneNumber
+                    )
+                    is CompliancePendingViewUiEffects.OpenGigerDetailsBottomSheet -> openGigerDetailsScreen(
+                        it.gigerDetails
+                    )
+                    is CompliancePendingViewUiEffects.ShowDateFilterBottomSheet -> showDateFilter(
+                        it.dateFilters
+                    )
+                    is CompliancePendingViewUiEffects.ShowSnackBar -> showSnackBar(
+                        it.message
+                    )
+                }
+            }
+    }
+
+    private fun dialPhoneNumber(
+        phoneNumber: String
+    ) {
+        try {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun openGigerDetailsScreen(
+        gigerDetails: CompliancePendingScreenData.GigerItemData
+    ) {
+        tlWorkSpaceNavigation.openGigerInfoBottomSheetForCompliance(
+            gigerId = gigerDetails.gigerId,
+            jobProfileId = gigerDetails.jobProfileId!!,
+            businessId = gigerDetails.business!!,
+            eJoiningId = null
+        )
+    }
+
+    private fun showDateFilter(dateFilters: List<TLWorkSpaceDateFilterOption>) {
+        tlWorkSpaceNavigation.openFilterBottomSheet(
+            dateFilters
+        )
     }
 
     private fun showSnackBar(
@@ -351,4 +355,5 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
             Snackbar.LENGTH_SHORT
         ).show()
     }
+
 }

@@ -22,7 +22,7 @@
             android:id="@+id/shimmer_container"
             layout="@layout/shimmer_container"
             android:layout_width="match_parent"
-            android:layout_height="650dp"
+            android:layout_height="500dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:paddingTop="20dp"
@@ -32,7 +32,7 @@
             android:id="@+id/info_layout"
             layout="@layout/layout_common_information"
             android:layout_width="match_parent"
-            android:layout_height="650dp"
+            android:layout_height="500dp"
             android:visibility="gone" />
 
 

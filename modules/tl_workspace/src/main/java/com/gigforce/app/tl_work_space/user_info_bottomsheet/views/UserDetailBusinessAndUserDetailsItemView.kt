@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.gigforce.app.tl_work_space.databinding.BottomsheetGigerInfoBusinessUserDetailsInfoItemBinding
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.GigerInformationDetailsBottomSheetFragmentViewEvents
@@ -13,7 +14,7 @@ import com.google.android.material.card.MaterialCardView
 class UserDetailBusinessAndUserDetailsItemView(
     context: Context,
     attrs: AttributeSet?
-) : MaterialCardView(
+) : LinearLayout(
     context,
     attrs
 ), View.OnClickListener {
@@ -26,7 +27,6 @@ class UserDetailBusinessAndUserDetailsItemView(
         setDefault()
         inflate()
         setOnClickListeners()
-        cardElevation = 0.0f
     }
 
     private fun setDefault() {

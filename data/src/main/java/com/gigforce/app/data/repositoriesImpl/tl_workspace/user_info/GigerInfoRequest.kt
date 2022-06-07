@@ -17,8 +17,5 @@ data class GigerInfoRequest(
     val jobProfileId: String,
 
 	@field:SerializedName("payoutId")
-	val payoutId: String? = null,
-
-	@field:SerializedName("eJoiningId")
-	val eJoiningId: String? = null,
+	val payoutId: String? = null
 )

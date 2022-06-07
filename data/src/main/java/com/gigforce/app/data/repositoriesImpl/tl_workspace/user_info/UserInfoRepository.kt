@@ -14,17 +14,15 @@ class UserInfoRepository @Inject constructor(
         gigerId: String,
         jobProfileId: String,
         businessId: String,
-        payoutId: String?,
-        eJoiningId: String?
+        payoutId: String?
     ): GigerInfoApiModel {
-        return service.getRetentionData(
+        return service.getUserInformationData(
             GigerInfoRequest(
                 requiredData = fetchInfoFor,
                 gigerId = gigerId,
                 businessId = businessId,
                 jobProfileId = jobProfileId,
-                payoutId = payoutId,
-                eJoiningId = eJoiningId
+                payoutId = payoutId
             )
         ).bodyFromBaseResponseElseThrow()
     }

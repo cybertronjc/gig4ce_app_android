@@ -29,9 +29,9 @@ import javax.inject.Singleton
 class RetrofitServiceFactory @Inject constructor(
     private val buildConfig: IBuildConfig,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
-    private val logger : GigforceLogger
+    private val logger: GigforceLogger
 ) {
-    companion object{
+    companion object {
         const val TAG = "RetrofitServiceFactory"
     }
 
@@ -63,14 +63,22 @@ class RetrofitServiceFactory @Inject constructor(
 
         //Add Common Headers params to all headers
         prepareCommonHeaders().forEach { (key, value) ->
-            requestBuilder.addHeader(key, value)
+
+            //why ? If user has overwritten a default header for a specific request then it will overwrite it
+            if (!originalRequest.headers().names().contains(key)) {
+                requestBuilder.addHeader(key, value)
+            }
         }
 
         //Adding common Query Params
         val originalHttpUrl = originalRequest.url()
         val urlBuilder = originalHttpUrl.newBuilder()
         prepareCommonQueryParams().forEach { (key, value) ->
-            urlBuilder.addQueryParameter(key, value)
+
+            //why ? If user has overwritten a default query param for a specific request then it will overwrite it
+            if (!originalRequest.url().queryParameterNames().contains(key)) {
+                urlBuilder.addQueryParameter(key, value)
+            }
         }
         requestBuilder.url(urlBuilder.build())
 
@@ -170,12 +178,12 @@ class RetrofitServiceFactory @Inject constructor(
                     is InternalServerErrorException -> {
 
                         //todo add more info to logs
-                        logger.e("ServerError","calling api",exception)
+                        logger.e("ServerError", "calling api", exception)
                         throw IOException("Some internal server while processing your request, please try again later")
                     }
                     else -> {
                         //Some Serious Issue occurred, Logging it
-                        logger.e(TAG, "Some Serious Error While Networking",exception)
+                        logger.e(TAG, "Some Serious Error While Networking", exception)
                         throw exception
                     }
                 }

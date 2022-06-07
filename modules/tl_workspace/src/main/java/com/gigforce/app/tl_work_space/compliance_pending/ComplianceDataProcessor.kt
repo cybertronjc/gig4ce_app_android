@@ -103,6 +103,7 @@ object ComplianceDataProcessor {
                 gigerName = it.name ?: "N/A",
                 phoneNumber = it.mobileNumber,
                 business = it.getBusinessNonNull(),
+                jobProfileId = it.jobProfileId ?: "",
                 jobProfile = it.jobProfile,
                 profilePicture = it.profileAvatarName,
                 profilePictureThumbnail = it.profilePicThumbnail,

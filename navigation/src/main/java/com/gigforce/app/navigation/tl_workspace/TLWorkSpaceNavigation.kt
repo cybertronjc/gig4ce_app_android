@@ -35,7 +35,6 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val INTENT_EXTRA_PAYOUT_ID = "payout_id"
         const val INTENT_EXTRA_BUSINESS_ID = "business_id"
         const val INTENT_EXTRA_JOB_PROFILE_ID = "job_profile_id"
-        const val INTENT_EXTRA_E_JOINING_ID = "e_joining_id"
         const val INTENT_OPEN_USER_DETAILS_OF = "open_details_of"
 
         const val COMPLIANCE = "compliance"
@@ -158,8 +157,7 @@ class TLWorkSpaceNavigation @Inject constructor(
     fun openGigerInfoBottomSheetForRetention(
         gigerId: String,
         jobProfileId: String,
-        businessId: String,
-        eJoiningId: String
+        businessId: String
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
@@ -167,8 +165,7 @@ class TLWorkSpaceNavigation @Inject constructor(
                 INTENT_OPEN_USER_DETAILS_OF to RETENTION,
                 INTENT_EXTRA_GIGER_ID to gigerId,
                 INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
-                INTENT_EXTRA_BUSINESS_ID to businessId,
-                INTENT_EXTRA_E_JOINING_ID to eJoiningId
+                INTENT_EXTRA_BUSINESS_ID to businessId
             ),
             NavigationOptions.getNavOptions()
         )
@@ -178,16 +175,16 @@ class TLWorkSpaceNavigation @Inject constructor(
         gigerId: String,
         jobProfileId: String,
         businessId: String,
-        eJoiningId: String
+        eJoiningId: String?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
             bundleOf(
                 INTENT_OPEN_USER_DETAILS_OF to COMPLIANCE,
-                INTENT_EXTRA_GIGER_ID to gigerId,
-                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
-                INTENT_EXTRA_BUSINESS_ID to businessId,
-                INTENT_EXTRA_E_JOINING_ID to eJoiningId
+                INTENT_EXTRA_GIGER_ID to "18qOXM6TUOgGcx70XwMNFxvVxKm2",
+                INTENT_EXTRA_JOB_PROFILE_ID to "7ccMIdMtaamjtIgP85yE",
+                INTENT_EXTRA_BUSINESS_ID to "Yzd2b16WVRFtfnJWTpHN",
+                INTENT_EXTRA_PAYOUT_ID to "627f5345b4b64ad717e7e92d"
             ),
             NavigationOptions.getNavOptions()
         )
@@ -207,7 +204,6 @@ class TLWorkSpaceNavigation @Inject constructor(
                 INTENT_EXTRA_GIGER_ID to gigerId,
                 INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
                 INTENT_EXTRA_BUSINESS_ID to businessId,
-                INTENT_EXTRA_E_JOINING_ID to eJoiningId,
                 INTENT_EXTRA_PAYOUT_ID to payoutId
             ),
             NavigationOptions.getNavOptions()

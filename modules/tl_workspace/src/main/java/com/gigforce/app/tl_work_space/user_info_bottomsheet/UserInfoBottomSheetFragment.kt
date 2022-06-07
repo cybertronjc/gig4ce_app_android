@@ -1,15 +1,19 @@
 package com.gigforce.app.tl_work_space.user_info_bottomsheet
 
 import android.app.Dialog
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,14 +32,15 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DropScreenIntentModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.fb.FirebaseUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -76,7 +81,6 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                 it.getString(TLWorkSpaceNavigation.INTENT_EXTRA_BUSINESS_ID) ?: return@let
             val jobProfileId =
                 it.getString(TLWorkSpaceNavigation.INTENT_EXTRA_JOB_PROFILE_ID) ?: return@let
-            val eJoiningId = it.getString(TLWorkSpaceNavigation.INTENT_EXTRA_E_JOINING_ID)
             val payoutId = it.getString(TLWorkSpaceNavigation.INTENT_EXTRA_PAYOUT_ID)
 
             viewModel.setKeysReceivedFromPreviousScreen(
@@ -84,7 +88,6 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                 gigerId,
                 businessId,
                 jobProfileId,
-                eJoiningId,
                 payoutId
             )
         }
@@ -184,15 +187,28 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
 
             viewModel.effect.collect {
                 when (it) {
-
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.CallPhoneNumber -> callPhoneNumber(
+                        it.phoneNumber
+                    )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.DownloadPayslip -> startDocumentDownload(
+                        it.businessName,
+                        it.payslipUrl
+                    )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.DropGiger -> openDropScreen(
+                        jobProfileId = it.jobProfileId,
+                        gigerId = it.gigerId
+                    )
                 }
             }
         }
     }
 
     private fun openDropScreen(
-        dropScreenData: DropScreenIntentModel
-    ) = leadManagementNavigation.openDropJoiningOrGigerScreen(dropScreenData)
+        jobProfileId: String,
+        gigerId: String
+    ) {
+
+    }
 
     private fun openChangeTlScreen(
         gigId: String,
@@ -213,7 +229,7 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
         )
     }
 
-    private fun callGiger(phoneNumber: String) {
+    private fun callPhoneNumber(phoneNumber: String) {
 
         try {
             val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
@@ -235,7 +251,8 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                 minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
                 marginRight = R.dimen.size_16,
                 marginTop = R.dimen.size_1,
-                orientation = LinearLayout.VERTICAL
+                orientation = LinearLayout.VERTICAL,
+                itemsToBeDrawn = 3
             ),
             R.id.shimmer_controller
         )
@@ -306,6 +323,49 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
 
         infoLayout.root.visible()
         infoLayout.infoMessageTv.text = error
+    }
+
+    private fun startDocumentDownload(
+        businessName: String,
+        url: String
+    ) {
+        try {
+            val filePathName = FirebaseUtils.extractFilePath(url)
+
+            val downloadRequest = DownloadManager.Request(Uri.parse(url)).run {
+                setTitle(filePathName)
+                setDescription(businessName)
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    filePathName
+                )
+                setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+                )
+            }
+
+            val downloadManager = requireContext()
+                .getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            downloadManager.enqueue(downloadRequest)
+
+            ToastHandler.showToast(
+                requireContext(),
+                "Saving file in Downloads,check notification...",
+                Toast.LENGTH_LONG
+            )
+        } catch (e: Exception) {
+            ToastHandler.showToast(
+                requireContext(),
+                "Unable to start payslip download",
+                Toast.LENGTH_LONG
+            )
+
+            logger.e(
+                TAG,
+                "Unable to start payslip download",
+                e
+            )
+        }
     }
 
 }

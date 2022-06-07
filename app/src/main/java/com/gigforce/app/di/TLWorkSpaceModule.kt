@@ -12,6 +12,7 @@ import com.gigforce.app.data.repositoriesImpl.tl_workspace.payout.TLWorkspaceGig
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.retention.RetentionRetrofitService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.retention.TLWorkspaceRetentionRepositoryImpl
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.upcoming_gigers.TLWorkspaceUpcomingGigersRepositoryImpl
+import com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info.UserInfoRetrofitService
 import com.gigforce.app.domain.repositories.tl_workspace.*
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import dagger.Binds
@@ -88,6 +89,14 @@ abstract class TLWorkSpaceModule {
         ): PayoutRetrofitService {
             return retrofitServiceFactory.prepareService(PayoutRetrofitService::class.java)
         }
+
+        @Provides
+        fun provideTLWorkspaceUserInfoRetrofitService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): UserInfoRetrofitService {
+            return retrofitServiceFactory.prepareService(UserInfoRetrofitService::class.java)
+        }
+
 
 
     }

@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
+    implementation project(path: ':android-common-ui')
 
     /**
      * Common dependencies

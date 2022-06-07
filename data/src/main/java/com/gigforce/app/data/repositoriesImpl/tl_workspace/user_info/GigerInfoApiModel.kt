@@ -1,6 +1,8 @@
 package com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info
 
 import com.google.gson.annotations.SerializedName
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 data class GigerInfoApiModel(
 
@@ -63,7 +65,12 @@ data class GigerInfoApiModel(
 
 	@field:SerializedName("retention")
 	val retention: Retention? = null
-)
+) {
+
+	fun getFormattedJoiningDate() : String?{
+		return null
+	}
+}
 
 data class PendingComplianceInformation(
 
@@ -74,19 +81,26 @@ data class PendingComplianceInformation(
 	val backgroundColorCode: String? = null,
 
 	@field:SerializedName("pririty")
-	val pririty: String? = null
+	val priority: String? = null,
+
+	@field:SerializedName("navigationRoute")
+	val navigationRoute: String? = null
 )
 
 data class Retention(
 
 	@field:SerializedName("lastActiveWarningString")
-	val lastActiveWarningString: String? = null
+	val lastActiveWarningString: String? = null,
+
+
+	@field:SerializedName("backgroundColorCode")
+	val backgroundColorCode: String? = null,
 )
 
 data class PayoutInformation(
 
 	@field:SerializedName("amount")
-	val amount: Int? = null,
+	val amount: Double? = null,
 
 	@field:SerializedName("paymentCycleEndDate")
 	val paymentCycleEndDate: Any? = null,
@@ -101,7 +115,7 @@ data class PayoutInformation(
 	val id: String? = null,
 
 	@field:SerializedName("payOutCycle")
-	val payOutCycle: Any? = null,
+	val payOutCycle: String? = null,
 
 	@field:SerializedName("statusColorCode")
 	val statusColorCode: String? = null,
@@ -110,14 +124,29 @@ data class PayoutInformation(
 	val category: String? = null,
 
 	@field:SerializedName("paidOnDate")
-	val paidOnDate: Any? = null,
+	val paidOnDate: String? = null,
 
 	@field:SerializedName("status")
 	val status: List<String?>? = null,
 
 	@field:SerializedName("colorString")
 	val colorString: String? = null
-)
+){
+	private val isoDateFormat = SimpleDateFormat("yyyy-MM-dd")
+	private val monthYearDateFormat = SimpleDateFormat("MMMM yyyy")
+
+	private val isoDateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
+	private val endCycleMonthYearFormatter = DateTimeFormatter.ofPattern("LLLL yyyy") //YYYY-MM-DD
+	private val paidOnDateFormatter = DateTimeFormatter.ofPattern("dd/LLL/yyyy")
+
+	fun getPaidOnDateString(): String {
+		return if (this.paidOnDate == null) {
+			"-"
+		} else {
+			paidOnDateFormatter.format(isoDateFormatter.parse(this.paidOnDate))
+		}
+	}
+}
 
 data class Scout(
 

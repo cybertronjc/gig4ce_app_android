@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,11 +17,8 @@ import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
-import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType2
 import com.gigforce.app.tl_work_space.databinding.FragmentCompliancePendingBinding
-import com.gigforce.app.tl_work_space.home.models.ValueChangeType
-import com.gigforce.app.tl_work_space.retentions.*
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
@@ -49,7 +45,8 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
         const val TAG = "CompliancePendingFragment"
     }
 
-    @Inject lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+    @Inject
+    lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
     private val viewModel: CompliancePendingViewModel by viewModels()
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
@@ -73,7 +70,9 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
                         ) ?: return@setFragmentResultListener
 
                     viewModel.setEvent(
-                        CompliancePendingFragmentViewEvents.FilterApplied.DateFilterApplied(selectedFilter)
+                        CompliancePendingFragmentViewEvents.FilterApplied.DateFilterApplied(
+                            selectedFilter
+                        )
                     )
                 }
             }
@@ -124,7 +123,9 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
 
                         Log.d("Search ", "Searhcingg...$searchString")
                         viewModel.setEvent(
-                            CompliancePendingFragmentViewEvents.FilterApplied.SearchFilterApplied(searchString)
+                            CompliancePendingFragmentViewEvents.FilterApplied.SearchFilterApplied(
+                                searchString
+                            )
                         )
                     }
             }
@@ -270,37 +271,26 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
         this.mainLayout.infoLayout.root.gone()
 
         if (anyPreviousDataShownOnScreen) {
+            swipeRefreshLayout.isRefreshing = true
 
-            if (!swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = true
-            }
-
-            if (shimmerContainer.isVisible) {
-                shimmerContainer.gone()
-                stopShimmer(
-                    this.shimmerContainer,
-                    R.id.shimmer_controller
-                )
-            }
+            shimmerContainer.gone()
+            stopShimmer(
+                this.shimmerContainer,
+                R.id.shimmer_controller
+            )
         } else {
-
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
-
-            if (!shimmerContainer.isVisible) {
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
-            }
+            swipeRefreshLayout.isRefreshing = false
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
         }
     }
 
@@ -341,9 +331,12 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
     private fun openGigerDetailsScreen(
         gigerDetails: CompliancePendingScreenData.GigerItemData
     ) {
-//        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-//            gigerDetails.gigerId
-//        )
+        tlWorkSpaceNavigation.openGigerInfoBottomSheetForCompliance(
+            gigerId = gigerDetails.gigerId,
+            jobProfileId = gigerDetails.jobProfileId!!,
+            businessId = gigerDetails.business!!,
+            eJoiningId = null
+        )
     }
 
     private fun showDateFilter(dateFilters: List<TLWorkSpaceDateFilterOption>) {

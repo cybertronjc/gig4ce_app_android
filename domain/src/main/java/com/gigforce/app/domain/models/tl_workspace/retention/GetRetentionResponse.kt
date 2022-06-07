@@ -44,8 +44,14 @@ data class GigersRetentionListItem(
 	@field:SerializedName("warningString")
 	val warningString: String? = null,
 
+	@field:SerializedName("jobProfileId")
+	val jobProfileId: String? = null,
+
 	@field:SerializedName("jobProfile")
 	val jobProfile: String? = null,
+
+	@field:SerializedName("businessId")
+	val businessId: String? = null,
 
 	@field:SerializedName("business")
 	val business: String? = null,

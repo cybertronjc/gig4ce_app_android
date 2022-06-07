@@ -1,32 +1,42 @@
 package com.gigforce.app.tl_work_space.user_info_bottomsheet
 
-import android.widget.TextView
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
+import com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info.GigerInfoApiModel
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info.UserInfoRepository
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
+import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class UserInfoBottomSheetViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val savedStateHandle: SavedStateHandle,
-    private val repository : UserInfoRepository
+    private val repository: UserInfoRepository
 ) : BaseViewModel<
         GigerInformationDetailsBottomSheetFragmentViewEvents,
         GigerInformationDetailsBottomSheetFragmentViewState,
         GigerInformationDetailsBottomSheetFragmentViewEffects>(initialState = GigerInformationDetailsBottomSheetFragmentViewState.LoadingGigerInformation) {
 
+    companion object {
+        const val TAG = "UserInfoBottomSheetViewModel"
+    }
+
     private lateinit var openGigerDetailsFor: String
     private lateinit var gigerId: String
     private lateinit var jobProfileId: String
     private lateinit var businessId: String
-    private var eJoiningId: String? = null
     private var payoutId: String? = null
+
+    // Raw Info
+    private var rawUserInfo: GigerInfoApiModel? = null
+    private var userInfoViewShownOnView: List<UserInfoBottomSheetData> = emptyList()
 
     init {
         tryRestoringKeys()
@@ -42,9 +52,6 @@ class UserInfoBottomSheetViewModel @Inject constructor(
         businessId = savedStateHandle.get<String?>(
             TLWorkSpaceNavigation.INTENT_EXTRA_BUSINESS_ID
         ) ?: return
-        eJoiningId = savedStateHandle.get<String?>(
-            TLWorkSpaceNavigation.INTENT_EXTRA_E_JOINING_ID
-        )
         payoutId = savedStateHandle.get<String?>(
             TLWorkSpaceNavigation.INTENT_EXTRA_PAYOUT_ID
         )
@@ -58,14 +65,12 @@ class UserInfoBottomSheetViewModel @Inject constructor(
         gigerId: String,
         businessId: String,
         jobProfileId: String,
-        eJoiningId: String?,
         payoutId: String?
     ) {
         this.openGigerDetailsFor = openDetailsFor
         this.gigerId = gigerId
         this.businessId = businessId
         this.jobProfileId = jobProfileId
-        this.eJoiningId = eJoiningId
         this.payoutId = payoutId
         fetchUserDetails()
 
@@ -82,10 +87,6 @@ class UserInfoBottomSheetViewModel @Inject constructor(
             businessId
         )
         savedStateHandle.set(
-            TLWorkSpaceNavigation.INTENT_EXTRA_E_JOINING_ID,
-            eJoiningId
-        )
-        savedStateHandle.set(
             TLWorkSpaceNavigation.INTENT_EXTRA_PAYOUT_ID,
             payoutId
         )
@@ -98,23 +99,121 @@ class UserInfoBottomSheetViewModel @Inject constructor(
         }
 
         try {
-            repository.getUserInfo(
+
+            delay(500)
+            rawUserInfo = repository.getUserInfo(
                 fetchInfoFor = openGigerDetailsFor,
                 gigerId = gigerId,
                 jobProfileId = jobProfileId,
                 businessId = businessId,
-                payoutId = payoutId,
-                eJoiningId = eJoiningId
+                payoutId = payoutId
             )
+
+            userInfoViewShownOnView =
+                UserInfoScreenRawDataToPresentationDataMapper.prepareUserInfoSections(
+                    openGigerDetailsFor = openGigerDetailsFor,
+                    rawGigerData = rawUserInfo!!,
+                    viewModel = this@UserInfoBottomSheetViewModel
+                )
+
+            setState {
+                GigerInformationDetailsBottomSheetFragmentViewState.ShowGigerInformation(
+                    viewItems = userInfoViewShownOnView
+                )
+            }
         } catch (e: Exception) {
+
+            if (e is IOException) {
+                setState {
+                    GigerInformationDetailsBottomSheetFragmentViewState.ErrorWhileFetchingGigerInformation(
+                        e.message ?: "Unable to load data"
+                    )
+                }
+            } else {
+
+                setState {
+                    GigerInformationDetailsBottomSheetFragmentViewState.ErrorWhileFetchingGigerInformation(
+                        "Unable to load data"
+                    )
+                }
+            }
         }
     }
+
 
     override fun handleEvent(
         event: GigerInformationDetailsBottomSheetFragmentViewEvents
     ) {
         when (event) {
-            is GigerInformationDetailsBottomSheetFragmentViewEvents.ActionButtonClicked -> TODO()
+            is GigerInformationDetailsBottomSheetFragmentViewEvents.ActionButtonClicked -> handleActionButtonClick(
+                event.actionButton
+            )
+        }
+    }
+
+    private fun handleActionButtonClick(
+        actionButtonClicked: UserInfoBottomSheetData.UserInfoActionButtonData
+    ) {
+
+        when (actionButtonClicked.id) {
+            UserInfoScreenRawDataToPresentationDataMapper.ID_CALL_SCOUT -> callScout()
+            UserInfoScreenRawDataToPresentationDataMapper.ID_CHANGE_CLIENT_ID -> {}
+            UserInfoScreenRawDataToPresentationDataMapper.ID_DROP_GIGER -> {}
+            UserInfoScreenRawDataToPresentationDataMapper.ID_DOWNLOAD_PAYSLIPS -> downloadPaySlip()
+            UserInfoScreenRawDataToPresentationDataMapper.ID_CALL_GIGER -> callGiger()
+            UserInfoScreenRawDataToPresentationDataMapper.ID_CHANGE_TL -> {}
+            UserInfoScreenRawDataToPresentationDataMapper.ID_OPEN_ATTENDANCE_HISTORY -> {}
+            UserInfoScreenRawDataToPresentationDataMapper.ID_DISABLE_GIGER -> {}
+            else -> {}
+        }
+    }
+
+    private fun downloadPaySlip() {
+        if (rawUserInfo?.payoutInformation?.pdfUrl.isNullOrBlank()) {
+            logger.d(
+                TAG,
+                "ignoring downloadPaySlip call ,as pdf url  : '${rawUserInfo?.payoutInformation?.pdfUrl}', is null or blank"
+            )
+            return
+        }
+
+        setEffect {
+            GigerInformationDetailsBottomSheetFragmentViewEffects.DownloadPayslip(
+                businessName = rawUserInfo?.businessName ?: "",
+                payslipUrl = rawUserInfo?.payoutInformation?.pdfUrl!!
+            )
+        }
+    }
+
+    private fun callScout() {
+        if (rawUserInfo?.scout?.mobile.isNullOrBlank()) {
+            logger.d(
+                TAG,
+                "ignoring call scout ,as scout mobile : '${rawUserInfo?.scout?.mobile}', is null or blank"
+            )
+            return
+        }
+
+        setEffect {
+            GigerInformationDetailsBottomSheetFragmentViewEffects.CallPhoneNumber(
+                phoneNumber = rawUserInfo?.scout?.mobile!!
+            )
+        }
+    }
+
+    private fun callGiger() {
+        if (rawUserInfo?.gigerMobile.isNullOrBlank()) {
+            logger.d(
+                TAG,
+                "ignoring call giger ,as gigerMobile : '${rawUserInfo?.gigerMobile}', is null or blank"
+            )
+            return
+        }
+
+        setEffect {
+            GigerInformationDetailsBottomSheetFragmentViewEffects.CallPhoneNumber(
+                phoneNumber = rawUserInfo?.gigerMobile!!
+            )
         }
     }
 

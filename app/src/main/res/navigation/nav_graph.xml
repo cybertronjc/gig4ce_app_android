@@ -1220,5 +1220,8 @@
         android:id="@+id/gigerPayoutFragment"
         android:name="com.gigforce.app.tl_work_space.payout.GigerPayoutFragment"
         android:label="GigerPayoutFragment" />
+    <dialog android:id="@+id/userInfoBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.user_info_bottomsheet.UserInfoBottomSheetFragment"
+        android:label="DateFilterBottomSheetFragment"/>
 </navigation>
 

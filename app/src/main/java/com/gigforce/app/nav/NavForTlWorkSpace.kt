@@ -38,5 +38,9 @@ class NavForTlWorkSpace(
             TLWorkSpaceNavigation.NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET,
             R.id.dateFilterBottomSheetFragment
         )
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
+            R.id.userInfoBottomSheetFragment
+        )
     }
 }
