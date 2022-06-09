@@ -169,8 +169,24 @@ object UserInfoScreenRawDataToPresentationDataMapper {
             profilePicture = rawGigerData.gigerProfilePicture,
             profilePictureThumbnail = rawGigerData.gigerProfilePictureThumbnail,
             actionButtons = actionItems,
-            viewModel = viewModel
+            viewModel = viewModel,
+            payoutInformation = getPayoutInformation(rawGigerData)
         )
+    }
+
+    private fun getPayoutInformation(
+        rawGigerData: GigerInfoApiModel
+    ): UserInfoBottomSheetData.UserDetailsAndActionData.PayoutInformation? {
+
+        return if (rawGigerData.payoutInformation?.status != null) {
+            UserInfoBottomSheetData.UserDetailsAndActionData.PayoutInformation(
+                status = rawGigerData.payoutInformation?.colorString!!,
+                colorCode = rawGigerData.payoutInformation?.statusColorCode!!,
+                category = rawGigerData.payoutInformation?.category!!
+            )
+        } else {
+            null
+        }
     }
 
     private fun prepareActionButtonListForPayout(

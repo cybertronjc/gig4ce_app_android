@@ -177,13 +177,18 @@ class GigerPayoutViewModel @Inject constructor(
     override fun handleEvent(event: GigerPayoutFragmentViewEvents) {
         when(event) {
 
-            is GigerPayoutFragmentViewEvents.BusinessClicked -> businessHeaderClicker(event.businessName)
-
+            is GigerPayoutFragmentViewEvents.BusinessClicked -> businessHeaderClicker(
+                event.businessName
+            )
             is GigerPayoutFragmentViewEvents.GigerClicked  -> gigerClicked(
                 event.giger
             )
             is GigerPayoutFragmentViewEvents.FilterApplied -> handleFilter(
                 event
+            )
+            is GigerPayoutFragmentViewEvents.CallGigerClicked -> {}
+            GigerPayoutFragmentViewEvents.RefreshGigerPayoutDataClicked -> refreshGigersData(
+                currentlySelectedDateFilter
             )
         }
     }
@@ -223,22 +228,15 @@ class GigerPayoutViewModel @Inject constructor(
         } else {
             collapsedBusiness.add(businessName)
         }
+
         Log.d("GigerPayoutViewModel", "collapsed: $collapsedBusiness")
         processRawGigerPayoutDataAndUpdateOnView(false)
-
     }
 
     private fun tabSelected(
         tabId: String
     ) {
-        this.selectedTabId = tabId
-        if (currentState is GigerPayoutFragmentUiState.LoadingGigerPayoutData) {
-            return
-        }
 
-        processRawGigerPayoutDataAndUpdateOnView(
-            false
-        )
     }
 
     private fun searchFilterApplied(
@@ -265,6 +263,13 @@ class GigerPayoutViewModel @Inject constructor(
     }
 
     override fun handleCustomTabClick(tabClickedType1: CustomTabData) {
+        this.selectedTabId = tabClickedType1.tabId
+        if (currentState is GigerPayoutFragmentUiState.LoadingGigerPayoutData) {
+            return
+        }
 
+        processRawGigerPayoutDataAndUpdateOnView(
+            false
+        )
     }
 }

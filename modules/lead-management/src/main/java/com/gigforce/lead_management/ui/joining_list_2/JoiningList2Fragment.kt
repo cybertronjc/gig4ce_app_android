@@ -128,7 +128,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                             gigerName = it.gigerName,
                             teamLeaderId = null,
                             joiningId = it._id,
-                            gigId = null
+                            gigId = null,
+                            jobProfileId = null
                         )
                     }
                 )
@@ -163,7 +164,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                                     gigerName = it.gigerName,
                                     teamLeaderId = null,
                                     joiningId = it._id,
-                                    gigId = null
+                                    gigId = null,
+                                    jobProfileId = null
                                 )
                             }
                         )

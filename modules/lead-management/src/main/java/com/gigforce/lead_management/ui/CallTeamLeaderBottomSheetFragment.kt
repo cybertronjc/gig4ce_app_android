@@ -165,7 +165,6 @@ class CallTeamLeaderBottomSheetFragment : BaseBottomSheetDialogFragment<Fragment
         reportingTlCard.callIcon.setOnClickListener {
             callManager(reportingTl.mobileNumber)
         }
-
     }
 
     private fun callManager(number : String?) {

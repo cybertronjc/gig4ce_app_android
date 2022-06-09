@@ -259,9 +259,10 @@ class GigerAttendanceDetailsFragment :
                     is GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen -> gigNavigation.openGigAttendanceHistoryScreen(
                         gigDate = it.date,
                         gigTitle = it.jobProfile ?: "",
-                        gigOrderId = it.gigOrderId,
                         companyLogo = it.companyLogo ?: "",
-                        companyName = it.companyName ?: ""
+                        companyName = it.companyName ?: "",
+                        jobProfileId = it.jobProfileId,
+                        gigerId = it.gigerId
                     )
                 }
             }
@@ -285,7 +286,8 @@ class GigerAttendanceDetailsFragment :
                     gigerName = gigerName,
                     teamLeaderId = teamLeaderUid,
                     joiningId = null,
-                    gigId = gigId
+                    gigId = gigId,
+                    jobProfileId = null
                 )
             )
         )

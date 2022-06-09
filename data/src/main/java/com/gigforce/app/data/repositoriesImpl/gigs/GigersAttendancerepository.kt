@@ -36,7 +36,8 @@ class GigersAttendanceRepository @Inject constructor(
     }
 
     suspend fun getAttendanceMonthly(
-        gigOrderId: String,
+        jobProfileId: String,
+        userId : String?,
         month: Int,
         year: Int
     ): List<Gig> {
@@ -44,9 +45,10 @@ class GigersAttendanceRepository @Inject constructor(
             GigAttendanceRequest(
                 month = month,
                 year = year,
-                gigOrderId = gigOrderId
+                jobProfileId = jobProfileId,
+                gigerId = userId ?: firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
             )
-        ).bodyOrThrow()
+        ).bodyFromBaseResponseElseThrow()
             .map {
                 it.toGig()
             }

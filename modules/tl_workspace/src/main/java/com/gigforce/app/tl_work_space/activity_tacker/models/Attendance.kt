@@ -90,6 +90,7 @@ open class AttendanceRecyclerItemData(
                 gigOrderId = null,
                 gigDate = LocalDate.now(),
                 jobProfile = null,
+                jobProfileId = null
             )
         }
     }

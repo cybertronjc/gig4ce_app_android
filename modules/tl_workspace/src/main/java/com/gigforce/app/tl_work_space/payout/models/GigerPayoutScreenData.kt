@@ -10,16 +10,20 @@ open class GigerPayoutScreenData(
 ) : SimpleDVM(type){
 
     data class GigerItemData(
+        val payoutId : String,
         val gigerId: String,
         val gigerName: String,
         val phoneNumber: String?,
+        val businessId: String? ,
         val business: String? ,
+        val jobProfileId : String?,
         val jobProfile: String? ,
         val profilePicture: String? ,
         val profilePictureThumbnail: String?,
         val selectionDateString : String,
         val category: String?,
         val amount: Double?,
+        val statusString: String,
         val status: String,
         val statusColorCode: String,
         val paymentDate: String?,

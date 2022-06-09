@@ -46,6 +46,9 @@ data class GigAttendanceApiModel(
     @field:SerializedName("_id")
     val id: String? = null,
 
+    @field:SerializedName("JobProfileId")
+    val jobProfileId: String? = null,
+
     @field:SerializedName("JobProfile")
     val jobProfile: String? = null,
 

@@ -7,25 +7,27 @@ import kotlinx.android.parcel.Parcelize
 data class ChangeTeamLeaderRequest(
 
     @SerializedName("changeTlOfGigers")
-    val changeTlOfGigers : List<ChangeTeamLeaderRequestItem>
+    val changeTlOfGigers: List<ChangeTeamLeaderRequestItem>
 )
 
 @Parcelize
 data class ChangeTeamLeaderRequestItem(
 
     @SerializedName("gigerUid")
-    val gigerUid : String?,
+    val gigerUid: String?,
 
     @SerializedName("gigerName")
-    var gigerName : String?,
+    var gigerName: String?,
 
     @SerializedName("teamLeaderId")
-    var teamLeaderId : String?,
+    var teamLeaderId: String?,
 
     @SerializedName("joiningId")
-    val joiningId : String? = null,
+    val joiningId: String? = null,
 
     @SerializedName("gigId")
-    val gigId : String?,
+    val gigId: String?,
 
+    @SerializedName("jobProfileId")
+    val jobProfileId: String?
 ) : Parcelable

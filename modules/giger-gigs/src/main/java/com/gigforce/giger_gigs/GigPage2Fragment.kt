@@ -858,9 +858,10 @@ class GigPage2Fragment : Fragment(),
                         currentDate.monthValue,
                         1
                     ), gigTitle = gig.getGigTitle(),
-                    gigOrderId = gig.gigOrderId,
                     companyLogo = gig.getFullCompanyLogo()!!,
-                    companyName = gig.getFullCompanyName()!!
+                    companyName = gig.getFullCompanyName()!!,
+                    jobProfileId = gig.profile.id!!,
+                    gigerId = null
                 )
 
             }

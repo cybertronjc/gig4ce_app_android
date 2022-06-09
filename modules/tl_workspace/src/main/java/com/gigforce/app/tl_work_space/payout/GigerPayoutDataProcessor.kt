@@ -22,7 +22,8 @@ object GigerPayoutDataProcessor {
 
         val updatedStatusMaster = updateCountInTabs(
             tabMaster,
-            filteredGigers
+            filteredGigers,
+            selectedTab
         )
 
         val gigersAfterFinalFilter = filterGigersWithStatus(
@@ -61,13 +62,15 @@ object GigerPayoutDataProcessor {
 
     private fun updateCountInTabs(
         statusMaster: List<GigerPayoutStatusData>,
-        filteredGigersWithIncompleteCompliance: List<GigerPayoutListItem>
+        filteredGigersWithIncompleteCompliance: List<GigerPayoutListItem>,
+        selectedTab: GigerPayoutStatusData?
     ): List<GigerPayoutStatusData> {
         return statusMaster.apply {
             onEach { status ->
                 status.value = filteredGigersWithIncompleteCompliance.count {
                     it.tabStatus != null && it.tabStatus!!.contains(status.id)
                 }
+                status.selected = status.id == selectedTab?.id
             }
         }
     }
@@ -144,16 +147,20 @@ object GigerPayoutDataProcessor {
             it.name
         }.map {
             GigerPayoutScreenData.GigerItemData(
+                payoutId = it.payoutId!!,
                 gigerId = it.gigerId ?: "",
                 gigerName = it.name ?: "N/A",
                 phoneNumber = it.mobileNumber,
+                businessId = it.businessId!!,
                 business = it.getBusinessNonNull(),
+                jobProfileId = it.jobProfileId!!,
                 jobProfile = it.jobProfile,
                 profilePicture = it.profilePicture,
                 profilePictureThumbnail = it.profilePictureThumbnail,
                 selectionDateString = "",
                 category = it.category,
                 amount = it.amount,
+                statusString = it.colorString ?: "",
                 status = it.payoutStatus.toString() ?: "N/A",
                 statusColorCode = it.statusColorCode.toString(),
                 paymentDate = it.paidOnDate,

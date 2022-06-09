@@ -1,34 +1,37 @@
 package com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger
 
+import com.gigforce.app.data.remote.bodyFromBaseResponseElseThrow
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TLWorkspaceDropGigerRepository @Inject constructor() {
+class TLWorkspaceDropGigerRepository @Inject constructor(
+    private val dropGigerService: DropGigerService
+) {
 
-    suspend fun getDropOptions() : List<DropOption>{
-        return listOf(
-            DropOption(
-                dropLocalizedText = "ded",
-                reasonId = "ded",
-                customReason = false
-            ),
-            DropOption(
-                dropLocalizedText = "ddd",
-                reasonId = "dddd",
-                customReason = false
-            )
-        )
+    suspend fun getDropOptions(): List<DropOptionApiModel> {
+        return dropGigerService
+            .getDropReasons()
+            .bodyFromBaseResponseElseThrow()
     }
 
     suspend fun dropGiger(
-        gigerId : String,
-        jobProfileId : String,
-        reasonId : String,
-        reasonText : String,
-        lastWorkingDate : LocalDate
+        gigerId: String,
+        jobProfileId: String,
+        reasonId: String,
+        reasonText: String,
+        customReason: Boolean,
+        lastWorkingDate: LocalDate
     ) {
 
+        dropGigerService.dropGiger(
+            DropGigerRequest(
+                reason = if (customReason) reasonText else reasonId,
+                gigerId = gigerId,
+                lastWorkingDate = lastWorkingDate,
+                jobProfileId = jobProfileId
+            )
+        ).bodyFromBaseResponseElseThrow()
     }
 }

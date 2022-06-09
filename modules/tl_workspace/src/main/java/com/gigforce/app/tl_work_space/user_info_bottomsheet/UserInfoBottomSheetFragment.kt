@@ -21,6 +21,7 @@ import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.databinding.BottomsheetGigerInfoBinding
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
@@ -33,7 +34,6 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
-import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -63,9 +63,14 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
     lateinit var gigNavigation: GigNavigation
 
     @Inject
+    lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
+    @Inject
     lateinit var leadManagementNavigation: LeadManagementNavigation
 
     private val viewModel: UserInfoBottomSheetViewModel by viewModels()
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
+
     private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
     private val gigsJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
 
@@ -110,32 +115,6 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
 
             initView()
             initViewModel()
-            initSharedViewModel()
-        }
-    }
-
-    private fun initSharedViewModel() {
-        lifecycleScope.launchWhenCreated {
-
-            sharedGigViewModel.sharedEvents
-                .collect {
-
-                    when (it) {
-
-                    }
-                }
-        }
-
-        lifecycleScope.launchWhenCreated {
-
-            gigsJoiningSharedViewModel.gigSharedViewModelState
-                .collect {
-
-                    when (it) {
-                        is SharedGigViewState.TeamLeaderOfGigerChangedWithGigId -> dismiss()
-                        is SharedGigViewState.UserDroppedWithGig -> dismiss()
-                    }
-                }
         }
     }
 
@@ -167,6 +146,7 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
     }
 
     private fun initViewModel() {
+        viewModel.setSharedViewModel(sharedViewModel)
 
         lifecycleScope.launch {
 
@@ -198,24 +178,70 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                         jobProfileId = it.jobProfileId,
                         gigerId = it.gigerId
                     )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.OpenChangeClientIdBottomSheet -> openChangeClientIdBottomSheet(
+                        it.existingClientId,
+                        it.gigerId,
+                        it.gigerName,
+                        it.gigerMobile,
+                        it.jobProfileId,
+                        it.jobProfileName,
+                        it.businessId
+                    )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.OpenMonthlyAttendanceScreen -> gigNavigation.openGigAttendanceHistoryScreen(
+                        gigDate = it.gigDate,
+                        gigTitle = it.gigTitle,
+                        companyLogo = it.companyLogo,
+                        companyName = it.companyName,
+                        jobProfileId = it.jobProfileId,
+                        gigerId = it.gigerId
+                    )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.OpenChangeTeamLeaderScreen -> openChangeTlScreen(
+                        gigerId = it.gigerId,
+                        gigerName = it.gigerName,
+                        teamLeaderUid = it.teamLeaderUid,
+                        jobProfileId = it.jobProfileId
+                    )
                 }
             }
         }
     }
 
+    private fun openChangeClientIdBottomSheet(
+        existingClientId: String,
+        gigerId: String,
+        gigerName: String,
+        gigerMobile: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        businessId: String
+    ) = tlWorkSpaceNavigation.openToChangeClientIdBottomSheet(
+        existingClientId = existingClientId,
+        gigerId = gigerId,
+        gigerName = gigerName,
+        gigerMobile = gigerMobile,
+        jobProfileId = jobProfileId,
+        jobProfileName = jobProfileName,
+        businessId = businessId
+    )
+
+
     private fun openDropScreen(
         jobProfileId: String,
         gigerId: String
     ) {
-
+        tlWorkSpaceNavigation.navigateToDropGigerScreen(
+            gigerId,
+            jobProfileId
+        )
     }
 
     private fun openChangeTlScreen(
-        gigId: String,
-        gigerId: String?,
-        gigerName: String?,
-        teamLeaderUid: String
+        gigerId: String,
+        gigerName: String,
+        teamLeaderUid: String,
+        jobProfileId: String
     ) {
+
         leadManagementNavigation.openChangeTLBottomSheet(
             arrayListOf(
                 ChangeTeamLeaderRequestItem(
@@ -223,7 +249,8 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                     gigerName = gigerName,
                     teamLeaderId = teamLeaderUid,
                     joiningId = null,
-                    gigId = gigId
+                    gigId = null,
+                    jobProfileId = jobProfileId
                 )
             )
         )
@@ -290,6 +317,7 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
     private fun showInfoOnView(
         attendanceDetails: List<UserInfoBottomSheetData>
     ) = viewBinding.mainLayout.mainLinearLayout.apply {
+        removeAllViews()
 
         attendanceDetails.forEach {
 

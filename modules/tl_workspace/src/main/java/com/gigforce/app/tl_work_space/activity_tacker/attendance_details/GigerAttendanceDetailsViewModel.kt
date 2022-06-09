@@ -84,11 +84,12 @@ class GigerAttendanceDetailsViewModel @Inject constructor(
 
         _viewEffects.emit(
             GigerAttendanceDetailsViewContract.UiEffect.OpenMonthlyAttendanceScreen(
-                gigOrderId = gigDetails.gigOrderId!!,
                 date = gigDetails.gigDate,
                 jobProfile = gigDetails.jobProfile,
                 companyName = gigDetails.businessName,
-                companyLogo = gigDetails.businessLogo
+                companyLogo = gigDetails.businessLogo,
+                gigerId = gigDetails.gigerId,
+                jobProfileId = gigDetails.jobProfileId!!
             )
         )
     }

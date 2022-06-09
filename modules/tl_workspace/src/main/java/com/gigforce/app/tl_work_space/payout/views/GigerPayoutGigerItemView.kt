@@ -1,4 +1,4 @@
-package com.gigforce.app.tl_work_space.payout
+package com.gigforce.app.tl_work_space.payout.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import com.gigforce.app.android_common_utils.extensions.capitalizeFirstLetter
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.RecyclerViewGigerPayoutGigerItemViewBinding
+import com.gigforce.app.tl_work_space.payout.GigerPayoutFragmentViewEvents
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.common_ui.ext.formatToCurrency
 import com.gigforce.core.IViewHolder
@@ -67,7 +68,7 @@ class GigerPayoutGigerItemView (
             viewBinding.gigerName.text = it.gigerName
             viewBinding.amount.text = it.amount.formatToCurrency()
             viewBinding.payoutStatusView.bind(
-                it.status,
+                it.statusString,
                 it.statusColorCode
             )
             viewBinding.paidOnTextview.text = formatPaymentDate(it.paymentDate)
@@ -78,17 +79,6 @@ class GigerPayoutGigerItemView (
         }
     }
 
-    private fun getCompanyDesignationString(business: String?, jobProfile: String?): String {
-        return if (!business.isNullOrBlank() && !jobProfile.isNullOrBlank()) {
-            "${business.capitalizeFirstLetter()}- ${jobProfile.capitalizeFirstLetter()}"
-        } else if (!business.isNullOrBlank()) {
-            business.capitalizeFirstLetter()
-        } else if (!jobProfile.isNullOrBlank()) {
-            jobProfile.capitalizeFirstLetter()
-        } else {
-            ""
-        }
-    }
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.call_giger_btn) {

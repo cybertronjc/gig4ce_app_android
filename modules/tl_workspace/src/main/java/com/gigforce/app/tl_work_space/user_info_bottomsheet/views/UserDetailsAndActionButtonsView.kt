@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.BottomsheetGigerInfoUserDetailsActionButtonsViewBinding
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
@@ -54,6 +55,22 @@ class UserDetailsAndActionButtonsView(
         )
         viewBinding.nameTextview.text = data.gigerName
         viewBinding.lastActiveTextview.text = data.lastActiveText
+
+        if (data.payoutInformation != null) {
+            viewBinding.payoutStatusView.isVisible = true
+            viewBinding.categoryTextview.isVisible = true
+
+            viewBinding.payoutStatusView.bind(
+                data.payoutInformation.status,
+                data.payoutInformation.colorCode
+            )
+            viewBinding.categoryTextview.text = data.payoutInformation.category
+        } else {
+            viewBinding.payoutStatusView.isVisible = false
+            viewBinding.categoryTextview.isVisible = false
+        }
+
+
 
         viewBinding.actionButtonContainer.removeAllViews()
         data.actionButtons.forEach {

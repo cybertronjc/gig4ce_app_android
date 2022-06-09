@@ -2,9 +2,9 @@ import mobile.buildsrc.Libs
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -36,6 +36,7 @@ dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':android-common-ui')
 
 
     /**

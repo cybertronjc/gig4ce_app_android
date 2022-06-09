@@ -55,11 +55,8 @@ class CompliancePendingViewModel @Inject constructor(
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
-    init {
-        refreshComplianceData(null)
-    }
 
-    private fun refreshComplianceData(
+    fun refreshComplianceData(
         dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 

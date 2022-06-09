@@ -13,10 +13,10 @@ interface GigerAttendanceService {
         @Body request : GetGigersAttendanceRequest
     ): Response<BaseResponse<GetGigersAttendanceResponse>>
 
-    @POST("gigAttendance/attendanceHistory")
+    @POST("operationsChampion/tlWorkspace/attendanceHistory")
     suspend fun getGigOrderAttendanceMonthly(
         @Body request : GigAttendanceRequest
-    ): Response<List<GigInfoBasicApiModel>>
+    ): Response<BaseResponse<List<GigInfoBasicApiModel>>>
 
     @POST("gigAttendance/markAttendance")
     suspend fun markAttendance(

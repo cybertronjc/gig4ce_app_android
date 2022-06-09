@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 data class GigerInfoApiModel(
 
 	@field:SerializedName("clientId")
-	val clientId: String? = null,
+	var clientId: String? = null,
 
 	@field:SerializedName("jobProfile")
 	val jobProfile: String? = null,

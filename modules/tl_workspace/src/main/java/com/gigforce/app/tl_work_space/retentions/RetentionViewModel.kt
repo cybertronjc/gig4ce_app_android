@@ -57,11 +57,7 @@ class RetentionViewModel @Inject constructor(
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
-    init {
-        refreshGigersData(null)
-    }
-
-    private fun refreshGigersData(
+     fun refreshGigersData(
         dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 

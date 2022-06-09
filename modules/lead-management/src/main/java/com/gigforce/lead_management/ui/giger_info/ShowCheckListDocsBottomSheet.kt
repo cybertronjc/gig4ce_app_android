@@ -1,24 +1,18 @@
 package com.gigforce.lead_management.ui.giger_info
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.FragmentJoiningFilterBinding
 import com.gigforce.lead_management.databinding.FragmentShowCheckListDocsBottomSheetBinding
-import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_show_check_list_docs_bottom_sheet.*
 
 @AndroidEntryPoint
 class ShowCheckListDocsBottomSheet : BottomSheetDialogFragment() {

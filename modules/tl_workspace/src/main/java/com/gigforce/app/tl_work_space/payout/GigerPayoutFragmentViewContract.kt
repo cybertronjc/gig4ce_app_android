@@ -7,6 +7,7 @@ import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragmentViewEvents
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
+import kotlin.random.Random
 
 sealed class GigerPayoutFragmentUiState : UiState{
 
@@ -24,7 +25,16 @@ sealed class GigerPayoutFragmentUiState : UiState{
         val dateFilterSelected: TLWorkSpaceDateFilterOption?,
         val gigerPayoutData: List<GigerPayoutScreenData>,
         val updatedTabMaster: List<GigerPayoutStatusData>,
-    ) : GigerPayoutFragmentUiState()
+    ) : GigerPayoutFragmentUiState(){
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
 
 }
 

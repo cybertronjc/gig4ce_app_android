@@ -517,7 +517,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun openSelectionListScreen() {
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenJoininingScreen(
-                getTitleForSection(TLWorkspaceHomeSection.SELECTIONS)
+                title = getTitleForSection(TLWorkspaceHomeSection.SELECTIONS),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.SELECTIONS]
             )
         }
     }
@@ -525,7 +526,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun openRetentionScreen() {
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenRetentionScreen(
-                getTitleForSection(TLWorkspaceHomeSection.RETENTION)
+                title = getTitleForSection(TLWorkspaceHomeSection.RETENTION),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.RETENTION]
             )
         }
     }
@@ -533,7 +535,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun openCompliancePendingScreen() {
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen(
-                getTitleForSection(TLWorkspaceHomeSection.COMPLIANCE_PENDING)
+                title = getTitleForSection(TLWorkspaceHomeSection.COMPLIANCE_PENDING),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.COMPLIANCE_PENDING]
             )
         }
     }
@@ -541,7 +544,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun openActivityTrackerScreen() {
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenActivityTrackerScreen(
-                getTitleForSection(TLWorkspaceHomeSection.ACTIVITY_TRACKER)
+                title = getTitleForSection(TLWorkspaceHomeSection.ACTIVITY_TRACKER),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.ACTIVITY_TRACKER]
             )
         }
     }
@@ -549,7 +553,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
     private fun openPayoutScreen() {
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenPayoutScreen(
-                getTitleForSection(TLWorkspaceHomeSection.PAYOUT)
+                title = getTitleForSection(TLWorkspaceHomeSection.PAYOUT),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.PAYOUT]
             )
         }
     }
@@ -558,7 +563,8 @@ class TLWorkspaceHomeViewModel @Inject constructor(
 
         setEffect {
             TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen(
-                getTitleForSection(TLWorkspaceHomeSection.UPCOMING_GIGERS)
+                getTitleForSection(TLWorkspaceHomeSection.UPCOMING_GIGERS),
+                filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.UPCOMING_GIGERS]
             )
         }
     }

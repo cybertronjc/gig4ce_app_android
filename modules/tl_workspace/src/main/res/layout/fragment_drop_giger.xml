@@ -13,12 +13,12 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             app:backgroundType="PinkBar"
-            app:isFilterVisible="true"
-            app:isSearchVisible="true"
+            app:isFilterVisible="false"
+            app:isSearchVisible="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Retention" />
+            app:titleText="Drop Giger" />
 
 
         <FrameLayout
@@ -27,16 +27,10 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <include
+                android:id="@+id/main_layout"
+                layout="@layout/fragment_drop_giger_main" />
 
-                <include
-                    android:id="@+id/retention_main_layout"
-                    layout="@layout/fragment_retention_main" />
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <include
                 android:id="@+id/shimmer_container"
@@ -45,6 +39,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:visibility="visible" />
+
+            <include
+                android:id="@+id/info_layout"
+                layout="@layout/layout_common_information" />
 
         </FrameLayout>
     </LinearLayout>

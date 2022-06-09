@@ -1,7 +1,15 @@
 package com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger
 
-data class DropOption(
-    var dropLocalizedText : String,
-    var reasonId : String,
-    val customReason : Boolean
+import com.google.gson.annotations.SerializedName
+
+data class DropOptionApiModel(
+
+    @SerializedName("localizedReason")
+    var dropLocalizedText: String,
+
+    @SerializedName("reasonId")
+    var reasonId: String,
+
+    @SerializedName("customReason")
+    var customReason: Boolean
 )

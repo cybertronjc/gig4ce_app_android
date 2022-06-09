@@ -218,7 +218,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     joiningId = joiningId,
                     gigerName = gigerName,
                     teamLeaderId = teamLeaderId,
-                    gigId = gigId
+                    gigId = gigId,
+                    jobProfileId = null
                 )
             ),
             childFragmentManager

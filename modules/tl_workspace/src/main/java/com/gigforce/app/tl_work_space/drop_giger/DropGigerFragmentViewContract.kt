@@ -3,8 +3,9 @@ package com.gigforce.app.tl_work_space.drop_giger
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
-import com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger.DropOption
+import com.gigforce.app.tl_work_space.drop_giger.models.DropOption
 import java.time.LocalDate
+import kotlin.random.Random
 
 
 sealed class DropGigerFragmentUiState : UiState {
@@ -17,15 +18,60 @@ sealed class DropGigerFragmentUiState : UiState {
 
     data class ShowOptionsData(
         val options: List<DropOption>
-    ) : DropGigerFragmentUiState()
+    ) : DropGigerFragmentUiState() {
 
-    object DroppingGiger : DropGigerFragmentUiState()
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
+
+    object DroppingGiger : DropGigerFragmentUiState(){
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
 
     data class ErrorWhileDroppingGiger(
         val error: String
-    ) : DropGigerFragmentUiState()
+    ) : DropGigerFragmentUiState(){
 
-    object GigerDroppedWithSuccess : DropGigerFragmentUiState()
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
+
+    object GigerDroppedWithSuccess : DropGigerFragmentUiState(){
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return Random.nextInt()
+        }
+    }
+
+
+    override fun equals(other: Any?): Boolean {
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return Random.nextInt()
+    }
 }
 
 sealed class DropGigerFragmentViewEvents : UiEvent {

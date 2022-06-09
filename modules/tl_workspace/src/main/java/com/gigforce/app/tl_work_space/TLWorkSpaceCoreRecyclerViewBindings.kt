@@ -8,9 +8,10 @@ import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceBusines
 import com.gigforce.app.tl_work_space.compliance_pending.views.ComplianceGigerItemView
 import com.gigforce.app.tl_work_space.custom_tab.TabType1CardView
 import com.gigforce.app.tl_work_space.custom_tab.TabType2CardView
+import com.gigforce.app.tl_work_space.drop_giger.views.DropGigerReasonView
 import com.gigforce.app.tl_work_space.home.views.*
-import com.gigforce.app.tl_work_space.payout.GigerPayoutBusinessItemView
-import com.gigforce.app.tl_work_space.payout.GigerPayoutGigerItemView
+import com.gigforce.app.tl_work_space.payout.views.GigerPayoutBusinessItemView
+import com.gigforce.app.tl_work_space.payout.views.GigerPayoutGigerItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionBusinessItemView
 import com.gigforce.app.tl_work_space.retentions.views.RetentionGigerItemView
 import com.gigforce.app.tl_work_space.upcoming_gigers.views.UpcomingGigersBusinessItemView
@@ -74,6 +75,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
     const val GigerPayoutGigerItemType = 392457
     const val GigerPayoutBusinessItemType = 3374890
 
+    const val DropGigerItemType = 33244156
 
     override fun getView(
         context: Context,
@@ -112,6 +114,7 @@ object TLWorkSpaceCoreRecyclerViewBindings : IViewTypeLoader {
         ComplianceBusinessItemType -> ComplianceBusinessItemView(context, null)
         ComplianceGigerItemType -> ComplianceGigerItemView(context, null)
 
+        DropGigerItemType -> DropGigerReasonView(context,null)
         else -> null
     }
 }

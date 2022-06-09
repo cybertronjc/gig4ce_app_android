@@ -11,8 +11,7 @@ import retrofit2.http.POST
 
 interface PayoutRetrofitService {
 
-    @Headers("LoggedInUserUid: 729ldLw3aieVLEdaQdYIpDVRZfe2")
-    @POST("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/operationsChampion/tlWorkspace/payout")
+    @POST("operationsChampion/tlWorkspace/payout")
     suspend fun getGigerPayoutData(
         @Body request: GetGigerPayoutDataRequest
     ): Response<BaseResponse<GetGigerPayoutResponse>>

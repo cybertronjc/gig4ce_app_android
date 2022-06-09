@@ -57,6 +57,17 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setFragmentListenerForDateFilterSelection()
+        getFilterFromPreviousScreenAndFetchData()
+    }
+
+    private fun getFilterFromPreviousScreenAndFetchData() {
+        arguments?.let {
+
+            val dateFilter: TLWorkSpaceDateFilterOption? = it.getParcelable(
+                TLWorkSpaceNavigation.INTENT_EXTRA_DATE_FILTER
+            )
+            viewModel.refreshGigersData(dateFilter)
+        }
     }
 
     private fun setFragmentListenerForDateFilterSelection() {

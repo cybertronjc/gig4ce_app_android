@@ -3,7 +3,6 @@ package com.gigforce.app.tl_work_space.payout
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingFragmentViewEvents
-import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
-import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType2
 import com.gigforce.app.tl_work_space.databinding.GigerPayoutFragmentBinding
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutStatusData
@@ -91,7 +87,7 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         }
     }
 
-    private fun initView() = viewBinding.apply{
+    private fun initView() = viewBinding.apply {
         this.appBar.apply {
             setAppBarTitle(getToolBarTitleReceivedFromPreviousScreen() ?: "Payout")
             setBackButtonListener {
@@ -140,8 +136,8 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
 
     private fun observeViewStates() = lifecycleScope.launchWhenCreated {
 
-        viewModel.uiState.collect{
-            when(it) {
+        viewModel.uiState.collect {
+            when (it) {
                 is GigerPayoutFragmentUiState.ErrorWhileLoadingGigerPayoutData -> handleErrorLoadingInPayoutData(
                     it.error
                 )
@@ -163,7 +159,7 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         dateFilterSelected: TLWorkSpaceDateFilterOption?,
         gigerPayoutData: List<GigerPayoutScreenData>,
         updatedTabMaster: List<GigerPayoutStatusData>
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
 
         setSelectedDateFilterOnAppBar(dateFilterSelected)
         updateTabs(updatedTabMaster)
@@ -181,57 +177,52 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         )
     }
 
-    private fun showOrHideNoDataLayout(dataAvailableToShowOnScreen: Boolean) = viewBinding.payoutMainLayout.infoLayoutPayout.apply{
-        if (dataAvailableToShowOnScreen) {
-            root.gone()
-            infoMessageTv.text = null
-        } else {
-            this.root.visible()
-            this.infoMessageTv.text = "No gigers to show"
+    private fun showOrHideNoDataLayout(dataAvailableToShowOnScreen: Boolean) =
+        viewBinding.payoutMainLayout.infoLayoutPayout.apply {
+            if (dataAvailableToShowOnScreen) {
+                root.gone()
+                infoMessageTv.text = null
+            } else {
+                this.root.visible()
+                this.infoMessageTv.text = "No gigers to show"
+            }
+
         }
 
-    }
-
-    private fun handleLoadingState(alreadyShowingGigersOnView: Boolean) = viewBinding.apply{
+    private fun handleLoadingState(
+        alreadyShowingGigersOnView: Boolean
+    ) = viewBinding.apply {
         this.payoutMainLayout.infoLayoutPayout.root.gone()
 
         if (alreadyShowingGigersOnView) {
 
-            if (!swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = true
-            }
+            swipeRefreshLayout.isRefreshing = true
 
-            if (shimmerContainer.isVisible) {
-                shimmerContainer.gone()
-                stopShimmer(
-                    this.shimmerContainer,
-                    R.id.shimmer_controller
-                )
-            }
+            shimmerContainer.gone()
+            stopShimmer(
+                this.shimmerContainer,
+                R.id.shimmer_controller
+            )
         } else {
 
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
+            swipeRefreshLayout.isRefreshing = false
 
-            if (!shimmerContainer.isVisible) {
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
-            }
+            shimmerContainer.visible()
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
         }
-
     }
 
-    private fun handleErrorLoadingInPayoutData(error: String)  = viewBinding.apply {
+    private fun handleErrorLoadingInPayoutData(error: String) = viewBinding.apply {
         swipeRefreshLayout.isRefreshing = false
         stopShimmer(
             shimmerContainer,
@@ -254,9 +245,9 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         }
     }
 
-    private fun observeViewEffects() = lifecycleScope.launchWhenCreated{
-        viewModel.effect.collect{
-            when(it) {
+    private fun observeViewEffects() = lifecycleScope.launchWhenCreated {
+        viewModel.effect.collect {
+            when (it) {
 
                 is GigerPayoutFragmentViewUiEffects.DialogPhoneNumber -> {}
 
@@ -281,11 +272,15 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
         )
     }
 
-    private fun openGigerDetailScreen(gigerDetails: GigerPayoutScreenData.GigerItemData) {
-//        tlWorkSpaceNavigation.openGigerInfoBottomSheetForRetention(
-//            gigerDetails.gigerId
-//        )
-
+    private fun openGigerDetailScreen(
+        gigerDetails: GigerPayoutScreenData.GigerItemData
+    ) {
+        tlWorkSpaceNavigation.openGigerInfoBottomSheetForPayout(
+            gigerId = gigerDetails.gigerId,
+            jobProfileId = gigerDetails.jobProfileId!!,
+            businessId = gigerDetails.businessId!!,
+            payoutId = gigerDetails.jobProfileId
+        )
     }
 
     private fun setSelectedDateFilterOnAppBar(

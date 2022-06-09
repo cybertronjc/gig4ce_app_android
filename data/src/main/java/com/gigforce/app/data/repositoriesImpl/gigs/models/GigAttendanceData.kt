@@ -20,6 +20,7 @@ data class GigAttendanceData(
     val gigerDesignation: String,
     val gigOrderId: String?,
     val gigDate: LocalDate,
+    val jobProfileId: String?,
     val jobProfile: String?,
 
     val businessLogo : String?,
@@ -91,6 +92,7 @@ data class GigAttendanceData(
                 currentDateInISOFormat = gigApiModel.currentDate,
                 gigEndDateInIsoFormat = gigApiModel.gigEndDate,
                 gigStartDateInIsoFormat = gigApiModel.gigStartDate,
+                jobProfileId =  gigApiModel.jobProfileId
             )
         }
     }

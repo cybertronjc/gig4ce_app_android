@@ -22,7 +22,11 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val NAV_DESTINATION_GIGER_PAYOUT = "tl_workspace/payout"
         const val NAV_DESTINATION_ACTIVITY_TRACKER = "gig/gigerAttendanceUnderManagerFragment"
         const val NAV_DESTINATION_SELECTION_LIST = "LeadMgmt/joiningListFragment"
+        const val NAV_DESTINATION_DROP_GIGER = "tl_workspace/drop_giger"
+        const val NAV_DESTINATION_DROP_GIGER_SUCCESS = "tl_workspace/dropSuccessBottomSheetFragment"
         const val NAV_HELP_SCREEN = "HelpSectionFragment"
+        const val NAV_DESTINATION_CHANGE_CLIENT_ID = "tl_workspace/change_client_id"
+
 
         const val NAV_DESTINATION_DATE_FILTER_BOTTOM_SHEET = "tl_workspace/date_filter_bottom_sheet"
         const val NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET = "tl_workspace/giger_info_bottomsheet"
@@ -36,6 +40,12 @@ class TLWorkSpaceNavigation @Inject constructor(
         const val INTENT_EXTRA_BUSINESS_ID = "business_id"
         const val INTENT_EXTRA_JOB_PROFILE_ID = "job_profile_id"
         const val INTENT_OPEN_USER_DETAILS_OF = "open_details_of"
+
+        const val INTENT_EXTRA_EXISTING_CLIENT_ID = "existing_client_id"
+        const val INTENT_EXTRA_GIGER_MOBILE_NO = "giger_mobile"
+        const val INTENT_EXTRA_GIGER_NAME = "giger_name"
+        const val INTENT_EXTRA_JOB_PROFILE_NAME = "job_profile_name"
+        const val INTENT_EXTRA_DATE_FILTER = "date_filter"
 
         const val COMPLIANCE = "compliance"
         const val RETENTION = "retention"
@@ -78,24 +88,28 @@ class TLWorkSpaceNavigation @Inject constructor(
     }
 
     fun navigateToPendingComplianceScreen(
-        title: String
+        title: String,
+        filter : TLWorkSpaceDateFilterOption?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_PENDING_COMPLIANCE,
             bundleOf(
-                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title,
+                INTENT_EXTRA_DATE_FILTER to filter
             ),
             NavigationOptions.getNavOptions()
         )
     }
 
     fun navigateToRetentionScreen(
-        title: String
+        title: String,
+        filter : TLWorkSpaceDateFilterOption?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_RETENTION,
             bundleOf(
-                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title,
+                INTENT_EXTRA_DATE_FILTER to filter
             ),
             NavigationOptions.getNavOptions()
         )
@@ -113,19 +127,14 @@ class TLWorkSpaceNavigation @Inject constructor(
         )
     }
 
-    fun openGigerInfoBottomSheetForPayout(
-        gigerId: String,
-        payoutId: String
-    ) {
+    fun openDropSuccessBottomSheet() {
         navigation.navigateTo(
-            NAV_DESTINATION_TL_WORKSPACE_HOME,
-            bundleOf(
-                INTENT_EXTRA_GIGER_ID to gigerId,
-                INTENT_EXTRA_PAYOUT_ID to payoutId,
-            ),
+            NAV_DESTINATION_DROP_GIGER_SUCCESS,
+            null,
             NavigationOptions.getNavOptions()
         )
     }
+
 
     fun openUpcomingGigerInfoBottomSheet(
         gigerId: String
@@ -181,10 +190,9 @@ class TLWorkSpaceNavigation @Inject constructor(
             NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
             bundleOf(
                 INTENT_OPEN_USER_DETAILS_OF to COMPLIANCE,
-                INTENT_EXTRA_GIGER_ID to "18qOXM6TUOgGcx70XwMNFxvVxKm2",
-                INTENT_EXTRA_JOB_PROFILE_ID to "7ccMIdMtaamjtIgP85yE",
-                INTENT_EXTRA_BUSINESS_ID to "Yzd2b16WVRFtfnJWTpHN",
-                INTENT_EXTRA_PAYOUT_ID to "627f5345b4b64ad717e7e92d"
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_BUSINESS_ID to businessId
             ),
             NavigationOptions.getNavOptions()
         )
@@ -194,7 +202,6 @@ class TLWorkSpaceNavigation @Inject constructor(
         gigerId: String,
         jobProfileId: String,
         businessId: String,
-        eJoiningId: String,
         payoutId: String
     ) {
         navigation.navigateTo(
@@ -211,12 +218,15 @@ class TLWorkSpaceNavigation @Inject constructor(
     }
 
     fun navigateToJoiningListScreen(
-        title: String
+        title: String,
+        filter : TLWorkSpaceDateFilterOption?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_SELECTION_LIST,
+
             bundleOf(
-                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title,
+                INTENT_EXTRA_DATE_FILTER to filter
             ),
             NavigationOptions.getNavOptions()
         )
@@ -224,24 +234,28 @@ class TLWorkSpaceNavigation @Inject constructor(
 
 
     fun navigateToPayoutListScreen(
-        title: String
+        title: String,
+        filter : TLWorkSpaceDateFilterOption?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_GIGER_PAYOUT,
             bundleOf(
-                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title,
+                INTENT_EXTRA_DATE_FILTER to filter
             ),
             NavigationOptions.getNavOptions()
         )
     }
 
     fun navigateToActivityTrackerListScreen(
-        title: String
+        title: String,
+        filter : TLWorkSpaceDateFilterOption?
     ) {
         navigation.navigateTo(
             NAV_DESTINATION_ACTIVITY_TRACKER,
             bundleOf(
-                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title
+                BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to title,
+                INTENT_EXTRA_DATE_FILTER to filter
             ),
             NavigationOptions.getNavOptions()
         )
@@ -252,6 +266,44 @@ class TLWorkSpaceNavigation @Inject constructor(
             NAV_HELP_SCREEN,
             bundleOf(
                 BaseFragment2.INTENT_EXTRA_TOOLBAR_TITLE to "Help"
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun navigateToDropGigerScreen(
+        gigerId: String,
+        jobProfileId: String
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_DROP_GIGER,
+            bundleOf(
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_GIGER_ID to gigerId,
+            ),
+            NavigationOptions.getNavOptions()
+        )
+    }
+
+    fun openToChangeClientIdBottomSheet(
+        existingClientId: String,
+        gigerId: String,
+        gigerMobile: String,
+        gigerName: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        businessId: String,
+    ) {
+        navigation.navigateTo(
+            NAV_DESTINATION_CHANGE_CLIENT_ID,
+            bundleOf(
+                INTENT_EXTRA_EXISTING_CLIENT_ID to existingClientId,
+                INTENT_EXTRA_GIGER_ID to gigerId,
+                INTENT_EXTRA_GIGER_MOBILE_NO to gigerMobile,
+                INTENT_EXTRA_GIGER_NAME to gigerName,
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_JOB_PROFILE_NAME to jobProfileName,
+                INTENT_EXTRA_BUSINESS_ID to businessId
             ),
             NavigationOptions.getNavOptions()
         )

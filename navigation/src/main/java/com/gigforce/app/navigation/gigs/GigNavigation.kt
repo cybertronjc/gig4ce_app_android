@@ -18,7 +18,9 @@ class GigNavigation @Inject constructor(
         const val INTENT_EXTRA_COMPANY_NAME = "company_name"
         const val INTENT_EXTRA_COMPANY_LOGO = "company_logo"
         const val INTENT_EXTRA_SELECTED_DATE = "selected_month_year"
-        const val INTENT_EXTRA_GIG_ORDER_ID = "gig_order_id"
+
+        const val INTENT_EXTRA_JOB_PROFILE_ID = "job_profile_id"
+        const val INTENT_EXTRA_GIGER_ID = "giger_id"
     }
 
     fun openGigPage(
@@ -31,18 +33,24 @@ class GigNavigation @Inject constructor(
 
     fun openGigAttendanceHistoryScreen(
         gigDate : LocalDate,
+
         gigTitle : String,
-        gigOrderId : String,
-        companyLogo : String,
-        companyName : String
+        companyLogo : String?,
+        companyName : String?,
+
+        jobProfileId : String,
+        gigerId  : String?
     ){
         navigation.navigateTo(
             "gig/gigMonthlyAttendanceFragment", bundleOf(
                 INTENT_EXTRA_SELECTED_DATE to gigDate,
+
+                INTENT_EXTRA_ROLE to gigTitle,
                 INTENT_EXTRA_COMPANY_LOGO to companyLogo,
                 INTENT_EXTRA_COMPANY_NAME to companyName,
-                INTENT_EXTRA_GIG_ORDER_ID to gigOrderId,
-                INTENT_EXTRA_ROLE to gigTitle
+
+                INTENT_EXTRA_JOB_PROFILE_ID to jobProfileId,
+                INTENT_EXTRA_GIGER_ID to gigerId
             ),
             NavigationOptions.getNavOptions()
         )

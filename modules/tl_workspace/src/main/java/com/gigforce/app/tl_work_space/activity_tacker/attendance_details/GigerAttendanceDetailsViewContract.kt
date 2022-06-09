@@ -80,8 +80,9 @@ class GigerAttendanceDetailsViewContract {
         ) : UiEffect()
 
         data class OpenMonthlyAttendanceScreen(
-            val gigOrderId : String,
+            val gigerId : String,
             val date : LocalDate,
+            val jobProfileId : String,
             val jobProfile : String?,
             val companyName : String?,
             val companyLogo : String?

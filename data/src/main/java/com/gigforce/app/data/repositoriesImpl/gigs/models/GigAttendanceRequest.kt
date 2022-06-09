@@ -10,6 +10,9 @@ data class GigAttendanceRequest(
 	@field:SerializedName("year")
 	val year: Int,
 
-	@field:SerializedName("gigOrderId")
-	val gigOrderId: String? = null
+	@field:SerializedName("jobProfileId")
+	val jobProfileId: String,
+
+	@field:SerializedName("gigerId")
+	val gigerId: String
 )

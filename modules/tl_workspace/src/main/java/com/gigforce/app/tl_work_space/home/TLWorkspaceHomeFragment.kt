@@ -56,7 +56,6 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     @Inject
     lateinit var activityTrackerNavigation: ActivityTrackerNavigation
-
     private val viewModel: TLWorkspaceHomeViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -183,25 +182,30 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     ) {
         when (it) {
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenCompliancePendingScreen -> tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
-                it.title
+                it.title,
+                it.filter
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenUpcomingGigersScreen -> tlWorkSpaceNavigation.navigateToUpcomingGigersScreen(
                 it.title
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenActivityTrackerScreen -> tlWorkSpaceNavigation.navigateToActivityTrackerListScreen(
-                it.title
+                it.title,
+                it.filter
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenGigerDetailsBottomSheet -> tlWorkSpaceNavigation.openUpcomingGigerInfoBottomSheet(
                 it.gigerId
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenJoininingScreen -> tlWorkSpaceNavigation.navigateToJoiningListScreen(
-                it.title
+                it.title,
+                it.filter
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenPayoutScreen -> tlWorkSpaceNavigation.navigateToPayoutListScreen(
-                it.title
+                it.title,
+                it.filter
             )
             is TLWorkSpaceHomeViewUiEffects.NavigationEvents.OpenRetentionScreen -> tlWorkSpaceNavigation.navigateToRetentionScreen(
-                it.title
+                it.title,
+                it.filter
             )
         }
     }
@@ -502,46 +506,46 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
     }
 
     override fun onClick(attachmentOption: ActionsAttachmentOption?) {
-        when (attachmentOption?.id) {
-            ActionsAttachmentOption.SELECTION_FORM_ID -> {
-                tlWorkSpaceNavigation.navigateToJoiningListScreen(
-                    "Selection Form"
-                )
-            }
-            ActionsAttachmentOption.LOGIN_SUMMARY_ID -> {
-
-
-            }
-            ActionsAttachmentOption.RAISE_GIGER_TICKET_ID -> {
-
-            }
-            ActionsAttachmentOption.GIGER_ATTENDANCE_ID -> {
-
-            }
-            ActionsAttachmentOption.ALL_SELECTIONS_ID -> {
-
-            }
-            ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
-                tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
-                    "Compliance Pending"
-                )
-
-            }
-            ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
-                tlWorkSpaceNavigation.navigateToPayoutListScreen(
-                    "Payout"
-                )
-            }
-            ActionsAttachmentOption.GIGER_RETENTION_ID -> {
-                tlWorkSpaceNavigation.navigateToRetentionScreen(
-                    "Retention"
-                )
-            }
-            ActionsAttachmentOption.GIGER_TICKET_ID -> {
-
-            }
-
-        }
+//        when (attachmentOption?.id) {
+//            ActionsAttachmentOption.SELECTION_FORM_ID -> {
+//                tlWorkSpaceNavigation.navigateToJoiningListScreen(
+//                    "Selection Form"
+//                )
+//            }
+//            ActionsAttachmentOption.LOGIN_SUMMARY_ID -> {
+//
+//
+//            }
+//            ActionsAttachmentOption.RAISE_GIGER_TICKET_ID -> {
+//
+//            }
+//            ActionsAttachmentOption.GIGER_ATTENDANCE_ID -> {
+//
+//            }
+//            ActionsAttachmentOption.ALL_SELECTIONS_ID -> {
+//
+//            }
+//            ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
+//                tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
+//                    "Compliance Pending"
+//                )
+//
+//            }
+//            ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
+//                tlWorkSpaceNavigation.navigateToPayoutListScreen(
+//                    "Payout"
+//                )
+//            }
+//            ActionsAttachmentOption.GIGER_RETENTION_ID -> {
+//                tlWorkSpaceNavigation.navigateToRetentionScreen(
+//                    "Retention"
+//                )
+//            }
+//            ActionsAttachmentOption.GIGER_TICKET_ID -> {
+//
+//            }
+//
+//        }
     }
 
     override fun isVisible(visible: Boolean?) {

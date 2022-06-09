@@ -71,6 +71,9 @@ data class GigerPayoutListItem(
     val paidOnString: String? = null,
 
     @field:SerializedName("businessName")
+    val businessId: String? = null,
+
+    @field:SerializedName("businessName")
     val businessName: String? = null,
 
     @field:SerializedName("jobProfile")

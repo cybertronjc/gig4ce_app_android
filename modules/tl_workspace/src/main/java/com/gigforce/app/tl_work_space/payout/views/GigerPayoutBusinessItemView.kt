@@ -1,14 +1,14 @@
-package com.gigforce.app.tl_work_space.payout
+package com.gigforce.app.tl_work_space.payout.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.databinding.RecyclerViewGigerPayoutBusinessItemViewBinding
+import com.gigforce.app.tl_work_space.payout.GigerPayoutFragmentViewEvents
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
 import com.gigforce.core.IViewHolder
 
@@ -27,7 +27,6 @@ class GigerPayoutBusinessItemView (
 
         setDefault()
         inflate()
-
     }
 
     private fun setDefault() {
@@ -50,8 +49,8 @@ class GigerPayoutBusinessItemView (
 
     override fun bind(data: Any?) {
         (data as GigerPayoutScreenData.BusinessItemData?)?.let {
-
-            viewBinding.statusTv.text = "${it.businessName + "(" + it.count + ")"}"
+            viewData = it
+            viewBinding.statusTv.text = "${it.businessName + " (" + it.count + ")"}"
 
             if (it.expanded) {
 

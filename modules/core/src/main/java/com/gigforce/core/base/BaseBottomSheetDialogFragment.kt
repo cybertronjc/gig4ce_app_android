@@ -1,5 +1,8 @@
 package com.gigforce.core.base
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -109,5 +112,12 @@ abstract class BaseBottomSheetDialogFragment<V : ViewDataBinding>(
             this.popEnter = R.anim.anim_enter_from_left
             this.popExit = R.anim.anim_exit_to_right
         }
+    }
+
+    fun removeBackGroundTint(){
+        val bottomSheet = viewBinding.root.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
     }
 }

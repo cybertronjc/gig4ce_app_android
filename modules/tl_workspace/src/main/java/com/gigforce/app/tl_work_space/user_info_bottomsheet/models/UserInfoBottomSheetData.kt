@@ -12,14 +12,22 @@ open class UserInfoBottomSheetData {
         val profilePicture: String?,
         val profilePictureThumbnail: String?,
         val actionButtons: List<UserInfoActionButtonData>,
+        val payoutInformation: PayoutInformation?,
         val viewModel: UserInfoBottomSheetViewModel
-    ) : UserInfoBottomSheetData()
+    ) : UserInfoBottomSheetData() {
+
+        data class PayoutInformation(
+            val status: String,
+            val colorCode: String,
+            val category: String
+        )
+    }
 
     data class UserInfoActionButtonData(
         val id: String,
         @DrawableRes val icon: Int,
         val text: String,
-        val viewModel : UserInfoBottomSheetViewModel,
+        val viewModel: UserInfoBottomSheetViewModel,
         val navigationRoute: String? = null,
     )
 

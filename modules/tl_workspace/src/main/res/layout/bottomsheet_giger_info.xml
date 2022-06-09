@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="bottom"
-        android:background="@drawable/filter_bottom_background"
+        android:background="@drawable/background_bottomsheet_top_round_corner"
         tools:context=".payouts.payout_details.PayoutDetailsFragment">
 
         <include

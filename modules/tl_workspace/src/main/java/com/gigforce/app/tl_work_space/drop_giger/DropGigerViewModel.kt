@@ -1,9 +1,11 @@
 package com.gigforce.app.tl_work_space.drop_giger
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
-import com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger.DropOption
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger.TLWorkspaceDropGigerRepository
+import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
+import com.gigforce.app.tl_work_space.drop_giger.models.DropOption
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DropGigerViewModel @Inject constructor(
     private val logger: GigforceLogger,
+    private val savedStateHandle: SavedStateHandle,
     private val repository: TLWorkspaceDropGigerRepository
 ) : BaseViewModel<
         DropGigerFragmentViewEvents,
@@ -25,37 +28,67 @@ class DropGigerViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "DropGigerViewModel"
-
-        private const val DROP_OPTION_ID_OTHER = "other"
     }
+
+    private var dropOptions = listOf<DropOption>()
 
     private lateinit var jobProfileId: String
     private lateinit var gigerId: String
 
     private var lastWorkingDate: LocalDate? = null
     private var selectedReason: DropOption? = null
+    private var customReasonString: String? = null
 
     init {
+        tryRestoringKeys()
         getDropOptions()
     }
 
-    private fun getDropOptions() = viewModelScope.launch {
+    private fun tryRestoringKeys() {
+        gigerId = savedStateHandle.get<String?>(
+            TLWorkSpaceNavigation.INTENT_OPEN_USER_DETAILS_OF
+        ) ?: return
+        jobProfileId = savedStateHandle.get<String?>(
+            TLWorkSpaceNavigation.INTENT_EXTRA_JOB_PROFILE_ID
+        ) ?: return
+    }
 
+    fun setKeysReceivedFromPreviousScreen(
+        gigerId: String,
+        jobProfileId: String
+    ) {
+        this.gigerId = gigerId
+        this.jobProfileId = jobProfileId
+
+        savedStateHandle.set(
+            TLWorkSpaceNavigation.INTENT_EXTRA_GIGER_ID,
+            gigerId
+        )
+        savedStateHandle.set(
+            TLWorkSpaceNavigation.INTENT_EXTRA_JOB_PROFILE_ID,
+            jobProfileId
+        )
+    }
+
+    private fun getDropOptions() = viewModelScope.launch {
 
         setState {
             DropGigerFragmentUiState.LoadingDropOptionsData
         }
 
         try {
-            val dropOptions = repository.getDropOptions().toMutableList().apply {
-                add(
+            dropOptions = repository
+                .getDropOptions()
+                .map {
+
                     DropOption(
-                        "Other",
-                        reasonId = DROP_OPTION_ID_OTHER,
-                        customReason = true
+                        dropLocalizedText = it.dropLocalizedText,
+                        reasonId = it.reasonId,
+                        customReason = it.customReason,
+                        selected = it.reasonId == selectedReason?.reasonId,
+                        viewModel = this@DropGigerViewModel
                     )
-                )
-            }
+                }
 
             setState {
 
@@ -101,6 +134,30 @@ class DropGigerViewModel @Inject constructor(
     private fun reasonSelected(reason: DropOption) {
         this.selectedReason = reason
         checkForValidationAndEnableSubmitButton()
+
+        dropOptions.onEach {
+            it.selected = it.reasonId == selectedReason?.reasonId
+        }
+
+        setState {
+
+            DropGigerFragmentUiState.ShowOptionsData(
+                dropOptions
+            )
+        }
+
+
+        if (reason.customReason) {
+
+            setEffect {
+                DropGigerFragmentViewUiEffects.ShowCustomReasonLayout
+            }
+        } else {
+
+            setEffect {
+                DropGigerFragmentViewUiEffects.HideCustomReasonLayout
+            }
+        }
     }
 
     private fun lastWorkingDateEdited(date: LocalDate) {
@@ -109,17 +166,37 @@ class DropGigerViewModel @Inject constructor(
     }
 
     private fun customReasonEntered(reason: String) {
-        this.selectedReason?.reasonId = reason
-        this.selectedReason?.dropLocalizedText = reason
+        this.customReasonString = reason
         checkForValidationAndEnableSubmitButton()
     }
 
     private fun checkForValidationAndEnableSubmitButton() {
-        TODO("Not yet implemented")
+        if (lastWorkingDate == null) {
+            setEffect {
+                DropGigerFragmentViewUiEffects.DisableSubmitButton
+            }
+            return
+        }
+
+        if (selectedReason == null ||
+            (selectedReason!!.customReason &&
+                    customReasonString.isNullOrBlank())
+        ) {
+
+            setEffect {
+                DropGigerFragmentViewUiEffects.DisableSubmitButton
+            }
+            return
+        }
+
+        setEffect {
+            DropGigerFragmentViewUiEffects.EnableSubmitButton
+        }
     }
 
 
     private fun dropGiger() = viewModelScope.launch {
+        val finalReason = selectedReason ?: return@launch
 
         setState {
             DropGigerFragmentUiState.DroppingGiger
@@ -129,8 +206,9 @@ class DropGigerViewModel @Inject constructor(
             repository.dropGiger(
                 gigerId = gigerId,
                 jobProfileId = jobProfileId,
-                reasonId = selectedReason!!.reasonId,
-                reasonText = selectedReason!!.dropLocalizedText,
+                customReason = finalReason.customReason,
+                reasonId = finalReason.reasonId,
+                reasonText = if (finalReason.customReason) customReasonString!! else finalReason.dropLocalizedText,
                 lastWorkingDate = lastWorkingDate!!
             )
 

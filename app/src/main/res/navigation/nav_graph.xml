@@ -1220,8 +1220,22 @@
         android:id="@+id/gigerPayoutFragment"
         android:name="com.gigforce.app.tl_work_space.payout.GigerPayoutFragment"
         android:label="GigerPayoutFragment" />
+
+    <fragment
+        android:id="@+id/dropGigerFragment"
+        android:name="com.gigforce.app.tl_work_space.drop_giger.DropGigerFragment"
+        android:label="GigerPayoutFragment" />
+
     <dialog android:id="@+id/userInfoBottomSheetFragment"
         android:name="com.gigforce.app.tl_work_space.user_info_bottomsheet.UserInfoBottomSheetFragment"
         android:label="DateFilterBottomSheetFragment"/>
+
+    <dialog android:id="@+id/dropSuccessBottomSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.drop_giger.DropSuccessBottomSheetFragment"
+        android:label="DropSuccessBottomSheetFragment"/>
+
+    <dialog android:id="@+id/changeClientIdSheetFragment"
+        android:name="com.gigforce.app.tl_work_space.change_client_id.ChangeClientIdSheetFragment"
+        android:label="ChangeClientIdSheetFragment"/>
 </navigation>
 

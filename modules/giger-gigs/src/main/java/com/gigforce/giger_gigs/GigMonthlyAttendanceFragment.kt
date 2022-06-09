@@ -19,6 +19,7 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
@@ -53,7 +54,10 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
     private var role: String? = null
     private var companyName: String? = null
     private var companyLogo: String? = null
-    private lateinit var gigOrderId: String
+
+    private lateinit var jobProfileId: String
+    private var userId: String? = null
+
 
     private var currentlySelectedMonthYear: LocalDate = LocalDate.now()
 
@@ -88,9 +92,11 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
             role = it.getString(GigNavigation.INTENT_EXTRA_ROLE)
             companyName = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                "Gig order id not passed in intent"
+
+            jobProfileId = it.getString(GigNavigation.INTENT_EXTRA_JOB_PROFILE_ID) ?: throw IllegalArgumentException(
+                "jobProfileId not passed in intent"
             )
+            userId = it.getString(GigNavigation.INTENT_EXTRA_GIGER_ID)
         }
 
         savedInstanceState?.let {
@@ -99,9 +105,11 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
             role = it.getString(GigNavigation.INTENT_EXTRA_ROLE)
             companyName = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                "Gig order id not passed in saved intent"
+
+            jobProfileId = it.getString(GigNavigation.INTENT_EXTRA_JOB_PROFILE_ID) ?: throw IllegalArgumentException(
+                "jobProfileId not passed in intent"
             )
+            userId = it.getString(GigNavigation.INTENT_EXTRA_GIGER_ID)
         }
     }
 
@@ -112,7 +120,8 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
         outState.putString(GigNavigation.INTENT_EXTRA_ROLE, role)
         outState.putString(GigNavigation.INTENT_EXTRA_COMPANY_NAME, companyName)
         outState.putString(GigNavigation.INTENT_EXTRA_COMPANY_LOGO, companyLogo)
-        outState.putString(GigNavigation.INTENT_EXTRA_GIG_ORDER_ID, gigOrderId)
+        outState.putString(GigNavigation.INTENT_EXTRA_JOB_PROFILE_ID, jobProfileId)
+        outState.putString(GigNavigation.INTENT_EXTRA_GIGER_ID, userId)
     }
 
     private fun initUi() {
@@ -139,6 +148,7 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
                 Glide.with(requireContext())
                     .load(companyLogo)
                     .placeholder(getCircularProgressDrawable())
+                    .fitCenter()
                     .into(company_logo_iv)
             } else {
                 val imageRef = FirebaseStorage.getInstance()
@@ -290,9 +300,11 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
         dateYearTV.text = "$monthName - $year"
 
         viewModel.getGigsForMonth(
-            gigOrderId = gigOrderId,
+
             month = currentlySelectedMonthYear.monthValue,
-            year = currentlySelectedMonthYear.year
+            year = currentlySelectedMonthYear.year,
+            jobProfileId = jobProfileId,
+            gigerId = userId
         )
     }
 }

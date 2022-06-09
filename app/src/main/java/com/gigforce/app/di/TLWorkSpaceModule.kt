@@ -1,11 +1,13 @@
 package com.gigforce.app.di
 
+import com.gigforce.app.data.repositoriesImpl.tl_workspace.change_client_id.ChangeClientIdService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.compliance_pending.TLWorkCompliancePendingService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TlWorkSpaceLocalDataStore
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.upcoming_gigers.TlWorkspaceUpcomingGigersRemoteDatastore
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TLWorkSpaceService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.upcoming_gigers.TLWorkUpcomingGigersService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.compliance_pending.TLWorkspaceComplianceRepositoryImpl
+import com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger.DropGigerService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.home_screen.TLWorkSpaceHomeScreenRepositoryImpl
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.payout.PayoutRetrofitService
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.payout.TLWorkspaceGigerPayoutRepositoryImpl
@@ -98,6 +100,18 @@ abstract class TLWorkSpaceModule {
         }
 
 
+        @Provides
+        fun provideTLWorkspaceDropGigerService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): DropGigerService {
+            return retrofitServiceFactory.prepareService(DropGigerService::class.java)
+        }
 
+        @Provides
+        fun provideTLWorkspaceChangeClientIdService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): ChangeClientIdService {
+            return retrofitServiceFactory.prepareService(ChangeClientIdService::class.java)
+        }
     }
 }

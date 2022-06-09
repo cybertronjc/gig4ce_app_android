@@ -78,27 +78,33 @@ import java.time.LocalDate
         sealed class NavigationEvents : TLWorkSpaceHomeViewUiEffects() {
 
             data class OpenUpcomingGigersScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenCompliancePendingScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenPayoutScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenActivityTrackerScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenRetentionScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenJoininingScreen(
-                val title : String
+                val title : String,
+                val filter : TLWorkSpaceDateFilterOption?
             ) : NavigationEvents()
 
             data class OpenGigerDetailsBottomSheet(

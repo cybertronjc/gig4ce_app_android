@@ -1,33 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.gigforce.core.recyclerView.CoreRecyclerView
-            android:id="@+id/tab_recycler_view"
+        <TextView
+            android:id="@+id/expected_date_of_joining_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="28dp"
+            android:gravity="top"
+            android:lineSpacingExtra="1sp"
+            android:text="Last Working Date"
+            android:textAppearance="@style/style_h5"
+            android:translationY="-0.6sp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal">
 
-        <FrameLayout
+
+            <TextView
+                android:id="@+id/selected_date_label"
+                style="@style/style_h6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+            <TextView
+                android:id="@+id/change_date_btn"
+                style="@style/style_h5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Change Date"
+                android:textColor="@color/lipstick_2" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/select_reason_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:gravity="top"
+            android:lineSpacingExtra="1sp"
+            android:text="Select Reason for Drop Out"
+            android:textAppearance="@style/style_h5"
+            android:translationY="-0.6sp" />
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1" />
 
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/recycler_view"
+
+        <LinearLayout
+            android:id="@+id/custom_reason_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/giger_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:gravity="top"
+                android:lineSpacingExtra="1sp"
+                android:text="State your reason"
+                android:textAppearance="@style/style_h5"
+                android:translationY="-0.6sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/custom_reason_text_input_layout"
+                style="@style/Widget.Design.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:hint=" "
+                app:errorEnabled="false">
 
-            <include
-                android:id="@+id/info_layout"
-                layout="@layout/layout_common_information" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/custom_reason_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#EBEBEB"
+                    android:hint="Type here"
+                    android:inputType="textNoSuggestions"
+                    android:paddingBottom="15dp"
+                    android:textAppearance="@style/body_primary"
+                    android:textColorHint="#979C9E" />
 
-        </FrameLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            style="@style/GigforceUnElevatedButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:enabled="false"
+            android:fontFamily="@font/lato_bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="Drop Selection"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
+
+
     </LinearLayout>
 </layout>

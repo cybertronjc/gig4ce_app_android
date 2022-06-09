@@ -42,5 +42,18 @@ class NavForTlWorkSpace(
             TLWorkSpaceNavigation.NAV_DESTINATION_GIGER_INFO_BOTTOM_SHEET,
             R.id.userInfoBottomSheetFragment
         )
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_DROP_GIGER,
+            R.id.dropGigerFragment
+        )
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_DROP_GIGER_SUCCESS,
+            R.id.dropSuccessBottomSheetFragment
+        )
+
+        baseImplementation.registerRoute(
+            TLWorkSpaceNavigation.NAV_DESTINATION_CHANGE_CLIENT_ID,
+            R.id.changeClientIdSheetFragment
+        )
     }
 }

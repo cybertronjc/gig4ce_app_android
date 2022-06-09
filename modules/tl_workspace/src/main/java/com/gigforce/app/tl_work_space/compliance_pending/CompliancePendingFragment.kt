@@ -54,7 +54,18 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getFilterFromPreviousScreenAndFetchData()
         setFragmentListenerForDateFilterSelection()
+    }
+
+    private fun getFilterFromPreviousScreenAndFetchData() {
+        arguments?.let {
+
+            val dateFilter: TLWorkSpaceDateFilterOption? = it.getParcelable(
+                TLWorkSpaceNavigation.INTENT_EXTRA_DATE_FILTER
+            )
+            viewModel.refreshComplianceData(dateFilter)
+        }
     }
 
     private fun setFragmentListenerForDateFilterSelection() {

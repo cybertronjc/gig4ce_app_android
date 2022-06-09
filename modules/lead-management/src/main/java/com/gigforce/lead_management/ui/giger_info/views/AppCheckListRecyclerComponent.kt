@@ -38,7 +38,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.layout_application_checklist_item.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint

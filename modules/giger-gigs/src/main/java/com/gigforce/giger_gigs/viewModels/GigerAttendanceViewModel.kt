@@ -27,22 +27,24 @@ class GigerAttendanceViewModel @Inject constructor(
     val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
 
     fun getGigsForMonth(
-        gigOrderId: String,
+        jobProfileId: String,
+        gigerId : String?,
         month: Int,
         year: Int
     ) = viewModelScope.launch {
         logger.d(
             TAG,
-            "getting monthly attendance for gigOrderId : $gigOrderId, month : $month, year : $year"
+            "getting monthly attendance for jobProfileId : $jobProfileId,  month : $month, year : $year"
         )
 
         try {
             _monthlyGigs.value = Lce.loading()
             val attendance = gigersAttendanceRepository
                 .getAttendanceMonthly(
-                    gigOrderId,
-                    month,
-                    year
+                    jobProfileId = jobProfileId,
+                    userId = gigerId,
+                    month = month,
+                    year = year
                 )
 
             _monthlyGigs.value = Lce.content(attendance)

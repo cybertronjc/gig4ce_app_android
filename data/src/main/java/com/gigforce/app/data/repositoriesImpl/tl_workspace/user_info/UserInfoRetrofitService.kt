@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface UserInfoRetrofitService {
 
-    @POST("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/operationsChampion/tlWorkspace/gigerInfo")
+    @POST("operationsChampion/tlWorkspace/gigerInfo")
     suspend fun getUserInformationData(
         @Body request: GigerInfoRequest
     ): Response<BaseResponse<GigerInfoApiModel>>
