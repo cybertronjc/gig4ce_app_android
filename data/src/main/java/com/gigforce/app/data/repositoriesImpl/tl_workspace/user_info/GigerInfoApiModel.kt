@@ -83,8 +83,8 @@ data class PendingComplianceInformation(
 	@field:SerializedName("pririty")
 	val priority: String? = null,
 
-	@field:SerializedName("navigationRout")
-	val navigationRoute: String? = "verification/main"
+	@field:SerializedName("navigationRoute")
+	val navigationRoute: String? = null
 )
 
 data class Retention(
