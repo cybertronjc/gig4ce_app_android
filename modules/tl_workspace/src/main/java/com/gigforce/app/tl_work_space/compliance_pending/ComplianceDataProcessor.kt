@@ -102,6 +102,7 @@ object ComplianceDataProcessor {
                 gigerId = it.gigerId ?: "",
                 gigerName = it.name ?: "N/A",
                 phoneNumber = it.mobileNumber,
+                businessId =it.businessId,
                 business = it.getBusinessNonNull(),
                 jobProfileId = it.jobProfileId ?: "",
                 jobProfile = it.jobProfile,

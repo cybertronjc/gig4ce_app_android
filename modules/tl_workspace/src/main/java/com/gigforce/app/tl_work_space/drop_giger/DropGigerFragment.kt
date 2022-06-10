@@ -5,14 +5,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.app.android_common_utils.extensions.vibrate
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.databinding.FragmentDropGigerBinding
 import com.gigforce.app.tl_work_space.drop_giger.models.DropOption
 import com.gigforce.app.tl_work_space.retentions.RetentionFragmentViewEvents
@@ -51,6 +54,7 @@ class DropGigerFragment : BaseFragment2<FragmentDropGigerBinding>(
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
     private val viewModel: DropGigerViewModel by viewModels()
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
 
     private val dateFormatter = DateTimeFormatter.ofPattern(
         "dd/MMM/yy",
@@ -107,6 +111,7 @@ class DropGigerFragment : BaseFragment2<FragmentDropGigerBinding>(
             )
         }
 
+        viewModel.setSharedViewModel(sharedViewModel)
         setFragmentListenerForDateFilterSelection()
     }
 
@@ -203,7 +208,9 @@ class DropGigerFragment : BaseFragment2<FragmentDropGigerBinding>(
                     )
                     is DropGigerFragmentUiState.GigerDroppedWithSuccess -> {
 
+                        requireContext().vibrate()
                         hideDroppingProgressView()
+
                         tlWorkSpaceNavigation.openDropSuccessBottomSheet()
                     }
                     is DropGigerFragmentUiState.LoadingDropOptionsData -> handleLoadingState()

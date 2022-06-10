@@ -2,6 +2,7 @@ package com.gigforce.app.tl_work_space.change_client_id
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.toastfix.toastcompatwrapper.ToastHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -155,6 +157,7 @@ class ChangeClientIdSheetFragment : BaseBottomSheetDialogFragment<BottomsheetCha
             ChangeClientIdFragmentUiState.ChangingClientId -> showDroppingProgressView()
             ChangeClientIdFragmentUiState.ClientIdChanged -> {
 
+                ToastHandler.showToast(requireContext(), "Client Id updated", Toast.LENGTH_SHORT)
                 requireContext().vibrate()
                 dismiss()
             }

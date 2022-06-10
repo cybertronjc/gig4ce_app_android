@@ -1,7 +1,6 @@
 package com.gigforce.app.tl_work_space.user_info_bottomsheet.views
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -13,7 +12,7 @@ import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBotto
 import com.gigforce.common_ui.TextDrawable
 import com.google.android.material.card.MaterialCardView
 
-class UserDetailBusinessAndUserDetailsView(
+class BottomBusinessDetailsView(
     context: Context,
     attrs: AttributeSet?
 ) : MaterialCardView(
@@ -31,18 +30,24 @@ class UserDetailBusinessAndUserDetailsView(
     private fun setDefault() {
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-        val px = TypedValue.applyDimension(
+        val px20 = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             20f,
             resources.displayMetrics
         ).toInt()
-        params.setMargins(
-            px,
-            px,
-            px,
-            px
-        )
 
+        val px10 = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            10f,
+            resources.displayMetrics
+        ).toInt()
+
+        params.setMargins(
+            px20,
+            px10,
+            px20,
+            px20
+        )
         this.layoutParams = params
 
         elevation = resources.getDimension(R.dimen.size_0dp)
@@ -90,7 +95,7 @@ class UserDetailBusinessAndUserDetailsView(
         this.gigerInfoBusinessItemContainer.removeAllViews()
         data.dataItems.forEach {
 
-            val view = UserDetailBusinessAndUserDetailsItemView(context, null)
+            val view = BottomBusinessDetailsItemView(context, null)
             this.gigerInfoBusinessItemContainer.addView(view)
             view.bind(it)
         }

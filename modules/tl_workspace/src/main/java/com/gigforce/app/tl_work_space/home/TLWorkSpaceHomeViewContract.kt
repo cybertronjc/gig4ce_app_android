@@ -7,6 +7,7 @@ import com.gigforce.app.android_common_utils.base.viewModel.UiState
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.home.views.ActionsAttachmentOption
 import java.time.LocalDate
 
 
@@ -70,7 +71,9 @@ import java.time.LocalDate
             ) : UpcomingGigersSectionEvent()
         }
 
-
+        data class QuickMenuActionClicked(
+            val section: ActionsAttachmentOption
+        ) : TLWorkSpaceHomeUiEvents()
     }
 
     sealed class TLWorkSpaceHomeViewUiEffects : UiEffect {

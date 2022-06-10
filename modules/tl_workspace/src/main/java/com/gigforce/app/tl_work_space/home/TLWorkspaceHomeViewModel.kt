@@ -2,11 +2,12 @@ package com.gigforce.app.tl_work_space.home
 
 import android.view.View
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.*
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkSpaceHomeScreenRepository
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.home.mapper.ApiModelToPresentationModelMapper
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
+import com.gigforce.app.tl_work_space.home.views.ActionsAttachmentOption
 import com.gigforce.core.extensions.replace
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class TLWorkspaceHomeViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val tlWorkSpaceHomeScreenRepository: TLWorkSpaceHomeScreenRepository
-) : BaseViewModel<
+) : BaseTLWorkSpaceViewModel<
         TLWorkSpaceHomeUiEvents,
         TLWorkSpaceHomeUiState,
         TLWorkSpaceHomeViewUiEffects>
@@ -273,6 +274,23 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 event.giger.gigerId
             )
             TLWorkSpaceHomeUiEvents.UpcomingGigersSectionEvent.SeeAllUpcomingGigersClicked -> openUpcomingGigersScreen()
+            is TLWorkSpaceHomeUiEvents.QuickMenuActionClicked -> handleQuickMenuActionClick(event.section)
+        }
+    }
+
+    private fun handleQuickMenuActionClick(section: ActionsAttachmentOption) {
+        when (section.id) {
+            ActionsAttachmentOption.SELECTION_FORM_ID -> openSelectionListScreen() //todo
+
+            ActionsAttachmentOption.GIGER_ATTENDANCE_ID -> openActivityTrackerScreen()
+            ActionsAttachmentOption.ALL_SELECTIONS_ID -> openSelectionListScreen()
+            ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> openCompliancePendingScreen()
+            ActionsAttachmentOption.GIGER_PAYOUT_ID -> openPayoutScreen()
+            ActionsAttachmentOption.GIGER_RETENTION_ID -> openRetentionScreen()
+
+            ActionsAttachmentOption.LOGIN_SUMMARY_ID -> {}
+            ActionsAttachmentOption.RAISE_GIGER_TICKET_ID -> {}
+            ActionsAttachmentOption.GIGER_TICKET_ID -> {}
         }
     }
 
@@ -567,5 +585,15 @@ class TLWorkspaceHomeViewModel @Inject constructor(
                 filter = sectionToSelectedDateFilterMap[TLWorkspaceHomeSection.UPCOMING_GIGERS]
             )
         }
+    }
+
+    override fun gigerDropped(gigerId: String, jobProfileId: String) {
+        super.gigerDropped(gigerId, jobProfileId)
+        refreshWorkSpaceData()
+    }
+
+    override fun teamLeaderChangedOf(gigerId: String, jobProfileId: String) {
+        super.teamLeaderChangedOf(gigerId, jobProfileId)
+        refreshWorkSpaceData()
     }
 }

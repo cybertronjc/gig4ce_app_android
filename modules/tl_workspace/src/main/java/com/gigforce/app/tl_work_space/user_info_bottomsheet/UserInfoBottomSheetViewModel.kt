@@ -1,5 +1,6 @@
 package com.gigforce.app.tl_work_space.user_info_bottomsheet
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info.GigerInfoApiModel
@@ -7,6 +8,7 @@ import com.gigforce.app.data.repositoriesImpl.tl_workspace.user_info.UserInfoRep
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
+import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -166,7 +168,24 @@ class UserInfoBottomSheetViewModel @Inject constructor(
             UserInfoScreenRawDataToPresentationDataMapper.ID_CHANGE_TL -> changeTeamLeader()
             UserInfoScreenRawDataToPresentationDataMapper.ID_OPEN_ATTENDANCE_HISTORY -> navigateToAttendanceHistory()
             UserInfoScreenRawDataToPresentationDataMapper.ID_DISABLE_GIGER -> dropGiger()
+            UserInfoScreenRawDataToPresentationDataMapper.ID_NAVIGATE_TO_OTHER_SCREEN -> navigateToOtherScreen(
+                actionButtonClicked
+            )
             else -> {}
+        }
+    }
+
+    private fun navigateToOtherScreen(
+        actionButtonClicked: UserInfoBottomSheetData.UserInfoActionButtonData
+    ) {
+
+        setEffect {
+            GigerInformationDetailsBottomSheetFragmentViewEffects.NavigateToScreen(
+                route = actionButtonClicked.navigationRoute!!,
+                payload = bundleOf(
+                    CommonIntentExtras.INTENT_USER_ID to rawUserInfo?.gigerId!!
+                )
+            )
         }
     }
 

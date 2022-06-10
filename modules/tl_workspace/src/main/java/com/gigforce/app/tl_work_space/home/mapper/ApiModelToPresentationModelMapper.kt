@@ -15,16 +15,16 @@ object ApiModelToPresentationModelMapper {
 
         return rawData.filter {
             it.sectionId != null
-        }/*.filter {
+        }.filter {
 
-            *//*Removing Upcoming gigers Section If there are no upcoming Gigers*//*
+           //   Removing Upcoming gigers Section If there are no upcoming Gigers
             if (TLWorkspaceHomeSection.UPCOMING_GIGERS.getSectionId() == it.sectionId) {
                 it.upcomingGigers != null && it.upcomingGigers!!.isNotEmpty()
             } else {
                 true
             }
 
-        }*/.sortedBy {
+        }.sortedBy {
             it.index ?: 0
         }.map {
             when (TLWorkspaceHomeSection.fromId(it.sectionId!!)) {

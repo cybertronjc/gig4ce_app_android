@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType2
@@ -47,15 +49,20 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
     private val viewModel: CompliancePendingViewModel by viewModels()
+
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         getFilterFromPreviousScreenAndFetchData()
         setFragmentListenerForDateFilterSelection()
+        viewModel.setSharedViewModel(sharedViewModel)
     }
 
     private fun getFilterFromPreviousScreenAndFetchData() {
@@ -345,7 +352,7 @@ class CompliancePendingFragment : BaseFragment2<FragmentCompliancePendingBinding
         tlWorkSpaceNavigation.openGigerInfoBottomSheetForCompliance(
             gigerId = gigerDetails.gigerId,
             jobProfileId = gigerDetails.jobProfileId!!,
-            businessId = gigerDetails.business!!,
+            businessId = gigerDetails.businessId!!,
             eJoiningId = null
         )
     }

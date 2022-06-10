@@ -7,6 +7,7 @@ import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.payout.GetGigerPayoutDataRequest
 import com.gigforce.app.domain.models.tl_workspace.payout.GigerPayoutListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspacePayoutRepository
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.compliance_pending.CompliancePendingViewUiEffects
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class GigerPayoutViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val repository: TLWorkspacePayoutRepository
-) : BaseViewModel<
+) : BaseTLWorkSpaceViewModel<
         GigerPayoutFragmentViewEvents,
         GigerPayoutFragmentUiState,
         GigerPayoutFragmentViewUiEffects>
@@ -272,4 +273,9 @@ class GigerPayoutViewModel @Inject constructor(
             false
         )
     }
+
+//    override fun teamLeaderChangedOf(gigerId: String, jobProfileId: String) {
+//        super.teamLeaderChangedOf(gigerId, jobProfileId)
+//
+//    }
 }

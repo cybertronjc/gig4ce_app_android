@@ -1,15 +1,14 @@
 package com.gigforce.app.tl_work_space.compliance_pending
 
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.compliance.GigersWithPendingComplainceDataItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceComplianceRepository
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.compliance_pending.models.CompliancePendingScreenData
 import com.gigforce.app.tl_work_space.compliance_pending.models.ComplianceStatusData
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
-import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.core.deque.dequeLimiter
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class CompliancePendingViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val repository: TLWorkspaceComplianceRepository
-) : BaseViewModel<
+) : BaseTLWorkSpaceViewModel<
         CompliancePendingFragmentViewEvents,
         CompliancePendingFragmentUiState,
         CompliancePendingViewUiEffects>(initialState = CompliancePendingFragmentUiState.ScreenInitialisedOrRestored),
@@ -34,7 +33,8 @@ class CompliancePendingViewModel @Inject constructor(
     /**
      * Raw Data, from Server
      */
-    private var rawComplianceGigersList: List<GigersWithPendingComplainceDataItem> = emptyList()
+    private var rawComplianceGigersList: MutableList<GigersWithPendingComplainceDataItem> =
+        mutableListOf()
 
     /**
      * Master Data
@@ -93,7 +93,8 @@ class CompliancePendingViewModel @Inject constructor(
             setDefaultSelectedTabIfNotSet()
 
             rawComplianceGigersList =
-                complianceResponse.gigersWithPendingComplainceData ?: emptyList()
+                complianceResponse.gigersWithPendingComplainceData?.toMutableList()
+                    ?: mutableListOf()
 
             this@CompliancePendingViewModel.currentlySelectedDateDateFilter =
                 dateDateFilter ?: getDefaultDateFilter()
@@ -286,6 +287,17 @@ class CompliancePendingViewModel @Inject constructor(
 
         processRawComplianceDataAndUpdateOnView(
             false
+        )
+    }
+
+    override fun gigerDropped(gigerId: String, jobProfileId: String) {
+        super.gigerDropped(gigerId, jobProfileId)
+        rawComplianceGigersList.removeIf {
+            gigerId == it.gigerId && jobProfileId == it.jobProfileId
+        }
+
+        processRawComplianceDataAndUpdateOnView(
+            true
         )
     }
 

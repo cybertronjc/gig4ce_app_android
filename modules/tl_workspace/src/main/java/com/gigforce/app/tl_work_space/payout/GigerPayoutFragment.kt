@@ -3,6 +3,7 @@ package com.gigforce.app.tl_work_space.payout
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.app.tl_work_space.databinding.GigerPayoutFragmentBinding
 import com.gigforce.app.tl_work_space.payout.models.GigerPayoutScreenData
@@ -45,6 +47,8 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
     private val viewModel: GigerPayoutViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -54,6 +58,7 @@ class GigerPayoutFragment : BaseFragment2<GigerPayoutFragmentBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setFragmentListenerForDateFilterSelection()
+        viewModel.setSharedViewModel(sharedViewModel)
     }
 
     private fun setFragmentListenerForDateFilterSelection() {

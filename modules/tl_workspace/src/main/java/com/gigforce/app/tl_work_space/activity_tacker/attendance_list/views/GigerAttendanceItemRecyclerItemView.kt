@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.core.IViewHolder
-import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.GigerAttendanceUnderManagerViewContract
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.GigerAttendanceUnderManagerViewEvents
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
 import com.gigforce.app.tl_work_space.databinding.RecyclerRowGigerAttendanceBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -135,12 +135,12 @@ class GigerAttendanceItemRecyclerItemView(
         val currentViewData = viewData ?: return
         when (v?.id) {
             R.id.resolve_btn -> currentViewData.viewModel.handleEvent(
-                GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemResolveClicked(
+                GigerAttendanceUnderManagerViewEvents.AttendanceItemResolveClicked(
                     currentViewData
                 )
             )
             else -> currentViewData.viewModel.handleEvent(
-                GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemClicked(
+                GigerAttendanceUnderManagerViewEvents.AttendanceItemClicked(
                     currentViewData
                 )
             )

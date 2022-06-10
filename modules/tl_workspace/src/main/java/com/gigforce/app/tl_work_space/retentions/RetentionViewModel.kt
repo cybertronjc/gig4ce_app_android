@@ -1,11 +1,11 @@
 package com.gigforce.app.tl_work_space.retentions
 
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.domain.models.tl_workspace.retention.GetRetentionDataRequest
 import com.gigforce.app.domain.models.tl_workspace.retention.GigersRetentionListItem
 import com.gigforce.app.domain.repositories.tl_workspace.TLWorkspaceRetentionRepository
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabClickListener
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabData
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class RetentionViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val repository: TLWorkspaceRetentionRepository
-) : BaseViewModel<
+) : BaseTLWorkSpaceViewModel<
         RetentionFragmentViewEvents,
         RetentionFragmentUiState,
         RetentionFragmentViewUiEffects>
@@ -36,7 +36,7 @@ class RetentionViewModel @Inject constructor(
     /**
      * Raw Data, from Server
      */
-    private var rawRetentionGigersList: List<GigersRetentionListItem> = emptyList()
+    private var rawRetentionGigersList: MutableList<GigersRetentionListItem> = mutableListOf()
 
     /**
      * Master Data
@@ -57,7 +57,7 @@ class RetentionViewModel @Inject constructor(
     private var searchText: String? = null
     private var collapsedBusiness: ArrayDeque<String> by dequeLimiter(3)
 
-     fun refreshGigersData(
+    fun refreshGigersData(
         dateDateFilter: TLWorkSpaceDateFilterOption?
     ) = viewModelScope.launch {
 
@@ -100,7 +100,7 @@ class RetentionViewModel @Inject constructor(
                 )
             } ?: emptyList()
 
-            rawRetentionGigersList = retentionResponse.gigersRetentionList ?: emptyList()
+            rawRetentionGigersList = retentionResponse.gigersRetentionList?.toMutableList() ?: mutableListOf()
 
             setDefaultSelectedTabIfNotSet()
             setDefaultDateFilter(dateDateFilter)
@@ -299,6 +299,17 @@ class RetentionViewModel @Inject constructor(
 
         processRawRetentionDataAndUpdateOnView(
             false
+        )
+    }
+
+    override fun gigerDropped(gigerId: String, jobProfileId: String) {
+        super.gigerDropped(gigerId, jobProfileId)
+
+        rawRetentionGigersList.removeIf {
+            gigerId == it.gigerId && jobProfileId == it.jobProfileId
+        }
+        processRawRetentionDataAndUpdateOnView(
+            true
         )
     }
 }

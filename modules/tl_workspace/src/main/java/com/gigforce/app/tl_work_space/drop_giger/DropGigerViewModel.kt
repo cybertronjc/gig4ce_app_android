@@ -2,9 +2,10 @@ package com.gigforce.app.tl_work_space.drop_giger
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.android_common_utils.base.viewModel.BaseViewModel
 import com.gigforce.app.data.repositoriesImpl.tl_workspace.drop_giger.TLWorkspaceDropGigerRepository
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModelEvent
 import com.gigforce.app.tl_work_space.drop_giger.models.DropOption
 import com.gigforce.core.logger.GigforceLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ class DropGigerViewModel @Inject constructor(
     private val logger: GigforceLogger,
     private val savedStateHandle: SavedStateHandle,
     private val repository: TLWorkspaceDropGigerRepository
-) : BaseViewModel<
+) : BaseTLWorkSpaceViewModel<
         DropGigerFragmentViewEvents,
         DropGigerFragmentUiState,
         DropGigerFragmentViewUiEffects>
@@ -210,6 +211,13 @@ class DropGigerViewModel @Inject constructor(
                 reasonId = finalReason.reasonId,
                 reasonText = if (finalReason.customReason) customReasonString!! else finalReason.dropLocalizedText,
                 lastWorkingDate = lastWorkingDate!!
+            )
+
+            sharedViewModel.setEvent(
+                TLWorkSpaceSharedViewModelEvent.GigerDropped(
+                    gigerId,
+                    jobProfileId
+                )
             )
 
             setState {

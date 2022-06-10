@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.domain.models.tl_workspace.TLWorkSpaceDateFilterOption
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.custom_tab.CustomTabDataType1
 import com.gigforce.app.tl_work_space.databinding.FragmentRetentionBinding
 import com.gigforce.app.tl_work_space.retentions.models.RetentionScreenData
@@ -48,6 +49,8 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
     private val viewModel: RetentionViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -58,9 +61,12 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
         super.onCreate(savedInstanceState)
         setFragmentListenerForDateFilterSelection()
         getFilterFromPreviousScreenAndFetchData()
+        viewModel.setSharedViewModel(sharedViewModel)
     }
 
     private fun getFilterFromPreviousScreenAndFetchData() {
+
+
         arguments?.let {
 
             val dateFilter: TLWorkSpaceDateFilterOption? = it.getParcelable(
@@ -337,19 +343,19 @@ class RetentionFragment : BaseFragment2<FragmentRetentionBinding>(
                 R.id.shimmer_controller
             )
         } else {
-                swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout.isRefreshing = false
 
-                startShimmer(
-                    this.shimmerContainer as LinearLayout,
-                    ShimmerDataModel(
-                        minHeight = R.dimen.size_120,
-                        minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                        marginRight = R.dimen.size_16,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.VERTICAL
-                    ),
-                    R.id.shimmer_controller
-                )
+            startShimmer(
+                this.shimmerContainer as LinearLayout,
+                ShimmerDataModel(
+                    minHeight = R.dimen.size_120,
+                    minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                    marginRight = R.dimen.size_16,
+                    marginTop = R.dimen.size_1,
+                    orientation = LinearLayout.VERTICAL
+                ),
+                R.id.shimmer_controller
+            )
         }
     }
 

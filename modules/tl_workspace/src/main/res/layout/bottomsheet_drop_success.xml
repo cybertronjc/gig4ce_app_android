@@ -2,31 +2,25 @@
 
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="390dp"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="30dp"
+        android:gravity="center"
         android:paddingEnd="16dp"
         android:paddingBottom="30dp"
         android:background="@drawable/background_bottomsheet_top_round_corner">
 
-        <TextView
-            android:id="@+id/okay_button"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginStart="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_40"
-            android:layout_marginEnd="@dimen/size_20"
-            android:background="@drawable/bottom_primary_button_background"
-            android:gravity="center"
-            android:text="@string/okay_lead"
-            android:textAllCaps="true"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"/>
 
+
+
+        <ImageView
+            android:id="@+id/tick_image_imageview"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/ic_right_tick_big" />
 
         <TextView
             android:id="@+id/droped_selection_label"
@@ -35,18 +29,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:text="@string/drop_selection_success"
-            app:layout_constraintTop_toBottomOf="@id/tick_image_imageview" />
+            android:text="@string/drop_selection_success" />
 
-        <ImageView
-            android:id="@+id/tick_image_imageview"
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:layout_marginTop="100dp"
-            android:src="@drawable/ic_right_tick_big"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/okay_button"
+            android:layout_width="match_parent"
+            style="@style/GigforceUnElevatedButtonStyle"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_20"
+            android:gravity="center"
+            android:text="@string/okay_lead"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
 </layout>

@@ -18,6 +18,7 @@ import com.gigforce.app.data.repositoriesImpl.gigs.models.GigAttendanceData
 import com.gigforce.app.navigation.gigs.GigNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceTabData
@@ -75,6 +76,8 @@ class GigersAttendanceUnderManagerFragment :
     private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
     private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
     private val gigJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
+    private val tlWorkSpaceSharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
+
     private val simpleDateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
 
     private val swipeTouchHandler = AttendanceSwipeHandler(this)
@@ -106,6 +109,7 @@ class GigersAttendanceUnderManagerFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getIntentData(savedInstanceState)
+        viewModel.setSharedViewModel(tlWorkSpaceSharedViewModel)
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -179,7 +183,7 @@ class GigersAttendanceUnderManagerFragment :
 
         swipeRefresh.setOnRefreshListener {
             viewModel.handleEvent(
-                GigerAttendanceUnderManagerViewContract.UiEvent.RefreshAttendanceClicked
+                GigerAttendanceUnderManagerViewEvents.RefreshAttendanceClicked
             )
         }
 
@@ -213,13 +217,13 @@ class GigersAttendanceUnderManagerFragment :
 
                     logger.d(TAG, "state recevied : $it")
                     when (it) {
-                        is GigerAttendanceUnderManagerViewContract.State.ErrorInLoadingOrUpdatingAttendanceList -> errorInLoadingAttendanceFromServer(
+                        is GigerAttendanceUnderManagerViewState.ErrorInLoadingOrUpdatingAttendanceList -> errorInLoadingAttendanceFromServer(
                             it.error,
                             false
                         )
-                        is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList -> showDataLoadingFromServer()
-                        GigerAttendanceUnderManagerViewContract.State.ScreenLoaded -> {}
-                        is GigerAttendanceUnderManagerViewContract.State.ShowOrUpdateAttendanceListOnView -> {
+                        is GigerAttendanceUnderManagerViewState.LoadingAttendanceList -> showDataLoadingFromServer()
+                        GigerAttendanceUnderManagerViewState.ScreenLoaded -> {}
+                        is GigerAttendanceUnderManagerViewState.ShowOrUpdateAttendanceListOnView -> {
                             showStatusAndAttendanceOnView(
                                 attendanceSwipeControlsEnabled = it.attendanceSwipeControlsEnabled,
                                 enablePresentSwipeAction = it.enablePresentSwipeAction,
@@ -267,25 +271,25 @@ class GigersAttendanceUnderManagerFragment :
                 .collect {
 
                     when (it) {
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.ShowErrorUnableToMarkAttendanceForUser -> showErrorInMarkingAttendance(
+                        is GigerAttendanceUnderManagerViewEffect.ShowErrorUnableToMarkAttendanceForUser -> showErrorInMarkingAttendance(
                             it.error
                         )
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.ShowGigerDetailsScreen -> showGigerDetailsScreen(
+                        is GigerAttendanceUnderManagerViewEffect.ShowGigerDetailsScreen -> showGigerDetailsScreen(
                             it.gigId,
                             it.gigAttendanceData
                         )
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.ShowResolveAttendanceConflictScreen -> showResolveAttendanceConflictScreen(
+                        is GigerAttendanceUnderManagerViewEffect.ShowResolveAttendanceConflictScreen -> showResolveAttendanceConflictScreen(
                             it.gigId,
                             it.gigAttendanceData
                         )
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation -> openMarkActiveConfirmationDialog(
+                        is GigerAttendanceUnderManagerViewEffect.OpenMarkGigerActiveConfirmation -> openMarkActiveConfirmationDialog(
                             it.gigId,
                             it.hasGigerMarkedHimselfInActive
                         )
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveConfirmationDialog -> openMarkInactiveConfirmationDialog(
+                        is GigerAttendanceUnderManagerViewEffect.OpenMarkInactiveConfirmationDialog -> openMarkInactiveConfirmationDialog(
                             gigId = it.gigId
                         )
-                        is GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog -> openMarkInactiveSelectReasonDialog(
+                        is GigerAttendanceUnderManagerViewEffect.OpenMarkInactiveSelectReasonDialog -> openMarkInactiveSelectReasonDialog(
                             gigId = it.gigId,
                             popConfirmationDialog = it.popConfirmationDialog
                         )
@@ -498,7 +502,7 @@ class GigersAttendanceUnderManagerFragment :
         itemTouchHelper.startSwipe(viewHolder)
 
         viewModel.handleEvent(
-            GigerAttendanceUnderManagerViewContract.UiEvent.UserRightSwipedForMarkingPresent(
+            GigerAttendanceUnderManagerViewEvents.UserRightSwipedForMarkingPresent(
                 attendanceData
             )
         )
@@ -514,7 +518,7 @@ class GigersAttendanceUnderManagerFragment :
         itemTouchHelper.startSwipe(viewHolder)
 
         viewModel.handleEvent(
-            GigerAttendanceUnderManagerViewContract.UiEvent.UserLeftSwipedForMarkingAbsent(
+            GigerAttendanceUnderManagerViewEvents.UserLeftSwipedForMarkingAbsent(
                 attendanceData
             )
         )

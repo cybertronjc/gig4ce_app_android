@@ -9,9 +9,8 @@ import androidx.core.view.isVisible
 import com.gigforce.app.tl_work_space.databinding.BottomsheetGigerInfoBusinessUserDetailsInfoItemBinding
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.GigerInformationDetailsBottomSheetFragmentViewEvents
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
-import com.google.android.material.card.MaterialCardView
 
-class UserDetailBusinessAndUserDetailsItemView(
+class BottomBusinessDetailsItemView(
     context: Context,
     attrs: AttributeSet?
 ) : LinearLayout(
@@ -49,7 +48,7 @@ class UserDetailBusinessAndUserDetailsItemView(
     fun bind(
         data: UserInfoBottomSheetData.UserDetailsBusinessAndUserDetailsData.UserDetailsBusinessAndUserDetailsDataItem
     ) = viewBinding.apply {
-        this@UserDetailBusinessAndUserDetailsItemView.data = data
+        this@BottomBusinessDetailsItemView.data = data
 
         this.imageView.loadImage(
             data.icon

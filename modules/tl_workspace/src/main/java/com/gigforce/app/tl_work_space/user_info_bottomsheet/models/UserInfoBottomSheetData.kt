@@ -28,7 +28,7 @@ open class UserInfoBottomSheetData {
         @DrawableRes val icon: Int,
         val text: String,
         val viewModel: UserInfoBottomSheetViewModel,
-        val navigationRoute: String? = null,
+        val navigationRoute: String?= null,
     )
 
     data class RetentionComplianceWarningCardData(

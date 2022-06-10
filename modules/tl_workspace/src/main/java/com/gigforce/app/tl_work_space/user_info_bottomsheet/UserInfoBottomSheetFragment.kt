@@ -22,10 +22,9 @@ import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
-import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.databinding.BottomsheetGigerInfoBinding
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
-import com.gigforce.app.tl_work_space.user_info_bottomsheet.views.UserDetailBusinessAndUserDetailsView
+import com.gigforce.app.tl_work_space.user_info_bottomsheet.views.BottomBusinessDetailsView
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.views.UserDetailsAndActionButtonsView
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.views.WarningCardView
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -33,11 +32,12 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.navigation.lead_management.LeadManagementNavigation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
-import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.NavigationOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.toastfix.toastcompatwrapper.ToastHandler
@@ -64,15 +64,14 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
 
     @Inject
     lateinit var tlWorkSpaceNavigation: TLWorkSpaceNavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     @Inject
     lateinit var leadManagementNavigation: LeadManagementNavigation
 
     private val viewModel: UserInfoBottomSheetViewModel by viewModels()
     private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
-
-    private val sharedGigViewModel: AttendanceTLSharedViewModel by activityViewModels()
-    private val gigsJoiningSharedViewModel: SharedGigViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -201,9 +200,24 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                         teamLeaderUid = it.teamLeaderUid,
                         jobProfileId = it.jobProfileId
                     )
+                    is GigerInformationDetailsBottomSheetFragmentViewEffects.NavigateToScreen -> navigateToScreen(
+                        it.route,
+                        it.payload
+                    )
                 }
             }
         }
+    }
+
+    private fun navigateToScreen(
+        route: String,
+        payload: Bundle?
+    ) {
+        navigation.navigateTo(
+            route,
+            payload,
+            NavigationOptions.getNavOptions()
+        )
     }
 
     private fun openChangeClientIdBottomSheet(
@@ -333,7 +347,7 @@ class UserInfoBottomSheetFragment : BaseBottomSheetDialogFragment<BottomsheetGig
                 view.bind(it)
             } else if (it is UserInfoBottomSheetData.UserDetailsBusinessAndUserDetailsData) {
 
-                val view = UserDetailBusinessAndUserDetailsView(requireContext(), null)
+                val view = BottomBusinessDetailsView(requireContext(), null)
                 addView(view)
                 view.bind(it)
             }

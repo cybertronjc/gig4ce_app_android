@@ -1,5 +1,6 @@
 package com.gigforce.app.tl_work_space.user_info_bottomsheet
 
+import android.os.Bundle
 import com.gigforce.app.android_common_utils.base.viewModel.UiEffect
 import com.gigforce.app.android_common_utils.base.viewModel.UiEvent
 import com.gigforce.app.android_common_utils.base.viewModel.UiState
@@ -79,6 +80,12 @@ sealed class GigerInformationDetailsBottomSheetFragmentViewEffects : UiEffect {
         val teamLeaderUid: String,
         val jobProfileId: String
     ) : GigerInformationDetailsBottomSheetFragmentViewEffects()
+
+    data class NavigateToScreen(
+        val route: String,
+        val payload: Bundle?
+    ) : GigerInformationDetailsBottomSheetFragmentViewEffects()
+
 
 
 

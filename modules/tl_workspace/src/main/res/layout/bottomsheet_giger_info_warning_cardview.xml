@@ -17,6 +17,7 @@
         <com.gigforce.common_ui.views.GigforceImageView
             android:id="@+id/imageView"
             android:layout_width="22dp"
+            android:tint="@color/white"
             android:layout_height="22dp" />
 
         <TextView
@@ -41,6 +42,7 @@
             android:lineHeight="21sp"
             android:padding="12dp"
             android:text="Review"
+            android:background="@drawable/background_round_translucent"
             android:textColor="@color/white"
             android:textFontWeight="700" />
 

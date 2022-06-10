@@ -1,10 +1,10 @@
 package com.gigforce.app.tl_work_space.activity_tacker.attendance_list
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.data.repositoriesImpl.gigs.AttendanceStatus
 import com.gigforce.app.data.repositoriesImpl.gigs.GigAttendanceApiModel
 import com.gigforce.app.data.repositoriesImpl.gigs.GigersAttendanceRepository
+import com.gigforce.app.tl_work_space.BaseTLWorkSpaceViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.AttendanceTLSharedViewModel
 import com.gigforce.app.tl_work_space.activity_tacker.SharedAttendanceTLSharedViewModelEvents
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
@@ -37,14 +37,18 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private var eventTracker: IEventTracker,
     private val logger: GigforceLogger,
     private val attendanceRepository: GigAttendanceRepository
-) : ViewModel(), CustomTabClickListener {
+) : BaseTLWorkSpaceViewModel<
+        GigerAttendanceUnderManagerViewEvents,
+        GigerAttendanceUnderManagerViewState,
+        GigerAttendanceUnderManagerViewEffect>(initialState = GigerAttendanceUnderManagerViewState.ScreenLoaded),
+    CustomTabClickListener {
 
     companion object {
         const val TAG = "GigerAttendanceUnderManagerViewModel"
     }
 
     /* data*/
-    private var attendanceListRaw: List<GigAttendanceApiModel> = emptyList()
+    private var attendanceListRaw: MutableList<GigAttendanceApiModel> = mutableListOf()
     private var statusMaster: List<AttendanceTabData> = emptyList()
     private var attendanceShownOnScreen: MutableList<AttendanceRecyclerItemData> = mutableListOf()
 
@@ -61,12 +65,12 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
 
     //To view Observables
-    private val _viewState = MutableStateFlow<GigerAttendanceUnderManagerViewContract.State>(
-        GigerAttendanceUnderManagerViewContract.State.ScreenLoaded
+    private val _viewState = MutableStateFlow<GigerAttendanceUnderManagerViewState>(
+        GigerAttendanceUnderManagerViewState.ScreenLoaded
     )
     val viewState = _viewState.asStateFlow()
 
-    private val _viewEffects = MutableSharedFlow<GigerAttendanceUnderManagerViewContract.UiEffect>()
+    private val _viewEffects = MutableSharedFlow<GigerAttendanceUnderManagerViewEffect>()
     val viewEffects = _viewEffects.asSharedFlow()
 
     init {
@@ -105,7 +109,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                         it.attendance
                     )
                     is SharedAttendanceTLSharedViewModelEvents.OpenMarkInactiveReasonsDialog -> _viewEffects.emit(
-                        GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog(
+                        GigerAttendanceUnderManagerViewEffect.OpenMarkInactiveSelectReasonDialog(
                             gigId = it.gigId,
                             popConfirmationDialog = true
                         )
@@ -115,33 +119,35 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
 
-    fun handleEvent(
-        event: GigerAttendanceUnderManagerViewContract.UiEvent
-    ) = when (event) {
-        is GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemClicked -> attendanceItemClicked(
-            event.attendance
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.BusinessHeaderClicked -> businessHeaderClicked(
-            event.header
-        )
-        GigerAttendanceUnderManagerViewContract.UiEvent.RefreshAttendanceClicked -> fetchUsersAttendanceDate(
-            currentlyFetchingForDate
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.FiltersApplied.DateChanged -> fetchUsersAttendanceDate(
-            event.date
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.FiltersApplied.SearchTextChanged -> searchAttendance(
-            event.searchText
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.AttendanceItemResolveClicked -> resolveButtonClicked(
-            event.attendance
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.UserRightSwipedForMarkingPresent -> userRightSwipedForMarkingPresent(
-            event.attendance
-        )
-        is GigerAttendanceUnderManagerViewContract.UiEvent.UserLeftSwipedForMarkingAbsent -> userLeftSwipedForMarkingAbsent(
-            event.attendance
-        )
+    override fun handleEvent(
+        event: GigerAttendanceUnderManagerViewEvents
+    ) {
+        when (event) {
+            is GigerAttendanceUnderManagerViewEvents.AttendanceItemClicked -> attendanceItemClicked(
+                event.attendance
+            )
+            is GigerAttendanceUnderManagerViewEvents.BusinessHeaderClicked -> businessHeaderClicked(
+                event.header
+            )
+            GigerAttendanceUnderManagerViewEvents.RefreshAttendanceClicked -> fetchUsersAttendanceDate(
+                currentlyFetchingForDate
+            )
+            is GigerAttendanceUnderManagerViewEvents.FiltersApplied.DateChanged -> fetchUsersAttendanceDate(
+                event.date
+            )
+            is GigerAttendanceUnderManagerViewEvents.FiltersApplied.SearchTextChanged -> searchAttendance(
+                event.searchText
+            )
+            is GigerAttendanceUnderManagerViewEvents.AttendanceItemResolveClicked -> resolveButtonClicked(
+                event.attendance
+            )
+            is GigerAttendanceUnderManagerViewEvents.UserRightSwipedForMarkingPresent -> userRightSwipedForMarkingPresent(
+                event.attendance
+            )
+            is GigerAttendanceUnderManagerViewEvents.UserLeftSwipedForMarkingAbsent -> userLeftSwipedForMarkingAbsent(
+                event.attendance
+            )
+        }
     }
 
     private fun userRightSwipedForMarkingPresent(
@@ -152,7 +158,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         } ?: return@launch
 
         _viewEffects.emit(
-            GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkGigerActiveConfirmation(
+            GigerAttendanceUnderManagerViewEffect.OpenMarkGigerActiveConfirmation(
                 gigId = attendance.gigId,
                 hasGigerMarkedHimselfInActive = rightSwipedAttendance.getGigerMarkedAttendance() == AttendanceStatus.ABSENT
             )
@@ -169,14 +175,14 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         if (leftSwipedAttendance.getGigerMarkedAttendance() == AttendanceStatus.PRESENT) {
 
             _viewEffects.emit(
-                GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveConfirmationDialog(
+                GigerAttendanceUnderManagerViewEffect.OpenMarkInactiveConfirmationDialog(
                     gigId = attendance.gigId
                 )
             )
         } else {
 
             _viewEffects.emit(
-                GigerAttendanceUnderManagerViewContract.UiEffect.OpenMarkInactiveSelectReasonDialog(
+                GigerAttendanceUnderManagerViewEffect.OpenMarkInactiveSelectReasonDialog(
                     gigId = attendance.gigId
                 )
             )
@@ -188,7 +194,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     ) = viewModelScope.launch {
 
         _viewEffects.emit(
-            GigerAttendanceUnderManagerViewContract.UiEffect.ShowResolveAttendanceConflictScreen(
+            GigerAttendanceUnderManagerViewEffect.ShowResolveAttendanceConflictScreen(
                 gigId = attendance.gigId,
                 gigAttendanceData = attendance.mapToGigAttendance()
             )
@@ -199,7 +205,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         attendance: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) = viewModelScope.launch {
         _viewEffects.emit(
-            GigerAttendanceUnderManagerViewContract.UiEffect.ShowGigerDetailsScreen(
+            GigerAttendanceUnderManagerViewEffect.ShowGigerDetailsScreen(
                 attendance.gigId,
                 attendance.mapToGigAttendance()
             )
@@ -226,20 +232,20 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         date: LocalDate
     ) = viewModelScope.launch(Dispatchers.IO) {
 
-        if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
+        if (_viewState.value is GigerAttendanceUnderManagerViewState.LoadingAttendanceList) {
             return@launch
         }
 
         currentlyFetchingForDate = date
         _viewState.emit(
-            GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList(null)
+            GigerAttendanceUnderManagerViewState.LoadingAttendanceList(null)
         )
 
         try {
             val gigersAttendance = gigersAttendanceRepository.getAttendance(
                 date
             )
-            attendanceListRaw = gigersAttendance.gigers
+            attendanceListRaw = gigersAttendance.gigers.toMutableList()
             statusMaster = gigersAttendance.statusCount.map {
                 AttendanceTabData(
                     id = it.id ?: "",
@@ -260,13 +266,13 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
             if (e is IOException) {
                 _viewState.emit(
-                    GigerAttendanceUnderManagerViewContract.State.ErrorInLoadingOrUpdatingAttendanceList(
+                    GigerAttendanceUnderManagerViewState.ErrorInLoadingOrUpdatingAttendanceList(
                         e.message ?: "Unable to fetch gigers attendance"
                     )
                 )
             } else {
                 _viewState.emit(
-                    GigerAttendanceUnderManagerViewContract.State.ErrorInLoadingOrUpdatingAttendanceList(
+                    GigerAttendanceUnderManagerViewState.ErrorInLoadingOrUpdatingAttendanceList(
                         "Unable to fetch gigers attendance"
                     )
                 )
@@ -307,7 +313,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         }.toMutableList()
 
         _viewState.emit(
-            GigerAttendanceUnderManagerViewContract.State.ShowOrUpdateAttendanceListOnView(
+            GigerAttendanceUnderManagerViewState.ShowOrUpdateAttendanceListOnView(
                 date = currentlyFetchingForDate,
                 attendanceSwipeControlsEnabled = !currentlyFetchingForDate.isBefore(LocalDate.now()),
                 enablePresentSwipeAction = currentlyFetchingForDate == LocalDate.now(),
@@ -324,7 +330,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         currentlySelectedStatus = status.tabId
 
-        if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
+        if (_viewState.value is GigerAttendanceUnderManagerViewState.LoadingAttendanceList) {
             return@launch
         }
         processAttendanceListAndEmitToView(
@@ -337,7 +343,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         searchTerm: String
     ) = viewModelScope.launch(Dispatchers.IO) {
 
-        if (_viewState.value is GigerAttendanceUnderManagerViewContract.State.LoadingAttendanceList) {
+        if (_viewState.value is GigerAttendanceUnderManagerViewState.LoadingAttendanceList) {
             return@launch
         }
 
@@ -411,5 +417,40 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         filterAttendanceByStatus(tabClickedType1)
     }
 
+    override fun gigerDropped(
+        gigerId: String,
+        jobProfileId: String
+    ) {
+        super.gigerDropped(gigerId, jobProfileId)
+
+        viewModelScope.launch {
+
+            attendanceListRaw.removeIf {
+                gigerId == it.gigerId && jobProfileId == it.jobProfileId
+            }
+
+            processAttendanceListAndEmitToView(
+                showDataUpdatedToast = true,
+                updateStatusTabsCount = true
+            )
+        }
+    }
+
+    override fun teamLeaderChangedOf(
+        gigerId: String,
+        jobProfileId: String
+    ) {
+        super.teamLeaderChangedOf(gigerId, jobProfileId)
+        viewModelScope.launch {
+
+            attendanceListRaw.removeIf {
+                gigerId == it.gigerId && jobProfileId == it.jobProfileId
+            }
+            processAttendanceListAndEmitToView(
+                showDataUpdatedToast = true,
+                updateStatusTabsCount = true
+            )
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.tl_work_space.R
 import com.gigforce.app.tl_work_space.user_info_bottomsheet.models.UserInfoBottomSheetData
 import com.gigforce.common_ui.ext.formatToCurrency
+import com.gigforce.common_ui.ext.nonEmptyStringOrNull
 
 object UserInfoScreenRawDataToPresentationDataMapper {
 
@@ -78,22 +79,24 @@ object UserInfoScreenRawDataToPresentationDataMapper {
             )
         )
 
-        if (rawGigerData.pendingComplianceInformation?.string != null) {
+        if (!rawGigerData.pendingComplianceInformation?.string.isNullOrBlank()) {
 
-            UserInfoBottomSheetData.RetentionComplianceWarningCardData(
-                warningText = rawGigerData.pendingComplianceInformation?.string!!,
-                icon = if ("high" == rawGigerData.pendingComplianceInformation?.priority) R.drawable.ic_baseline_info_24 else R.drawable.ic_warning_white,
-                backgroundColorCode = rawGigerData.pendingComplianceInformation?.backgroundColorCode
-                    ?: "#F9B021",
-                actionButton = if (rawGigerData.pendingComplianceInformation?.navigationRoute != null)
-                    UserInfoBottomSheetData.UserInfoActionButtonData(
-                        id = ID_NAVIGATE_TO_OTHER_SCREEN,
-                        icon = -1,
-                        text = "Review",
-                        viewModel = viewModel,
-                        navigationRoute = rawGigerData.pendingComplianceInformation?.navigationRoute
-                    ) else null,
-                viewModel = viewModel
+            add(
+                UserInfoBottomSheetData.RetentionComplianceWarningCardData(
+                    warningText = rawGigerData.pendingComplianceInformation?.string!!,
+                    icon = if ("high" == rawGigerData.pendingComplianceInformation?.priority) R.drawable.ic_baseline_info_24 else R.drawable.ic_warning_white,
+                    backgroundColorCode = rawGigerData.pendingComplianceInformation?.backgroundColorCode.nonEmptyStringOrNull()
+                        ?: "#F9B021",
+                    actionButton = if (rawGigerData.pendingComplianceInformation?.navigationRoute.nonEmptyStringOrNull() != null)
+                        UserInfoBottomSheetData.UserInfoActionButtonData(
+                            id = ID_NAVIGATE_TO_OTHER_SCREEN,
+                            icon = -1,
+                            text = "Review",
+                            viewModel = viewModel,
+                            navigationRoute = rawGigerData.pendingComplianceInformation?.navigationRoute.nonEmptyStringOrNull() ?: "verification/main"
+                        ) else null,
+                    viewModel = viewModel
+                )
             )
         }
 
@@ -120,11 +123,11 @@ object UserInfoScreenRawDataToPresentationDataMapper {
             )
         )
 
-        if (rawGigerData.retention?.lastActiveWarningString != null) {
+        if (!rawGigerData.retention?.lastActiveWarningString.isNullOrBlank()) {
             add(
                 UserInfoBottomSheetData.RetentionComplianceWarningCardData(
                     warningText = rawGigerData.retention?.lastActiveWarningString!!,
-                    icon = R.drawable.ic_baseline_info_24,
+                    icon = R.drawable.ic_info_white_24,
                     backgroundColorCode = rawGigerData.retention?.backgroundColorCode ?: "#E11900",
                     actionButton = null,
                     viewModel = viewModel

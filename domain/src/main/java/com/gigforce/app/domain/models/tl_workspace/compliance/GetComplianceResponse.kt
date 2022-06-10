@@ -36,6 +36,9 @@ data class GigersWithPendingComplainceDataItem(
     @field:SerializedName("jobProfileId")
     val jobProfileId: String? = null,
 
+    @field:SerializedName("businessId")
+    val businessId: String? = null,
+
     @field:SerializedName("business")
     val business: String? = null,
 

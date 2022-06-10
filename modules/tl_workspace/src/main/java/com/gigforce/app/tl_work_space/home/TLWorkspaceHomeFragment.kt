@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -21,6 +22,7 @@ import com.gigforce.app.domain.models.tl_workspace.TLWorkspaceHomeSection
 import com.gigforce.app.navigation.tl_workspace.TLWorkSpaceNavigation
 import com.gigforce.app.navigation.tl_workspace.attendance.ActivityTrackerNavigation
 import com.gigforce.app.tl_work_space.R
+import com.gigforce.app.tl_work_space.TLWorkSpaceSharedViewModel
 import com.gigforce.app.tl_work_space.databinding.FragmentTlWorkspaceHomeBinding
 import com.gigforce.app.tl_work_space.home.models.TLWorkspaceRecyclerItemData
 import com.gigforce.app.tl_work_space.home.views.ActionAttachmentOptionsListetner
@@ -28,6 +30,7 @@ import com.gigforce.app.tl_work_space.home.views.ActionsAttachmentOption
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.ext.toDate
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -56,6 +59,8 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     @Inject
     lateinit var activityTrackerNavigation: ActivityTrackerNavigation
+
+    private val sharedViewModel: TLWorkSpaceSharedViewModel by activityViewModels()
     private val viewModel: TLWorkspaceHomeViewModel by viewModels()
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -77,6 +82,7 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setSharedViewModel(sharedViewModel)
 
         requireActivity()
             .onBackPressedDispatcher
@@ -276,6 +282,13 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
             val menuTag = "$sectionId<>$filterId"
             this.datePicker.tag = menuTag
 
+            if (minDate != null) {
+                datePicker.minDate = minDate.toDate().time
+            }
+
+            if (maxDate != null) {
+                datePicker.maxDate = maxDate.toDate().time
+            }
             this.show()
         }
     }
@@ -505,47 +518,11 @@ class TLWorkspaceHomeFragment : BaseFragment2<FragmentTlWorkspaceHomeBinding>(
         )
     }
 
-    override fun onClick(attachmentOption: ActionsAttachmentOption?) {
-//        when (attachmentOption?.id) {
-//            ActionsAttachmentOption.SELECTION_FORM_ID -> {
-//                tlWorkSpaceNavigation.navigateToJoiningListScreen(
-//                    "Selection Form"
-//                )
-//            }
-//            ActionsAttachmentOption.LOGIN_SUMMARY_ID -> {
-//
-//
-//            }
-//            ActionsAttachmentOption.RAISE_GIGER_TICKET_ID -> {
-//
-//            }
-//            ActionsAttachmentOption.GIGER_ATTENDANCE_ID -> {
-//
-//            }
-//            ActionsAttachmentOption.ALL_SELECTIONS_ID -> {
-//
-//            }
-//            ActionsAttachmentOption.COMPLIANCE_PENDING_ID -> {
-//                tlWorkSpaceNavigation.navigateToPendingComplianceScreen(
-//                    "Compliance Pending"
-//                )
-//
-//            }
-//            ActionsAttachmentOption.GIGER_PAYOUT_ID -> {
-//                tlWorkSpaceNavigation.navigateToPayoutListScreen(
-//                    "Payout"
-//                )
-//            }
-//            ActionsAttachmentOption.GIGER_RETENTION_ID -> {
-//                tlWorkSpaceNavigation.navigateToRetentionScreen(
-//                    "Retention"
-//                )
-//            }
-//            ActionsAttachmentOption.GIGER_TICKET_ID -> {
-//
-//            }
-//
-//        }
+    override fun onClick(attachmentOption: ActionsAttachmentOption) {
+
+        viewModel.setEvent(
+            TLWorkSpaceHomeUiEvents.QuickMenuActionClicked(attachmentOption)
+        )
     }
 
     override fun isVisible(visible: Boolean?) {

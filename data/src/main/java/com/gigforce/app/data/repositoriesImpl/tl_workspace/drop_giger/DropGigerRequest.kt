@@ -12,7 +12,7 @@ data class DropGigerRequest(
 	val gigerId: String? = null,
 
 	@field:SerializedName("lastWorkingDate")
-	val lastWorkingDate: LocalDate? = null,
+	val lastWorkingDate: String? = null,
 
 	@field:SerializedName("jobProfileId")
 	val jobProfileId: String? = null

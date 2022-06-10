@@ -14,6 +14,7 @@ open class CompliancePendingScreenData(
         val gigerId: String,
         val gigerName: String,
         val phoneNumber: String?,
+        val businessId: String? ,
         val business: String? ,
         val jobProfileId : String?,
         val jobProfile: String? ,

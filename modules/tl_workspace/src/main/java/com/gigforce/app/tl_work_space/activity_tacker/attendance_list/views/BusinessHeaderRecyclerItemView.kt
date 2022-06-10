@@ -9,7 +9,7 @@ import android.view.animation.RotateAnimation
 import android.widget.RelativeLayout
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.tl_work_space.R
-import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.GigerAttendanceUnderManagerViewContract
+import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.GigerAttendanceUnderManagerViewEvents
 import com.gigforce.app.tl_work_space.activity_tacker.attendance_list.StatusFilters
 import com.gigforce.app.tl_work_space.activity_tacker.models.AttendanceRecyclerItemData
 import com.gigforce.app.tl_work_space.databinding.RecyclerRowBusinessNameShiftTimeBinding
@@ -215,7 +215,7 @@ class BusinessHeaderRecyclerItemView(
     ) {
         viewData?.let {
             it.viewModel.handleEvent(
-                GigerAttendanceUnderManagerViewContract.UiEvent.BusinessHeaderClicked(
+               GigerAttendanceUnderManagerViewEvents.BusinessHeaderClicked(
                     it
                 )
             )
